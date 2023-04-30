@@ -1,12 +1,12 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { App } from "App";
 import { Error as ErrorElement } from "components/common";
-import { MainLayout } from "layouts";
-import { Health, Home, Login, Projects } from "pages";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { App } from "App";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Health, Home, Login, Projects, Users } from "pages";
+import { Main } from "components/common";
 
 const rootElement = document.querySelector("#root");
 if (!rootElement) throw new Error("Root element not found");
@@ -23,19 +23,22 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <MainLayout />,
+                element: <Main />,
                 children: [
                     {
                         path: "/",
-                        element: <Home />,
-                        index: true
+                        element: <Home />
                     },
                     {
                         path: "/projects",
                         element: <Projects />
                     },
                     {
-                        path: "/health",
+                        path: "/users",
+                        element: <Users />
+                    },
+                    {
+                        path: "health",
                         element: <Health />
                     }
                 ]
@@ -46,9 +49,7 @@ const router = createBrowserRouter([
             }
         ]
     }
-], {
-    basename: "/dashboard"
-});
+]);
 
 root.render(
     <StrictMode>
