@@ -1,0 +1,18 @@
+@use "src/styles/mixins";
+
+.button {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: hsl(var(--primary-1));
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: hsl(var(--accent-1));
+    border-radius: var(--radius, 5px);
+    @include mixins.box-shadow;
+    transition: scale 0.3s;
+
+    &:active {
+        scale: 0.95;
+    }
+}
