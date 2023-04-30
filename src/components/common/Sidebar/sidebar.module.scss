@@ -1,0 +1,37 @@
+@use "src/styles/mixins";
+
+.sidebar {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    @include mixins.size(var(--sidebar-width-close), 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: hsl(var(--primary-1));
+    backdrop-filter: blur(5px);
+    overflow-x: hidden;
+    transition: width 0.3s;
+
+    &:hover {
+        width: var(--sidebar-width-open);
+    }
+}
+
+.sidebar-item {
+    width: var(--sidebar-width-open);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+    transition: background-color 0.3s;
+
+    &:hover, &.active {
+        background-color: hsl(var(--primary-1));
+    }
+
+    svg {
+        @include mixins.size(var(--sidebar-width-close));
+        padding: 15px;
+    }
+}
