@@ -1,0 +1,18 @@
+@use "src/styles/mixins";
+
+.health-wrapper {
+    @include mixins.size;
+    padding: 5em 5%;
+}
+
+.health-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5em;
+}
+
+.status-cards-wrapper {
+    width: 100%;
+    justify-content: center;
+    justify-items: center;
+}
