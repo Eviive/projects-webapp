@@ -4,12 +4,12 @@ export type User = {
     firstName: string;
     lastName: string;
     roles: Role[];
-};
+}
 
 export type Role = {
     id: number;
     name: string;
-};
+}
 
 export type Project = {
     id: number;
@@ -21,19 +21,18 @@ export type Project = {
     skills: Skill[];
     image: Image;
     featured: boolean;
-};
+}
 
 export type Skill = {
     id: number;
     name: string;
     image: Image;
-};
+}
 
 export type Image = {
     id: number;
-    uuid?: string;
     alt: string;
-};
+}
 
 export type Page<E> = {
     content: E[];
@@ -62,4 +61,4 @@ export type Page<E> = {
     first: boolean;
     numberOfElements: number;
     empty: boolean;
-};
+}
