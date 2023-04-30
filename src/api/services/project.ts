@@ -1,5 +1,5 @@
 import { request } from "api/client";
-import { Page, Project } from "types/entities";
+import { Project, Page } from "types/entities";
 
 const URL = "project";
 
@@ -11,7 +11,7 @@ const findAllFeatured = () => request<Project[]>(`/${URL}/featured`, {}, false);
 
 const findAllNotFeatured = () => request<Project[]>(`/${URL}/not-featured`, {}, false);
 
-const findAllNotFeaturedPaginated = (page: number) => request<Page<Project>>(`/${URL}/not-featured/paginated`, { params: { page } }, false);
+const findAllNotFeaturedPaginated = (page: number) => request<Page<Project[]>>(`/${URL}/not-featured/paginated`, { params: { page } }, false);
 
 const save = (project: Project) => request<Project, Project>(`/${URL}`, {
     method: "POST",
@@ -32,10 +32,7 @@ const uploadImage = (id: number, file: File) => {
     formData.append("file", file);
     return request<Project, FormData>(`/${URL}/${id}/upload-image`, {
         method: "POST",
-        data: formData,
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
+        data: formData
     });
 };
 

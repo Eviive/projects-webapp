@@ -7,7 +7,7 @@ const auditEvents = () => request<{ events: AuditEvent[] }>(`/${URL}/auditevents
 
 const health = () => request<Health>(`/${URL}/health`);
 
-const httpExchanges = () => request<{ exchanges: HttpExchange[] }>(`/${URL}/httpexchanges`);
+const httpExchanges = () => request<{ traces: HttpExchange[] }>(`/${URL}/httpexchanges`);
 
 const info = () => request<Info>(`/${URL}/info`);
 
