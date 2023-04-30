@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
-export type ModalConfig = {
+export interface ModalConfig {
 	outsideClick?: boolean;
 	escapeKey?: boolean;
-};
+}
 
 export const useCloseEvents = <E extends HTMLElement>(handleClose: () => void, config: ModalConfig = { outsideClick: true, escapeKey: true }) => {
 

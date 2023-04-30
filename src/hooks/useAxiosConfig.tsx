@@ -1,8 +1,8 @@
 import { httpClient } from "api/client";
-import { UserService } from "api/services";
-import { useAuthContext } from "contexts/AuthContext";
 import decode, { JwtPayload } from "jwt-decode";
 import { useEffect } from "react";
+import { useAuthContext } from "../contexts/AuthContext";
+import { UserService } from "../api/services";
 
 const isExpired = (token: string) => {
     const { exp } = decode<JwtPayload>(token);
@@ -35,6 +35,11 @@ export const useAxiosConfig = () => {
                             } catch (e) {
                                 console.error("Refreshing failed", e);
                                 setAccessToken("");
+                                // showPopup({
+                                //     title: "Session Expired",
+                                //     message: "Your session has expired. Please log in again."
+                                // });
+
                                 return Promise.reject(e);
                             }
                         } else {
