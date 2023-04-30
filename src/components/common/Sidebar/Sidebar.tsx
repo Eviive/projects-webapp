@@ -4,7 +4,7 @@ import { Anchor, Link } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { FC } from "react";
 import { BsBriefcaseFill } from "react-icons/bs";
-import { FaHome, FaInfo } from "react-icons/fa";
+import { FaHome, FaInfo, FaUsers } from "react-icons/fa";
 import { GiHealthNormal } from "react-icons/gi";
 import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
@@ -24,6 +24,11 @@ const routes: Route[] = [
         icon: <BsBriefcaseFill />
     },
     {
+        name: "Users",
+        path: "/users",
+        icon: <FaUsers />
+    },
+    {
         name: "Health",
         path: "/health",
         icon: <GiHealthNormal />
@@ -36,8 +41,8 @@ export const Sidebar: FC = () => {
 
     const queryClient = useQueryClient();
 
-    const handleRefresh = async () => {
-        await queryClient.invalidateQueries();
+    const handleRefresh = () => {
+        queryClient.invalidateQueries();
     };
 
     const handleLogout = async () => {
@@ -47,6 +52,11 @@ export const Sidebar: FC = () => {
             console.error("Logout failed", e);
         } finally {
             setAccessToken("");
+            console.log("Logged out");
+            // showPopup({
+            //     title: "Signed out",
+            //     message: "You have been successfully signed out."
+            // });
         }
     };
 
@@ -55,7 +65,7 @@ export const Sidebar: FC = () => {
             <ul>
                 {routes.map((route, index) => (
                     <li key={index}>
-                        <Link route={route} className={styles.sidebarItem} activeClassName={styles.active} />
+                        <Link route={route} className={styles.sidebarItem} />
                     </li>
                 ))}
             </ul>

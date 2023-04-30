@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect } from "react";
+import { FC, ReactNode } from "react";
 
 type Props = {
     title: string;
@@ -6,13 +6,7 @@ type Props = {
 };
 
 export const Page: FC<Props> = ({ title, children }) => {
-    useEffect(() => {
-        document.title = title;
-
-        return () => {
-            document.title = "Dashboard";
-        };
-    }, [title]);
+    document.title = title;
 
     return <>{children}</>;
 };

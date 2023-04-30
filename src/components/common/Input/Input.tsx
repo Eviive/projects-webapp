@@ -1,28 +1,35 @@
 import { FC, FormEventHandler, InputHTMLAttributes, ReactNode } from "react";
 
+const TEXT_INPUT = [ "text", "search", "url", "tel", "email", "password", "number" ];
+
 type Attributes = InputHTMLAttributes<HTMLInputElement> & { name: string; };
 
 type Props = {
     attributes: Attributes;
     label?: ReactNode;
-    wrapperClassName?: string;
     handleInvalid?: FormEventHandler<HTMLInputElement>;
-};
+}
 
-export const Input: FC<Props> = (({ attributes, label, wrapperClassName, handleInvalid }) => {
+export const Input: FC<Props> = (({ attributes, label, handleInvalid }) => {
 
     const type = attributes.type ?? "text";
 
+    const placeholder = attributes.placeholder ?? (
+        TEXT_INPUT.includes(type)
+            ? `${attributes.name.charAt(0).toUpperCase()}${attributes.name.substring(1)}`
+            : undefined
+    );
+
     return (
-        <div className={wrapperClassName}>
-            {label && <label htmlFor={`input-${attributes.name}`}>{label}{typeof label === "string" && " :"}</label>}
+        <div className={attributes.className}>
+            {label && <label htmlFor={`input-${attributes.name}`}>{label}</label>}
             <input
                 {...attributes}
                 id={`input-${attributes.name}`}
                 type={type}
-                placeholder={attributes.placeholder}
-                pattern={attributes.pattern}
-                required={attributes.required}
+                placeholder={placeholder}
+                pattern={attributes.pattern ?? ".*\\S.*"} // prevents whitespace-only input
+                required={attributes.required ?? (type !== "checkbox")}
                 onInput={handleInvalid && (e => e.currentTarget.setCustomValidity(""))}
                 onInvalid={handleInvalid}
             />
