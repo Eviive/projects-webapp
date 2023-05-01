@@ -35,6 +35,7 @@
     width: min(90%, 50ch);
     background-color: hsl(var(--primary-1));
     border-radius: 5px;
+    @include mixins.box-shadow;
 }
 
 .modal-header {

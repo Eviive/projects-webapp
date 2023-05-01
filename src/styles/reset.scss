@@ -19,6 +19,10 @@ a, button {
     cursor: pointer;
 }
 
+progress, input:is([type="checkbox"], [type="radio"], [type="range"]) {
+    accent-color: hsl(var(--accent-1));
+}
+
 html {
     min-width: 350px;
     font-family: 'Inter', 'Open Sans', 'Karla', sans-serif;
