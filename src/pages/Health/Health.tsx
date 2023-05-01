@@ -36,21 +36,23 @@ export const Health: FC = () => {
     const query = useCustomQuery([ "httpExchanges" ], HealthService.httpExchanges);
 
     return (
-        <div className={styles.healthWrapper}>
-            {query.isSuccess
+        <>
+            { query.isSuccess
 
-                ? <div className={styles.healthContent}>
-                    <GridLayout className={styles.statusCardsWrapper}>
-                        {HTTP_STATUS.map((status, index) => {
-                            const value = query.data.exchanges.filter(t => t.response.status === status.code).length;
-                            return <HttpStatusCard key={index} {...status} value={value} />;
-                        })}
-                    </GridLayout>
-                    <TracesTable httpTraces={query.data.exchanges} />
+                ? <div className={styles.healthWrapper}>
+                    <div className={styles.healthContent}>
+                        <GridLayout className={styles.statusCardsWrapper}>
+                            {HTTP_STATUS.map((status, index) => {
+                                const value = query.data.exchanges.filter(t => t.response.status === status.code).length;
+                                return <HttpStatusCard key={index} {...status} value={value} />;
+                            })}
+                        </GridLayout>
+                        <TracesTable httpTraces={query.data.exchanges} />
+                    </div>
                 </div>
 
                 : <Loader />
             }
-        </div>
+        </>
     );
 };
