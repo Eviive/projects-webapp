@@ -5,7 +5,7 @@ import styles from "./loader.module.scss";
 
 type Props = {
     className?: string;
-}
+};
 
 export const Loader: FC<Props> = props => {
     return (

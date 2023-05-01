@@ -3,7 +3,7 @@ import { createContext, Dispatch, SetStateAction, useContext } from "react";
 type IAuthContext = {
     accessToken: string;
     setAccessToken: Dispatch<SetStateAction<string>>;
-}
+};
 
 const AuthContext = createContext<IAuthContext>({
     accessToken: "",

@@ -8,7 +8,7 @@ type Props = {
     attributes: Attributes;
     label?: ReactNode;
     handleInvalid?: FormEventHandler<HTMLInputElement>;
-}
+};
 
 export const Input: FC<Props> = (({ attributes, label, handleInvalid }) => {
 
