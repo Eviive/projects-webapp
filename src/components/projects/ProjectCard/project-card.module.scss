@@ -7,14 +7,10 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 15px;
-    background-color: hsl(var(--primary-1));
+    background-color: white;
+    border: 1px solid hsl(var(--primary-1));
     border-radius: 8px;
     @include mixins.box-shadow($down: 5px);
-    transition: scale 0.3s;
-
-    &:hover {
-        scale: 1.03;
-    }
 }
 
 .card-content {
@@ -36,6 +32,7 @@
         gap: 5px;
 
         h1 {
+            width: max-content;
             font-size: 1.2em;
             font-weight: bold;
             overflow-wrap: anywhere;
@@ -63,7 +60,7 @@
     gap: 5px;
 
     a, button {
-        scale: inherit;
+        @include mixins.size(22px);
         display: flex;
     }
 }
@@ -83,7 +80,7 @@
     gap: 5px;
 
     img {
-        @include mixins.size(28px);
+        @include mixins.size(30px);
         object-fit: cover;
     }
 }
