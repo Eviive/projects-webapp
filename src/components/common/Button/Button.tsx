@@ -16,14 +16,12 @@ export const Button: FC<Props> = props => {
             className={props.className ? `${styles.button} ${props.className}` : styles.button}
             onClick={props.handleClick}
         >
-            {props.loading
-
+            { props.loading
                 ? <PulseLoader
                     size={10}
                     color="hsl(var(--primary-1))"
                     cssOverride={{ display: "unset" }}
                 />
-
                 : props.children
             }
         </button>
