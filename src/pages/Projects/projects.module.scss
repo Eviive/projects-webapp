@@ -5,14 +5,8 @@
     padding: 5em 5%;
 }
 
-.projects-content {
-    display: flex;
-    flex-direction: column;
-    gap: 5em;
-}
-
-div.wrapper {
+.cardsWrapper {
     @include mixins.for-size(m) {
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     };
 }
