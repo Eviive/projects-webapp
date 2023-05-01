@@ -1,0 +1,99 @@
+@use "src/styles/mixins";
+@use "src/styles/variables" as *;
+
+.card {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+    background-color: hsl(var(--primary-1));
+    border-radius: 8px;
+    @include mixins.box-shadow($down: 5px);
+    transition: scale 0.3s;
+
+    &:hover {
+        scale: 1.03;
+    }
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5em;
+}
+
+.card-title {
+    div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        h1 {
+            font-size: 1.2em;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+
+            svg {
+                margin-left: 0.5ch;
+                display: inline-block;
+                vertical-align: top;
+            }
+        }
+    }
+
+    span {
+        font-family: $font-mono;
+        font-size: 0.9em;
+    }
+}
+
+.card-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    a, button {
+        scale: inherit;
+        display: flex;
+    }
+}
+
+.card-description {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    p {
+        text-align: justify;
+    }
+}
+
+.card-skills {
+    display: flex;
+    gap: 5px;
+
+    img {
+        @include mixins.size(28px);
+        object-fit: cover;
+    }
+}
+
+.card-image {
+    display: flex;
+    justify-content: center;
+
+    img {
+        max-width: 100%;
+        border-radius: 6px;
+    }
+}
