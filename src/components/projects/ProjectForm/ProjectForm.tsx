@@ -1,199 +1,145 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { ProjectService, SkillService } from "api/services";
-import { Button, Input, Modal, Popup } from "components/common";
+import { Button, Input, Modal } from "components/common";
 import { useCustomQuery } from "hooks/useCustomQuery";
-import { usePopup } from "hooks/usePopup";
-import { FC, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import { Project } from "types/entities";
-import { getTitleAndMessage } from "utils/errors";
+import { ChangeEventHandler, FC, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Project, Skill } from "types/entities";
 
 import styles from "./project-form.module.scss";
+import { SkillService } from "../../../api/services";
 
 type Props = {
     project?: Project;
-    handleClose: (madeChanges: boolean) => void;
+    handleClose: () => void;
 };
 
-type ProjectWithFile = Project & { image: { file: FileList } };
-
-export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose }) => {
+export const ProjectForm: FC<Props> = ({ project, handleClose }) => {
 
     const queryClient = useQueryClient();
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
 
-    const [ popup, showPopup ] = usePopup();
+    const { data: skills } = useCustomQuery([ "skills" ], SkillService.findAll);
 
-    const query = useCustomQuery(["skills"], SkillService.findAll);
+    const { register, handleSubmit, setValue } = useForm<Project>({ defaultValues: project });
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        formState: { isDirty }
-    } = useForm<ProjectWithFile>({ defaultValues: initialProject });
+    const skillsOptions = skills?.map(skill => <option key={skill.id} value={skill.id}>{skill.name}</option>);
 
-    const skillsOptions = query.data?.map(skill => ({ id: skill.id, label: skill.name, value: skill.id }));
+    const submitHandler: SubmitHandler<Project> = async data => {
+        console.log(data);
+        // setIsSubmitting(true);
+        // try {
+        // 	const editing = !!project;
 
-    const submitHandler: SubmitHandler<ProjectWithFile> = async data => {
-        if (isSubmitting) return;
-        if (!isDirty) return handleClose(false);
-        setIsSubmitting(true);
-        try {
-            const editing = !!initialProject;
+        // 	editing ? await updateProject(data) : await saveProject(data);
 
-            const project: Project = {
-                ...data,
-                image: {
-                    id: data.image.id,
-                    uuid: initialProject?.image?.uuid,
-                    alt: data.image.alt
+        // 	queryClient.invalidateQueries(["projects"]);
+        // 	showPopup({ title: "Project", message: `Project ${editing ? "updated" : "created"} successfully!` }, handleClose);
+        // } catch (e) {
+        // 	console.log(e);
+        // 	if (e instanceof AxiosError) {
+        // 		showPopup({
+        // 			title: e.response?.data?.error ?? e.name,
+        // 			message: e.response?.data?.message ?? e.message
+        // 		});
+        // 	} else {
+        // 		showPopup({
+        // 			title: "Unknown error",
+        // 			message: "Please try again later."
+        // 		});
+        // 	}
+        // } finally {
+        // 	setIsSubmitting(false);
+        // }
+    };
+
+    const selectChangeHandler: ChangeEventHandler<HTMLSelectElement> = e => {
+        const { options } = e.target;
+        const selectedSkills: Skill[] = [];
+
+        for (const o of options) {
+            if (o.selected) {
+                const skill = skills?.find(s => s.id === parseInt(o.value));
+
+                if (skill) {
+                    selectedSkills.push(skill);
                 }
-            };
-            const imageFile = data.image.file[0];
-
-            if (editing) {
-                const promises: Promise<Project>[] = [ProjectService.update(project)];
-                imageFile && promises.push(ProjectService.uploadImage(project.id, imageFile));
-                await Promise.all(promises);
-            } else {
-                const createdProject = await ProjectService.save(project);
-                imageFile && await ProjectService.uploadImage(createdProject.id, imageFile);
             }
-
-            await queryClient.invalidateQueries(["projects"]);
-            console.log(`Project ${editing ? "updated" : "created"} successfully!`);
-            handleClose(true);
-        } catch (e) {
-            showPopup(getTitleAndMessage(e));
-        } finally {
-            setIsSubmitting(false);
         }
+
+        setValue("skills", selectedSkills);
     };
 
     return (
-        <>
-            <Modal
-                title={initialProject ? `Editing ${initialProject.title}` : "Creating project"}
-                handleClose={() => handleClose(false)}
-                config={{ outsideClick: false, escapeKey: true }}
-            >
-                <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-                    <Input
-                        attributes={{
-                            ...register("title"),
-                            required: true,
-                            maxLength: 50
-                        }}
-                        label="Title"
-                        wrapperClassName={styles.field}
-                    />
+        <Modal
+            title={project ? `Editing ${project.title}` : "Creating project"}
+            handleClose={handleClose}
+            config={{ outsideClick: false, escapeKey: true }}
+        >
+            <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+                <Input attributes={{
+                    ...register("title", { required: true }),
+                    className: styles.field
+                }} />
 
-                    <div className={styles.field}>
-                        <label htmlFor="input-description">Description :</label>
-                        <textarea
-                            {...register("description")}
-                            id="input-description"
-                            rows={3}
-                            maxLength={510}
-                            required
-                        ></textarea>
-                    </div>
+                <div className={styles.field}>
+                    <textarea
+                        {...register("description", { required: true })}
+                        id="input-description"
+                        placeholder="Enter the description"
+                        rows={3}
+                    ></textarea>
+                </div>
 
-                    <Input
-                        attributes={{
-                            ...register("creationDate"),
-                            type: "date",
+                <Input attributes={{
+                    ...register("creationDate", { required: true }),
+                    type: "date",
+                    className: styles.field
+                }} />
+
+                <Input attributes={{
+                    ...register("repoUrl", { required: true }),
+                    type: "url",
+                    className: styles.field
+                }} />
+
+                <Input attributes={{
+                    ...register("demoUrl", { required: true }),
+                    type: "url",
+                    className: styles.field
+                }} />
+
+                <div className={styles.field}>
+                    <select
+                        {...register("skills", {
                             required: true
-                        }}
-                        label="Creation date"
-                        wrapperClassName={styles.field}
-                    />
+                        })}
+                        onChange={selectChangeHandler}
+                        id="input-skills"
+                        multiple
+                    >
+                        {skillsOptions}
+                    </select>
+                </div>
 
-                    <Input
-                        attributes={{
-                            ...register("repoUrl"),
-                            type: "url",
-                            maxLength: 255,
-                            required: true
-                        }}
-                        label="Repository URL"
-                        wrapperClassName={styles.field}
-                    />
+                <Input attributes={{
+                    ...register("image.alt", { required: true }),
+                    className: styles.field
+                }} />
 
-                    <Input
-                        attributes={{
-                            ...register("demoUrl"),
-                            type: "url",
-                            maxLength: 255,
-                            required: true
-                        }}
-                        label="Demonstration URL"
-                        wrapperClassName={styles.field}
-                    />
+                {/* <Input className={styles.field} type="file" name="image-file" accept="image/jpeg,image/png" required={false} /> */}
 
-                    <div className={styles.field}>
-                        <label htmlFor="input-skills">Skills :</label>
-                        <Controller
-                            control={control}
-                            name={"skills"}
-                            render={({ field }) => (
-                                <Select
-                                    ref={field.ref}
-                                    options={skillsOptions}
-                                    components={makeAnimated()}
-                                    placeholder={""}
-                                    value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
-                                    onChange={v => {
-                                        const selectedIds = [...v.values()].map(s => s.id);
-                                        field.onChange(query.data?.filter(s => selectedIds.includes(s.id)));
-                                    }}
-                                    isLoading={query.isLoading}
-                                    isDisabled={query.isLoading || query.isError}
-                                    isMulti
-                                    required
-                                />
-                            )}
-                        />
-                    </div>
+                <Input
+                    attributes={{
+                        ...register("featured", { required: true }),
+                        type: "checkbox",
+                        className: styles.field
+                    }}
+                    label="Featured :"
+                />
 
-                    <Input
-                        attributes={{
-                            ...register("image.file"),
-                            type: "file",
-                            accept: "image/*",
-                            required: !initialProject
-                        }}
-                        label="Image file"
-                        wrapperClassName={styles.field}
-                    />
-
-                    <Input
-                        attributes={{
-                            ...register("image.alt"),
-                            maxLength: 255,
-                            required: true
-                        }}
-                        label="Image alt"
-                        wrapperClassName={styles.field}
-                    />
-
-                    <Input
-                        attributes={{
-                            ...register("featured"),
-                            type: "checkbox"
-                        }}
-                        label="Featured"
-                        wrapperClassName={styles.field}
-                    />
-
-                    <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
-                </form>
-            </Modal>
-            <Popup {...popup} />
-        </>
+                <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
+            </form>
+        </Modal>
     );
 };

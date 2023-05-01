@@ -12,7 +12,7 @@ type Props = {
     handleEdit: () => void;
 };
 
-const PLACEHOLDER = "https://via.placeholder.com/1920x1080/E6E6E6/000000?text=No+image+available+for+this+project";
+const PLACEHOLDER = "https://via.placeholder.com/1920x1080/AAAAAA/000000?text=No+image+available+for+this+project";
 
 export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
 
@@ -26,10 +26,12 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
                 <div className={styles.cardHeader}>
                     <div className={styles.cardTitle}>
                         <div>
-                            <h1>{project.title}</h1>
-                            {project.featured && <FaHeart size={20} fill="red" />}
+                            <h1>
+                                {project.title}
+                                {project.featured && <FaHeart size={22} fill="red" />}
+                            </h1>
                         </div>
-                        <span>{Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(new Date(project.creationDate))}</span>
+                        <span>{project.creationDate}</span>
                     </div>
                     <div className={styles.cardLinks}>
                         <button onClick={handleEdit}>
@@ -52,7 +54,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
             </div>
             <div className={styles.cardImage}>
                 <img
-                    src={ImageService.getImageUrl(project.image) ?? PLACEHOLDER}
+                    src={ImageService.getImageUrl(project.image) || PLACEHOLDER}
                     alt={project.image.alt}
                     title={project.title}
                     onError={e => e.currentTarget.src = PLACEHOLDER}
