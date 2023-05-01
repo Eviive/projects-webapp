@@ -6,7 +6,7 @@ import { App } from "App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Health, Home, Login, Projects, Users } from "pages";
-import { Main } from "components/common";
+import { MainLayout } from "layouts";
 
 const rootElement = document.querySelector("#root");
 if (!rootElement) throw new Error("Root element not found");
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Main />,
+                element: <MainLayout />,
                 children: [
                     {
                         path: "/",
