@@ -1,0 +1,70 @@
+@use "src/styles/mixins";
+
+.details-switch {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    button {
+        z-index: 1;
+        flex: 1 1 50%;
+        padding: 0.5em 0;
+        border: 1px solid hsl(var(--accent-1));
+        transition: color 0.3s, background-color 0.3s;
+
+        &:first-child {
+            border-right: 0;
+            border-radius: 5px 0 0 5px;
+        }
+
+        &:last-child {
+            border-left: 0;
+            border-radius: 0 5px 5px 0;
+        }
+    }
+}
+
+.active {
+    color: white;
+    background-color: hsl(var(--accent-1));
+}
+
+@supports selector(:has(:last-child.active)::before) {
+    .details-switch {
+        @include mixins.pseudo(before, $pos: 50% 0 0 25%) {
+            @include mixins.size(50%, 100%);
+            background-color: hsl(var(--accent-1));
+            border-radius: 5px 0 0 5px;
+            translate: -50% -50%;
+            transition: all 0.25s ease-in-out;
+        };
+
+        &:has(:last-child.active)::before {
+            border-radius: 0 5px 5px 0;
+            translate: 50% -50%;
+        }
+    }
+
+    .active {
+        background-color: transparent;
+    }
+}
+
+.details-content {
+    width: 100%;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    overflow-y: auto;
+
+    span {
+        width: 100%;
+        overflow-wrap: anywhere;
+
+        strong {
+            text-transform: capitalize;
+        }
+    }
+}
