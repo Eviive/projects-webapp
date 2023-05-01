@@ -8,8 +8,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: hsl(var(--primary-1));
+    background-color: hsl(var(--primary-1), 0.8);
     backdrop-filter: blur(5px);
+    @include mixins.box-shadow(5px, 0);
     overflow-x: hidden;
     transition: width 0.3s;
 
@@ -27,7 +28,7 @@
     transition: background-color 0.3s;
 
     &:hover, &.active {
-        background-color: hsl(var(--primary-1));
+        background-color: hsl(var(--primary-2), 0.5);
     }
 
     svg {
