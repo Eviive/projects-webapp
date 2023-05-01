@@ -5,11 +5,7 @@ import styles from "./loader.module.scss";
 
 type Props = {
     className?: string;
-<<<<<<< develop
 };
-=======
-}
->>>>>>> feat: added a loader component and moved Main to a layouts folder
 
 export const Loader: FC<Props> = props => {
     return (
