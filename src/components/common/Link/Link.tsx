@@ -2,23 +2,19 @@ import { FC } from "react";
 import { NavLink } from "react-router-dom";
 import { Route } from "types/app";
 
-import styles from "./link.module.scss";
-
 type Props = {
     route: Route;
     className?: string;
+    activeClassName?: string;
 };
 
-export const Link: FC<Props> = ({ route, className }) => {
+export const Link: FC<Props> = ({ route, className, activeClassName }) => {
     return (
         <NavLink
             to={route.path}
             className={({ isActive, isPending }) => {
-                if (isPending) {
-                    return `${className} text-muted`;
-                }
-                if (isActive) {
-                    return `${className} text-decoration-underline`;
+                if (isActive || isPending) {
+                    return `${className} ${activeClassName}`;
                 }
                 return className;
             }}
