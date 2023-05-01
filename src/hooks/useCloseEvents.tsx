@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export interface ModalConfig {
+export type ModalConfig = {
 	outsideClick?: boolean;
 	escapeKey?: boolean;
 }
