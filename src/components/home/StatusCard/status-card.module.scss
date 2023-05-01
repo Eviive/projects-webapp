@@ -1,0 +1,24 @@
+@use "src/styles/mixins";
+
+.card {
+    flex: 250px 1 1;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: .25em;
+    color: white;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 8px;
+    @include mixins.box-shadow($blur: 20px);
+
+    p {
+        font-size: 1.8em;
+    }
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

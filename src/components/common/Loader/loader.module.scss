@@ -1,8 +1,8 @@
 @use "src/styles/mixins";
 
 .loader {
-    min-height: 100vh;
-    min-height: 100dvh;
+    flex-grow: 1;
+    @include mixins.size;
     display: grid;
     place-items: center;
 }
