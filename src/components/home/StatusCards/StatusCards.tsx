@@ -1,8 +1,9 @@
 import { StatusCard } from "components/home";
-import { GridLayout } from "layouts";
 import { FC } from "react";
 import { FaDatabase, FaHdd, FaServer, FaWifi } from "react-icons/fa";
 import { Health } from "types/health";
+
+import styles from "./status-cards.module.scss";
 
 type Props = {
     data: Health;
@@ -10,7 +11,7 @@ type Props = {
 
 export const StatusCards: FC<Props> = ({ data }) => {
     return (
-        <GridLayout>
+        <div className={styles.cardsWrapper}>
             <StatusCard
                 title="API"
                 icon={<FaServer size={30} />}
@@ -31,6 +32,6 @@ export const StatusCards: FC<Props> = ({ data }) => {
                 icon={<FaHdd size={30} />}
                 status={data.components.diskSpace.status}
             />
-        </GridLayout>
+        </div>
     );
 };

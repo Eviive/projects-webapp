@@ -1,13 +1,8 @@
 @use "src/styles/mixins";
 
 .loader {
-<<<<<<< develop
     flex-grow: 1;
     @include mixins.size;
-=======
-    min-height: 100vh;
-    min-height: 100dvh;
->>>>>>> feat: added a loader component and moved Main to a layouts folder
     display: grid;
     place-items: center;
 }
