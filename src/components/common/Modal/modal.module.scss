@@ -10,7 +10,7 @@
     min-width: 350px;
     display: grid;
     place-items: center;
-    background-color: hsl(0deg, 0%, 0%, 0.7);
+    background-color: hsl(0deg, 0%, 0%, .7);
     overflow-y: auto;
 
     &::-webkit-scrollbar {
@@ -35,7 +35,6 @@
     width: min(90%, 50ch);
     background-color: hsl(var(--primary-1));
     border-radius: 5px;
-    @include mixins.box-shadow;
 }
 
 .modal-header {
@@ -44,7 +43,7 @@
     justify-content: space-between;
     align-items: center;
     font-weight: bold;
-    border-bottom: 2px solid hsl(var(--primary-2));
+    border-bottom: 2px solid hsl(var(--primary-1));
 
     h1 {
         font-size: 1.2em;

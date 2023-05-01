@@ -9,7 +9,7 @@ type Props = {
     handleClose: () => void;
     children: ReactNode;
     config?: ModalConfig;
-};
+}
 
 export const Modal: FC<Props> = props => {
 

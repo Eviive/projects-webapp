@@ -7,3 +7,4 @@ export { Button } from "./Button/Button";
 export { Input } from "./Input/Input";
 export { RequireAuth } from "./RequireAuth/RequireAuth";
 export { Loader } from "./Loader/Loader";
+export { Modal } from "./Modal/Modal";
