@@ -1,12 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
 import { useCustomQuery } from "hooks/useCustomQuery";
-import { ChangeEventHandler, FC, useState } from "react";
+import { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Project, Skill } from "types/entities";
+import { Project } from "types/entities";
 
 import styles from "./project-form.module.scss";
-import { SkillService } from "../../../api/services";
 
 type Props = {
     project?: Project;
@@ -53,22 +53,22 @@ export const ProjectForm: FC<Props> = ({ project, handleClose }) => {
         // }
     };
 
-    const selectChangeHandler: ChangeEventHandler<HTMLSelectElement> = e => {
-        const { options } = e.target;
-        const selectedSkills: Skill[] = [];
-
-        for (const o of options) {
-            if (o.selected) {
-                const skill = skills?.find(s => s.id === parseInt(o.value));
-
-                if (skill) {
-                    selectedSkills.push(skill);
-                }
-            }
-        }
-
-        setValue("skills", selectedSkills);
-    };
+    // const selectChangeHandler: ChangeEventHandler<HTMLSelectElement> = e => {
+    //     const { options } = e.target;
+    //     const selectedSkills: Skill[] = [];
+    //
+    //     for (const o of options) {
+    //         if (o.selected) {
+    //             const skill = skills?.find(s => s.id === parseInt(o.value));
+    //
+    //             if (skill) {
+    //                 selectedSkills.push(skill);
+    //             }
+    //         }
+    //     }
+    //
+    //     setValue("skills", selectedSkills);
+    // };
 
     return (
         <Modal
@@ -77,44 +77,57 @@ export const ProjectForm: FC<Props> = ({ project, handleClose }) => {
             config={{ outsideClick: false, escapeKey: true }}
         >
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-                <Input attributes={{
-                    ...register("title", { required: true }),
-                    className: styles.field
-                }} />
+                <Input
+                    attributes={{
+                        ...register("title", { required: true }),
+                        className: styles.field
+                    }}
+                    label="Title"
+                />
 
                 <div className={styles.field}>
+                    <label htmlFor="input-description">Description :</label>
                     <textarea
                         {...register("description", { required: true })}
                         id="input-description"
-                        placeholder="Enter the description"
                         rows={3}
                     ></textarea>
                 </div>
 
-                <Input attributes={{
-                    ...register("creationDate", { required: true }),
-                    type: "date",
-                    className: styles.field
-                }} />
+                <Input
+                    attributes={{
+                        ...register("creationDate", { required: true }),
+                        type: "date",
+                        className: styles.field
+                    }}
+                    label="Creation date"
+                />
 
-                <Input attributes={{
-                    ...register("repoUrl", { required: true }),
-                    type: "url",
-                    className: styles.field
-                }} />
+                <Input
+                    attributes={{
+                        ...register("repoUrl", { required: true }),
+                        type: "url",
+                        className: styles.field
+                    }}
+                    label="Repository URL"
+                />
 
-                <Input attributes={{
-                    ...register("demoUrl", { required: true }),
-                    type: "url",
-                    className: styles.field
-                }} />
+                <Input
+                    attributes={{
+                        ...register("demoUrl", { required: true }),
+                        type: "url",
+                        className: styles.field
+                    }}
+                    label="Demonstration URL"
+                />
 
                 <div className={styles.field}>
+                    <label htmlFor="input-skills">Skills :</label>
                     <select
                         {...register("skills", {
                             required: true
                         })}
-                        onChange={selectChangeHandler}
+                        // onChange={selectChangeHandler}
                         id="input-skills"
                         multiple
                     >
@@ -122,12 +135,24 @@ export const ProjectForm: FC<Props> = ({ project, handleClose }) => {
                     </select>
                 </div>
 
-                <Input attributes={{
-                    ...register("image.alt", { required: true }),
-                    className: styles.field
-                }} />
+                <Input
+                    attributes={{
+                        ...register("image.alt", { required: true }),
+                        className: styles.field
+                    }}
+                    label="Image alt"
+                />
 
-                {/* <Input className={styles.field} type="file" name="image-file" accept="image/jpeg,image/png" required={false} /> */}
+                <Input
+                    attributes={{
+                        ...register("image.alt", { required: false }),
+                        className: styles.field,
+                        type: "file",
+                        accept: "image/*",
+                        required: !project
+                    }}
+                    label="Image preview"
+                />
 
                 <Input
                     attributes={{
@@ -135,7 +160,7 @@ export const ProjectForm: FC<Props> = ({ project, handleClose }) => {
                         type: "checkbox",
                         className: styles.field
                     }}
-                    label="Featured :"
+                    label="Featured"
                 />
 
                 <Button className={styles.submit} loading={isSubmitting}>Submit</Button>

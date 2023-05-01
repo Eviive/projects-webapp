@@ -22,7 +22,7 @@ export const Input: FC<Props> = (({ attributes, label, handleInvalid }) => {
 
     return (
         <div className={attributes.className}>
-            {label && <label htmlFor={`input-${attributes.name}`}>{label}</label>}
+            {label && <label htmlFor={`input-${attributes.name}`}>{label} :</label>}
             <input
                 {...attributes}
                 id={`input-${attributes.name}`}
