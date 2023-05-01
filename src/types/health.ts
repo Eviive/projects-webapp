@@ -55,7 +55,7 @@ export type HttpExchange = {
             [key: string]: string[];
         };
     };
-    timeTaken: number;
+    timeTaken: string;
 };
 
 export type Info = {
