@@ -4,7 +4,7 @@ type Props = {
     href: string,
     className?: string,
     children?: ReactNode
-}
+};
 
 export const Anchor: FC<Props> = props => {
     return (

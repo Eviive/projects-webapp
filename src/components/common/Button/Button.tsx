@@ -8,7 +8,7 @@ type Props = {
     className?: string;
     loading?: boolean;
     handleClick?: MouseEventHandler<HTMLButtonElement>;
-}
+};
 
 export const Button: FC<Props> = props => {
     return (

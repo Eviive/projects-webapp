@@ -9,7 +9,7 @@ export type AuditEvent = {
             [key: string]: string;
         };
     };
-}
+};
 
 export type Health = {
     status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
@@ -34,7 +34,7 @@ export type Health = {
             status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
         }
     };
-}
+};
 
 export type HttpExchange = {
     timestamp: string;
@@ -56,7 +56,7 @@ export type HttpExchange = {
         };
     };
     timeTaken: number;
-}
+};
 
 export type Info = {
     app: {
@@ -65,4 +65,4 @@ export type Info = {
         version: string;
         stage: string;
     };
-}
+};
