@@ -25,7 +25,7 @@ export const App: FC = () => {
             }
         };
         persistLogin();
-    }, [ setAccessToken ]);
+    }, [setAccessToken]);
 
     return (
         <AuthContextProvider value={{

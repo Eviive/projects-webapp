@@ -24,7 +24,7 @@ export const Login: FC = () => {
         if (accessToken) {
             setRedirect(true);
         }
-    }, [ accessToken ]);
+    }, [accessToken]);
 
     const handleInvalid: FormEventHandler<HTMLInputElement> = e => {
         e.preventDefault(); // prevents the default popup from showing
