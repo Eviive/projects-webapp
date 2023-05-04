@@ -33,7 +33,7 @@ const HTTP_STATUS = [
 
 export const Health: FC = () => {
 
-    const query = useCustomQuery([ "httpExchanges" ], HealthService.httpExchanges);
+    const query = useCustomQuery(["httpExchanges"], HealthService.httpExchanges);
 
     return (
         <>
