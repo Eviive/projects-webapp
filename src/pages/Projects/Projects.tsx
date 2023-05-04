@@ -10,7 +10,7 @@ import styles from "./projects.module.scss";
 
 export const Projects: FC = () => {
 
-    const query = useCustomQuery([ "projects" ], ProjectService.findAll);
+    const query = useCustomQuery(["projects"], ProjectService.findAll);
 
     const [ editProject, setEditProject ] = useState<Project | null>(null);
 

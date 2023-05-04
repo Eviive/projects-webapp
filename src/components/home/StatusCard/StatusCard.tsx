@@ -17,7 +17,7 @@ const STATUS_COLORS = {
 
 export const StatusCard: FC<Props> = props => {
     return (
-        <div className={styles.card} style={{ backgroundColor: STATUS_COLORS[ props.status ] }}>
+        <div className={styles.card} style={{ backgroundColor: STATUS_COLORS[props.status] }}>
             <h3>{props.title}</h3>
             <div className={styles.cardContent}>
                 {props.icon}
