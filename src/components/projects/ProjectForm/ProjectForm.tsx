@@ -1,9 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { SkillService } from "api/services";
+import { ProjectService, SkillService } from "api/services";
+import { AxiosError } from "axios";
 import { Button, Input, Modal } from "components/common";
 import { useCustomQuery } from "hooks/useCustomQuery";
 import { FC, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 import { Project } from "types/entities";
 
 import styles from "./project-form.module.scss";
@@ -13,74 +16,86 @@ type Props = {
     handleClose: () => void;
 };
 
-export const ProjectForm: FC<Props> = ({ project, handleClose }) => {
+type ProjectWithFile = Project & { image: { file: FileList } };
+
+export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose }) => {
 
     const queryClient = useQueryClient();
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
 
-    const { data: skills } = useCustomQuery([ "skills" ], SkillService.findAll);
+    const query = useCustomQuery(["skills"], SkillService.findAll);
 
-    const { register, handleSubmit, setValue } = useForm<Project>({ defaultValues: project });
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState
+    } = useForm<ProjectWithFile>({ defaultValues: initialProject });
 
-    const skillsOptions = skills?.map(skill => <option key={skill.id} value={skill.id}>{skill.name}</option>);
+    const skillsOptions = query.data?.map(skill => ({ id: skill.id, label: skill.name, value: skill.id }));
 
-    const submitHandler: SubmitHandler<Project> = async data => {
-        console.log(data);
-        // setIsSubmitting(true);
-        // try {
-        // 	const editing = !!project;
+    const submitHandler: SubmitHandler<ProjectWithFile> = async data => {
+        if (isSubmitting) return;
+        if (!formState.isDirty) return;
+        setIsSubmitting(true);
+        try {
+            const editing = !!initialProject;
 
-        // 	editing ? await updateProject(data) : await saveProject(data);
+            const project: Project = {
+                ...data,
+                image: {
+                    id: data.image.id,
+                    alt: data.image.alt
+                }
+            };
+            const imageFile = data.image.file[0];
 
-        // 	queryClient.invalidateQueries(["projects"]);
-        // 	showPopup({ title: "Project", message: `Project ${editing ? "updated" : "created"} successfully!` }, handleClose);
-        // } catch (e) {
-        // 	console.log(e);
-        // 	if (e instanceof AxiosError) {
-        // 		showPopup({
-        // 			title: e.response?.data?.error ?? e.name,
-        // 			message: e.response?.data?.message ?? e.message
-        // 		});
-        // 	} else {
-        // 		showPopup({
-        // 			title: "Unknown error",
-        // 			message: "Please try again later."
-        // 		});
-        // 	}
-        // } finally {
-        // 	setIsSubmitting(false);
-        // }
+            if (editing) {
+                const promises: Promise<Project>[] = [ProjectService.update(project)];
+                imageFile && promises.push(ProjectService.uploadImage(project.id, imageFile));
+                await Promise.all(promises);
+            } else {
+                const createdProject = await ProjectService.save(project);
+                imageFile && await ProjectService.uploadImage(createdProject.id, imageFile);
+            }
+
+            await queryClient.invalidateQueries(["projects"]);
+            console.log(`Project ${editing ? "updated" : "created"} successfully!`);
+            handleClose();
+            // showPopup({ title: "Project", message: `Project ${editing ? "updated" : "created"} successfully!` }, handleClose);
+        } catch (e) {
+            console.log(e);
+            if (e instanceof AxiosError) {
+                console.error("AxiosError", e);
+                // showPopup({
+                //     title: e.response?.data?.error ?? e.name,
+                //     message: e.response?.data?.message ?? e.message
+                // });
+            } else {
+                console.error("Unknown error", e);
+                // showPopup({
+                //     title: "Unknown error",
+                //     message: "Please try again later."
+                // });
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
-
-    // const selectChangeHandler: ChangeEventHandler<HTMLSelectElement> = e => {
-    //     const { options } = e.target;
-    //     const selectedSkills: Skill[] = [];
-    //
-    //     for (const o of options) {
-    //         if (o.selected) {
-    //             const skill = skills?.find(s => s.id === parseInt(o.value));
-    //
-    //             if (skill) {
-    //                 selectedSkills.push(skill);
-    //             }
-    //         }
-    //     }
-    //
-    //     setValue("skills", selectedSkills);
-    // };
 
     return (
         <Modal
-            title={project ? `Editing ${project.title}` : "Creating project"}
+            title={initialProject ? `Editing ${initialProject.title}` : "Creating project"}
             handleClose={handleClose}
             config={{ outsideClick: false, escapeKey: true }}
         >
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
                 <Input
                     attributes={{
-                        ...register("title", { required: true }),
-                        className: styles.field
+                        ...register("title"),
+                        className: styles.field,
+                        required: true
                     }}
                     label="Title"
                 />
@@ -88,75 +103,91 @@ export const ProjectForm: FC<Props> = ({ project, handleClose }) => {
                 <div className={styles.field}>
                     <label htmlFor="input-description">Description :</label>
                     <textarea
-                        {...register("description", { required: true })}
+                        {...register("description")}
                         id="input-description"
                         rows={3}
+                        required
                     ></textarea>
                 </div>
 
                 <Input
                     attributes={{
-                        ...register("creationDate", { required: true }),
+                        ...register("creationDate"),
                         type: "date",
-                        className: styles.field
+                        className: styles.field,
+                        required: true
                     }}
                     label="Creation date"
                 />
 
                 <Input
                     attributes={{
-                        ...register("repoUrl", { required: true }),
+                        ...register("repoUrl"),
                         type: "url",
-                        className: styles.field
+                        className: styles.field,
+                        required: true
                     }}
                     label="Repository URL"
                 />
 
                 <Input
                     attributes={{
-                        ...register("demoUrl", { required: true }),
+                        ...register("demoUrl"),
                         type: "url",
-                        className: styles.field
+                        className: styles.field,
+                        required: true
                     }}
                     label="Demonstration URL"
                 />
 
                 <div className={styles.field}>
                     <label htmlFor="input-skills">Skills :</label>
-                    <select
-                        {...register("skills", {
-                            required: true
-                        })}
-                        // onChange={selectChangeHandler}
-                        id="input-skills"
-                        multiple
-                    >
-                        {skillsOptions}
-                    </select>
+                    <Controller
+                        control={control}
+                        name={"skills"}
+                        render={({ field }) => (
+                            <Select
+                                ref={field.ref}
+                                options={skillsOptions}
+                                components={makeAnimated()}
+                                placeholder={""}
+                                value={skillsOptions?.filter(option => field.value.map(s => s.id)?.includes(option.id))}
+                                onChange={v => {
+                                    const selectedIds = [...v.values()].map(s => s.id);
+                                    field.onChange(query.data?.filter(s => selectedIds.includes(s.id)));
+                                }}
+                                isLoading={query.isLoading}
+                                isDisabled={query.isLoading || query.isError}
+                                isMulti
+                                required
+                            />
+                        )}
+                    />
                 </div>
 
                 <Input
                     attributes={{
-                        ...register("image.alt", { required: true }),
-                        className: styles.field
+                        ...register("image.file"),
+                        className: styles.field,
+                        type: "file",
+                        accept: "image/*",
+                        required: !initialProject
+                    }}
+                    label="Image file"
+                />
+
+                <Input
+                    attributes={{
+                        ...register("image.alt"),
+                        className: styles.field,
+                        required: true
                     }}
                     label="Image alt"
                 />
 
                 <Input
                     attributes={{
-                        ...register("image.alt", { required: false }),
-                        className: styles.field,
-                        type: "file",
-                        accept: "image/*",
-                        required: !project
-                    }}
-                    label="Image preview"
-                />
-
-                <Input
-                    attributes={{
-                        ...register("featured", { required: true }),
+                        ...register("featured"),
                         type: "checkbox",
                         className: styles.field
                     }}

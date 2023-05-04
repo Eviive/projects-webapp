@@ -26,7 +26,10 @@ const uploadImage = (id: number, file: File) => {
     formData.append("file", file);
     return request<Skill, FormData>(`/${URL}/${id}/upload-image`, {
         method: "POST",
-        data: formData
+        data: formData,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
     });
 };
 

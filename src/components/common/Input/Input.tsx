@@ -1,7 +1,5 @@
 import { FC, FormEventHandler, InputHTMLAttributes, ReactNode } from "react";
 
-const TEXT_INPUT = [ "text", "search", "url", "tel", "email", "password", "number" ];
-
 type Attributes = InputHTMLAttributes<HTMLInputElement> & { name: string; };
 
 type Props = {
@@ -14,22 +12,16 @@ export const Input: FC<Props> = (({ attributes, label, handleInvalid }) => {
 
     const type = attributes.type ?? "text";
 
-    const placeholder = attributes.placeholder ?? (
-        TEXT_INPUT.includes(type)
-            ? `${attributes.name.charAt(0).toUpperCase()}${attributes.name.substring(1)}`
-            : undefined
-    );
-
     return (
         <div className={attributes.className}>
-            {label && <label htmlFor={`input-${attributes.name}`}>{label} :</label>}
+            {label && <label htmlFor={`input-${attributes.name}`}>{label}{typeof label === "string" && " :"}</label>}
             <input
                 {...attributes}
                 id={`input-${attributes.name}`}
                 type={type}
-                placeholder={placeholder}
+                placeholder={attributes.placeholder}
                 pattern={attributes.pattern ?? ".*\\S.*"} // prevents whitespace-only input
-                required={attributes.required ?? (type !== "checkbox")}
+                required={attributes.required}
                 onInput={handleInvalid && (e => e.currentTarget.setCustomValidity(""))}
                 onInvalid={handleInvalid}
             />
