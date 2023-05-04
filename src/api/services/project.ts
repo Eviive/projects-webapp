@@ -1,5 +1,5 @@
 import { request } from "api/client";
-import { Project, Page } from "types/entities";
+import { Page, Project } from "types/entities";
 
 const URL = "project";
 
@@ -32,7 +32,10 @@ const uploadImage = (id: number, file: File) => {
     formData.append("file", file);
     return request<Project, FormData>(`/${URL}/${id}/upload-image`, {
         method: "POST",
-        data: formData
+        data: formData,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
     });
 };
 
