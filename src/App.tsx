@@ -13,7 +13,7 @@ export const App: FC = () => {
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {
-        const persistLogin = async () => {
+        (async () => {
             try {
                 const res = await UserService.refresh();
                 setAccessToken(res.roles.includes("ROLE_ADMIN") ? res.accessToken : "");
@@ -23,8 +23,7 @@ export const App: FC = () => {
             } finally {
                 setIsLoading(false);
             }
-        };
-        persistLogin();
+        })();
     }, [setAccessToken]);
 
     return (
