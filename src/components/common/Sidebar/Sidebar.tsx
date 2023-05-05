@@ -4,7 +4,7 @@ import { Anchor, Link } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { FC } from "react";
 import { BsBriefcaseFill } from "react-icons/bs";
-import { FaHome, FaInfo, FaUsers } from "react-icons/fa";
+import { FaHome, FaInfo } from "react-icons/fa";
 import { GiHealthNormal } from "react-icons/gi";
 import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
@@ -22,11 +22,6 @@ const routes: Route[] = [
         name: "Projects",
         path: "/projects",
         icon: <BsBriefcaseFill />
-    },
-    {
-        name: "Users",
-        path: "/users",
-        icon: <FaUsers />
     },
     {
         name: "Health",
