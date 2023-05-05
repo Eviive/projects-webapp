@@ -30,14 +30,14 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
         register,
         handleSubmit,
         control,
-        formState
+        formState: { isDirty }
     } = useForm<ProjectWithFile>({ defaultValues: initialProject });
 
     const skillsOptions = query.data?.map(skill => ({ id: skill.id, label: skill.name, value: skill.id }));
 
     const submitHandler: SubmitHandler<ProjectWithFile> = async data => {
         if (isSubmitting) return;
-        if (!formState.isDirty) return;
+        if (!isDirty) return handleClose();
         setIsSubmitting(true);
         try {
             const editing = !!initialProject;
