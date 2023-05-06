@@ -152,7 +152,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                                 options={skillsOptions}
                                 components={makeAnimated()}
                                 placeholder={""}
-                                value={skillsOptions?.filter(option => field.value.map(s => s.id)?.includes(option.id))}
+                                value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
                                 onChange={v => {
                                     const selectedIds = [...v.values()].map(s => s.id);
                                     field.onChange(query.data?.filter(s => selectedIds.includes(s.id)));
