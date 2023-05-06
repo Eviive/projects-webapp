@@ -96,7 +96,8 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                     attributes={{
                         ...register("title"),
                         className: styles.field,
-                        required: true
+                        required: true,
+                        maxLength: 50
                     }}
                     label="Title"
                 />
@@ -107,6 +108,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                         {...register("description")}
                         id="input-description"
                         rows={3}
+                        maxLength={510}
                         required
                     ></textarea>
                 </div>
@@ -126,6 +128,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                         ...register("repoUrl"),
                         type: "url",
                         className: styles.field,
+                        maxLength: 255,
                         required: true
                     }}
                     label="Repository URL"
@@ -136,6 +139,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                         ...register("demoUrl"),
                         type: "url",
                         className: styles.field,
+                        maxLength: 255,
                         required: true
                     }}
                     label="Demonstration URL"
@@ -181,6 +185,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                     attributes={{
                         ...register("image.alt"),
                         className: styles.field,
+                        maxLength: 255,
                         required: true
                     }}
                     label="Image alt"
