@@ -52,7 +52,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
             </div>
             <div className={styles.cardImage}>
                 <img
-                    src={ImageService.getImageUrl(project.image) || PLACEHOLDER}
+                    src={ImageService.getImageUrl(project.image) ?? PLACEHOLDER}
                     alt={project.image.alt}
                     title={project.title}
                     onError={e => e.currentTarget.src = PLACEHOLDER}
