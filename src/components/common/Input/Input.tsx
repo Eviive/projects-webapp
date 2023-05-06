@@ -20,7 +20,7 @@ export const Input: FC<Props> = (({ attributes, label, handleInvalid }) => {
                 id={`input-${attributes.name}`}
                 type={type}
                 placeholder={attributes.placeholder}
-                pattern={attributes.pattern ?? ".*\\S.*"} // prevents whitespace-only input
+                pattern={attributes.pattern}
                 required={attributes.required}
                 onInput={handleInvalid && (e => e.currentTarget.setCustomValidity(""))}
                 onInvalid={handleInvalid}

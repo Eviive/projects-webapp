@@ -1,19 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { ProjectService, SkillService } from "api/services";
-import { AxiosError } from "axios";
-import { Button, Input, Modal } from "components/common";
+import { Button, Input, Modal, Popup } from "components/common";
 import { useCustomQuery } from "hooks/useCustomQuery";
+import { usePopup } from "hooks/usePopup";
 import { FC, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { Project } from "types/entities";
+import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./project-form.module.scss";
 
 type Props = {
     project?: Project;
-    handleClose: () => void;
+    handleClose: (madeChanges: boolean) => void;
 };
 
 type ProjectWithFile = Project & { image: { file: FileList } };
@@ -23,6 +24,8 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
     const queryClient = useQueryClient();
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
+
+    const [ popup, showPopup ] = usePopup();
 
     const query = useCustomQuery(["skills"], SkillService.findAll);
 
@@ -37,7 +40,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
 
     const submitHandler: SubmitHandler<ProjectWithFile> = async data => {
         if (isSubmitting) return;
-        if (!isDirty) return handleClose();
+        if (!isDirty) return handleClose(false);
         setIsSubmitting(true);
         try {
             const editing = !!initialProject;
@@ -63,145 +66,134 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
 
             await queryClient.invalidateQueries(["projects"]);
             console.log(`Project ${editing ? "updated" : "created"} successfully!`);
-            handleClose();
-            // showPopup({ title: "Project", message: `Project ${editing ? "updated" : "created"} successfully!` }, handleClose);
+            handleClose(true);
         } catch (e) {
-            console.log(e);
-            if (e instanceof AxiosError) {
-                console.error("AxiosError", e);
-                // showPopup({
-                //     title: e.response?.data?.error ?? e.name,
-                //     message: e.response?.data?.message ?? e.message
-                // });
-            } else {
-                console.error("Unknown error", e);
-                // showPopup({
-                //     title: "Unknown error",
-                //     message: "Please try again later."
-                // });
-            }
+            showPopup(getTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <Modal
-            title={initialProject ? `Editing ${initialProject.title}` : "Creating project"}
-            handleClose={handleClose}
-            config={{ outsideClick: false, escapeKey: true }}
-        >
-            <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-                <Input
-                    attributes={{
-                        ...register("title"),
-                        className: styles.field,
-                        required: true,
-                        maxLength: 50
-                    }}
-                    label="Title"
-                />
-
-                <div className={styles.field}>
-                    <label htmlFor="input-description">Description :</label>
-                    <textarea
-                        {...register("description")}
-                        id="input-description"
-                        rows={3}
-                        maxLength={510}
-                        required
-                    ></textarea>
-                </div>
-
-                <Input
-                    attributes={{
-                        ...register("creationDate"),
-                        type: "date",
-                        className: styles.field,
-                        required: true
-                    }}
-                    label="Creation date"
-                />
-
-                <Input
-                    attributes={{
-                        ...register("repoUrl"),
-                        type: "url",
-                        className: styles.field,
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Repository URL"
-                />
-
-                <Input
-                    attributes={{
-                        ...register("demoUrl"),
-                        type: "url",
-                        className: styles.field,
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Demonstration URL"
-                />
-
-                <div className={styles.field}>
-                    <label htmlFor="input-skills">Skills :</label>
-                    <Controller
-                        control={control}
-                        name={"skills"}
-                        render={({ field }) => (
-                            <Select
-                                ref={field.ref}
-                                options={skillsOptions}
-                                components={makeAnimated()}
-                                placeholder={""}
-                                value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
-                                onChange={v => {
-                                    const selectedIds = [...v.values()].map(s => s.id);
-                                    field.onChange(query.data?.filter(s => selectedIds.includes(s.id)));
-                                }}
-                                isLoading={query.isLoading}
-                                isDisabled={query.isLoading || query.isError}
-                                isMulti
-                                required
-                            />
-                        )}
+        <>
+            <Modal
+                title={initialProject ? `Editing ${initialProject.title}` : "Creating project"}
+                handleClose={() => handleClose(false)}
+                config={{ outsideClick: false, escapeKey: true }}
+            >
+                <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+                    <Input
+                        attributes={{
+                            ...register("title"),
+                            className: styles.field,
+                            required: true,
+                            maxLength: 50
+                        }}
+                        label="Title"
                     />
-                </div>
 
-                <Input
-                    attributes={{
-                        ...register("image.file"),
-                        className: styles.field,
-                        type: "file",
-                        accept: "image/*",
-                        required: !initialProject
-                    }}
-                    label="Image file"
-                />
+                    <div className={styles.field}>
+                        <label htmlFor="input-description">Description :</label>
+                        <textarea
+                            {...register("description")}
+                            id="input-description"
+                            rows={3}
+                            maxLength={510}
+                            required
+                        ></textarea>
+                    </div>
 
-                <Input
-                    attributes={{
-                        ...register("image.alt"),
-                        className: styles.field,
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Image alt"
-                />
+                    <Input
+                        attributes={{
+                            ...register("creationDate"),
+                            type: "date",
+                            className: styles.field,
+                            required: true
+                        }}
+                        label="Creation date"
+                    />
 
-                <Input
-                    attributes={{
-                        ...register("featured"),
-                        type: "checkbox",
-                        className: styles.field
-                    }}
-                    label="Featured"
-                />
+                    <Input
+                        attributes={{
+                            ...register("repoUrl"),
+                            type: "url",
+                            className: styles.field,
+                            maxLength: 255,
+                            required: true
+                        }}
+                        label="Repository URL"
+                    />
 
-                <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
-            </form>
-        </Modal>
+                    <Input
+                        attributes={{
+                            ...register("demoUrl"),
+                            type: "url",
+                            className: styles.field,
+                            maxLength: 255,
+                            required: true
+                        }}
+                        label="Demonstration URL"
+                    />
+
+                    <div className={styles.field}>
+                        <label htmlFor="input-skills">Skills :</label>
+                        <Controller
+                            control={control}
+                            name={"skills"}
+                            render={({ field }) => (
+                                <Select
+                                    ref={field.ref}
+                                    options={skillsOptions}
+                                    components={makeAnimated()}
+                                    placeholder={""}
+                                    value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
+                                    onChange={v => {
+                                        const selectedIds = [...v.values()].map(s => s.id);
+                                        field.onChange(query.data?.filter(s => selectedIds.includes(s.id)));
+                                    }}
+                                    isLoading={query.isLoading}
+                                    isDisabled={query.isLoading || query.isError}
+                                    isMulti
+                                    required
+                                />
+                            )}
+                        />
+                    </div>
+
+                    <Input
+                        attributes={{
+                            ...register("image.file"),
+                            className: styles.field,
+                            type: "file",
+                            accept: "image/*",
+                            required: !initialProject
+                        }}
+                        label="Image file"
+                    />
+
+                    <Input
+                        attributes={{
+                            ...register("image.alt"),
+                            className: styles.field,
+                            maxLength: 255,
+                            required: true
+                        }}
+                        label="Image alt"
+                    />
+
+                    <Input
+                        attributes={{
+                            ...register("featured"),
+                            type: "checkbox",
+                            className: styles.field
+                        }}
+                        label="Featured"
+                    />
+
+                    <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
+                </form>
+            </Modal>
+            <Popup {...popup} />
+        </>
     );
 };
