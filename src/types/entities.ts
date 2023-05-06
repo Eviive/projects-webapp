@@ -31,6 +31,7 @@ export type Skill = {
 
 export type Image = {
     id: number;
+    uuid?: string;
     alt: string;
 };
 
