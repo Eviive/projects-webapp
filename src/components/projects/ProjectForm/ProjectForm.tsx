@@ -46,6 +46,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                 ...data,
                 image: {
                     id: data.image.id,
+                    uuid: initialProject?.image?.uuid,
                     alt: data.image.alt
                 }
             };
