@@ -36,8 +36,8 @@ export const Sidebar: FC = () => {
 
     const queryClient = useQueryClient();
 
-    const handleRefresh = () => {
-        queryClient.invalidateQueries();
+    const handleRefresh = async () => {
+        await queryClient.invalidateQueries();
     };
 
     const handleLogout = async () => {
@@ -47,11 +47,6 @@ export const Sidebar: FC = () => {
             console.error("Logout failed", e);
         } finally {
             setAccessToken("");
-            console.log("Logged out");
-            // showPopup({
-            //     title: "Signed out",
-            //     message: "You have been successfully signed out."
-            // });
         }
     };
 
