@@ -62,19 +62,19 @@ export const Login: FC = () => {
                             <Input
                                 attributes={{
                                     ...register("username", { required: true }),
-                                    className: styles.inputWrapper,
                                     autoComplete: "username"
                                 }}
                                 label={<FaUser size={14} />}
+                                wrapperClassName={styles.inputWrapper}
                             />
                             <Input
                                 attributes={{
                                     ...register("password", { required: true }),
-                                    className: styles.inputWrapper,
                                     type: "password",
                                     autoComplete: "current-password"
                                 }}
                                 label={<FaLock size={14} />}
+                                wrapperClassName={styles.inputWrapper}
                             />
                             <Button loading={isSubmitting}>Sign In</Button>
                         </form>

@@ -85,11 +85,11 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                     <Input
                         attributes={{
                             ...register("title"),
-                            className: styles.field,
                             required: true,
                             maxLength: 50
                         }}
                         label="Title"
+                        wrapperClassName={styles.field}
                     />
 
                     <div className={styles.field}>
@@ -107,32 +107,32 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                         attributes={{
                             ...register("creationDate"),
                             type: "date",
-                            className: styles.field,
                             required: true
                         }}
                         label="Creation date"
+                        wrapperClassName={styles.field}
                     />
 
                     <Input
                         attributes={{
                             ...register("repoUrl"),
                             type: "url",
-                            className: styles.field,
                             maxLength: 255,
                             required: true
                         }}
                         label="Repository URL"
+                        wrapperClassName={styles.field}
                     />
 
                     <Input
                         attributes={{
                             ...register("demoUrl"),
                             type: "url",
-                            className: styles.field,
                             maxLength: 255,
                             required: true
                         }}
                         label="Demonstration URL"
+                        wrapperClassName={styles.field}
                     />
 
                     <div className={styles.field}>
@@ -163,31 +163,31 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                     <Input
                         attributes={{
                             ...register("image.file"),
-                            className: styles.field,
                             type: "file",
                             accept: "image/*",
                             required: !initialProject
                         }}
                         label="Image file"
+                        wrapperClassName={styles.field}
                     />
 
                     <Input
                         attributes={{
                             ...register("image.alt"),
-                            className: styles.field,
                             maxLength: 255,
                             required: true
                         }}
                         label="Image alt"
+                        wrapperClassName={styles.field}
                     />
 
                     <Input
                         attributes={{
                             ...register("featured"),
-                            type: "checkbox",
-                            className: styles.field
+                            type: "checkbox"
                         }}
                         label="Featured"
+                        wrapperClassName={styles.field}
                     />
 
                     <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
