@@ -1,5 +1,5 @@
 import { ProjectService } from "api/services";
-import { Button, Loader, Popup } from "components/common";
+import { Button, Loader, Page, Popup } from "components/common";
 import { ProjectCard, ProjectForm } from "components/projects";
 import { useCustomQuery } from "hooks/useCustomQuery";
 import { GridLayout } from "layouts";
@@ -29,7 +29,7 @@ export const Projects: FC = () => {
     };
 
     return (
-        <>
+        <Page title="Projects - Dashboard">
             { query.isSuccess
 
                 ? <>
@@ -47,6 +47,6 @@ export const Projects: FC = () => {
 
                 : <Loader />
             }
-        </>
+        </Page>
     );
 };
