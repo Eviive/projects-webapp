@@ -27,14 +27,15 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "/",
-                        element: <Home />
+                        element: <Home />,
+                        index: true
                     },
                     {
                         path: "/projects",
                         element: <Projects />
                     },
                     {
-                        path: "health",
+                        path: "/health",
                         element: <Health />
                     }
                 ]
@@ -45,7 +46,9 @@ const router = createBrowserRouter([
             }
         ]
     }
-]);
+], {
+    basename: "/dashboard"
+});
 
 root.render(
     <StrictMode>

@@ -1,5 +1,5 @@
 import { HealthService } from "api/services";
-import { Loader } from "components/common";
+import { Loader, Page } from "components/common";
 import { HttpStatusCard, TracesTable } from "components/health";
 import { useCustomQuery } from "hooks/useCustomQuery";
 import { GridLayout } from "layouts";
@@ -36,7 +36,7 @@ export const Health: FC = () => {
     const query = useCustomQuery(["httpExchanges"], HealthService.httpExchanges);
 
     return (
-        <>
+        <Page title="Health - Dashboard">
             { query.isSuccess
 
                 ? <div className={styles.healthWrapper}>
@@ -53,6 +53,6 @@ export const Health: FC = () => {
 
                 : <Loader />
             }
-        </>
+        </Page>
     );
 };
