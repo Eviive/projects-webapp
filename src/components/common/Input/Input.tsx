@@ -5,15 +5,16 @@ type Attributes = InputHTMLAttributes<HTMLInputElement> & { name: string; };
 type Props = {
     attributes: Attributes;
     label?: ReactNode;
+    wrapperClassName?: string;
     handleInvalid?: FormEventHandler<HTMLInputElement>;
 };
 
-export const Input: FC<Props> = (({ attributes, label, handleInvalid }) => {
+export const Input: FC<Props> = (({ attributes, label, wrapperClassName, handleInvalid }) => {
 
     const type = attributes.type ?? "text";
 
     return (
-        <div className={attributes.className}>
+        <div className={wrapperClassName}>
             {label && <label htmlFor={`input-${attributes.name}`}>{label}{typeof label === "string" && " :"}</label>}
             <input
                 {...attributes}
