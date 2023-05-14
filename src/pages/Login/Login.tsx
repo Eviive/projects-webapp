@@ -1,5 +1,5 @@
 import { UserService } from "api/services";
-import { Button, Input, Popup } from "components/common";
+import { Button, Input, Page, Popup } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { usePopup } from "hooks/usePopup";
 import { FC, useLayoutEffect, useState } from "react";
@@ -50,7 +50,7 @@ export const Login: FC = () => {
     };
 
     return (
-        <>
+        <Page title="Login - Dashboard">
             { redirect
                 ? <Navigate to="/" />
                 : <>
@@ -82,6 +82,6 @@ export const Login: FC = () => {
                     <Popup {...popup} />
                 </>
             }
-        </>
+        </Page>
     );
 };

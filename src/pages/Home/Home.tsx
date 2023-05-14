@@ -1,5 +1,5 @@
 import { HealthService } from "api/services";
-import { Loader } from "components/common";
+import { Loader, Page } from "components/common";
 import { StatusCards } from "components/home";
 import { useCustomQuery } from "hooks/useCustomQuery";
 import { FC } from "react";
@@ -12,7 +12,7 @@ export const Home: FC = () => {
     const queryHealth = useCustomQuery(["health"], HealthService.health);
 
     return (
-        <>
+        <Page title="Home - Dashboard">
             { (queryInfo.isSuccess && queryHealth.isSuccess)
 
                 ? <div className={styles.homeWrapper}>
@@ -28,6 +28,6 @@ export const Home: FC = () => {
 
                 : <Loader />
             }
-        </>
+        </Page>
     );
 };

@@ -11,7 +11,7 @@ const findAllFeatured = () => request<Project[]>(`/${URL}/featured`, {}, false);
 
 const findAllNotFeatured = () => request<Project[]>(`/${URL}/not-featured`, {}, false);
 
-const findAllNotFeaturedPaginated = (page: number) => request<Page<Project[]>>(`/${URL}/not-featured/paginated`, { params: { page } }, false);
+const findAllNotFeaturedPaginated = (page: number) => request<Page<Project>>(`/${URL}/not-featured/paginated`, { params: { page } }, false);
 
 const save = (project: Project) => request<Project, Project>(`/${URL}`, {
     method: "POST",
