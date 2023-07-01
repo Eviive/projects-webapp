@@ -1,9 +1,9 @@
 import { UserService } from "api/services";
-import { Button, Input, Page, Popup } from "components/common";
+import { Button, Input, Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
-import { usePopup } from "hooks/usePopup";
 import { FC, useLayoutEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { FaLock, FaUser } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import { AuthRequest } from "types/forms";
@@ -18,8 +18,6 @@ export const Login: FC = () => {
     const [ isSubmitting, setIsSubmitting ] = useState(false);
 
     const [ redirect, setRedirect ] = useState(false);
-
-    const [ popup, showPopup ] = usePopup();
 
     const { register, handleSubmit } = useForm<AuthRequest>();
 
@@ -37,13 +35,10 @@ export const Login: FC = () => {
             if (res.roles.includes("ROLE_ADMIN")) {
                 setAccessToken(res.accessToken);
             } else {
-                showPopup({
-                    title: "Insufficient permissions",
-                    message: "You must be an administrator to access the dashboard."
-                });
+                toast.error("You must be an administrator to access the dashboard.");
             }
         } catch (e) {
-            showPopup(getTitleAndMessage(e));
+            toast.error(getTitleAndMessage(e).message);
         } finally {
             setIsSubmitting(false);
         }
@@ -53,34 +48,31 @@ export const Login: FC = () => {
         <Page title="Login - Dashboard">
             { redirect
                 ? <Navigate to="/" />
-                : <>
-                    <div className={styles.loginWrapper}>
-                        <form
-                            className={styles.loginForm}
-                            onSubmit={handleSubmit(submitHandler)}
-                        >
-                            <Input
-                                attributes={{
-                                    ...register("username", { required: true }),
-                                    autoComplete: "username"
-                                }}
-                                label={<FaUser size={14} />}
-                                wrapperClassName={styles.inputWrapper}
-                            />
-                            <Input
-                                attributes={{
-                                    ...register("password", { required: true }),
-                                    type: "password",
-                                    autoComplete: "current-password"
-                                }}
-                                label={<FaLock size={14} />}
-                                wrapperClassName={styles.inputWrapper}
-                            />
-                            <Button loading={isSubmitting}>Sign In</Button>
-                        </form>
-                    </div>
-                    <Popup {...popup} />
-                </>
+                : <div className={styles.loginWrapper}>
+                    <form
+                        className={styles.loginForm}
+                        onSubmit={handleSubmit(submitHandler)}
+                    >
+                        <Input
+                            attributes={{
+                                ...register("username", { required: true }),
+                                autoComplete: "username"
+                            }}
+                            label={<FaUser size={14} />}
+                            wrapperClassName={styles.inputWrapper}
+                        />
+                        <Input
+                            attributes={{
+                                ...register("password", { required: true }),
+                                type: "password",
+                                autoComplete: "current-password"
+                            }}
+                            label={<FaLock size={14} />}
+                            wrapperClassName={styles.inputWrapper}
+                        />
+                        <Button loading={isSubmitting}>Sign In</Button>
+                    </form>
+                </div>
             }
         </Page>
     );

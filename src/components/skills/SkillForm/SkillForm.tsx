@@ -1,9 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Button, Input, Modal, Popup } from "components/common";
-import { usePopup } from "hooks/usePopup";
+import { Button, Input, Modal } from "components/common";
 import { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Skill } from "types/entities";
 import { getTitleAndMessage } from "utils/errors";
 
@@ -21,8 +21,6 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
     const queryClient = useQueryClient();
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
-
-    const [ popup, showPopup ] = usePopup();
 
     const {
         register,
@@ -60,55 +58,52 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
             console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
             handleClose(true);
         } catch (e) {
-            showPopup(getTitleAndMessage(e));
+            toast.error(getTitleAndMessage(e).message);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <>
-            <Modal
-                title={initialSkill ? `Editing ${initialSkill.name}` : "Creating skill"}
-                handleClose={() => handleClose(false)}
-                config={{ outsideClick: false, escapeKey: true }}
-            >
-                <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-                    <Input
-                        attributes={{
-                            ...register("name"),
-                            required: true,
-                            maxLength: 50
-                        }}
-                        label="Name"
-                        wrapperClassName={styles.field}
-                    />
+        <Modal
+            title={initialSkill ? `Editing ${initialSkill.name}` : "Creating skill"}
+            handleClose={() => handleClose(false)}
+            config={{ outsideClick: false, escapeKey: true }}
+        >
+            <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+                <Input
+                    attributes={{
+                        ...register("name"),
+                        required: true,
+                        maxLength: 50
+                    }}
+                    label="Name"
+                    wrapperClassName={styles.field}
+                />
 
-                    <Input
-                        attributes={{
-                            ...register("image.file"),
-                            type: "file",
-                            accept: "image/*",
-                            required: !initialSkill
-                        }}
-                        label="Image file"
-                        wrapperClassName={styles.field}
-                    />
+                <Input
+                    attributes={{
+                        ...register("image.file"),
+                        type: "file",
+                        accept: "image/*",
+                        required: !initialSkill
+                    }}
+                    label="Image file"
+                    wrapperClassName={styles.field}
+                />
 
-                    <Input
-                        attributes={{
-                            ...register("image.alt"),
-                            maxLength: 255,
-                            required: true
-                        }}
-                        label="Image alt"
-                        wrapperClassName={styles.field}
-                    />
+                <Input
+                    attributes={{
+                        ...register("image.alt"),
+                        maxLength: 255,
+                        required: true
+                    }}
+                    label="Image alt"
+                    wrapperClassName={styles.field}
+                />
 
-                    <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
-                </form>
-            </Modal>
-            <Popup {...popup} />
-        </>
+                <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
+            </form>
+        </Modal>
     );
 };

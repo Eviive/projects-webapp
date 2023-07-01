@@ -1,9 +1,9 @@
 import { SkillService } from "api/services";
-import { Loader, Page, Popup } from "components/common";
+import { Loader, Page } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
 import { useCustomQuery } from "hooks/useCustomQuery";
-import { usePopup } from "hooks/usePopup";
 import { FC, useState } from "react";
+import toast from "react-hot-toast";
 import { Skill } from "types/entities";
 
 import styles from "./skills.module.scss";
@@ -19,10 +19,8 @@ export const Skills: FC = () => {
 
     const [ skillForm, setSkillForm ] = useState<SkillForm>({ show: false });
 
-    const [ popup, showPopup ] = usePopup();
-
     const handleClose = (madeChanges: boolean) => {
-        madeChanges && showPopup({ title: "Skill", message: `Skill ${skillForm.skill ? "updated" : "created"} successfully!` });
+        madeChanges && toast.success(`Skill ${skillForm.skill ? "updated" : "created"} successfully!`);
         setSkillForm({ show: false });
     };
 
@@ -30,16 +28,13 @@ export const Skills: FC = () => {
         <Page title="Skills - Dashboard">
             { query.isSuccess
 
-                ? <>
-                    <div className={styles.skillsWrapper}>
-                        {skillForm.show && <SkillForm skill={skillForm.skill} handleClose={handleClose} />}
-                        <div className={styles.cardsWrapper}>
-                            {query.data.map((skill, index) => <SkillCard key={index} skill={skill} handleAction={() => setSkillForm({ skill, show: true })} />)}
-                            <SkillCard handleAction={() => setSkillForm({ show: true })} />
-                        </div>
+                ? <div className={styles.skillsWrapper}>
+                    {skillForm.show && <SkillForm skill={skillForm.skill} handleClose={handleClose} />}
+                    <div className={styles.cardsWrapper}>
+                        {query.data.map((skill, index) => <SkillCard key={index} skill={skill} handleAction={() => setSkillForm({ skill, show: true })} />)}
+                        <SkillCard handleAction={() => setSkillForm({ show: true })} />
                     </div>
-                    <Popup {...popup} />
-                </>
+                </div>
 
                 : <Loader />
             }

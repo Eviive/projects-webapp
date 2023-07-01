@@ -3,6 +3,7 @@ import { Loader } from "components/common";
 import { AuthContextProvider } from "contexts/AuthContext";
 import { useAxiosConfig } from "hooks/useAxiosConfig";
 import { FC, useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 
 import "styles/reset.scss";
@@ -38,6 +39,10 @@ export const App: FC = () => {
                 ? <Loader />
                 : <Outlet />
             }
+            <Toaster
+                position="bottom-center"
+                reverseOrder={true}
+            />
         </AuthContextProvider>
     );
 };

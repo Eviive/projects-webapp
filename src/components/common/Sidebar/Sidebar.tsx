@@ -3,6 +3,7 @@ import { UserService } from "api/services";
 import { Anchor, Link } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { FC } from "react";
+import toast from "react-hot-toast";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { FaHome, FaInfo, FaTools } from "react-icons/fa";
 import { GiHealthNormal } from "react-icons/gi";
@@ -52,6 +53,7 @@ export const Sidebar: FC = () => {
             console.error("Logout failed", e);
         } finally {
             setAccessToken("");
+            toast.success("You have been logged out");
         }
     };
 
