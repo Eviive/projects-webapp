@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
 import { Error as ErrorElement } from "components/common";
 import { MainLayout } from "layouts";
-import { Health, Home, Login, Projects } from "pages";
+import { Health, Home, Login, Projects, Skills } from "pages";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -33,6 +33,10 @@ const router = createBrowserRouter([
                     {
                         path: "/projects",
                         element: <Projects />
+                    },
+                    {
+                        path: "/skills",
+                        element: <Skills />
                     },
                     {
                         path: "/health",

@@ -13,7 +13,7 @@ import styles from "./projects.module.scss";
 type ProjectForm = {
     project?: Project;
     show: boolean;
-}
+};
 
 export const Projects: FC = () => {
 
@@ -24,8 +24,8 @@ export const Projects: FC = () => {
     const [ popup, showPopup ] = usePopup();
 
     const handleClose = (madeChanges: boolean) => {
-        setProjectForm({ show: false });
         madeChanges && showPopup({ title: "Project", message: `Project ${projectForm.project ? "updated" : "created"} successfully!` });
+        setProjectForm({ show: false });
     };
 
     return (
@@ -36,7 +36,7 @@ export const Projects: FC = () => {
                     <div className={styles.projectsWrapper}>
                         {projectForm.show && <ProjectForm project={projectForm.project} handleClose={handleClose} />}
                         <GridLayout className={styles.cardsWrapper} size="350px" gap="2.5em">
-                            {[ ...query.data, ...query.data, ...query.data ].map((project, index) => <ProjectCard key={index} project={project} handleEdit={() => setProjectForm({ project, show: true })} />)}
+                            {query.data.map((project, index) => <ProjectCard key={index} project={project} handleEdit={() => setProjectForm({ project, show: true })} />)}
                         </GridLayout>
                         <Button className={styles.addButton} handleClick={() => setProjectForm({ show: true })}>
                             <FaPlus size={22} />

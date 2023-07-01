@@ -1,0 +1,13 @@
+@use "src/styles/mixins";
+
+.skills-wrapper {
+    @include mixins.size;
+    padding: 5em 5%;
+}
+
+.cardsWrapper {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2em;
+}

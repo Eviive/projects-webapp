@@ -61,7 +61,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                 await Promise.all(promises);
             } else {
                 const createdProject = await ProjectService.save(project);
-                imageFile && await ProjectService.uploadImage(createdProject.id, imageFile);
+                imageFile && await ProjectService.uploadImage(createdProject.id, imageFile); // TODO: make this into a single request using FormData and @RequestPart
             }
 
             await queryClient.invalidateQueries(["projects"]);
