@@ -1,0 +1,8 @@
+@use "src/styles/mixins";
+
+.loader {
+    flex-grow: 1;
+    @include mixins.size;
+    display: grid;
+    place-items: center;
+}

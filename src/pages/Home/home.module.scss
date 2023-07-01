@@ -1,0 +1,30 @@
+@use "src/styles/mixins";
+
+.home-wrapper {
+    @include mixins.size;
+    padding: 5em 5%;
+}
+
+.home-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5em;
+}
+
+.home-header {
+    h1 {
+        font-size: 2em;
+
+        strong {
+            color: hsl(var(--accent-1));
+        }
+    }
+
+    h2 {
+        font-size: 1.1em;
+    }
+
+    p {
+        margin-top: 1em;
+    }
+}

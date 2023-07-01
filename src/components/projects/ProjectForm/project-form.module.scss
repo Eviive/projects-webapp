@@ -1,0 +1,52 @@
+.form {
+    width: 100%;
+    padding: 0 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    --radius: 5px;
+}
+
+.field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    input, select, textarea {
+        flex-grow: 1;
+        padding: 0.5rem;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: var(--radius);
+        overflow: auto;
+    }
+
+    &:has(input[type="checkbox"]) {
+        flex-direction: row;
+
+        input {
+            flex-grow: 0;
+            width: auto;
+        }
+    }
+
+    input[type="file"] {
+        width: 100%;
+    }
+
+    label {
+        font-size: 0.9em;
+        font-weight: bold;
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
+}
+
+.submit {
+    margin-top: 0.5em;
+    padding: 10px 20px;
+    min-width: 15ch;
+}

@@ -1,90 +1,100 @@
 * {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font-family: inherit;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-family: inherit;
+    box-sizing: border-box;
 }
 
 ol, ul {
-	list-style: none;
+    list-style: none;
 }
 
 a, button {
-	color: inherit;
-	text-decoration: none;
-	background-color: transparent;
-	-webkit-tap-highlight-color: transparent;
-	cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+}
+
+progress, input:is([type="checkbox"], [type="radio"], [type="range"]) {
+    accent-color: hsl(var(--accent-1));
+}
+
+textarea {
+    resize: vertical;
 }
 
 html {
-	min-width: 350px;
-	font-family: 'Inter', 'Open Sans', 'Karla', sans-serif;
-	scroll-behavior: smooth;
+    min-width: 350px;
+    font-family: 'Inter', 'Open Sans', 'Karla', sans-serif;
+    scroll-behavior: smooth;
 
-	body {
-		--primary-1: 240deg, 5%, 89%;
+    body {
+        --primary-1: 240deg, 5%, 89%;
 
-		--secondary-1: 212deg, 10%, 26%;
-		--secondary-2: 210deg, 3%, 63%;
+        --secondary-1: 212deg, 10%, 26%;
+        --secondary-2: 210deg, 3%, 63%;
 
-		--accent-1: 347deg, 84%, 50%;
+        --accent-1: 347deg, 84%, 50%;
 
-		--status-100: hsl(0deg, 0%, 0%);
-		--status-200: hsl(121deg 34% 51%);
-		--status-300: hsl(0deg, 0%, 50%);
-		--status-400: hsl(216deg 89% 60%);
-		--status-401: hsl(30deg 91% 58%);
-		--status-403: hsl(21deg, 100%, 50%);
-		--status-500: hsl(355deg, 60%, 52%);
+        --status-100: hsl(0deg, 0%, 0%);
+        --status-200: hsl(121deg 34% 51%);
+        --status-300: hsl(0deg, 0%, 50%);
+        --status-400: hsl(216deg 89% 60%);
+        --status-401: hsl(30deg 91% 58%);
+        --status-403: hsl(21deg, 100%, 50%);
+        --status-500: hsl(355deg, 60%, 52%);
 
-		font-size: 16px;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
+        --sidebar-width-open: 250px;
+        --sidebar-width-close: 60px;
 
-		&:has(.no-scroll) {
-			overflow-y: hidden;
-		}
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
 
-		#root {
-			min-height: 100vh;
-			min-height: 100dvh;
-			display: flex;
-			flex-direction: column;
+        &:has(.no-scroll) {
+            overflow-y: hidden;
+        }
 
-			main {
-				flex-grow: 1;
-				margin: 40px;
-				display: flex;
-				flex-direction: column;
-				gap: 40px;
-			}
-		}
-	}
+        #root {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+
+            main {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 40px;
+            }
+        }
+    }
 }
 
 .loader {
-	min-height: 100vh;
-	min-height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
-	background-color: hsl(240deg, 5%, 89%);
+    width: 8px;
+    height: 8px;
+    background-color: hsl(240deg, 5%, 89%);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: hsl(240deg, 5%, 65%);
-	border-radius: 10px;
+    background: hsl(240deg, 5%, 65%);
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: hsl(240deg, 5%, 50%);
+    background: hsl(240deg, 5%, 50%);
 }
 
 ::-webkit-scrollbar-corner {
-	background: hsl(240deg, 5%, 89%);
+    background: hsl(240deg, 5%, 89%);
 }
