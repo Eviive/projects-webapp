@@ -1,8 +1,8 @@
+import { TraceDetails } from "components/health";
 import { FC, useState } from "react";
 import { CgDetailsMore } from "react-icons/cg";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { HttpExchange } from "types/health";
-import { TraceDetails } from "components/health";
 
 import styles from "./traces-table.module.scss";
 
@@ -68,7 +68,7 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
                                             </span>
                                         </td>
                                         <td>
-                                            {trace.request.uri.substring(import.meta.env.VITE_API_BASE_URL.length)}
+                                            {trace.request.uri.substring(import.meta.env.VITE_API_BASE_URL?.length ?? 0)}
                                         </td>
                                         <td className={styles.detailsCell}>
                                             <button onClick={() => setTraceDetails(trace)}>

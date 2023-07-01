@@ -47,7 +47,7 @@ const router = createBrowserRouter([
         ]
     }
 ], {
-    basename: "/dashboard"
+    basename: import.meta.env.VITE_ROUTER_BASE_URL
 });
 
 root.render(
