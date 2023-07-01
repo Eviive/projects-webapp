@@ -47,10 +47,6 @@
 		caret-color: white;
 		transition: background-color 0.3s;
 
-		&::placeholder {
-			color: hsl(var(--secondary-3));
-		}
-
 		&:focus {
 			outline: none;
 		}
