@@ -10,6 +10,7 @@ import { GiHealthNormal } from "react-icons/gi";
 import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { Route } from "types/app";
+import { getTitleAndMessage } from "../../../utils/errors";
 
 import styles from "./sidebar.module.scss";
 
@@ -50,7 +51,7 @@ export const Sidebar: FC = () => {
         try {
             await UserService.logout();
         } catch (e) {
-            console.error("Logout failed", e);
+            console.error("Logout failed :", getTitleAndMessage(e).message);
         } finally {
             setAccessToken("");
             toast.success("You have been logged out");

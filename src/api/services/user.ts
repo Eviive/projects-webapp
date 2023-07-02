@@ -1,6 +1,6 @@
 import { request } from "api/client";
 import { User } from "types/entities";
-import { AuthRequest, AuthResponse } from "../../types/forms";
+import { AuthRequest, AuthResponse } from "types/forms";
 
 const URL = "user";
 

@@ -43,15 +43,16 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
                     alt: data.image.alt
                 }
             };
-            const imageFile = data.image.file[0];
+            const imageFile = data.image.file.item(0);
+            if (imageFile?.size && imageFile.size > 3 * 1024 * 1024) {
+                toast.error("Image size cannot exceed 3MB");
+                return;
+            }
 
             if (editing) {
-                const promises: Promise<Skill>[] = [SkillService.update(skill)];
-                imageFile && promises.push(SkillService.uploadImage(skill.id, imageFile));
-                await Promise.all(promises);
+                await SkillService.update(skill, imageFile);
             } else {
-                const createSkill = await SkillService.save(skill);
-                imageFile && await SkillService.uploadImage(createSkill.id, imageFile); // TODO: make this into a single request using FormData and @RequestPart
+                await SkillService.save(skill, imageFile);
             }
 
             await queryClient.invalidateQueries(["skills"]);

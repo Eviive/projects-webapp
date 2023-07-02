@@ -34,7 +34,7 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
 
     return (
         <>
-            {traceDetails && <TraceDetails trace={traceDetails} handleClose={() => setTraceDetails(null)} />}
+            {!!traceDetails && <TraceDetails trace={traceDetails} handleClose={() => setTraceDetails(null)} />}
             <div className={styles.tracesContainer}>
                 <div className={styles.tableResponsive}>
                     <table className={styles.tracesTable}>

@@ -51,15 +51,17 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                     alt: data.image.alt
                 }
             };
-            const imageFile = data.image.file[0];
+
+            const imageFile = data.image.file.item(0);
+            if (imageFile?.size && imageFile?.size > 3 * 1024 * 1024) {
+                toast.error("Image size cannot exceed 3MB");
+                return;
+            }
 
             if (editing) {
-                const promises: Promise<Project>[] = [ProjectService.update(project)];
-                imageFile && promises.push(ProjectService.uploadImage(project.id, imageFile));
-                await Promise.all(promises);
+                await ProjectService.update(project, imageFile);
             } else {
-                const createdProject = await ProjectService.save(project);
-                imageFile && await ProjectService.uploadImage(createdProject.id, imageFile); // TODO: make this into a single request using FormData and @RequestPart
+                await ProjectService.save(project, imageFile);
             }
 
             await queryClient.invalidateQueries(["projects"]);
@@ -95,7 +97,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                         {...register("description")}
                         id="input-description"
                         rows={3}
-                        maxLength={510}
+                        maxLength={512}
                         required
                     ></textarea>
                 </div>

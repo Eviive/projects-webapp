@@ -7,30 +7,49 @@ const findById = (id: number) => request<Skill>(`/${URL}/${id}`, {}, false);
 
 const findAll = () => request<Skill[]>(`/${URL}`, {}, false);
 
-const save = (skill: Skill) => request<Skill, Skill>(`/${URL}`, {
-    method: "POST",
-    data: skill
-});
+const save = (skill: Skill, file?: File | null) => {
+    if (!file) {
+        return request<Skill, Skill>(`/${URL}`, {
+            method: "POST",
+            data: skill
+        });
+    }
 
-const update = (skill: Skill) => request<Skill, Skill>(`/${URL}/${skill.id}`, {
-    method: "PUT",
-    data: skill
-});
+    return request<Skill, FormData>(`/${URL}/with-image`, {
+        method: "POST",
+        data: buildFormData(skill, file),
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+};
+
+const update = (skill: Skill, file?: File | null) => {
+    if (!file) {
+        return request<Skill, Skill>(`/${URL}/${skill.id}`, {
+            method: "PUT",
+            data: skill
+        });
+    }
+
+    return request<Skill, FormData>(`/${URL}/${skill.id}/with-image`, {
+        method: "PUT",
+        data: buildFormData(skill, file),
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+};
 
 const deleteSkill = (id: number) => request<void>(`/${URL}/${id}`, {
     method: "DELETE"
 });
 
-const uploadImage = (id: number, file: File) => {
+const buildFormData = (skill: Skill, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    return request<Skill, FormData>(`/${URL}/${id}/upload-image`, {
-        method: "POST",
-        data: formData,
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    });
+    formData.append("skill", new Blob([JSON.stringify(skill)], { type: "application/json" }));
+    return formData;
 };
 
 export const SkillService = {
@@ -38,6 +57,5 @@ export const SkillService = {
     findAll,
     save,
     update,
-    delete: deleteSkill,
-    uploadImage
+    delete: deleteSkill
 };
