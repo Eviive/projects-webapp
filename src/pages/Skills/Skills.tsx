@@ -19,8 +19,9 @@ export const Skills: FC = () => {
 
     const [ skillForm, setSkillForm ] = useState<SkillForm>({ show: false });
 
-    const handleClose = (madeChanges: boolean) => {
+    const handleClose = (madeChanges: boolean, deleted: boolean) => {
         madeChanges && toast.success(`Skill ${skillForm.skill ? "updated" : "created"} successfully!`);
+        deleted && toast.success("Skill deleted successfully!");
         setSkillForm({ show: false });
     };
 

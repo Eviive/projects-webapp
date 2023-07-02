@@ -14,7 +14,7 @@ import styles from "./project-form.module.scss";
 
 type Props = {
     project?: Project;
-    handleClose: (madeChanges: boolean) => void;
+    handleClose: (madeChanges: boolean, deleted: boolean) => void;
 };
 
 type ProjectWithFile = Project & { image: { file: FileList } };
@@ -38,7 +38,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
 
     const submitHandler: SubmitHandler<ProjectWithFile> = async data => {
         if (isSubmitting) return;
-        if (!isDirty) return handleClose(false);
+        if (!isDirty) return handleClose(false, false);
         setIsSubmitting(true);
         try {
             const editing = !!initialProject;
@@ -66,7 +66,23 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
 
             await queryClient.invalidateQueries(["projects"]);
             console.log(`Project ${editing ? "updated" : "created"} successfully!`);
-            handleClose(true);
+            handleClose(true, false);
+        } catch (e) {
+            toast.error(getTitleAndMessage(e).message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (isSubmitting) return;
+        if (!initialProject) return;
+        setIsSubmitting(true);
+        try {
+            await ProjectService.delete(initialProject.id);
+            await queryClient.invalidateQueries(["projects"]);
+            console.log("Project deleted successfully!");
+            handleClose(false, true);
         } catch (e) {
             toast.error(getTitleAndMessage(e).message);
         } finally {
@@ -77,7 +93,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
     return (
         <Modal
             title={initialProject ? `Editing ${initialProject.title}` : "Creating project"}
-            handleClose={() => handleClose(false)}
+            handleClose={() => handleClose(false, false)}
             config={{ outsideClick: false, escapeKey: true }}
         >
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
@@ -189,7 +205,10 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                     wrapperClassName={styles.field}
                 />
 
-                <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
+                <div className={styles.buttonsWrapper}>
+                    {!!initialProject && <Button className={styles.button} loading={isSubmitting} handleClick={handleDelete}>Delete</Button>}
+                    <Button className={`${styles.button} ${styles.submit}`} loading={isSubmitting}>Submit</Button>
+                </div>
             </form>
         </Modal>
     );

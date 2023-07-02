@@ -36,8 +36,20 @@
     }
 }
 
-.submit {
-    margin: 0.5em 0;
-    padding: 10px 20px;
-    min-width: 15ch;
+.buttons-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+
+    button {
+        flex: 0 1 50%;
+        margin: 0.5em 0;
+        padding: 8px 16px;
+
+        &.submit {
+            background-color: hsl(145, 63%, 45%);
+        }
+    }
 }

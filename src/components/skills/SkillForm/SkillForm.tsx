@@ -11,7 +11,7 @@ import styles from "./skill-form.module.scss";
 
 type Props = {
     skill?: Skill;
-    handleClose: (madeChanges: boolean) => void;
+    handleClose: (madeChanges: boolean, deleted: boolean) => void;
 };
 
 type SkillWithFile = Skill & { image: { file: FileList } };
@@ -30,7 +30,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
 
     const submitHandler: SubmitHandler<SkillWithFile> = async data => {
         if (isSubmitting) return;
-        if (!isDirty) return handleClose(false);
+        if (!isDirty) return handleClose(false, false);
         setIsSubmitting(true);
         try {
             const editing = !!initialSkill;
@@ -57,7 +57,23 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
 
             await queryClient.invalidateQueries(["skills"]);
             console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
-            handleClose(true);
+            handleClose(true, false);
+        } catch (e) {
+            toast.error(getTitleAndMessage(e).message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (isSubmitting) return;
+        if (!initialSkill) return;
+        setIsSubmitting(true);
+        try {
+            await SkillService.delete(initialSkill.id);
+            await queryClient.invalidateQueries(["skills"]);
+            console.log("Skill deleted successfully!");
+            handleClose(false, true);
         } catch (e) {
             toast.error(getTitleAndMessage(e).message);
         } finally {
@@ -68,7 +84,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
     return (
         <Modal
             title={initialSkill ? `Editing ${initialSkill.name}` : "Creating skill"}
-            handleClose={() => handleClose(false)}
+            handleClose={() => handleClose(false, false)}
             config={{ outsideClick: false, escapeKey: true }}
         >
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
@@ -103,7 +119,10 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
                     wrapperClassName={styles.field}
                 />
 
-                <Button className={styles.submit} loading={isSubmitting}>Submit</Button>
+                <div className={styles.buttonsWrapper}>
+                    {!!initialSkill && <Button className={styles.button} loading={isSubmitting} handleClick={handleDelete}>Delete</Button>}
+                    <Button className={`${styles.button} ${styles.submit}`} loading={isSubmitting}>Submit</Button>
+                </div>
             </form>
         </Modal>
     );
