@@ -6,7 +6,7 @@ type TitleAndMessage = {
 };
 
 export const getTitleAndMessage = (e: unknown): TitleAndMessage => {
-    console.log(e);
+    import.meta.env.PROD || console.error(e);
     let titleAndMessage: TitleAndMessage;
     if (e instanceof AxiosError) {
         titleAndMessage = {

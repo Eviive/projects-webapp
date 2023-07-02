@@ -8,4 +8,3 @@ export { Input } from "./Input/Input";
 export { RequireAuth } from "./RequireAuth/RequireAuth";
 export { Loader } from "./Loader/Loader";
 export { Modal } from "./Modal/Modal";
-export { Popup } from "./Popup/Popup";

@@ -15,22 +15,13 @@
     flex-direction: column;
     gap: 7px;
 
-    input, select, textarea {
+    input {
         flex-grow: 1;
         padding: 0.5rem;
         background-color: #fff;
         border: 1px solid #ccc;
         border-radius: var(--radius);
         overflow: auto;
-    }
-
-    &:has(input[type="checkbox"]) {
-        flex-direction: row;
-
-        input {
-            flex-grow: 0;
-            width: auto;
-        }
     }
 
     input[type="file"] {

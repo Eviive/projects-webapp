@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
 import { Error as ErrorElement } from "components/common";
 import { MainLayout } from "layouts";
-import { Health, Home, Login, Projects } from "pages";
+import { Health, Home, Login, Projects, Skills } from "pages";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -35,6 +35,10 @@ const router = createBrowserRouter([
                         element: <Projects />
                     },
                     {
+                        path: "/skills",
+                        element: <Skills />
+                    },
+                    {
                         path: "/health",
                         element: <Health />
                     }
@@ -47,7 +51,7 @@ const router = createBrowserRouter([
         ]
     }
 ], {
-    basename: "/dashboard"
+    basename: import.meta.env.VITE_ROUTER_BASE_URL
 });
 
 root.render(
