@@ -28,7 +28,7 @@ export const Projects: FC = () => {
     };
 
     return (
-        <Page title="Projects - Dashboard">
+        <Page title="Projects">
             { query.isSuccess
 
                 ? <div className={styles.projectsWrapper}>

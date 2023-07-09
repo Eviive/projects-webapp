@@ -36,7 +36,7 @@ export const Health: FC = () => {
     const query = useCustomQuery(["httpExchanges"], HealthService.httpExchanges);
 
     return (
-        <Page title="Health - Dashboard">
+        <Page title="Health">
             { query.isSuccess
 
                 ? <div className={styles.healthWrapper}>

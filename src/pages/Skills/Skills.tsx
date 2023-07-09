@@ -83,7 +83,7 @@ export const Skills: FC = () => {
     };
 
     return (
-        <Page title="Skills - Dashboard">
+        <Page title="Skills">
             { query.isSuccess
 
                 ? <div className={styles.skillsWrapper}>

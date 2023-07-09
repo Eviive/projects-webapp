@@ -45,7 +45,7 @@ export const Login: FC = () => {
     };
 
     return (
-        <Page title="Login - Dashboard">
+        <Page title="Login">
             { redirect
                 ? <Navigate to="/" />
                 : <div className={styles.loginWrapper}>

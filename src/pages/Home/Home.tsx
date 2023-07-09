@@ -12,7 +12,7 @@ export const Home: FC = () => {
     const queryHealth = useCustomQuery(["health"], HealthService.health);
 
     return (
-        <Page title="Home - Dashboard">
+        <Page title="Home">
             { (queryInfo.isSuccess && queryHealth.isSuccess)
 
                 ? <div className={styles.homeWrapper}>
