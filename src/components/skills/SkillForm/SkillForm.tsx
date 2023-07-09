@@ -11,12 +11,13 @@ import styles from "./skill-form.module.scss";
 
 type Props = {
     skill?: Skill;
+    numberOfSkills: number;
     handleClose: (madeChanges: boolean, deleted: boolean) => void;
 };
 
 type SkillWithFile = Skill & { image: { file: FileList } };
 
-export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
+export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, handleClose }) => {
 
     const queryClient = useQueryClient();
 
@@ -43,6 +44,10 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
                     alt: data.image.alt
                 }
             };
+            if (!editing) {
+                skill.sort = numberOfSkills + 1;
+            }
+
             const imageFile = data.image.file.item(0);
             if (imageFile?.size && imageFile.size > 3 * 1024 * 1024) {
                 toast.error("Image size cannot exceed 3MB");

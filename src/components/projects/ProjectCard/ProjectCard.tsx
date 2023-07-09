@@ -16,9 +16,11 @@ const PLACEHOLDER = "https://via.placeholder.com/1920x1080/E6E6E6/000000?text=No
 
 export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
 
-    const skills = project.skills.map((s, i) => {
-        return <img key={i} src={ImageService.getImageUrl(s.image)} alt={s.name} title={s.name} />;
-    });
+    const skills = project.skills
+        .sort((a, b) => a.sort - b.sort)
+        .map((s, i) => {
+            return <img key={i} src={ImageService.getImageUrl(s.image)} alt={s.name} title={s.name} />;
+        });
 
     return (
         <div className={styles.card}>

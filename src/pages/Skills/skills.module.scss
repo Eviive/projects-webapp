@@ -6,8 +6,5 @@
 }
 
 .cardsWrapper {
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 2em;
+    grid-template-columns: repeat(auto-fill, var(--size));
 }

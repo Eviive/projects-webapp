@@ -1,6 +1,7 @@
 @use "src/styles/mixins";
 
 .card {
+    position: relative;
     padding: 10px;
     @include mixins.size(125px);
     aspect-ratio: 1/1;
@@ -15,8 +16,34 @@
     cursor: pointer;
 }
 
-.addCard {
+.add-card {
     border-style: dashed;
+}
+
+.drag-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 3px;
+    display: flex;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: hsl(var(--primary-1));
+    }
+
+    &.toggle-dnd {
+        padding: 2px;
+    }
+
+    &:not(.toggle-dnd) {
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
 }
 
 .card-image {

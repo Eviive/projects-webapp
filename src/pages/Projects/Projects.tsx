@@ -5,7 +5,7 @@ import { useCustomQuery } from "hooks/useCustomQuery";
 import { GridLayout } from "layouts";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
-import { FaPlus } from "react-icons/all";
+import { FaPlus } from "react-icons/fa";
 import { Project } from "types/entities";
 
 import styles from "./projects.module.scss";

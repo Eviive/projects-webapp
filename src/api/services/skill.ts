@@ -24,6 +24,13 @@ const save = (skill: Skill, file?: File | null) => {
     });
 };
 
+const saveAll = (skills: Skill[]) => {
+    return request<Skill[], Skill[]>(`/${URL}/save-all`, {
+        method: "POST",
+        data: skills
+    });
+};
+
 const update = (skill: Skill, file?: File | null) => {
     if (!file) {
         return request<Skill, Skill>(`/${URL}/${skill.id}`, {
@@ -56,6 +63,7 @@ export const SkillService = {
     findById,
     findAll,
     save,
+    saveAll,
     update,
     delete: deleteSkill
 };

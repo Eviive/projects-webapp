@@ -26,6 +26,7 @@ export type Project = {
 export type Skill = {
     id: number;
     name: string;
+    sort: number;
     image: Image;
 };
 
