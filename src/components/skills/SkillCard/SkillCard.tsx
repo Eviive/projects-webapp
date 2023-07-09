@@ -2,31 +2,38 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ImageService } from "api/services";
 import { FC, MouseEventHandler } from "react";
-import { CgClose } from "react-icons/cg";
+import { MdEdit } from "react-icons/all";
+import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
-import { FiEdit } from "react-icons/fi";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import { Skill } from "types/entities";
 
 import styles from "./skill-card.module.scss";
 
 type Props = {
-    skill?: Skill;
     handleAction: () => void;
-    isDndActive?: boolean;
-    toggleDnd?: () => void;
+    isDndActive: boolean;
+} & (SkillCardProps | AddCardProps);
+
+type SkillCardProps = {
+    skill: Skill;
 };
 
-const PLACEHOLDER = "https://via.placeholder.com/1920x1080/E6E6E6/000000?text=No+image+available+for+this+skill";
+type AddCardProps = {
+    skill?: never;
+    toggleDnd: () => void;
+};
 
-export const SkillCard: FC<Props> = ({ skill, handleAction, isDndActive, toggleDnd }) => {
+const PLACEHOLDER = "https://placehold.co/68/E6E6E6/000000?font=source-sans-pro&text=No+image";
+
+export const SkillCard: FC<Props> = props => {
     const {
         attributes,
         listeners,
         setNodeRef,
         transform,
         transition
-    } = useSortable({ id: skill?.id ?? 0, disabled: !skill });
+    } = useSortable({ id: props.skill?.id ?? 0, disabled: !props.skill });
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -35,30 +42,30 @@ export const SkillCard: FC<Props> = ({ skill, handleAction, isDndActive, toggleD
 
     const handleClick: MouseEventHandler<HTMLButtonElement> = e => {
         e.stopPropagation();
-        toggleDnd?.();
+        !props.skill && props.toggleDnd();
     };
 
     return (
-        <div ref={setNodeRef} style={style} className={skill ? styles.card : `${styles.card} ${styles.addCard}`} onClick={handleAction}>
-            {skill
+        <div ref={setNodeRef} style={style} className={props.skill ? styles.card : `${styles.card} ${styles.addCard}`} onClick={props.handleAction}>
+            {props.skill
 
-                ? (isDndActive &&
+                ? (props.isDndActive &&
                     <span className={styles.dragHandle} {...attributes} {...listeners}>
                         <RxDragHandleDots2 size={22}/>
                     </span>
                 )
 
                 : <button className={`${styles.dragHandle} ${styles.toggleDnd}`} onClick={handleClick}>
-                    {isDndActive ? <CgClose size={18} /> : <FiEdit size={18}/>}
+                    {props.isDndActive ? <BsCheckLg size={18} /> : <MdEdit size={18}/>}
                 </button>
             }
             <div className={styles.cardImage}>
-                {skill
+                {props.skill
 
                     ? <img
-                        src={ImageService.getImageUrl(skill.image) ?? PLACEHOLDER}
-                        alt={skill.image.alt}
-                        title={skill.name}
+                        src={ImageService.getImageUrl(props.skill.image) ?? PLACEHOLDER}
+                        alt={props.skill.image.alt}
+                        title={props.skill.name}
                         onError={e => e.currentTarget.src = PLACEHOLDER}
                     />
 
@@ -66,7 +73,7 @@ export const SkillCard: FC<Props> = ({ skill, handleAction, isDndActive, toggleD
                 }
             </div>
             <div className={styles.cardContent}>
-                {skill ? skill.name : "Add skill"}
+                {props.skill ? props.skill.name : "Add skill"}
             </div>
         </div>
     );

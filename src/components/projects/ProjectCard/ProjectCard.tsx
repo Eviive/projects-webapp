@@ -12,7 +12,7 @@ type Props = {
     handleEdit: () => void;
 };
 
-const PLACEHOLDER = "https://via.placeholder.com/1920x1080/E6E6E6/000000?text=No+image+available+for+this+project";
+const PLACEHOLDER = "https://placehold.co/1920x1080/E6E6E6/000000?font=source-sans-pro&text=No+image+available+for+this+project";
 
 export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
 

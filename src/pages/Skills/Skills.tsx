@@ -17,14 +17,12 @@ type SkillForm = {
     show: boolean;
 };
 
-export const Skills: FC = () => {
-    const sensors =useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates
-        })
-    );
+export type DndState = {
+    isDndActive: boolean;
+    madeDndChanges: boolean;
+};
 
+export const Skills: FC = () => {
     const query = useCustomQuery(["skills"], SkillService.findAll);
     const [ skillItems, setSkillItems ] = useState<Skill[]>(query.data ?? []);
     useEffect(() => {
@@ -39,13 +37,12 @@ export const Skills: FC = () => {
         setSkillForm({ show: false });
     };
 
-    const [ isDndActive, setIsDndActive ] = useState(false);
-    const [ madeDndChanges, setMadeDndChanges ] = useState(false);
+    const [ dndState, setDndState ] = useState<DndState>({ isDndActive: false, madeDndChanges: false });
     const queryClient = useQueryClient();
 
     const handleToggleDnd = () => {
-        setIsDndActive(prevState => {
-            if (prevState && madeDndChanges) {
+        setDndState(prevDndState => {
+            if (prevDndState.isDndActive && prevDndState.madeDndChanges) {
                 (async () => {
                     await SkillService.saveAll(skillItems);
                     await queryClient.invalidateQueries([ "skills", "projects" ]);
@@ -53,7 +50,7 @@ export const Skills: FC = () => {
                 })();
             }
 
-            return !prevState;
+            return { ...prevDndState, isDndActive: !prevDndState.isDndActive };
         });
     };
 
@@ -75,12 +72,19 @@ export const Skills: FC = () => {
                     }
                 }
 
-                setMadeDndChanges(true);
+                setDndState(prevDndState => ({ ...prevDndState, madeDndChanges: true }));
 
                 return newItems;
             });
         }
     };
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates
+        })
+    );
 
     return (
         <Page title="Skills">
@@ -94,10 +98,10 @@ export const Skills: FC = () => {
                                 {skillItems
                                     .sort((a, b) => a.sort - b.sort)
                                     .map(skill =>
-                                        <SkillCard key={skill.id} skill={skill} handleAction={() => setSkillForm({ skill, show: true })} isDndActive={isDndActive} />
+                                        <SkillCard key={skill.id} skill={skill} handleAction={() => setSkillForm({ skill, show: true })} isDndActive={dndState.isDndActive} />
                                     )
                                 }
-                                <SkillCard handleAction={() => setSkillForm({ show: true })} isDndActive={isDndActive} toggleDnd={handleToggleDnd} />
+                                <SkillCard handleAction={() => setSkillForm({ show: true })} isDndActive={dndState.isDndActive} toggleDnd={handleToggleDnd} />
                             </GridLayout>
                         </SortableContext>
                     </DndContext>
