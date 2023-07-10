@@ -2,7 +2,7 @@ import { httpClient } from "api/client";
 import { UserService } from "api/services";
 import decode, { JwtPayload } from "jwt-decode";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { getTitleAndMessage } from "../utils/errors";
+import { getTitleAndMessage } from "utils/errors";
 
 const isExpired = (token: string) => {
     const { exp } = decode<JwtPayload>(token);

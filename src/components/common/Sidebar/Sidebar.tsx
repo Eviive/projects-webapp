@@ -10,7 +10,7 @@ import { GiHealthNormal } from "react-icons/gi";
 import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { Route } from "types/app";
-import { getTitleAndMessage } from "../../../utils/errors";
+import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./sidebar.module.scss";
 

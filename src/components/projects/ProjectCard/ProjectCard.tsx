@@ -23,7 +23,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
         });
 
     return (
-        <div className={styles.card}>
+        <li className={styles.card}>
             <div className={styles.cardContent}>
                 <div className={styles.cardHeader}>
                     <div className={styles.cardTitle}>
@@ -60,6 +60,6 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
                     onError={e => e.currentTarget.src = PLACEHOLDER}
                 />
             </div>
-        </div>
+        </li>
     );
 };

@@ -1,11 +1,8 @@
-import { DndContext, DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Loader, Page } from "components/common";
+import { Loader, Page, SortableList } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
 import { useCustomQuery } from "hooks/useCustomQuery";
-import { GridLayout } from "layouts";
 import { FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Skill } from "types/entities";
@@ -37,7 +34,7 @@ export const Skills: FC = () => {
         setSkillForm({ show: false });
     };
 
-    const [ dndState, setDndState ] = useState<DndState>({ isDndActive: false, madeDndChanges: false });
+    const [ dndState, setDndState ] = useState<DndState>({ isDndActive: true, madeDndChanges: false });
     const queryClient = useQueryClient();
 
     const handleToggleDnd = () => {
@@ -54,57 +51,46 @@ export const Skills: FC = () => {
         });
     };
 
-    const handleDragEnd = (e: DragEndEvent) => {
-        const { active, over } = e;
-
-        if (over?.id && active.id !== over.id) {
-            setSkillItems(prevItems => {
-                const oldIndex = prevItems.findIndex(s => s.id === active.id);
-                const newIndex = prevItems.findIndex(s => s.id === over.id);
-
-                const newItems = arrayMove(prevItems, oldIndex, newIndex)
-                    .map((s, i) => ({ ...s, sort: i + 1 }));
-
-                for (const s of query.data ?? []) {
-                    const newSkill = newItems.find(ns => ns.id === s.id);
-                    if (newSkill) {
-                        s.sort = newSkill.sort;
-                    }
-                }
-
-                setDndState(prevDndState => ({ ...prevDndState, madeDndChanges: true }));
-
-                return newItems;
-            });
+    const handleOnSetItems = (items: Skill[]) => {
+        for (const s of query.data ?? []) {
+            const newSkill = items.find(s => s.id === s.id);
+            if (newSkill) {
+                s.sort = newSkill.sort;
+            }
         }
-    };
 
-    const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates
-        })
-    );
+        setDndState(prevDndState => ({ ...prevDndState, madeDndChanges: true }));
+    };
 
     return (
         <Page title="Skills">
             { query.isSuccess
 
                 ? <div className={styles.skillsWrapper}>
-                    {skillForm.show && <SkillForm skill={skillForm.skill} numberOfSkills={skillItems.length} handleClose={handleClose} />}
-                    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-                        <SortableContext items={skillItems}>
-                            <GridLayout className={styles.cardsWrapper} size="125px" gap="2em">
-                                {skillItems
-                                    .sort((a, b) => a.sort - b.sort)
-                                    .map(skill =>
-                                        <SkillCard key={skill.id} skill={skill} handleAction={() => setSkillForm({ skill, show: true })} isDndActive={dndState.isDndActive} />
-                                    )
-                                }
-                                <SkillCard handleAction={() => setSkillForm({ show: true })} isDndActive={dndState.isDndActive} toggleDnd={handleToggleDnd} />
-                            </GridLayout>
-                        </SortableContext>
-                    </DndContext>
+                    {skillForm.show &&
+                        <SkillForm
+                            skill={skillForm.skill}
+                            numberOfSkills={skillItems.length}
+                            handleClose={handleClose}
+                        />
+                    }
+                    <SortableList
+                        items={skillItems.sort((a, b) => a.sort - b.sort)}
+                        setItems={setSkillItems}
+                        onSetItems={handleOnSetItems}
+                        renderItem={skill => (
+                            <SkillCard
+                                skill={skill}
+                                handleAction={() => setSkillForm({ skill, show: true })}
+                                isDndActive={dndState.isDndActive}
+                            />
+                        )}
+                        wrapperProps={{
+                            className: styles.cardsWrapper,
+                            size: "125px",
+                            gap: "2em"
+                        }}
+                    />
                 </div>
 
                 : <Loader />

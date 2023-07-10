@@ -1,16 +1,15 @@
-import { FC, MouseEventHandler, ReactNode } from "react";
+import { FC, MouseEventHandler, PropsWithChildren } from "react";
 import { PulseLoader } from "react-spinners";
 
 import styles from "./button.module.scss";
 
 type Props = {
-    children?: ReactNode;
     className?: string;
     loading?: boolean;
     handleClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
-export const Button: FC<Props> = props => {
+export const Button: FC<PropsWithChildren<Props>> = props => {
     return (
         <button
             className={props.className ? `${styles.button} ${props.className}` : styles.button}

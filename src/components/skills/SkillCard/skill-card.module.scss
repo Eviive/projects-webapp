@@ -14,10 +14,10 @@
     border-radius: 8px;
     @include mixins.box-shadow($down: 5px);
     cursor: pointer;
-}
 
-.add-card {
-    border-style: dashed;
+    &.add-card {
+        border-style: dashed;
+    }
 }
 
 .drag-handle {
@@ -27,22 +27,11 @@
     margin: 3px;
     display: flex;
     border-radius: 4px;
+    cursor: grab;
     transition: background-color 0.3s;
 
     &:hover {
         background-color: hsl(var(--primary-1));
-    }
-
-    &.toggle-dnd {
-        padding: 2px;
-    }
-
-    &:not(.toggle-dnd) {
-        cursor: grab;
-
-        &:active {
-            cursor: grabbing;
-        }
     }
 }
 
