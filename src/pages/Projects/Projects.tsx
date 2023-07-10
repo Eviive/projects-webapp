@@ -38,9 +38,9 @@ export const Projects: FC = () => {
 
     const [ projectForm, setProjectForm ] = useState<ProjectForm>({ show: false });
 
-    const handleClose = (madeChanges: boolean, deleted: boolean) => {
-        madeChanges && toast.success(`Project ${projectForm.project ? "updated" : "created"} successfully!`);
-        deleted && toast.success("Project deleted successfully!");
+    const handleClose = (isTouched: boolean, isDeleted: boolean) => {
+        isTouched && toast.success(`Project ${projectForm.project ? "updated" : "created"} successfully!`);
+        isDeleted && toast.success("Project deleted successfully!");
         setProjectForm({ show: false });
     };
 

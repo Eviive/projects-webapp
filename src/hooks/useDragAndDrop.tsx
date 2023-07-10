@@ -24,7 +24,7 @@ export const useDragAndDrop = <T extends DndItem>(
 
     const [ dndState, setDndState ] = useState<DndState>({
         isDndActive: false,
-        madeDndChanges: false,
+        isDndTouched: false,
         isDndSubmitting: false
     });
 
@@ -32,7 +32,7 @@ export const useDragAndDrop = <T extends DndItem>(
         if (dndState.isDndSubmitting) return;
         setDndState(prevDndState => ({ ...prevDndState, isDndSubmitting: true }));
 
-        if (dndState.isDndActive && dndState.madeDndChanges) {
+        if (dndState.isDndActive && dndState.isDndTouched) {
             try {
                 await saveOrder(items);
             } catch (e) {
@@ -43,7 +43,7 @@ export const useDragAndDrop = <T extends DndItem>(
         setDndState(prevDndState => ({
             ...prevDndState,
             isDndActive: !prevDndState.isDndActive,
-            madeDndChanges: false,
+            isDndTouched: false,
             isDndSubmitting: false
         }));
     };
@@ -56,7 +56,7 @@ export const useDragAndDrop = <T extends DndItem>(
             }
         }
 
-        setDndState(prevDndState => ({ ...prevDndState, madeDndChanges: true }));
+        setDndState(prevDndState => ({ ...prevDndState, isDndTouched: true }));
     };
 
     return {

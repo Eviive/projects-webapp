@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
 import { Error as ErrorElement } from "components/common";
+import { MainLayout } from "layouts";
+import { Health, Home, Login, Projects, Skills } from "pages";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -21,29 +23,29 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                lazy: async () => ({ Component: (await import("layouts/Main/Main")).Main }),
+                element: <MainLayout />,
                 children: [
                     {
                         index: true,
-                        lazy: async () => ({ Component: (await import("pages/Home/Home")).Home })
+                        element: <Home />
                     },
                     {
                         path: "/projects",
-                        lazy: async () => ({ Component: (await import("pages/Projects/Projects")).Projects })
+                        element: <Projects />
                     },
                     {
                         path: "/skills",
-                        lazy: async () => ({ Component: (await import("pages/Skills/Skills")).Skills })
+                        element: <Skills />
                     },
                     {
                         path: "/health",
-                        lazy: async () => ({ Component: (await import("pages/Health/Health")).Health })
+                        element: <Health />
                     }
                 ]
             },
             {
                 path: "/login",
-                lazy: async () => ({ Component: (await import("pages/Login/Login")).Login })
+                element: <Login />
             }
         ]
     }

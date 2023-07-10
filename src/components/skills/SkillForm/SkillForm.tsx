@@ -12,7 +12,7 @@ import styles from "./skill-form.module.scss";
 type Props = {
     skill?: Skill;
     numberOfSkills: number;
-    handleClose: (madeChanges: boolean, deleted: boolean) => void;
+    handleClose: (isTouched: boolean, isDeleted: boolean) => void;
 };
 
 type SkillWithFile = Skill & { image: { file: FileList } };

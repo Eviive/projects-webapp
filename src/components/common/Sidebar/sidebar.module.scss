@@ -31,10 +31,6 @@
         background-color: hsl(var(--primary-2), 0.5);
     }
 
-    &.pending {
-        cursor: wait;
-    }
-
     svg {
         @include mixins.size(var(--sidebar-width-close));
         padding: 15px;

@@ -14,7 +14,7 @@ import styles from "./project-form.module.scss";
 
 type Props = {
     project?: Project;
-    handleClose: (madeChanges: boolean, deleted: boolean) => void;
+    handleClose: (isTouched: boolean, isDeleted: boolean) => void;
 };
 
 type ProjectWithFile = Project & { image: { file: FileList } };
@@ -34,7 +34,9 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
         formState: { isDirty }
     } = useForm<ProjectWithFile>({ defaultValues: initialProject });
 
-    const skillsOptions = query.data?.map(skill => ({ id: skill.id, label: skill.name, value: skill.id }));
+    const skillsOptions = query.data
+        ?.sort((a, b) => a.sort - b.sort)
+        ?.map(skill => ({ id: skill.id, label: skill.name, value: skill.id }));
 
     const submitHandler: SubmitHandler<ProjectWithFile> = async data => {
         if (isSubmitting) return;

@@ -16,6 +16,6 @@ export type DndItem = {
 
 export type DndState = {
     isDndActive: boolean;
-    madeDndChanges: boolean;
+    isDndTouched: boolean;
     isDndSubmitting: boolean;
 };

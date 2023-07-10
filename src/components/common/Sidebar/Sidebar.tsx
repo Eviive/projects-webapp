@@ -67,7 +67,6 @@ export const Sidebar: FC = () => {
                             route={route}
                             className={styles.sidebarItem}
                             activeClassName={styles.active}
-                            pendingClassName={styles.pending}
                         />
                     </li>
                 ))}

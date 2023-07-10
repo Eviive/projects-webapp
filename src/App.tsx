@@ -5,9 +5,9 @@ import { useAxiosConfig } from "hooks/useAxiosConfig";
 import { FC, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
-
-import "styles/reset.scss";
 import { getTitleAndMessage } from "utils/errors";
+
+import "./styles/reset.scss";
 
 export const App: FC = () => {
 
