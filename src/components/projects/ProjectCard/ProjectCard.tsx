@@ -1,5 +1,5 @@
 import { ImageService } from "api/services";
-import { Anchor } from "components/common";
+import { Anchor, SortableDragHandle, SortableItem } from "components/common";
 import { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FiEdit, FiExternalLink, FiGithub } from "react-icons/fi";
@@ -10,11 +10,12 @@ import styles from "./project-card.module.scss";
 type Props = {
     project: Project;
     handleEdit: () => void;
+    isDndActive: boolean;
 };
 
 const PLACEHOLDER = "https://placehold.co/1920x1080/E6E6E6/000000?font=source-sans-pro&text=No+image+available+for+this+project";
 
-export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
+export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => {
 
     const skills = project.skills
         .sort((a, b) => a.sort - b.sort)
@@ -29,7 +30,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
         );
 
     return (
-        <li className={styles.card}>
+        <SortableItem id={project.id} itemProps={{ className: styles.card }}>
             <div className={styles.cardContent}>
                 <div className={styles.cardHeader}>
                     <div className={styles.cardTitle}>
@@ -40,14 +41,15 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
                         <span>{Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(new Date(project.creationDate))}</span>
                     </div>
                     <div className={styles.cardLinks}>
+                        {isDndActive && <SortableDragHandle />}
                         <button onClick={handleEdit}>
-                            <FiEdit size={25} />
+                            <FiEdit size={22} />
                         </button>
                         <Anchor href={project.repoUrl}>
-                            <FiGithub size={25} />
+                            <FiGithub size={22} />
                         </Anchor>
                         <Anchor href={project.demoUrl}>
-                            <FiExternalLink size={25} />
+                            <FiExternalLink size={22} />
                         </Anchor>
                     </div>
                 </div>
@@ -67,6 +69,6 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
                     loading="lazy"
                 />
             </div>
-        </li>
+        </SortableItem>
     );
 };

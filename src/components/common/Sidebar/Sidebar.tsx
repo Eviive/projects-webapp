@@ -63,7 +63,12 @@ export const Sidebar: FC = () => {
             <ul>
                 {routes.map((route, index) => (
                     <li key={index}>
-                        <Link route={route} className={styles.sidebarItem} activeClassName={styles.active} />
+                        <Link
+                            route={route}
+                            className={styles.sidebarItem}
+                            activeClassName={styles.active}
+                            pendingClassName={styles.pending}
+                        />
                     </li>
                 ))}
             </ul>

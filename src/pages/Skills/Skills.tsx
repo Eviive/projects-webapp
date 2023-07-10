@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
+import { DndState } from "types/app";
 import { Skill } from "types/entities";
 import { getTitleAndMessage } from "utils/errors";
 
@@ -16,12 +17,6 @@ import styles from "./skills.module.scss";
 type SkillForm = {
     skill?: Skill;
     show: boolean;
-};
-
-export type DndState = {
-    isDndActive: boolean;
-    madeDndChanges: boolean;
-    isDndSubmitting: boolean;
 };
 
 export const Skills: FC = () => {
