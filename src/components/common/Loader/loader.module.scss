@@ -2,7 +2,7 @@
 
 .loader {
     flex-grow: 1;
-    @include mixins.size;
+    @include mixins.size();
     display: grid;
     place-items: center;
 }

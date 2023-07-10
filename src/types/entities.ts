@@ -18,14 +18,16 @@ export type Project = {
     creationDate: string;
     repoUrl: string;
     demoUrl: string;
+    featured: boolean;
+    sort: number;
     skills: Skill[];
     image: Image;
-    featured: boolean;
 };
 
 export type Skill = {
     id: number;
     name: string;
+    sort: number;
     image: Image;
 };
 

@@ -1,18 +1,19 @@
-import { FC, ReactNode, useEffect } from "react";
+import { FC, PropsWithChildren, useEffect } from "react";
 
 type Props = {
     title: string;
-    children: ReactNode;
 };
 
-export const Page: FC<Props> = ({ title, children }) => {
+const WINDOW_TITLE = "Dashboard";
+
+export const Page: FC<PropsWithChildren<Props>> = ({ title, children }) => {
     useEffect(() => {
-        document.title = title;
+        document.title = `${title} - ${WINDOW_TITLE}`;
 
         return () => {
-            document.title = "Dashboard";
+            document.title = WINDOW_TITLE;
         };
-    }, [title]);
+    }, [ title ]);
 
     return <>{children}</>;
 };

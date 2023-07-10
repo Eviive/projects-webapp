@@ -1,0 +1,10 @@
+@use "src/styles/mixins";
+
+.skills-wrapper {
+    @include mixins.size();
+    padding: 5em 5%;
+}
+
+.cardsWrapper {
+    grid-template-columns: repeat(auto-fill, var(--size));
+}

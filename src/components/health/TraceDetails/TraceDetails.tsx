@@ -1,6 +1,7 @@
 import { Modal } from "components/common";
 import { FC, ReactNode, useState } from "react";
 import { HttpExchange } from "types/health";
+import { formatClassNames } from "utils/components";
 
 import styles from "./trace-details.module.scss";
 
@@ -27,12 +28,12 @@ export const TraceDetails: FC<Props> = ({ trace, handleClose }) => {
         <Modal title="HTTP Trace Details" handleClose={handleClose}>
             <div className={styles.detailsSwitch}>
                 <button
-                    className={content === "request" ? styles.active : ""}
+                    className={formatClassNames(content === "request" && styles.active)}
                     onClick={() => setContent("request")}>
                     Request
                 </button>
                 <button
-                    className={content === "response" ? styles.active : ""}
+                    className={formatClassNames(content === "response" && styles.active)}
                     onClick={() => setContent("response")}>
                     Response
                 </button>
@@ -41,9 +42,9 @@ export const TraceDetails: FC<Props> = ({ trace, handleClose }) => {
                 {content === "request"
 
                     ? <>
-                        <span><strong>Timestamp:</strong> {new Intl.DateTimeFormat("en-EN", { dateStyle: "full", timeStyle: "short" }).format(new Date(trace.timestamp))}</span>
+                        <span><strong>Timestamp:</strong> {new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "short" }).format(new Date(trace.timestamp))}</span>
                         <span><strong>Time taken:</strong> {Math.trunc(parseFloat(trace.timeTaken.substring(2, trace.timeTaken.length - 1)) * 1000)} ms</span>
-                        {trace.principal && <span><strong>Principal:</strong> {trace.principal.name}</span>}
+                        {!!trace.principal && <span><strong>Principal:</strong> {trace.principal.name}</span>}
                         {parseObject(trace.request)}
                     </>
 

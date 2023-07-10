@@ -9,13 +9,15 @@ type Props = {
     handleInvalid?: FormEventHandler<HTMLInputElement>;
 };
 
-export const Input: FC<Props> = (({ attributes, label, wrapperClassName, handleInvalid }) => {
+export const Input: FC<Props> = ({ attributes, label, wrapperClassName, handleInvalid }) => {
 
     const type = attributes.type ?? "text";
 
+    const labelContent = typeof label === "string" ? `${label} :` : label;
+
     return (
         <div className={wrapperClassName}>
-            {label && <label htmlFor={`input-${attributes.name}`}>{label}{typeof label === "string" && " :"}</label>}
+            {!!labelContent && <label htmlFor={`input-${attributes.name}`}>{labelContent}</label>}
             <input
                 {...attributes}
                 id={`input-${attributes.name}`}
@@ -28,4 +30,4 @@ export const Input: FC<Props> = (({ attributes, label, wrapperClassName, handleI
             />
         </div>
     );
-});
+};

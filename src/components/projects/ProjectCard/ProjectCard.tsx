@@ -1,27 +1,36 @@
 import { ImageService } from "api/services";
-import { Anchor } from "components/common";
+import { Anchor, SortableDragHandle, SortableItem } from "components/common";
 import { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FiEdit, FiExternalLink, FiGithub } from "react-icons/fi";
 import { Project } from "types/entities";
+import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./project-card.module.scss";
 
 type Props = {
     project: Project;
     handleEdit: () => void;
+    isDndActive: boolean;
 };
 
-const PLACEHOLDER = "https://via.placeholder.com/1920x1080/E6E6E6/000000?text=No+image+available+for+this+project";
+export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => {
 
-export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
-
-    const skills = project.skills.map((s, i) => {
-        return <img key={i} src={ImageService.getImageUrl(s.image)} alt={s.name} title={s.name} />;
-    });
+    const skills = project.skills
+        .sort((a, b) => a.sort - b.sort)
+        .map((s, i) =>
+            <img
+                key={i}
+                src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
+                alt={s.name}
+                title={s.name}
+                onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
+                loading="lazy"
+            />
+        );
 
     return (
-        <div className={styles.card}>
+        <SortableItem id={project.id} itemProps={{ className: styles.card }}>
             <div className={styles.cardContent}>
                 <div className={styles.cardHeader}>
                     <div className={styles.cardTitle}>
@@ -32,14 +41,15 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
                         <span>{Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(new Date(project.creationDate))}</span>
                     </div>
                     <div className={styles.cardLinks}>
+                        {isDndActive && <SortableDragHandle />}
                         <button onClick={handleEdit}>
-                            <FiEdit size={25} />
+                            <FiEdit size={22} />
                         </button>
                         <Anchor href={project.repoUrl}>
-                            <FiGithub size={25} />
+                            <FiGithub size={22} />
                         </Anchor>
                         <Anchor href={project.demoUrl}>
-                            <FiExternalLink size={25} />
+                            <FiExternalLink size={22} />
                         </Anchor>
                     </div>
                 </div>
@@ -52,12 +62,13 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
             </div>
             <div className={styles.cardImage}>
                 <img
-                    src={ImageService.getImageUrl(project.image) ?? PLACEHOLDER}
+                    src={ImageService.getImageUrl(project.image) ?? PROJECT_PLACEHOLDER}
                     alt={project.image.alt}
                     title={project.title}
-                    onError={e => e.currentTarget.src = PLACEHOLDER}
+                    onError={e => e.currentTarget.src = PROJECT_PLACEHOLDER}
+                    loading="lazy"
                 />
             </div>
-        </div>
+        </SortableItem>
     );
 };

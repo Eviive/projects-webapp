@@ -1,8 +1,9 @@
+import { TraceDetails } from "components/health";
 import { FC, useState } from "react";
 import { CgDetailsMore } from "react-icons/cg";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { HttpExchange } from "types/health";
-import { TraceDetails } from "components/health";
+import { formatClassNames } from "utils/components";
 
 import styles from "./traces-table.module.scss";
 
@@ -20,7 +21,7 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
             buttons.push(
                 <button
                     key={i}
-                    className={page === i ? styles.active : ""}
+                    className={formatClassNames(page === i && styles.active)}
                     onClick={() => setPage(i)}
                 >
                     {i + 1}
@@ -34,7 +35,7 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
 
     return (
         <>
-            {traceDetails && <TraceDetails trace={traceDetails} handleClose={() => setTraceDetails(null)} />}
+            {!!traceDetails && <TraceDetails trace={traceDetails} handleClose={() => setTraceDetails(null)} />}
             <div className={styles.tracesContainer}>
                 <div className={styles.tableResponsive}>
                     <table className={styles.tracesTable}>
@@ -68,7 +69,7 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
                                             </span>
                                         </td>
                                         <td>
-                                            {trace.request.uri.substring(import.meta.env.VITE_API_BASE_URL.length)}
+                                            {trace.request.uri.substring(import.meta.env.VITE_API_BASE_URL?.length ?? 0)}
                                         </td>
                                         <td className={styles.detailsCell}>
                                             <button onClick={() => setTraceDetails(trace)}>
