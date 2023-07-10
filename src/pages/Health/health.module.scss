@@ -1,7 +1,7 @@
 @use "src/styles/mixins";
 
 .health-wrapper {
-    @include mixins.size;
+    @include mixins.size();
     padding: 5em 5%;
 }
 

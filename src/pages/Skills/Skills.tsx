@@ -1,11 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Loader, Page, SortableList } from "components/common";
+import { Loader, Page, SortableList, Toolbar } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
 import { useCustomQuery } from "hooks/useCustomQuery";
 import { FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { BsCheckLg } from "react-icons/bs";
+import { FaPlus } from "react-icons/fa";
+import { RxDragHandleDots2 } from "react-icons/rx";
 import { Skill } from "types/entities";
+import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./skills.module.scss";
 
@@ -17,6 +21,7 @@ type SkillForm = {
 export type DndState = {
     isDndActive: boolean;
     madeDndChanges: boolean;
+    isDndSubmitting: boolean;
 };
 
 export const Skills: FC = () => {
@@ -34,21 +39,33 @@ export const Skills: FC = () => {
         setSkillForm({ show: false });
     };
 
-    const [ dndState, setDndState ] = useState<DndState>({ isDndActive: true, madeDndChanges: false });
+    const [ dndState, setDndState ] = useState<DndState>({
+        isDndActive: false,
+        madeDndChanges: false,
+        isDndSubmitting: false
+    });
     const queryClient = useQueryClient();
 
-    const handleToggleDnd = () => {
-        setDndState(prevDndState => {
-            if (prevDndState.isDndActive && prevDndState.madeDndChanges) {
-                (async () => {
-                    await SkillService.saveAll(skillItems);
-                    await queryClient.invalidateQueries([ "skills", "projects" ]);
-                    toast.success("Skills order saved successfully!");
-                })();
-            }
+    const handleToggleDnd = async () => {
+        if (dndState.isDndSubmitting) return;
+        setDndState(prevDndState => ({ ...prevDndState, isDndSubmitting: true }));
 
-            return { ...prevDndState, isDndActive: !prevDndState.isDndActive };
-        });
+        if (dndState.isDndActive && dndState.madeDndChanges) {
+            try {
+                await SkillService.saveAll(skillItems);
+                await queryClient.invalidateQueries([ "skills", "projects" ]);
+                toast.success("Skills order saved successfully!");
+            } catch (e) {
+                toast.error(getTitleAndMessage(e).message);
+            }
+        }
+
+        setDndState(prevDndState => ({
+            ...prevDndState,
+            isDndActive: !prevDndState.isDndActive,
+            madeDndChanges: false,
+            isDndSubmitting: false
+        }));
     };
 
     const handleOnSetItems = (items: Skill[]) => {
@@ -90,6 +107,19 @@ export const Skills: FC = () => {
                             size: "125px",
                             gap: "2em"
                         }}
+                    />
+                    <Toolbar
+                        tools={[
+                            {
+                                handleClick: handleToggleDnd,
+                                loading: dndState.isDndSubmitting,
+                                children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
+                            },
+                            {
+                                handleClick: () => setSkillForm({ show: true }),
+                                children: <FaPlus size={22} />
+                            }
+                        ]}
                     />
                 </div>
 

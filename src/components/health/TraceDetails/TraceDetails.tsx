@@ -1,6 +1,7 @@
 import { Modal } from "components/common";
 import { FC, ReactNode, useState } from "react";
 import { HttpExchange } from "types/health";
+import { formatClassNames } from "utils/components";
 
 import styles from "./trace-details.module.scss";
 
@@ -27,12 +28,12 @@ export const TraceDetails: FC<Props> = ({ trace, handleClose }) => {
         <Modal title="HTTP Trace Details" handleClose={handleClose}>
             <div className={styles.detailsSwitch}>
                 <button
-                    className={content === "request" ? styles.active : ""}
+                    className={formatClassNames(content === "request" && styles.active)}
                     onClick={() => setContent("request")}>
                     Request
                 </button>
                 <button
-                    className={content === "response" ? styles.active : ""}
+                    className={formatClassNames(content === "response" && styles.active)}
                     onClick={() => setContent("response")}>
                     Response
                 </button>

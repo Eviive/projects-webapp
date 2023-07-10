@@ -1,5 +1,5 @@
 import { ProjectService } from "api/services";
-import { Button, Loader, Page } from "components/common";
+import { Loader, Page, Toolbar } from "components/common";
 import { ProjectCard, ProjectForm } from "components/projects";
 import { useCustomQuery } from "hooks/useCustomQuery";
 import { GridLayout } from "layouts";
@@ -36,9 +36,14 @@ export const Projects: FC = () => {
                     <GridLayout className={styles.cardsWrapper} size="350px" gap="2.5em">
                         {query.data.map((project, index) => <ProjectCard key={index} project={project} handleEdit={() => setProjectForm({ project, show: true })} />)}
                     </GridLayout>
-                    <Button className={styles.addButton} handleClick={() => setProjectForm({ show: true })}>
-                        <FaPlus size={22} />
-                    </Button>
+                    <Toolbar
+                        tools={[
+                            {
+                                handleClick: () => setProjectForm({ show: true }),
+                                children: <FaPlus size={22} />
+                            }
+                        ]}
+                    />
                 </div>
 
                 : <Loader />

@@ -1,7 +1,7 @@
 @use "src/styles/mixins";
 
 .projects-wrapper {
-    @include mixins.size;
+    @include mixins.size();
     padding: 5em 5%;
 }
 
@@ -9,14 +9,4 @@
     @include mixins.for-size(m) {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     };
-}
-
-.add-button {
-    z-index: 100;
-    position: fixed;
-    bottom: 1.5em;
-    right: 1.5em;
-    @include mixins.size(auto);
-    padding: 10px;
-    border-radius: 50%;
 }

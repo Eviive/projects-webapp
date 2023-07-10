@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { ErrorResponse } from "types/app";
 
 type TitleAndMessage = {
     title: string;
@@ -11,7 +12,7 @@ export const getTitleAndMessage = (e: unknown): TitleAndMessage => {
     if (e instanceof AxiosError) {
         titleAndMessage = {
             title: e.response?.data?.error ?? e.name,
-            message: e.response?.data?.message ?? e.message
+            message: getMessage(e)
         };
     } else {
         titleAndMessage = {
@@ -20,4 +21,16 @@ export const getTitleAndMessage = (e: unknown): TitleAndMessage => {
         };
     }
     return titleAndMessage;
+};
+
+const getMessage = (e: AxiosError): string => {
+    const data = e.response?.data as ErrorResponse | undefined;
+
+    if (data?.message) {
+        return Array.isArray(data.message)
+            ? data.message.join("\n")
+            : data.message;
+    }
+
+    return e.message;
 };

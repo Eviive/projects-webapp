@@ -9,10 +9,16 @@
     font-weight: bold;
     background-color: hsl(var(--accent-1));
     border-radius: var(--radius, 5px);
-    @include mixins.box-shadow;
+    @include mixins.box-shadow();
     transition: scale 0.3s;
 
     &:active {
         scale: 0.95;
+    }
+
+    &.round {
+        @include mixins.size(45px);
+        border-radius: 50%;
+        @include mixins.box-shadow($down: 5px, $spread: -5px);
     }
 }
