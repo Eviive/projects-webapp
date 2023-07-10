@@ -20,7 +20,7 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "indent": "error",
+    "indent": ["error", 4, { "SwitchCase": 1 }],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "array-bracket-newline": ["error", "consistent"],

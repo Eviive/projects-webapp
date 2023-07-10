@@ -1,7 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
-import { FC, useState } from "react";
+import { useFormSubmissionState } from "hooks/useFormSubmissionState";
+import { FC } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Skill } from "types/entities";
@@ -21,7 +22,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
 
     const queryClient = useQueryClient();
 
-    const [ isSubmitting, setIsSubmitting ] = useState(false);
+    const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
     const {
         register,
@@ -30,9 +31,9 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
     } = useForm<SkillWithFile>({ defaultValues: initialSkill });
 
     const submitHandler: SubmitHandler<SkillWithFile> = async data => {
-        if (isSubmitting) return;
+        if (submissionState.isSubmittingEdition) return;
         if (!isDirty) return handleClose(false, false);
-        setIsSubmitting(true);
+        dispatchSubmissionState("editionStarted");
         try {
             const editing = !!initialSkill;
 
@@ -66,14 +67,14 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
         } catch (e) {
             toast.error(getTitleAndMessage(e));
         } finally {
-            setIsSubmitting(false);
+            dispatchSubmissionState("editionFinished");
         }
     };
 
     const handleDelete = async () => {
-        if (isSubmitting) return;
+        if (submissionState.isSubmittingDeletion) return;
         if (!initialSkill) return;
-        setIsSubmitting(true);
+        dispatchSubmissionState("deletionStarted");
         try {
             await SkillService.delete(initialSkill.id);
             await queryClient.invalidateQueries([ "skills" ]);
@@ -82,7 +83,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
         } catch (e) {
             toast.error(getTitleAndMessage(e));
         } finally {
-            setIsSubmitting(false);
+            dispatchSubmissionState("deletionFinished");
         }
     };
 
@@ -125,8 +126,8 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
                 />
 
                 <div className={styles.buttonsWrapper}>
-                    {!!initialSkill && <Button className={styles.button} loading={isSubmitting} handleClick={handleDelete}>Delete</Button>}
-                    <Button className={`${styles.button} ${styles.submit}`} loading={isSubmitting}>Submit</Button>
+                    {!!initialSkill && <Button loading={submissionState.isSubmittingDeletion} handleClick={handleDelete}>Delete</Button>}
+                    <Button className={styles.submit} loading={submissionState.isSubmittingEdition}>Submit</Button>
                 </div>
             </form>
         </Modal>
