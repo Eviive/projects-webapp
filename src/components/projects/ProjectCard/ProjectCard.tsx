@@ -18,9 +18,15 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
 
     const skills = project.skills
         .sort((a, b) => a.sort - b.sort)
-        .map((s, i) => {
-            return <img key={i} src={ImageService.getImageUrl(s.image)} alt={s.name} title={s.name} />;
-        });
+        .map((s, i) =>
+            <img
+                key={i}
+                src={ImageService.getImageUrl(s.image)}
+                alt={s.name}
+                title={s.name}
+                loading="lazy"
+            />
+        );
 
     return (
         <li className={styles.card}>
@@ -58,6 +64,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit }) => {
                     alt={project.image.alt}
                     title={project.title}
                     onError={e => e.currentTarget.src = PLACEHOLDER}
+                    loading="lazy"
                 />
             </div>
         </li>

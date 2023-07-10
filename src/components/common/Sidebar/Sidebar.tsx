@@ -51,7 +51,7 @@ export const Sidebar: FC = () => {
         try {
             await UserService.logout();
         } catch (e) {
-            console.error("Logout failed :", getTitleAndMessage(e).message);
+            console.error("Logout failed :", getTitleAndMessage(e));
         } finally {
             setAccessToken("");
             toast.success("You have been logged out");

@@ -29,6 +29,7 @@ export const SkillCard: FC<Props> = props => {
                     alt={props.skill.image.alt}
                     title={props.skill.name}
                     onError={e => e.currentTarget.src = PLACEHOLDER}
+                    loading="lazy"
                 />
             </div>
             <div className={styles.cardContent}>

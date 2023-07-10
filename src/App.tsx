@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 
 import "styles/reset.scss";
-import { getTitleAndMessage } from "./utils/errors";
+import { getTitleAndMessage } from "utils/errors";
 
 export const App: FC = () => {
 
@@ -23,7 +23,7 @@ export const App: FC = () => {
                 const res = await UserService.refresh();
                 setAccessToken(res.roles.includes("ROLE_ADMIN") ? res.accessToken : "");
             } catch (e) {
-                console.error("Persistent login failed :", getTitleAndMessage(e).message);
+                console.error("Persistent login failed :", getTitleAndMessage(e));
                 setAccessToken("");
             } finally {
                 setIsLoading(false);

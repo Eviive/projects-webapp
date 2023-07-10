@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build --base=/dashboard/",
-    "preview": "vite preview",
+    "preview": "vite preview --base=/dashboard/",
     "fix": "eslint ./src --fix"
   },
   "dependencies": {

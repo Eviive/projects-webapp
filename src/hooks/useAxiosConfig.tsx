@@ -39,7 +39,7 @@ export const useAxiosConfig = (accessToken: string, setAccessToken: Dispatch<Set
                             return Promise.reject("User is not admin");
                         }
                     } catch (e) {
-                        console.error("Refreshing failed :", getTitleAndMessage(e).message);
+                        console.error("Refreshing failed :", getTitleAndMessage(e));
                         setAccessToken("");
                         return Promise.reject(e);
                     }

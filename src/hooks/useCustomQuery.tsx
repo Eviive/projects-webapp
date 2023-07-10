@@ -12,11 +12,11 @@ export const useCustomQuery = <T,>(queryKey: QueryKey, queryFn: QueryFunction<T,
     const { setAccessToken } = useAuthContext();
 
     return useQuery<T>(queryKey, queryFn, {
-        onError(err) {
-            if (err instanceof AxiosError && err.response?.status === 401) {
+        onError(e) {
+            if (e instanceof AxiosError && e.response?.status === 401) {
                 setAccessToken("");
             } else {
-                toast.error(getTitleAndMessage(err).message);
+                toast.error(getTitleAndMessage(e));
             }
         },
         ...options

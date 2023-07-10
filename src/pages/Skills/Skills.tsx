@@ -56,7 +56,7 @@ export const Skills: FC = () => {
                 await queryClient.invalidateQueries([ "skills", "projects" ]);
                 toast.success("Skills order saved successfully!");
             } catch (e) {
-                toast.error(getTitleAndMessage(e).message);
+                toast.error(getTitleAndMessage(e));
             }
         }
 

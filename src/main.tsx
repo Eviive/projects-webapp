@@ -2,8 +2,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
 import { Error as ErrorElement } from "components/common";
-import { MainLayout } from "layouts";
-import { Health, Home, Login, Projects, Skills } from "pages";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -23,30 +21,29 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <MainLayout />,
+                lazy: async () => ({ Component: (await import("layouts/Main/Main")).Main }),
                 children: [
                     {
-                        path: "/",
-                        element: <Home />,
-                        index: true
+                        index: true,
+                        lazy: async () => ({ Component: (await import("pages/Home/Home")).Home })
                     },
                     {
                         path: "/projects",
-                        element: <Projects />
+                        lazy: async () => ({ Component: (await import("pages/Projects/Projects")).Projects })
                     },
                     {
                         path: "/skills",
-                        element: <Skills />
+                        lazy: async () => ({ Component: (await import("pages/Skills/Skills")).Skills })
                     },
                     {
                         path: "/health",
-                        element: <Health />
+                        lazy: async () => ({ Component: (await import("pages/Health/Health")).Health })
                     }
                 ]
             },
             {
                 path: "/login",
-                element: <Login />
+                lazy: async () => ({ Component: (await import("pages/Login/Login")).Login })
             }
         ]
     }

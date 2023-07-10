@@ -64,7 +64,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
             console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
             handleClose(true, false);
         } catch (e) {
-            toast.error(getTitleAndMessage(e).message);
+            toast.error(getTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }
@@ -80,7 +80,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
             console.log("Skill deleted successfully!");
             handleClose(false, true);
         } catch (e) {
-            toast.error(getTitleAndMessage(e).message);
+            toast.error(getTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }

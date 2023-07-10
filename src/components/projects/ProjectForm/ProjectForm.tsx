@@ -68,7 +68,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
             console.log(`Project ${editing ? "updated" : "created"} successfully!`);
             handleClose(true, false);
         } catch (e) {
-            toast.error(getTitleAndMessage(e).message);
+            toast.error(getTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }
@@ -84,7 +84,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
             console.log("Project deleted successfully!");
             handleClose(false, true);
         } catch (e) {
-            toast.error(getTitleAndMessage(e).message);
+            toast.error(getTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }

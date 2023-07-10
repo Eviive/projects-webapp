@@ -1,18 +1,12 @@
 import { AxiosError } from "axios";
-import { ErrorResponse } from "types/app";
 
-type TitleAndMessage = {
-    title: string;
-    message: string;
-};
-
-export const getTitleAndMessage = (e: unknown): TitleAndMessage => {
+export const getTitleAndMessage = (e: unknown): string => {
     import.meta.env.PROD || console.error(e);
-    let titleAndMessage: TitleAndMessage;
+    let titleAndMessage: { title: string, message: string | string[] };
     if (e instanceof AxiosError) {
         titleAndMessage = {
             title: e.response?.data?.error ?? e.name,
-            message: getMessage(e)
+            message: e.response?.data?.message ?? e.message
         };
     } else {
         titleAndMessage = {
@@ -20,17 +14,8 @@ export const getTitleAndMessage = (e: unknown): TitleAndMessage => {
             message: "Please try again later."
         };
     }
-    return titleAndMessage;
-};
 
-const getMessage = (e: AxiosError): string => {
-    const data = e.response?.data as ErrorResponse | undefined;
-
-    if (data?.message) {
-        return Array.isArray(data.message)
-            ? data.message.join("\n")
-            : data.message;
-    }
-
-    return e.message;
+    return Array.isArray(titleAndMessage.message)
+        ? titleAndMessage.message.join("\n")
+        : `${titleAndMessage.title}: ${titleAndMessage.message}`;
 };
