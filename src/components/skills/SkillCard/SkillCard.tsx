@@ -2,6 +2,7 @@ import { ImageService } from "api/services";
 import { SortableDragHandle, SortableItem } from "components/common";
 import { FC } from "react";
 import { Skill } from "types/entities";
+import { SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./skill-card.module.scss";
 
@@ -10,8 +11,6 @@ type Props = {
     handleAction: () => void;
     isDndActive: boolean;
 };
-
-const PLACEHOLDER = "https://placehold.co/68/E6E6E6/000000?font=source-sans-pro&text=No+image";
 
 export const SkillCard: FC<Props> = props => {
     return (
@@ -25,10 +24,10 @@ export const SkillCard: FC<Props> = props => {
             {props.isDndActive && <SortableDragHandle className={styles.dragHandle} />}
             <div className={styles.cardImage}>
                 <img
-                    src={ImageService.getImageUrl(props.skill.image) ?? PLACEHOLDER}
+                    src={ImageService.getImageUrl(props.skill.image) ?? SKILL_PLACEHOLDER}
                     alt={props.skill.image.alt}
                     title={props.skill.name}
-                    onError={e => e.currentTarget.src = PLACEHOLDER}
+                    onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
                     loading="lazy"
                 />
             </div>

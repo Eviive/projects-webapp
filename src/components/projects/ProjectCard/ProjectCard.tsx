@@ -4,6 +4,7 @@ import { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FiEdit, FiExternalLink, FiGithub } from "react-icons/fi";
 import { Project } from "types/entities";
+import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./project-card.module.scss";
 
@@ -13,8 +14,6 @@ type Props = {
     isDndActive: boolean;
 };
 
-const PLACEHOLDER = "https://placehold.co/1920x1080/E6E6E6/000000?font=source-sans-pro&text=No+image+available+for+this+project";
-
 export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => {
 
     const skills = project.skills
@@ -22,9 +21,10 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => 
         .map((s, i) =>
             <img
                 key={i}
-                src={ImageService.getImageUrl(s.image)}
+                src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
                 alt={s.name}
                 title={s.name}
+                onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
                 loading="lazy"
             />
         );
@@ -62,10 +62,10 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => 
             </div>
             <div className={styles.cardImage}>
                 <img
-                    src={ImageService.getImageUrl(project.image) ?? PLACEHOLDER}
+                    src={ImageService.getImageUrl(project.image) ?? PROJECT_PLACEHOLDER}
                     alt={project.image.alt}
                     title={project.title}
-                    onError={e => e.currentTarget.src = PLACEHOLDER}
+                    onError={e => e.currentTarget.src = PROJECT_PLACEHOLDER}
                     loading="lazy"
                 />
             </div>
