@@ -1,11 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
-import { Anchor, Link } from "components/common";
+import { Link } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { FC } from "react";
 import toast from "react-hot-toast";
 import { BsBriefcaseFill } from "react-icons/bs";
-import { FaHome, FaInfo, FaTools } from "react-icons/fa";
+import { FaHome, FaTools } from "react-icons/fa";
 import { GiHealthNormal } from "react-icons/gi";
 import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
@@ -77,12 +77,6 @@ export const Sidebar: FC = () => {
                         <MdRefresh />
                         Refresh data
                     </button>
-                </li>
-                <li>
-                    <Anchor href={`${import.meta.env.VITE_API_BASE_URL}/documentation`} className={styles.sidebarItem}>
-                        <FaInfo />
-                        API Documentation
-                    </Anchor>
                 </li>
                 <li>
                     <button className={styles.sidebarItem} onClick={handleLogout}>
