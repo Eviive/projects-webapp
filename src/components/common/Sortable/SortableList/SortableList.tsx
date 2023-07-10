@@ -1,15 +1,11 @@
-import { Active, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
+import { Active, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { SortableOverlay } from "components/common";
 import { GridLayout } from "layouts";
 import { ComponentProps, Dispatch, Fragment, ReactNode, SetStateAction, useMemo, useState } from "react";
+import { DndItem } from "types/app";
 
-type BaseItem = {
-    id: UniqueIdentifier;
-    sort: number;
-};
-
-type Props<T extends BaseItem> = {
+type Props<T extends DndItem> = {
     items: T[];
     setItems: Dispatch<SetStateAction<T[]>>;
     onSetItems?: (items: T[]) => void;
@@ -17,7 +13,7 @@ type Props<T extends BaseItem> = {
     wrapperProps?: Omit<ComponentProps<typeof GridLayout>, "children">;
 };
 
-export const SortableList = <T extends BaseItem>(props: Props<T>) => {
+export const SortableList = <T extends DndItem>(props: Props<T>) => {
 
     const [ active, setActive ] = useState<Active | null>(null);
 

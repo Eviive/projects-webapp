@@ -1,6 +1,6 @@
 import { ImageService } from "api/services";
 import { SortableDragHandle, SortableItem } from "components/common";
-import { ComponentProps, FC } from "react";
+import { FC } from "react";
 import { Skill } from "types/entities";
 
 import styles from "./skill-card.module.scss";
@@ -14,14 +14,14 @@ type Props = {
 const PLACEHOLDER = "https://placehold.co/68/E6E6E6/000000?font=source-sans-pro&text=No+image";
 
 export const SkillCard: FC<Props> = props => {
-
-    const itemProps: ComponentProps<typeof SortableItem>["itemProps"] = {
-        className: styles.card,
-        onClick: props.handleAction
-    };
-
     return (
-        <SortableItem id={props.skill.id} itemProps={itemProps}>
+        <SortableItem
+            id={props.skill.id}
+            itemProps={{
+                className: styles.card,
+                onClick: props.handleAction
+            }}
+        >
             {props.isDndActive && <SortableDragHandle className={styles.dragHandle} />}
             <div className={styles.cardImage}>
                 <img

@@ -25,7 +25,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
 
-    const query = useCustomQuery(["skills"], SkillService.findAll);
+    const query = useCustomQuery([ "skills" ], SkillService.findAll);
 
     const {
         register,
@@ -64,7 +64,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                 await ProjectService.save(project, imageFile);
             }
 
-            await queryClient.invalidateQueries(["projects"]);
+            await queryClient.invalidateQueries([ "projects" ]);
             console.log(`Project ${editing ? "updated" : "created"} successfully!`);
             handleClose(true, false);
         } catch (e) {
@@ -80,7 +80,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
         setIsSubmitting(true);
         try {
             await ProjectService.delete(initialProject.id);
-            await queryClient.invalidateQueries(["projects"]);
+            await queryClient.invalidateQueries([ "projects" ]);
             console.log("Project deleted successfully!");
             handleClose(false, true);
         } catch (e) {
@@ -163,7 +163,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                                 placeholder={""}
                                 value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
                                 onChange={v => {
-                                    const selectedIds = [...v.values()].map(s => s.id);
+                                    const selectedIds = [ ...v.values() ].map(s => s.id);
                                     field.onChange(query.data?.filter(s => selectedIds.includes(s.id)));
                                 }}
                                 isLoading={query.isLoading}

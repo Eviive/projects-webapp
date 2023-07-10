@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 /*
 	There is a comma after the type parameter ("T,") because there is a clash between the JSX and TypeScript syntax.
 	The comma is required to disambiguate the two. Another way to do this would be to use the "extends" keyword ("T extends {}").
 	See: https://stackoverflow.com/a/45576880
 */
-export const useLocalStorage = <T,>(key: string, defaultValue: T): [T, (newValue: T) => void] => {
+export const useLocalStorage = <T,>(key: string, defaultValue: T): [ T, Dispatch<SetStateAction<T>> ] => {
     const [ storedValue, setStoredValue ] = useState<T>(() => {
         try {
             const item = localStorage.getItem(key);
@@ -22,14 +22,21 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): [T, (newValue
         return defaultValue;
     });
 
-    const setValue = (newValue: T) => {
+    const setValue: Dispatch<SetStateAction<T>> = newValueOrFactory => {
         try {
-            localStorage.setItem(key, JSON.stringify(newValue));
+            if (newValueOrFactory instanceof Function) {
+                setStoredValue(prevState => {
+                    const newState = newValueOrFactory(prevState);
+                    localStorage.setItem(key, JSON.stringify(newState));
+                    return newState;
+                });
+            } else {
+                setStoredValue(newValueOrFactory);
+                localStorage.setItem(key, JSON.stringify(newValueOrFactory));
+            }
         } catch (e) {
             console.error(e);
         }
-
-        setStoredValue(newValue);
     };
 
     return [ storedValue, setValue ];

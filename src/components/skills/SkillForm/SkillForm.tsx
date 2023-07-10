@@ -60,7 +60,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
                 await SkillService.save(skill, imageFile);
             }
 
-            await queryClient.invalidateQueries(["skills"]);
+            await queryClient.invalidateQueries([ "skills" ]);
             console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
             handleClose(true, false);
         } catch (e) {
@@ -76,7 +76,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
         setIsSubmitting(true);
         try {
             await SkillService.delete(initialSkill.id);
-            await queryClient.invalidateQueries(["skills"]);
+            await queryClient.invalidateQueries([ "skills" ]);
             console.log("Skill deleted successfully!");
             handleClose(false, true);
         } catch (e) {

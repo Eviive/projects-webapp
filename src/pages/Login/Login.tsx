@@ -25,7 +25,7 @@ export const Login: FC = () => {
         if (accessToken) {
             setRedirect(true);
         }
-    }, [accessToken]);
+    }, [ accessToken ]);
 
     const submitHandler: SubmitHandler<AuthRequest> = async data => {
         if (isSubmitting) return;

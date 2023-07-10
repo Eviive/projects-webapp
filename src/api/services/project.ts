@@ -61,7 +61,7 @@ const deleteProject = (id: number) => request<void>(`/${URL}/${id}`, {
 const buildFormData = (project: Project, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("project", new Blob([JSON.stringify(project)], { type: "application/json" }));
+    formData.append("project", new Blob([ JSON.stringify(project) ], { type: "application/json" }));
     return formData;
 };
 

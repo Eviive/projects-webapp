@@ -13,7 +13,7 @@ export const Page: FC<PropsWithChildren<Props>> = ({ title, children }) => {
         return () => {
             document.title = WINDOW_TITLE;
         };
-    }, [title]);
+    }, [ title ]);
 
     return <>{children}</>;
 };

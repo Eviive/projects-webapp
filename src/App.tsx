@@ -29,7 +29,7 @@ export const App: FC = () => {
                 setIsLoading(false);
             }
         })();
-    }, [setAccessToken]);
+    }, [ setAccessToken ]);
 
     return (
         <AuthContextProvider value={{

@@ -3,14 +3,13 @@ import { ProjectService } from "api/services";
 import { Loader, Page, SortableList, Toolbar } from "components/common";
 import { ProjectCard, ProjectForm } from "components/projects";
 import { useCustomQuery } from "hooks/useCustomQuery";
-import { FC, useEffect, useState } from "react";
+import { useDragAndDrop } from "hooks/useDragAndDrop";
+import { FC, useState } from "react";
 import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { DndState } from "types/app";
 import { Project } from "types/entities";
-import { getTitleAndMessage } from "../../utils/errors";
 
 import styles from "./projects.module.scss";
 
@@ -20,11 +19,22 @@ type ProjectForm = {
 };
 
 export const Projects: FC = () => {
-    const query = useCustomQuery(["projects"], ProjectService.findAll);
-    const [ projectItems, setProjectItems ] = useState<Project[]>(query.data ?? []);
-    useEffect(() => {
-        setProjectItems(query.data ?? []);
-    }, [query.data]);
+    const query = useCustomQuery([ "projects" ], ProjectService.findAll);
+
+    const queryClient = useQueryClient();
+
+    const handleSaveProjectsOrder = async (projects: Project[]) => {
+        await ProjectService.saveAll(projects);
+        await queryClient.invalidateQueries([ "projects" ]);
+        toast.success("Projects order saved successfully!");
+    };
+
+    const {
+        items: [ projectItems, setProjectItems ],
+        dndState,
+        handleToggleDnd,
+        handleOnSetItems
+    } = useDragAndDrop(query, handleSaveProjectsOrder);
 
     const [ projectForm, setProjectForm ] = useState<ProjectForm>({ show: false });
 
@@ -34,46 +44,6 @@ export const Projects: FC = () => {
         setProjectForm({ show: false });
     };
 
-    const [ dndState, setDndState ] = useState<DndState>({
-        isDndActive: false,
-        madeDndChanges: false,
-        isDndSubmitting: false
-    });
-    const queryClient = useQueryClient();
-
-    const handleToggleDnd = async () => {
-        if (dndState.isDndSubmitting) return;
-        setDndState(prevDndState => ({ ...prevDndState, isDndSubmitting: true }));
-
-        if (dndState.isDndActive && dndState.madeDndChanges) {
-            try {
-                await ProjectService.saveAll(projectItems);
-                await queryClient.invalidateQueries(["projects"]);
-                toast.success("Projects order saved successfully!");
-            } catch (e) {
-                toast.error(getTitleAndMessage(e));
-            }
-        }
-
-        setDndState(prevDndState => ({
-            ...prevDndState,
-            isDndActive: !prevDndState.isDndActive,
-            madeDndChanges: false,
-            isDndSubmitting: false
-        }));
-    };
-
-    const handleOnSetItems = (items: Project[]) => {
-        for (const s of query.data ?? []) {
-            const newProject = items.find(s => s.id === s.id);
-            if (newProject) {
-                s.sort = newProject.sort;
-            }
-        }
-
-        setDndState(prevDndState => ({ ...prevDndState, madeDndChanges: true }));
-    };
-
     return (
         <Page title="Projects">
             { query.isSuccess
@@ -81,7 +51,7 @@ export const Projects: FC = () => {
                 ? <div className={styles.projectsWrapper}>
                     {projectForm.show && <ProjectForm project={projectForm.project} handleClose={handleClose} />}
                     <SortableList
-                        items={projectItems.sort((a, b) => a.sort - b.sort)}
+                        items={projectItems}
                         setItems={setProjectItems}
                         onSetItems={handleOnSetItems}
                         renderItem={project => (
