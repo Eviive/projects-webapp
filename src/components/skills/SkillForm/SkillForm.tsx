@@ -1,7 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
-import { FC, useState } from "react";
+import { useFormSubmissionState } from "hooks/useFormSubmissionState";
+import { FC } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Skill } from "types/entities";
@@ -11,16 +12,17 @@ import styles from "./skill-form.module.scss";
 
 type Props = {
     skill?: Skill;
-    handleClose: (madeChanges: boolean, deleted: boolean) => void;
+    numberOfSkills: number;
+    handleClose: (isTouched: boolean, isDeleted: boolean) => void;
 };
 
 type SkillWithFile = Skill & { image: { file: FileList } };
 
-export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
+export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, handleClose }) => {
 
     const queryClient = useQueryClient();
 
-    const [ isSubmitting, setIsSubmitting ] = useState(false);
+    const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
     const {
         register,
@@ -29,9 +31,9 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
     } = useForm<SkillWithFile>({ defaultValues: initialSkill });
 
     const submitHandler: SubmitHandler<SkillWithFile> = async data => {
-        if (isSubmitting) return;
+        if (submissionState.isSubmittingEdition) return;
         if (!isDirty) return handleClose(false, false);
-        setIsSubmitting(true);
+        dispatchSubmissionState("editionStarted");
         try {
             const editing = !!initialSkill;
 
@@ -43,6 +45,10 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
                     alt: data.image.alt
                 }
             };
+            if (!editing) {
+                skill.sort = numberOfSkills + 1;
+            }
+
             const imageFile = data.image.file.item(0);
             if (imageFile?.size && imageFile.size > 3 * 1024 * 1024) {
                 toast.error("Image size cannot exceed 3MB");
@@ -55,29 +61,29 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
                 await SkillService.save(skill, imageFile);
             }
 
-            await queryClient.invalidateQueries(["skills"]);
+            await queryClient.invalidateQueries([ "skills" ]);
             console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
             handleClose(true, false);
         } catch (e) {
-            toast.error(getTitleAndMessage(e).message);
+            toast.error(getTitleAndMessage(e));
         } finally {
-            setIsSubmitting(false);
+            dispatchSubmissionState("editionFinished");
         }
     };
 
     const handleDelete = async () => {
-        if (isSubmitting) return;
+        if (submissionState.isSubmittingDeletion) return;
         if (!initialSkill) return;
-        setIsSubmitting(true);
+        dispatchSubmissionState("deletionStarted");
         try {
             await SkillService.delete(initialSkill.id);
-            await queryClient.invalidateQueries(["skills"]);
+            await queryClient.invalidateQueries([ "skills" ]);
             console.log("Skill deleted successfully!");
             handleClose(false, true);
         } catch (e) {
-            toast.error(getTitleAndMessage(e).message);
+            toast.error(getTitleAndMessage(e));
         } finally {
-            setIsSubmitting(false);
+            dispatchSubmissionState("deletionFinished");
         }
     };
 
@@ -120,8 +126,8 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, handleClose }) => {
                 />
 
                 <div className={styles.buttonsWrapper}>
-                    {!!initialSkill && <Button className={styles.button} loading={isSubmitting} handleClick={handleDelete}>Delete</Button>}
-                    <Button className={`${styles.button} ${styles.submit}`} loading={isSubmitting}>Submit</Button>
+                    {!!initialSkill && <Button loading={submissionState.isSubmittingDeletion} handleClick={handleDelete}>Delete</Button>}
+                    <Button className={styles.submit} loading={submissionState.isSubmittingEdition}>Submit</Button>
                 </div>
             </form>
         </Modal>

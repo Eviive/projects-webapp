@@ -11,17 +11,19 @@ export type AuditEvent = {
     };
 };
 
+export type Status = "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
+
 export type Health = {
-    status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
+    status: Status;
     components: {
         db: {
-            status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
+            status: Status;
             details: {
                 database: string;
             };
         },
         diskSpace: {
-            status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
+            status: Status;
             details: {
                 path: string;
                 total: number;
@@ -31,7 +33,7 @@ export type Health = {
             };
         },
         ping: {
-            status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
+            status: Status;
         }
     };
 };

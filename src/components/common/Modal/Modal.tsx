@@ -1,5 +1,5 @@
 import { ModalConfig, useCloseEvents } from "hooks/useCloseEvents";
-import { FC, ReactNode } from "react";
+import { FC, PropsWithChildren } from "react";
 import { CgClose } from "react-icons/cg";
 
 import styles from "./modal.module.scss";
@@ -7,11 +7,10 @@ import styles from "./modal.module.scss";
 type Props = {
     title: string;
     handleClose: () => void;
-    children: ReactNode;
     config?: ModalConfig;
 };
 
-export const Modal: FC<Props> = props => {
+export const Modal: FC<PropsWithChildren<Props>> = props => {
 
     const wrapperRef = useCloseEvents<HTMLDivElement>(props.handleClose, props.config);
 

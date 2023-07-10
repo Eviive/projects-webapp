@@ -5,7 +5,6 @@
 	min-height: 100dvh;
 	display: grid;
 	place-items: center;
-	background-color: hsl(var(--primary-1));
 }
 
 .login-form {
@@ -19,7 +18,7 @@
 .input-wrapper {
 	display: flex;
 	border-radius: var(--radius);
-	@include mixins.box-shadow;
+	@include mixins.box-shadow();
 
 	&:is(:hover, :focus-within) input {
 		background-color: hsl(var(--secondary-2));

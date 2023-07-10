@@ -60,7 +60,6 @@
     gap: 5px;
 
     a, button {
-        @include mixins.size(22px);
         display: flex;
     }
 }

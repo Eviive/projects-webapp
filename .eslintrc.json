@@ -20,7 +20,7 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "indent": "error",
+    "indent": ["error", 4, { "SwitchCase": 1 }],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "array-bracket-newline": ["error", "consistent"],
@@ -32,7 +32,7 @@
     "no-mixed-spaces-and-tabs": ["error"],
     "no-trailing-spaces": "error",
     "object-curly-spacing": ["error", "always"],
-    "array-bracket-spacing": ["error", "always", { "singleValue": false, "objectsInArrays": false, "arraysInArrays": false }],
+    "array-bracket-spacing": ["error", "always"],
     "computed-property-spacing": ["error", "never"]
   },
   "settings": {

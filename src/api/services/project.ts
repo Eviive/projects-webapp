@@ -30,6 +30,13 @@ const save = (project: Project, file?: File | null) => {
     });
 };
 
+const saveAll = (projects: Project[]) => {
+    return request<Project[], Project[]>(`/${URL}/save-all`, {
+        method: "POST",
+        data: projects
+    });
+};
+
 const update = (project: Project, file?: File | null) => {
     if (!file) {
         return request<Project, Project>(`/${URL}/${project.id}`, {
@@ -54,7 +61,7 @@ const deleteProject = (id: number) => request<void>(`/${URL}/${id}`, {
 const buildFormData = (project: Project, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("project", new Blob([JSON.stringify(project)], { type: "application/json" }));
+    formData.append("project", new Blob([ JSON.stringify(project) ], { type: "application/json" }));
     return formData;
 };
 
@@ -65,6 +72,7 @@ export const ProjectService = {
     findAllNotFeatured,
     findAllNotFeaturedPaginated,
     save,
+    saveAll,
     update,
     delete: deleteProject
 };

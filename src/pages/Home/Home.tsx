@@ -8,11 +8,11 @@ import styles from "./home.module.scss";
 
 export const Home: FC = () => {
 
-    const queryInfo = useCustomQuery(["info"], HealthService.info);
-    const queryHealth = useCustomQuery(["health"], HealthService.health);
+    const queryInfo = useCustomQuery([ "info" ], HealthService.info);
+    const queryHealth = useCustomQuery([ "health" ], HealthService.health);
 
     return (
-        <Page title="Home - Dashboard">
+        <Page title="Home">
             { (queryInfo.isSuccess && queryHealth.isSuccess)
 
                 ? <div className={styles.homeWrapper}>

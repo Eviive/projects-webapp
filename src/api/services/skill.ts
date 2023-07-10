@@ -24,6 +24,13 @@ const save = (skill: Skill, file?: File | null) => {
     });
 };
 
+const saveAll = (skills: Skill[]) => {
+    return request<Skill[], Skill[]>(`/${URL}/save-all`, {
+        method: "POST",
+        data: skills
+    });
+};
+
 const update = (skill: Skill, file?: File | null) => {
     if (!file) {
         return request<Skill, Skill>(`/${URL}/${skill.id}`, {
@@ -48,7 +55,7 @@ const deleteSkill = (id: number) => request<void>(`/${URL}/${id}`, {
 const buildFormData = (skill: Skill, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("skill", new Blob([JSON.stringify(skill)], { type: "application/json" }));
+    formData.append("skill", new Blob([ JSON.stringify(skill) ], { type: "application/json" }));
     return formData;
 };
 
@@ -56,6 +63,7 @@ export const SkillService = {
     findById,
     findAll,
     save,
+    saveAll,
     update,
     delete: deleteSkill
 };

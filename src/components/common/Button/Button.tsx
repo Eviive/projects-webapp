@@ -1,26 +1,34 @@
-import { FC, MouseEventHandler, ReactNode } from "react";
+import { FC, MouseEventHandler, PropsWithChildren } from "react";
 import { PulseLoader } from "react-spinners";
+import { formatClassNames } from "utils/components";
 
 import styles from "./button.module.scss";
 
 type Props = {
-    children?: ReactNode;
     className?: string;
     loading?: boolean;
     handleClick?: MouseEventHandler<HTMLButtonElement>;
+    round?: boolean;
 };
 
-export const Button: FC<Props> = props => {
+export const Button: FC<PropsWithChildren<Props>> = props => {
+
+    const className = formatClassNames(
+        styles.button,
+        props.className,
+        props.round && styles.round
+    );
+
     return (
         <button
-            className={props.className ? `${styles.button} ${props.className}` : styles.button}
+            className={className}
             onClick={props.handleClick}
         >
             { props.loading
                 ? <PulseLoader
-                    size={10}
+                    size={props.round ? 5 : 10}
                     color="hsl(var(--primary-1))"
-                    cssOverride={{ display: "unset" }}
+                    cssOverride={{ display: "flex" }}
                 />
                 : props.children
             }

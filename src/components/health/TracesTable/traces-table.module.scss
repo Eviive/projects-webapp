@@ -11,7 +11,7 @@
 }
 
 .traces-table {
-    @include mixins.size;
+    @include mixins.size();
     border-collapse: collapse;
 
     .table-head {

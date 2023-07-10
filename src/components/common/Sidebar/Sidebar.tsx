@@ -1,16 +1,16 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
-import { Anchor, Link } from "components/common";
+import { Link } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { FC } from "react";
 import toast from "react-hot-toast";
 import { BsBriefcaseFill } from "react-icons/bs";
-import { FaHome, FaInfo, FaTools } from "react-icons/fa";
+import { FaHome, FaTools } from "react-icons/fa";
 import { GiHealthNormal } from "react-icons/gi";
 import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { Route } from "types/app";
-import { getTitleAndMessage } from "../../../utils/errors";
+import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./sidebar.module.scss";
 
@@ -51,7 +51,7 @@ export const Sidebar: FC = () => {
         try {
             await UserService.logout();
         } catch (e) {
-            console.error("Logout failed :", getTitleAndMessage(e).message);
+            console.error("Logout failed :", getTitleAndMessage(e));
         } finally {
             setAccessToken("");
             toast.success("You have been logged out");
@@ -63,7 +63,11 @@ export const Sidebar: FC = () => {
             <ul>
                 {routes.map((route, index) => (
                     <li key={index}>
-                        <Link route={route} className={styles.sidebarItem} activeClassName={styles.active} />
+                        <Link
+                            route={route}
+                            className={styles.sidebarItem}
+                            activeClassName={styles.active}
+                        />
                     </li>
                 ))}
             </ul>
@@ -73,12 +77,6 @@ export const Sidebar: FC = () => {
                         <MdRefresh />
                         Refresh data
                     </button>
-                </li>
-                <li>
-                    <Anchor href={`${import.meta.env.VITE_API_BASE_URL}/documentation`} className={styles.sidebarItem}>
-                        <FaInfo />
-                        API Documentation
-                    </Anchor>
                 </li>
                 <li>
                     <button className={styles.sidebarItem} onClick={handleLogout}>

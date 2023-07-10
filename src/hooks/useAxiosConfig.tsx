@@ -2,7 +2,7 @@ import { httpClient } from "api/client";
 import { UserService } from "api/services";
 import decode, { JwtPayload } from "jwt-decode";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { getTitleAndMessage } from "../utils/errors";
+import { getTitleAndMessage } from "utils/errors";
 
 const isExpired = (token: string) => {
     const { exp } = decode<JwtPayload>(token);
@@ -39,7 +39,7 @@ export const useAxiosConfig = (accessToken: string, setAccessToken: Dispatch<Set
                             return Promise.reject("User is not admin");
                         }
                     } catch (e) {
-                        console.error("Refreshing failed :", getTitleAndMessage(e).message);
+                        console.error("Refreshing failed :", getTitleAndMessage(e));
                         setAccessToken("");
                         return Promise.reject(e);
                     }

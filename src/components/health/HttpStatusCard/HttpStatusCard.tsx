@@ -11,12 +11,12 @@ type Props = {
 
 export const HttpStatusCard: FC<Props> = props => {
     return (
-        <div className={styles.card} style={{ backgroundColor: `var(--status-${props.code})` }}>
+        <li className={styles.card} style={{ backgroundColor: `var(--status-${props.code})` }}>
             <div className={styles.cardTitle}>
                 {props.icon}
                 <h1>{`${props.code} ${props.name}`}</h1>
             </div>
             <h2 className={styles.cardValue}>{props.value}</h2>
-        </div>
+        </li>
     );
 };

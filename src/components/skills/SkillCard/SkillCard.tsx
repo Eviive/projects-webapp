@@ -1,37 +1,39 @@
 import { ImageService } from "api/services";
+import { SortableDragHandle, SortableItem } from "components/common";
 import { FC } from "react";
-import { FaPlus } from "react-icons/all";
 import { Skill } from "types/entities";
+import { SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./skill-card.module.scss";
 
 type Props = {
-    skill?: Skill;
+    skill: Skill;
     handleAction: () => void;
+    isDndActive: boolean;
 };
 
-const PLACEHOLDER = "https://via.placeholder.com/1920x1080/E6E6E6/000000?text=No+image+available+for+this+skill";
-
-export const SkillCard: FC<Props> = ({ skill, handleAction }) => {
-
+export const SkillCard: FC<Props> = props => {
     return (
-        <div className={skill ? styles.card : `${styles.card} ${styles.addCard}`} onClick={handleAction}>
+        <SortableItem
+            id={props.skill.id}
+            itemProps={{
+                className: styles.card,
+                onClick: props.handleAction
+            }}
+        >
+            {props.isDndActive && <SortableDragHandle className={styles.dragHandle} />}
             <div className={styles.cardImage}>
-                {skill
-
-                    ? <img
-                        src={ImageService.getImageUrl(skill.image) ?? PLACEHOLDER}
-                        alt={skill.image.alt}
-                        title={skill.name}
-                        onError={e => e.currentTarget.src = PLACEHOLDER}
-                    />
-
-                    : <FaPlus />
-                }
+                <img
+                    src={ImageService.getImageUrl(props.skill.image) ?? SKILL_PLACEHOLDER}
+                    alt={props.skill.image.alt}
+                    title={props.skill.name}
+                    onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
+                    loading="lazy"
+                />
             </div>
             <div className={styles.cardContent}>
-                {skill ? skill.name : "Add skill"}
+                {props.skill.name}
             </div>
-        </div>
+        </SortableItem>
     );
 };
