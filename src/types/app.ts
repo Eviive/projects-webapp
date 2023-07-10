@@ -5,3 +5,5 @@ export type Route = {
     name: string;
     icon: ReactNode;
 };
+
+export type Falsy = false | 0 | "" | null | undefined;
