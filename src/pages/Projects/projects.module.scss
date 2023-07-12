@@ -5,7 +5,7 @@
     padding: 5em 5%;
 }
 
-.cardsWrapper {
+.cards-wrapper {
     @include mixins.for-size(m) {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     };
