@@ -49,7 +49,13 @@ export const Projects: FC = () => {
             { query.isSuccess
 
                 ? <div className={styles.projectsWrapper}>
-                    {projectForm.show && <ProjectForm project={projectForm.project} handleClose={handleClose} />}
+                    {projectForm.show &&
+                        <ProjectForm
+                            project={projectForm.project}
+                            numberOfProjects={projectItems.length}
+                            handleClose={handleClose}
+                        />
+                    }
                     <SortableList
                         items={projectItems}
                         setItems={setProjectItems}

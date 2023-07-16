@@ -15,12 +15,13 @@ import styles from "./project-form.module.scss";
 
 type Props = {
     project?: Project;
+    numberOfProjects: number;
     handleClose: (isTouched: boolean, isDeleted: boolean) => void;
 };
 
 type ProjectWithFile = Project & { image: { file: FileList } };
 
-export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose }) => {
+export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjects, handleClose }) => {
 
     const queryClient = useQueryClient();
 
@@ -54,6 +55,9 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, handleClose })
                     alt: data.image.alt
                 }
             };
+            if (!editing) {
+                project.sort = numberOfProjects + 1;
+            }
 
             const imageFile = data.image.file.item(0);
             if (imageFile?.size && imageFile?.size > 3 * 1024 * 1024) {
