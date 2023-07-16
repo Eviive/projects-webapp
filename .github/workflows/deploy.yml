@@ -16,6 +16,7 @@ jobs:
           docker-hub-username: ${{ secrets.DOCKER_HUB_USERNAME }}
           docker-hub-token: ${{ secrets.DOCKER_HUB_TOKEN }}
           docker-hub-repository: personal-api-dashboard
+          lfs: true
 
   deploy:
     needs: build
