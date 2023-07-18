@@ -3,7 +3,7 @@ import { Image } from "types/entities";
 
 const URL = "image";
 
-const getImageUrl = (image: Image) => image.uuid ? `${import.meta.env.VITE_API_BASE_URL}/${URL}/${image.uuid}` : null;
+const getImageUrl = (image: Image) => image.uuid ? `${import.meta.env.VITE_API_BASE_URL ?? ""}/${URL}/${image.uuid}` : null;
 
 const deleteImage = (id: number) => request<void>(`/${URL}/${id}`, {
     method: "DELETE"
