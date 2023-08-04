@@ -76,11 +76,13 @@ export const Skills: FC = () => {
                     <Toolbar
                         tools={[
                             {
+                                name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {
+                                name: "Add skill",
                                 handleClick: () => setSkillForm({ show: true }),
                                 children: <FaPlus size={22} />
                             }

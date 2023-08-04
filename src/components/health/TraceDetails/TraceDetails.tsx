@@ -15,9 +15,9 @@ export const TraceDetails: FC<Props> = ({ trace, handleClose }) => {
     const [ content, setContent ] = useState<"request" | "response">("request");
 
     const parseObject = (obj: object): ReactNode => {
-        return Object.entries(obj).map(([ key, val ], index) => {
+        return Object.entries(obj).map(([ key, val ]) => {
             if (Array.isArray(val) || !(val instanceof Object)) {
-                return <span key={index}><strong>{key}:</strong> {Array.isArray(val) ? val.join(" ") : val}</span>;
+                return <span key={key}><strong>{key}:</strong> {Array.isArray(val) ? val.join(" ") : val}</span>;
             } else {
                 return parseObject(val);
             }

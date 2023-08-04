@@ -8,5 +8,5 @@
 .cards-wrapper {
     @include mixins.for-size(m) {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    };
+    }
 }

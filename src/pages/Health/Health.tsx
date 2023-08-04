@@ -42,9 +42,9 @@ export const Health: FC = () => {
                 ? <div className={styles.healthWrapper}>
                     <div className={styles.healthContent}>
                         <GridLayout className={styles.statusCardsWrapper}>
-                            {HTTP_STATUS.map((status, index) => {
+                            {HTTP_STATUS.map(status => {
                                 const value = query.data.exchanges.filter(t => t.response.status === status.code).length;
-                                return <HttpStatusCard key={index} {...status} value={value} />;
+                                return <HttpStatusCard key={status.code} {...status} value={value} />;
                             })}
                         </GridLayout>
                         <TracesTable httpTraces={query.data.exchanges} />

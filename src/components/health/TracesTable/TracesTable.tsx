@@ -50,10 +50,10 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
                             </tr>
                         </thead>
                         <tbody className={styles.tableBody}>
-                            {httpTraces.slice(page * 10, (page + 1) * 10).map((trace, index) => {
+                            {httpTraces.slice(page * 10, (page + 1) * 10).map(trace => {
                                 const bgColor = `var(--status-${[ 401, 403 ].includes(trace.response.status) ? trace.response.status : Math.floor(trace.response.status / 100) * 100})`;
                                 return (
-                                    <tr key={index}>
+                                    <tr key={trace.timestamp}>
                                         <td>
                                             {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(trace.timestamp))}
                                         </td>

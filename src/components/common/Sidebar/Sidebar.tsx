@@ -61,8 +61,8 @@ export const Sidebar: FC = () => {
     return (
         <nav className={styles.sidebar}>
             <ul>
-                {routes.map((route, index) => (
-                    <li key={index}>
+                {routes.map(route => (
+                    <li key={route.name}>
                         <Link
                             route={route}
                             className={styles.sidebarItem}

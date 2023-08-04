@@ -16,18 +16,18 @@ type Props = {
 
 export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => {
 
-    const skills = project.skills
-        .sort((a, b) => a.sort - b.sort)
-        .map((s, i) =>
-            <img
-                key={i}
-                src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
-                alt={s.name}
-                title={s.name}
-                onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
-                loading="lazy"
-            />
-        );
+    project.skills.sort((a, b) => a.sort - b.sort);
+
+    const skills = project.skills.map(s =>
+        <img
+            key={s.id}
+            src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
+            alt={s.name}
+            title={s.name}
+            onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
+            loading="lazy"
+        />
+    );
 
     return (
         <SortableItem id={project.id} itemProps={{ className: styles.card }}>

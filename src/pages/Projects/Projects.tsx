@@ -76,11 +76,13 @@ export const Projects: FC = () => {
                     <Toolbar
                         tools={[
                             {
+                                name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {
+                                name: "Add project",
                                 handleClick: () => setProjectForm({ show: true }),
                                 children: <FaPlus size={22} />
                             }

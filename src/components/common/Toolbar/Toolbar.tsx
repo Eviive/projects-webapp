@@ -1,11 +1,12 @@
 import { Button } from "components/common";
-import { FC, MouseEventHandler, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 
 import styles from "./toolbar.module.scss";
 
 type Tool = {
+    name: string;
     className?: string;
-    handleClick: MouseEventHandler<HTMLButtonElement>;
+    handleClick: () => (void | Promise<void>);
     loading?: boolean;
 };
 
@@ -15,9 +16,9 @@ type Props = {
 
 export const Toolbar: FC<Props> = props => {
 
-    const buttons = props.tools.map((tool, index) => (
+    const buttons = props.tools.map(tool => (
         <Button
-            key={index}
+            key={tool.name}
             className={tool.className}
             loading={tool.loading}
             handleClick={tool.handleClick}

@@ -13,7 +13,7 @@ type useDragAndDropReturnType<T extends DndItem> = {
 
 export const useDragAndDrop = <T extends DndItem>(
     query: UseQueryResult<T[]>,
-    saveOrder: (items: T[]) => Promise<void>
+    saveOrder: (items: T[]) => (void | Promise<void>)
 ): useDragAndDropReturnType<T> => {
 
     const [ items, setItems ] = useState<T[]>(query.data?.sort((a, b) => a.sort - b.sort) ?? []);
@@ -49,10 +49,10 @@ export const useDragAndDrop = <T extends DndItem>(
     };
 
     const handleOnSetItems = (items: T[]) => {
-        for (const s of query.data ?? []) {
-            const newItem = items.find(s => s.id === s.id);
+        for (const item of query.data ?? []) {
+            const newItem = items.find(i => i.id === item.id);
             if (newItem) {
-                s.sort = newItem.sort;
+                item.sort = newItem.sort;
             }
         }
 
@@ -65,5 +65,4 @@ export const useDragAndDrop = <T extends DndItem>(
         handleToggleDnd,
         handleOnSetItems
     };
-
 };

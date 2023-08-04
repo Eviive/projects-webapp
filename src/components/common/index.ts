@@ -1,4 +1,4 @@
-export { Error } from "./Error/Error";
+export { ErrorPage } from "./Error/ErrorPage";
 export { Sidebar } from "./Sidebar/Sidebar";
 export { Link } from "./Link/Link";
 export { Anchor } from "./Anchor/Anchor";
