@@ -16,6 +16,10 @@
         scale: 0.95;
     }
 
+    &.disabled {
+        cursor: not-allowed;
+    }
+
     &.round {
         @include mixins.size(45px);
         border-radius: 50%;

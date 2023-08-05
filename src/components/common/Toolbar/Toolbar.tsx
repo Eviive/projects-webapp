@@ -8,6 +8,7 @@ type Tool = {
     className?: string;
     handleClick: () => (void | Promise<void>);
     loading?: boolean;
+    disabled?: boolean;
 };
 
 type Props = {
@@ -21,6 +22,7 @@ export const Toolbar: FC<Props> = props => {
             key={tool.name}
             className={tool.className}
             loading={tool.loading}
+            disabled={tool.disabled}
             handleClick={tool.handleClick}
             round={true}
         >

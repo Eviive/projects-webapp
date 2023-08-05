@@ -1,16 +1,17 @@
 @use "src/styles/mixins";
 
 .projects-wrapper {
-    padding: 5em 5%;
+    padding: 4em 5%;
     @include mixins.size();
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2em;
+    gap: 4em;
 }
 
 .cards-wrapper {
+    width: 100%;
     @include mixins.for-size(m) {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }

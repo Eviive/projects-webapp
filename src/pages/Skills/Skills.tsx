@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Loader, Page, SortableList, Toolbar } from "components/common";
+import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import type { FC } from "react";
@@ -29,6 +29,8 @@ export const Skills: FC = () => {
         toast.success("Skills order saved successfully!");
     };
 
+    const [ searchQuery, setSearchQuery ] = useState("");
+
     const {
         items: [ skillItems, setSkillItems ],
         dndState,
@@ -56,8 +58,9 @@ export const Skills: FC = () => {
                             handleClose={handleClose}
                         />
                     }
+                    <SearchBar handleChange={setSearchQuery} />
                     <SortableList
-                        items={skillItems}
+                        items={skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))}
                         setItems={setSkillItems}
                         onSetItems={handleOnSetItems}
                         renderItem={skill => (
@@ -79,6 +82,7 @@ export const Skills: FC = () => {
                                 name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
+                                disabled: skillItems.length !== skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase())).length,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {

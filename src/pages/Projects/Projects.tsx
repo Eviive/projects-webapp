@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services";
-import { Loader, Page, SortableList, Toolbar } from "components/common";
+import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
 import { ProjectCard, ProjectForm } from "components/projects";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import type { FC } from "react";
@@ -29,6 +29,8 @@ export const Projects: FC = () => {
         toast.success("Projects order saved successfully!");
     };
 
+    const [ searchQuery, setSearchQuery ] = useState("");
+
     const {
         items: [ projectItems, setProjectItems ],
         dndState,
@@ -56,8 +58,9 @@ export const Projects: FC = () => {
                             handleClose={handleClose}
                         />
                     }
+                    <SearchBar handleChange={setSearchQuery} />
                     <SortableList
-                        items={projectItems}
+                        items={projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()))}
                         setItems={setProjectItems}
                         onSetItems={handleOnSetItems}
                         renderItem={project => (
@@ -79,6 +82,7 @@ export const Projects: FC = () => {
                                 name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
+                                disabled: projectItems.length !== projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase())).length,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {
