@@ -1,4 +1,4 @@
-import { useSortable } from "@dnd-kit/sortable";
+import type { useSortable } from "@dnd-kit/sortable";
 import { createContext, useContext } from "react";
 
 export type ISortableItemContext = Partial<Pick<ReturnType<typeof useSortable>, "attributes" | "listeners" | "setActivatorNodeRef">>;

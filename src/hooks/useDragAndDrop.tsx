@@ -1,7 +1,8 @@
-import { UseQueryResult } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { UseQueryResult } from "@tanstack/react-query";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { DndItem, DndState } from "types/app";
+import type { DndItem, DndState } from "types/app";
 import { getTitleAndMessage } from "utils/errors";
 
 type useDragAndDropReturnType<T extends DndItem> = {

@@ -1,5 +1,5 @@
 import { Button } from "components/common";
-import { FC, PropsWithChildren } from "react";
+import type { FC, PropsWithChildren } from "react";
 
 import styles from "./toolbar.module.scss";
 

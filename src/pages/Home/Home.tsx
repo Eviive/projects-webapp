@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { HealthService } from "api/services";
 import { Loader, Page } from "components/common";
 import { StatusCards } from "components/home";
-import { FC } from "react";
+import type { FC } from "react";
 
 import styles from "./home.module.scss";
 

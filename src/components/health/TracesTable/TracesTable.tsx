@@ -1,8 +1,9 @@
 import { TraceDetails } from "components/health";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { CgDetailsMore } from "react-icons/cg";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-import { HttpExchange } from "types/health";
+import type { HttpExchange } from "types/health";
 import { formatClassNames } from "utils/components";
 
 import styles from "./traces-table.module.scss";

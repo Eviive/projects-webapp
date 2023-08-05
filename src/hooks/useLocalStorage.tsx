@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 
 /*
 	There is a comma after the type parameter ("T,") because there is a clash between the JSX and TypeScript syntax.

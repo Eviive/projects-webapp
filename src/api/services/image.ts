@@ -1,5 +1,5 @@
 import { request } from "api/client";
-import { Image } from "types/entities";
+import type { Image } from "types/entities";
 
 const URL = "image";
 

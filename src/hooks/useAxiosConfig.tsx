@@ -1,8 +1,10 @@
 import { httpClient } from "api/client";
 import { UserService } from "api/services";
 import { AxiosError } from "axios";
-import decode, { JwtPayload } from "jwt-decode";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import type { JwtPayload } from "jwt-decode";
+import decode from "jwt-decode";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { getTitleAndMessage } from "utils/errors";
 

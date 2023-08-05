@@ -1,8 +1,8 @@
-import { UniqueIdentifier } from "@dnd-kit/core";
+import type { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { SortableItemContextProvider } from "contexts/SortableItemContext";
-import { ComponentProps, CSSProperties, FC, PropsWithChildren } from "react";
+import type { ComponentProps, CSSProperties, FC, PropsWithChildren } from "react";
 
 type Props = {
     id?: UniqueIdentifier;

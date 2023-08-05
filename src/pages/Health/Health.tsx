@@ -3,7 +3,7 @@ import { HealthService } from "api/services";
 import { Loader, Page } from "components/common";
 import { HttpStatusCard, TracesTable } from "components/health";
 import { GridLayout } from "layouts";
-import { FC } from "react";
+import type { FC } from "react";
 import { AiFillBug, AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineExclamationCircle } from "react-icons/ai";
 
 import styles from "./health.module.scss";

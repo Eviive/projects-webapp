@@ -3,12 +3,13 @@ import { ProjectService } from "api/services";
 import { Loader, Page, SortableList, Toolbar } from "components/common";
 import { ProjectCard, ProjectForm } from "components/projects";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { Project } from "types/entities";
+import type { Project } from "types/entities";
 
 import styles from "./projects.module.scss";
 

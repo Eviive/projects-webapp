@@ -1,5 +1,5 @@
 import { request } from "api/client";
-import { Page, Project, Skill } from "types/entities";
+import type { Page, Project, Skill } from "types/entities";
 
 const URL = "project";
 

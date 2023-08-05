@@ -3,12 +3,13 @@ import { SkillService } from "api/services";
 import { Loader, Page, SortableList, Toolbar } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { Skill } from "types/entities";
+import type { Skill } from "types/entities";
 
 import styles from "./skills.module.scss";
 

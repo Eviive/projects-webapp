@@ -1,8 +1,13 @@
 @use "src/styles/mixins";
 
 .projects-wrapper {
-    @include mixins.size();
     padding: 5em 5%;
+    @include mixins.size();
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
 }
 
 .cards-wrapper {

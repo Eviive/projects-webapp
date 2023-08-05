@@ -2,10 +2,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
-import { FC } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import type { FC } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Skill } from "types/entities";
+import type { Skill } from "types/entities";
 import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./skill-form.module.scss";

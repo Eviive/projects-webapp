@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, PropsWithChildren } from "react";
+import type { FC, MouseEventHandler, PropsWithChildren } from "react";
 import { PulseLoader } from "react-spinners";
 import { formatClassNames } from "utils/components";
 

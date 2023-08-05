@@ -2,14 +2,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
 import { Link } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
-import { FC } from "react";
+import type { FC } from "react";
 import toast from "react-hot-toast";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { FaHome, FaTools } from "react-icons/fa";
 import { GiHealthNormal } from "react-icons/gi";
 import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
-import { Route } from "types/app";
+import type { Route } from "types/app";
 import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./sidebar.module.scss";

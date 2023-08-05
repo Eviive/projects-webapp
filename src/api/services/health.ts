@@ -1,5 +1,5 @@
 import { request } from "api/client";
-import { AuditEvent, Health, HttpExchange, Info } from "types/health";
+import type { AuditEvent, Health, HttpExchange, Info } from "types/health";
 
 const URL = "actuator";
 

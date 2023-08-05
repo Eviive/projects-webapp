@@ -1,9 +1,9 @@
 import { ImageService } from "api/services";
 import { Anchor, SortableDragHandle, SortableItem } from "components/common";
-import { FC } from "react";
+import type { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FiEdit, FiExternalLink, FiGithub } from "react-icons/fi";
-import { Project } from "types/entities";
+import type { Project } from "types/entities";
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./project-card.module.scss";

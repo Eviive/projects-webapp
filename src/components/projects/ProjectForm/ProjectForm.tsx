@@ -2,12 +2,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService, SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
-import { FC } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import type { FC } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { Project } from "types/entities";
+import type { Project } from "types/entities";
 import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./project-form.module.scss";

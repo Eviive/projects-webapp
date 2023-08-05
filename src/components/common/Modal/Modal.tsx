@@ -1,5 +1,6 @@
-import { ModalConfig, useCloseEvents } from "hooks/useCloseEvents";
-import { FC, PropsWithChildren } from "react";
+import type { ModalConfig } from "hooks/useCloseEvents";
+import { useCloseEvents } from "hooks/useCloseEvents";
+import type { FC, PropsWithChildren } from "react";
 import { CgClose } from "react-icons/cg";
 
 import styles from "./modal.module.scss";
