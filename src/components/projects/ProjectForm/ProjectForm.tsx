@@ -195,8 +195,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                     attributes={{
                         ...register("image.file"),
                         type: "file",
-                        accept: "image/*",
-                        required: !initialProject
+                        accept: "image/*"
                     }}
                     label="Image file"
                     wrapperClassName={styles.field}

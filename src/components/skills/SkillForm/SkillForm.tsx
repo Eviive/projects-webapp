@@ -118,8 +118,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
                     attributes={{
                         ...register("image.file"),
                         type: "file",
-                        accept: "image/*",
-                        required: !initialSkill
+                        accept: "image/*"
                     }}
                     label="Image file"
                     wrapperClassName={styles.field}
