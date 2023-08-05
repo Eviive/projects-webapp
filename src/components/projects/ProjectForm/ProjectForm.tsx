@@ -1,7 +1,6 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService, SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
 import { FC } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -27,7 +26,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
 
     const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
-    const query = useCustomQuery([ "skills" ], SkillService.findAll);
+    const query = useQuery([ "skills" ], SkillService.findAll);
 
     const {
         register,

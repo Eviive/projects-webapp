@@ -1,7 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { HealthService } from "api/services";
 import { Loader, Page } from "components/common";
 import { HttpStatusCard, TracesTable } from "components/health";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { GridLayout } from "layouts";
 import { FC } from "react";
 import { AiFillBug, AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineExclamationCircle } from "react-icons/ai";
@@ -33,7 +33,7 @@ const HTTP_STATUS = [
 
 export const Health: FC = () => {
 
-    const query = useCustomQuery([ "httpExchanges" ], HealthService.httpExchanges);
+    const query = useQuery([ "httpExchanges" ], HealthService.httpExchanges);
 
     return (
         <Page title="Health">

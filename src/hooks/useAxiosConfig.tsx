@@ -1,7 +1,9 @@
 import { httpClient } from "api/client";
 import { UserService } from "api/services";
+import { AxiosError } from "axios";
 import decode, { JwtPayload } from "jwt-decode";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import toast from "react-hot-toast";
 import { getTitleAndMessage } from "utils/errors";
 
 const isExpired = (token: string) => {
@@ -47,12 +49,24 @@ export const useAxiosConfig = (accessToken: string, setAccessToken: Dispatch<Set
 
                 req.headers["Authorization"] = `Bearer ${accessToken}`;
                 return req;
-            },
-            err => err
+            }
+        );
+
+        const responseInterceptor = httpClient.interceptors.response.use(
+            res => res,
+            async err => {
+                if (err instanceof AxiosError && err.response?.status === 401) {
+                    setAccessToken("");
+                } else {
+                    toast.error(getTitleAndMessage(err));
+                }
+                return Promise.reject(err);
+            }
         );
 
         return () => {
             httpClient.interceptors.request.eject(requestInterceptor);
+            httpClient.interceptors.response.eject(responseInterceptor);
         };
     }, [ accessToken, setAccessToken ]);
 };

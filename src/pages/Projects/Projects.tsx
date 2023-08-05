@@ -1,8 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services";
 import { Loader, Page, SortableList, Toolbar } from "components/common";
 import { ProjectCard, ProjectForm } from "components/projects";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
@@ -19,7 +18,7 @@ type ProjectForm = {
 };
 
 export const Projects: FC = () => {
-    const query = useCustomQuery([ "projects" ], ProjectService.findAll);
+    const query = useQuery([ "projects" ], ProjectService.findAll);
 
     const queryClient = useQueryClient();
 

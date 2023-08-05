@@ -1,15 +1,15 @@
+import { useQuery } from "@tanstack/react-query";
 import { HealthService } from "api/services";
 import { Loader, Page } from "components/common";
 import { StatusCards } from "components/home";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { FC } from "react";
 
 import styles from "./home.module.scss";
 
 export const Home: FC = () => {
 
-    const queryInfo = useCustomQuery([ "info" ], HealthService.info);
-    const queryHealth = useCustomQuery([ "health" ], HealthService.health);
+    const queryInfo = useQuery([ "info" ], HealthService.info);
+    const queryHealth = useQuery([ "health" ], HealthService.health);
 
     return (
         <Page title="Home">

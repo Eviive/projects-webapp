@@ -1,8 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
 import { Loader, Page, SortableList, Toolbar } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
@@ -19,7 +18,7 @@ type SkillForm = {
 };
 
 export const Skills: FC = () => {
-    const query = useCustomQuery([ "skills" ], SkillService.findAll);
+    const query = useQuery([ "skills" ], SkillService.findAll);
 
     const queryClient = useQueryClient();
 
