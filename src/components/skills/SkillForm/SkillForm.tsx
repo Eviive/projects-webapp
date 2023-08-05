@@ -27,6 +27,8 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
     const {
         register,
         handleSubmit,
+        getValues,
+        setValue,
         formState: { isDirty }
     } = useForm<SkillWithFile>({ defaultValues: initialSkill });
 
@@ -96,7 +98,15 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
                 <Input
                     attributes={{
-                        ...register("name"),
+                        ...register("name", {
+                            onChange: () => {
+                                if (!getValues("name") || getValues("name").trim().length === 0) {
+                                    setValue("image.alt", "");
+                                } else {
+                                    setValue("image.alt", `${getValues("name")}'s logo`);
+                                }
+                            }
+                        }),
                         required: true,
                         maxLength: 50
                     }}

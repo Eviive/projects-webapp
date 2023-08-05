@@ -33,6 +33,8 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
         register,
         handleSubmit,
         control,
+        getValues,
+        setValue,
         formState: { isDirty }
     } = useForm<ProjectWithFile>({ defaultValues: initialProject });
 
@@ -106,7 +108,15 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
                 <Input
                     attributes={{
-                        ...register("title"),
+                        ...register("title", {
+                            onChange: () => {
+                                if (!getValues("title") || getValues("title").trim().length === 0) {
+                                    setValue("image.alt", "");
+                                } else {
+                                    setValue("image.alt", `The ${getValues("title")}'s UI`);
+                                }
+                            }
+                        }),
                         required: true,
                         maxLength: 50
                     }}
@@ -158,16 +168,16 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                 />
 
                 <div className={styles.field}>
-                    <label htmlFor="input-skills">Skills :</label>
+                    <label>Skills :</label>
                     <Controller
                         control={control}
-                        name={"skills"}
+                        name="skills"
                         render={({ field }) => (
                             <Select
                                 ref={field.ref}
+                                placeholder=""
                                 options={skillsOptions}
                                 components={makeAnimated()}
-                                placeholder={""}
                                 value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
                                 onChange={v => {
                                     const selectedIds = [ ...v.values() ].map(s => s.id);
