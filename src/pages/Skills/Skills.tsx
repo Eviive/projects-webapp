@@ -24,7 +24,7 @@ export const Skills: FC = () => {
     const queryClient = useQueryClient();
 
     const handleSaveSkillsOrder = async (skills: Skill[]) => {
-        await SkillService.saveAll(skills);
+        await SkillService.sort(skills.map(skill => skill.id));
         await queryClient.invalidateQueries([ "skills", "projects" ]);
         toast.success("Skills order saved successfully!");
     };

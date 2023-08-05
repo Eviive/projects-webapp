@@ -24,7 +24,7 @@ export const Projects: FC = () => {
     const queryClient = useQueryClient();
 
     const handleSaveProjectsOrder = async (projects: Project[]) => {
-        await ProjectService.saveAll(projects);
+        await ProjectService.sort(projects.map(project => project.id));
         await queryClient.invalidateQueries([ "projects" ]);
         toast.success("Projects order saved successfully!");
     };
