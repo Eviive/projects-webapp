@@ -1,9 +1,11 @@
-import { Active, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import type { Active, DragEndEvent } from "@dnd-kit/core";
+import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { SortableOverlay } from "components/common";
 import { GridLayout } from "layouts";
-import { ComponentProps, Dispatch, Fragment, ReactNode, SetStateAction, useMemo, useState } from "react";
-import { DndItem } from "types/app";
+import type { ComponentProps, Dispatch, ReactNode, SetStateAction } from "react";
+import { Fragment, useMemo, useState } from "react";
+import type { DndItem } from "types/app";
 
 type Props<T extends DndItem> = {
     items: T[];

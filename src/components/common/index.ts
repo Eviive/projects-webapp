@@ -1,4 +1,4 @@
-export { Error } from "./Error/Error";
+export { ErrorPage } from "./Error/ErrorPage";
 export { Sidebar } from "./Sidebar/Sidebar";
 export { Link } from "./Link/Link";
 export { Anchor } from "./Anchor/Anchor";
@@ -9,6 +9,7 @@ export { RequireAuth } from "./RequireAuth/RequireAuth";
 export { Loader } from "./Loader/Loader";
 export { Modal } from "./Modal/Modal";
 export { Toolbar } from "./Toolbar/Toolbar";
+export { SearchBar } from "./SearchBar/SearchBar";
 
 export { SortableList } from "./Sortable/SortableList/SortableList";
 export { SortableItem } from "./Sortable/SortableItem/SortableItem";

@@ -2,10 +2,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
-import { FC } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import type { FC } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Skill } from "types/entities";
+import type { Skill } from "types/entities";
 import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./skill-form.module.scss";
@@ -27,6 +28,8 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
     const {
         register,
         handleSubmit,
+        getValues,
+        setValue,
         formState: { isDirty }
     } = useForm<SkillWithFile>({ defaultValues: initialSkill });
 
@@ -96,7 +99,15 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
                 <Input
                     attributes={{
-                        ...register("name"),
+                        ...register("name", {
+                            onChange: () => {
+                                if (!getValues("name") || getValues("name").trim().length === 0) {
+                                    setValue("image.alt", "");
+                                } else {
+                                    setValue("image.alt", `${getValues("name")}'s logo`);
+                                }
+                            }
+                        }),
                         required: true,
                         maxLength: 50
                     }}
@@ -108,8 +119,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
                     attributes={{
                         ...register("image.file"),
                         type: "file",
-                        accept: "image/*",
-                        required: !initialSkill
+                        accept: "image/*"
                     }}
                     label="Image file"
                     wrapperClassName={styles.field}

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
-import { Error as ErrorElement } from "components/common";
+import { ErrorPage } from "components/common";
 import { MainLayout } from "layouts";
 import { Health, Home, Login, Projects, Skills } from "pages";
 import { StrictMode } from "react";
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
-        errorElement: <ErrorElement />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "/",

@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, PropsWithChildren } from "react";
+import type { FC, MouseEventHandler, PropsWithChildren } from "react";
 import { PulseLoader } from "react-spinners";
 import { formatClassNames } from "utils/components";
 
@@ -7,6 +7,7 @@ import styles from "./button.module.scss";
 type Props = {
     className?: string;
     loading?: boolean;
+    disabled?: boolean;
     handleClick?: MouseEventHandler<HTMLButtonElement>;
     round?: boolean;
 };
@@ -16,6 +17,7 @@ export const Button: FC<PropsWithChildren<Props>> = props => {
     const className = formatClassNames(
         styles.button,
         props.className,
+        props.disabled && styles.disabled,
         props.round && styles.round
     );
 
@@ -23,6 +25,7 @@ export const Button: FC<PropsWithChildren<Props>> = props => {
         <button
             className={className}
             onClick={props.handleClick}
+            disabled={props.disabled}
         >
             { props.loading
                 ? <PulseLoader

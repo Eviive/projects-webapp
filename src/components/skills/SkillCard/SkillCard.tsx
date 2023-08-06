@@ -1,7 +1,7 @@
 import { ImageService } from "api/services";
 import { SortableDragHandle, SortableItem } from "components/common";
-import { FC } from "react";
-import { Skill } from "types/entities";
+import type { FC } from "react";
+import type { Skill } from "types/entities";
 import { SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./skill-card.module.scss";

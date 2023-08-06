@@ -1,14 +1,14 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService, SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
-import { FC } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import type { FC } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { Project } from "types/entities";
+import type { Project } from "types/entities";
 import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./project-form.module.scss";
@@ -27,12 +27,14 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
 
     const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
-    const query = useCustomQuery([ "skills" ], SkillService.findAll);
+    const query = useQuery([ "skills" ], SkillService.findAll);
 
     const {
         register,
         handleSubmit,
         control,
+        getValues,
+        setValue,
         formState: { isDirty }
     } = useForm<ProjectWithFile>({ defaultValues: initialProject });
 
@@ -106,7 +108,15 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
             <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
                 <Input
                     attributes={{
-                        ...register("title"),
+                        ...register("title", {
+                            onChange: () => {
+                                if (!getValues("title") || getValues("title").trim().length === 0) {
+                                    setValue("image.alt", "");
+                                } else {
+                                    setValue("image.alt", `The ${getValues("title")}'s UI`);
+                                }
+                            }
+                        }),
                         required: true,
                         maxLength: 50
                     }}
@@ -158,16 +168,16 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                 />
 
                 <div className={styles.field}>
-                    <label htmlFor="input-skills">Skills :</label>
+                    <label>Skills :</label>
                     <Controller
                         control={control}
-                        name={"skills"}
+                        name="skills"
                         render={({ field }) => (
                             <Select
                                 ref={field.ref}
+                                placeholder=""
                                 options={skillsOptions}
                                 components={makeAnimated()}
-                                placeholder={""}
                                 value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
                                 onChange={v => {
                                     const selectedIds = [ ...v.values() ].map(s => s.id);
@@ -186,8 +196,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                     attributes={{
                         ...register("image.file"),
                         type: "file",
-                        accept: "image/*",
-                        required: !initialProject
+                        accept: "image/*"
                     }}
                     label="Image file"
                     wrapperClassName={styles.field}

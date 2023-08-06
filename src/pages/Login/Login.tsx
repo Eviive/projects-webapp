@@ -1,12 +1,14 @@
 import { UserService } from "api/services";
 import { Button, Input, Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
-import { FC, useLayoutEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import type { FC } from "react";
+import { useLayoutEffect, useState } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaLock, FaUser } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
-import { AuthRequest } from "types/forms";
+import type { AuthRequest } from "types/forms";
 import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./login.module.scss";

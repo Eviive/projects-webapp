@@ -1,5 +1,5 @@
 import { request } from "api/client";
-import { Page, Project, Skill } from "types/entities";
+import type { Page, Project, Skill } from "types/entities";
 
 const URL = "project";
 
@@ -30,10 +30,10 @@ const save = (project: Project, file?: File | null) => {
     });
 };
 
-const saveAll = (projects: Project[]) => {
-    return request<Project[], Project[]>(`/${URL}/save-all`, {
+const sort = (sortedIds: number[]) => {
+    return request<void, number[]>(`/${URL}/sort`, {
         method: "POST",
-        data: projects
+        data: sortedIds
     });
 };
 
@@ -72,7 +72,7 @@ export const ProjectService = {
     findAllNotFeatured,
     findAllNotFeaturedPaginated,
     save,
-    saveAll,
+    sort,
     update,
     delete: deleteProject
 };

@@ -1,15 +1,15 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services";
-import { Loader, Page, SortableList, Toolbar } from "components/common";
+import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
 import { ProjectCard, ProjectForm } from "components/projects";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { Project } from "types/entities";
+import type { Project } from "types/entities";
 
 import styles from "./projects.module.scss";
 
@@ -19,12 +19,12 @@ type ProjectForm = {
 };
 
 export const Projects: FC = () => {
-    const query = useCustomQuery([ "projects" ], ProjectService.findAll);
+    const query = useQuery([ "projects" ], ProjectService.findAll);
 
     const queryClient = useQueryClient();
 
     const handleSaveProjectsOrder = async (projects: Project[]) => {
-        await ProjectService.saveAll(projects);
+        await ProjectService.sort(projects.map(project => project.id));
         await queryClient.invalidateQueries([ "projects" ]);
         toast.success("Projects order saved successfully!");
     };
@@ -35,6 +35,10 @@ export const Projects: FC = () => {
         handleToggleDnd,
         handleOnSetItems
     } = useDragAndDrop(query, handleSaveProjectsOrder);
+
+    const [ searchQuery, setSearchQuery ] = useState("");
+
+    const filteredProjectItems = projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
 
     const [ projectForm, setProjectForm ] = useState<ProjectForm>({ show: false });
 
@@ -56,8 +60,9 @@ export const Projects: FC = () => {
                             handleClose={handleClose}
                         />
                     }
+                    <SearchBar handleChange={setSearchQuery} />
                     <SortableList
-                        items={projectItems}
+                        items={filteredProjectItems}
                         setItems={setProjectItems}
                         onSetItems={handleOnSetItems}
                         renderItem={project => (
@@ -76,11 +81,14 @@ export const Projects: FC = () => {
                     <Toolbar
                         tools={[
                             {
+                                name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
+                                disabled: projectItems.length !== filteredProjectItems.length,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {
+                                name: "Add project",
                                 handleClick: () => setProjectForm({ show: true }),
                                 children: <FaPlus size={22} />
                             }

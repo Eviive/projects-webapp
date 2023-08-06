@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from "axios";
 
 export const httpClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -17,7 +18,8 @@ export const request = async <T, D = undefined>(url: string, config?: AxiosReque
             ...config?.data && { "Content-Type": "application/json" },
             ...config?.headers,
             ...auth && { "Authorization": "Bearer " }
-        }
+        },
+        ...config
     });
     return res.data;
 };
