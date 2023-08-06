@@ -1,6 +1,6 @@
 @use "src/styles/mixins";
 
-.traces-container {
+.http-exchanges-container {
     display: flex;
     flex-direction: column;
     gap: 2.5em;
@@ -10,7 +10,7 @@
     overflow-x: auto;
 }
 
-.traces-table {
+.http-exchanges-table {
     @include mixins.size();
     border-collapse: collapse;
 

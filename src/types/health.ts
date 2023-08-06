@@ -39,6 +39,7 @@ export type Health = {
 };
 
 export type HttpExchange = {
+    uuid: string;
     timestamp: string;
     principal?: {
         name: string;

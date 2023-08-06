@@ -29,14 +29,16 @@ export const Projects: FC = () => {
         toast.success("Projects order saved successfully!");
     };
 
-    const [ searchQuery, setSearchQuery ] = useState("");
-
     const {
         items: [ projectItems, setProjectItems ],
         dndState,
         handleToggleDnd,
         handleOnSetItems
     } = useDragAndDrop(query, handleSaveProjectsOrder);
+
+    const [ searchQuery, setSearchQuery ] = useState("");
+
+    const filteredProjectItems = projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
 
     const [ projectForm, setProjectForm ] = useState<ProjectForm>({ show: false });
 
@@ -60,7 +62,7 @@ export const Projects: FC = () => {
                     }
                     <SearchBar handleChange={setSearchQuery} />
                     <SortableList
-                        items={projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()))}
+                        items={filteredProjectItems}
                         setItems={setProjectItems}
                         onSetItems={handleOnSetItems}
                         renderItem={project => (
@@ -82,7 +84,7 @@ export const Projects: FC = () => {
                                 name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
-                                disabled: projectItems.length !== projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase())).length,
+                                disabled: projectItems.length !== filteredProjectItems.length,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {

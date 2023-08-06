@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { HealthService } from "api/services";
 import { Loader, Page } from "components/common";
-import { HttpStatusCard, TracesTable } from "components/health";
+import { HttpExchangesTable, HttpStatusCard } from "components/health";
 import { GridLayout } from "layouts";
 import type { FC } from "react";
 import { AiFillBug, AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineExclamationCircle } from "react-icons/ai";
@@ -43,11 +43,11 @@ export const Health: FC = () => {
                     <div className={styles.healthContent}>
                         <GridLayout className={styles.statusCardsWrapper}>
                             {HTTP_STATUS.map(status => {
-                                const value = query.data.exchanges.filter(t => t.response.status === status.code).length;
+                                const value = query.data.filter(httpExchange => httpExchange.response.status === status.code).length;
                                 return <HttpStatusCard key={status.code} {...status} value={value} />;
                             })}
                         </GridLayout>
-                        <TracesTable httpTraces={query.data.exchanges} />
+                        <HttpExchangesTable httpExchanges={query.data} />
                     </div>
                 </div>
 

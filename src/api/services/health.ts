@@ -7,7 +7,14 @@ const auditEvents = () => request<{ events: AuditEvent[] }>(`/${URL}/auditevents
 
 const health = () => request<Health>(`/${URL}/health`);
 
-const httpExchanges = () => request<{ exchanges: HttpExchange[] }>(`/${URL}/httpexchanges`);
+const httpExchanges = async (): Promise<HttpExchange[]> => {
+    const data = await request<{ exchanges: HttpExchange[] }>(`/${URL}/httpexchanges`);
+
+    return data.exchanges.map(exchange => ({
+        ...exchange,
+        uuid: crypto.randomUUID()
+    }));
+};
 
 const info = () => request<Info>(`/${URL}/info`);
 

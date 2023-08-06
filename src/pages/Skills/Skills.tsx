@@ -29,14 +29,16 @@ export const Skills: FC = () => {
         toast.success("Skills order saved successfully!");
     };
 
-    const [ searchQuery, setSearchQuery ] = useState("");
-
     const {
         items: [ skillItems, setSkillItems ],
         dndState,
         handleToggleDnd,
         handleOnSetItems
     } = useDragAndDrop(query, handleSaveSkillsOrder);
+
+    const [ searchQuery, setSearchQuery ] = useState("");
+
+    const filteredSkillItems = skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()));
 
     const [ skillForm, setSkillForm ] = useState<SkillForm>({ show: false });
 
@@ -60,7 +62,7 @@ export const Skills: FC = () => {
                     }
                     <SearchBar handleChange={setSearchQuery} />
                     <SortableList
-                        items={skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))}
+                        items={filteredSkillItems}
                         setItems={setSkillItems}
                         onSetItems={handleOnSetItems}
                         renderItem={skill => (
@@ -82,7 +84,7 @@ export const Skills: FC = () => {
                                 name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
-                                disabled: skillItems.length !== skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase())).length,
+                                disabled: skillItems.length !== filteredSkillItems.length,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {

@@ -4,14 +4,14 @@ import { useState } from "react";
 import type { HttpExchange } from "types/health";
 import { formatClassNames } from "utils/components";
 
-import styles from "./trace-details.module.scss";
+import styles from "./http-exchange-details.module.scss";
 
 type Props = {
-    trace: HttpExchange;
+    httpExchange: HttpExchange;
     handleClose: () => void;
 };
 
-export const TraceDetails: FC<Props> = ({ trace, handleClose }) => {
+export const HttpExchangeDetails: FC<Props> = ({ httpExchange, handleClose }) => {
 
     const [ content, setContent ] = useState<"request" | "response">("request");
 
@@ -26,7 +26,7 @@ export const TraceDetails: FC<Props> = ({ trace, handleClose }) => {
     };
 
     return (
-        <Modal title="HTTP Trace Details" handleClose={handleClose}>
+        <Modal title="HTTP Exchange Details" handleClose={handleClose}>
             <div className={styles.detailsSwitch}>
                 <button
                     className={formatClassNames(content === "request" && styles.active)}
@@ -43,13 +43,13 @@ export const TraceDetails: FC<Props> = ({ trace, handleClose }) => {
                 {content === "request"
 
                     ? <>
-                        <span><strong>Timestamp:</strong> {new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "short" }).format(new Date(trace.timestamp))}</span>
-                        <span><strong>Time taken:</strong> {Math.trunc(parseFloat(trace.timeTaken.substring(2, trace.timeTaken.length - 1)) * 1000)} ms</span>
-                        {!!trace.principal && <span><strong>Principal:</strong> {trace.principal.name}</span>}
-                        {parseObject(trace.request)}
+                        <span><strong>Timestamp:</strong> {new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "short" }).format(new Date(httpExchange.timestamp))}</span>
+                        <span><strong>Time taken:</strong> {Math.trunc(parseFloat(httpExchange.timeTaken.substring(2, httpExchange.timeTaken.length - 1)) * 1000)} ms</span>
+                        {!!httpExchange.principal && <span><strong>Principal:</strong> {httpExchange.principal.name}</span>}
+                        {parseObject(httpExchange.request)}
                     </>
 
-                    : parseObject(trace.response)
+                    : parseObject(httpExchange.response)
                 }
             </div>
         </Modal>

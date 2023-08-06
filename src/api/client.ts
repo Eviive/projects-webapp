@@ -18,7 +18,8 @@ export const request = async <T, D = undefined>(url: string, config?: AxiosReque
             ...config?.data && { "Content-Type": "application/json" },
             ...config?.headers,
             ...auth && { "Authorization": "Bearer " }
-        }
+        },
+        ...config
     });
     return res.data;
 };

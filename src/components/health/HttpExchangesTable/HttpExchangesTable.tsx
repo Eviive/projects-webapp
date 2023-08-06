@@ -1,4 +1,4 @@
-import { TraceDetails } from "components/health";
+import { HttpExchangeDetails } from "components/health";
 import type { FC } from "react";
 import { useState } from "react";
 import { CgDetailsMore } from "react-icons/cg";
@@ -6,19 +6,19 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import type { HttpExchange } from "types/health";
 import { formatClassNames } from "utils/components";
 
-import styles from "./traces-table.module.scss";
+import styles from "./http-exchanges-table.module.scss";
 
 type Props = {
-    httpTraces: HttpExchange[];
+    httpExchanges: HttpExchange[];
 };
 
-export const TracesTable: FC<Props> = ({ httpTraces }) => {
+export const HttpExchangesTable: FC<Props> = ({ httpExchanges }) => {
 
     const [ page, setPage ] = useState(0);
 
     const pageButtons = () => {
         const buttons = [];
-        for (let i = 0; i < httpTraces.length / 10; i++) {
+        for (let i = 0; i < httpExchanges.length / 10; i++) {
             buttons.push(
                 <button
                     key={i}
@@ -32,14 +32,14 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
         return buttons;
     };
 
-    const [ traceDetails, setTraceDetails ] = useState<HttpExchange | null>(null);
+    const [ httpExchangeDetails, setHttpExchangeDetails ] = useState<HttpExchange | null>(null);
 
     return (
         <>
-            {!!traceDetails && <TraceDetails trace={traceDetails} handleClose={() => setTraceDetails(null)} />}
-            <div className={styles.tracesContainer}>
+            {!!httpExchangeDetails && <HttpExchangeDetails httpExchange={httpExchangeDetails} handleClose={() => setHttpExchangeDetails(null)} />}
+            <div className={styles.httpExchangesContainer}>
                 <div className={styles.tableResponsive}>
-                    <table className={styles.tracesTable}>
+                    <table className={styles.httpExchangesTable}>
                         <thead className={styles.tableHead}>
                             <tr>
                                 <th>Timestamp</th>
@@ -51,29 +51,29 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
                             </tr>
                         </thead>
                         <tbody className={styles.tableBody}>
-                            {httpTraces.slice(page * 10, (page + 1) * 10).map(trace => {
-                                const bgColor = `var(--status-${[ 401, 403 ].includes(trace.response.status) ? trace.response.status : Math.floor(trace.response.status / 100) * 100})`;
+                            {httpExchanges.slice(page * 10, (page + 1) * 10).map(httpExchange => {
+                                const bgColor = `var(--status-${[ 401, 403 ].includes(httpExchange.response.status) ? httpExchange.response.status : Math.floor(httpExchange.response.status / 100) * 100})`;
                                 return (
-                                    <tr key={trace.timestamp}>
+                                    <tr key={httpExchange.uuid}>
                                         <td>
-                                            {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(trace.timestamp))}
+                                            {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(httpExchange.timestamp))}
                                         </td>
                                         <td>
-                                            {trace.request.method}
+                                            {httpExchange.request.method}
                                         </td>
                                         <td>
-                                            {Math.trunc(parseFloat(trace.timeTaken.substring(2, trace.timeTaken.length - 1)) * 1000)}
+                                            {Math.trunc(parseFloat(httpExchange.timeTaken.substring(2, httpExchange.timeTaken.length - 1)) * 1000)}
                                         </td>
                                         <td>
                                             <span className={styles.statusCell} style={{ backgroundColor: bgColor }}>
-                                                {trace.response.status}
+                                                {httpExchange.response.status}
                                             </span>
                                         </td>
                                         <td>
-                                            {new URL(trace.request.uri).pathname}
+                                            {new URL(httpExchange.request.uri).pathname}
                                         </td>
                                         <td className={styles.detailsCell}>
-                                            <button onClick={() => setTraceDetails(trace)}>
+                                            <button onClick={() => setHttpExchangeDetails(httpExchange)}>
                                                 <CgDetailsMore size={30} />
                                             </button>
                                         </td>
@@ -88,8 +88,8 @@ export const TracesTable: FC<Props> = ({ httpTraces }) => {
                         <GrFormPrevious size={25} color="inherit" />
                     </button>
                     {pageButtons()}
-                    <span>{`${httpTraces.length > 0 ? page + 1 : 0} / ${Math.ceil(httpTraces.length / 10)}`}</span>
-                    <button onClick={() => setPage(page + 1)} disabled={page >= (httpTraces.length / 10) - 1}>
+                    <span>{`${httpExchanges.length > 0 ? page + 1 : 0} / ${Math.ceil(httpExchanges.length / 10)}`}</span>
+                    <button onClick={() => setPage(page + 1)} disabled={page >= (httpExchanges.length / 10) - 1}>
                         <GrFormNext size={25} color="inherit" />
                     </button>
                 </div>
