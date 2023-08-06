@@ -9,9 +9,9 @@ import toast from "react-hot-toast";
 import { getTitleAndMessage } from "utils/errors";
 
 const isExpired = (token: string) => {
-    const { exp } = decode<JwtPayload>(token);
+    const { exp: expiresAt } = decode<JwtPayload>(token);
 
-    return exp && Date.now() >= exp * 1000;
+    return expiresAt && Date.now() >= expiresAt * 1000;
 };
 
 export const useAxiosConfig = (accessToken: string, setAccessToken: Dispatch<SetStateAction<string>>) => {
@@ -28,28 +28,29 @@ export const useAxiosConfig = (accessToken: string, setAccessToken: Dispatch<Set
                     return req;
                 }
 
-                if (isExpired(accessToken)) {
-                    console.log("Access token expired, refreshing...");
-                    try {
-                        const resRefresh = await UserService.refresh();
-
-                        if (resRefresh.roles.includes("ROLE_ADMIN")) {
-                            const newToken = resRefresh.accessToken;
-                            req.headers["Authorization"] = `Bearer ${newToken}`;
-                            setAccessToken(newToken);
-                            return req;
-                        } else {
-                            setAccessToken("");
-                            return Promise.reject("User is not admin");
-                        }
-                    } catch (e) {
-                        console.error("Refreshing failed :", getTitleAndMessage(e));
-                        setAccessToken("");
-                        return Promise.reject(e);
-                    }
+                if (!isExpired(accessToken)) {
+                    req.headers["Authorization"] = `Bearer ${accessToken}`;
+                    return req;
                 }
 
-                req.headers["Authorization"] = `Bearer ${accessToken}`;
+                console.log("Access token expired, refreshing...");
+                try {
+                    const resRefresh = await UserService.refresh();
+
+                    if (!resRefresh.roles.includes("ROLE_ADMIN")) {
+                        setAccessToken("");
+                        return Promise.reject("User is not admin");
+                    }
+
+                    const newToken = resRefresh.accessToken;
+                    req.headers["Authorization"] = `Bearer ${newToken}`;
+                    setAccessToken(newToken);
+                } catch (e) {
+                    console.error("Refreshing failed :", getTitleAndMessage(e));
+                    setAccessToken("");
+                    return Promise.reject(e);
+                }
+
                 return req;
             }
         );
