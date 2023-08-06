@@ -1,9 +1,9 @@
 import { ImageService } from "api/services";
 import { Anchor, SortableDragHandle, SortableItem } from "components/common";
-import { FC } from "react";
+import type { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FiEdit, FiExternalLink, FiGithub } from "react-icons/fi";
-import { Project } from "types/entities";
+import type { Project } from "types/entities";
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./project-card.module.scss";
@@ -16,18 +16,18 @@ type Props = {
 
 export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => {
 
-    const skills = project.skills
-        .sort((a, b) => a.sort - b.sort)
-        .map((s, i) =>
-            <img
-                key={i}
-                src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
-                alt={s.name}
-                title={s.name}
-                onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
-                loading="lazy"
-            />
-        );
+    project.skills.sort((a, b) => a.sort - b.sort);
+
+    const skills = project.skills.map(s =>
+        <img
+            key={s.id}
+            src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
+            alt={s.name}
+            title={s.name}
+            onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
+            loading="lazy"
+        />
+    );
 
     return (
         <SortableItem id={project.id} itemProps={{ className: styles.card }}>

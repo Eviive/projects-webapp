@@ -17,6 +17,7 @@ export const useCloseEvents = <E extends HTMLElement>(handleClose: () => void, c
 
     useEffect(() => {
         const element = ref.current;
+        const controller = new AbortController();
 
         const handleOutsideClick = (e: MouseEvent) => {
             if (ref.current && ref.current === e.target as Node) {
@@ -29,24 +30,11 @@ export const useCloseEvents = <E extends HTMLElement>(handleClose: () => void, c
         if (element) {
             element.focus();
 
-            if (config.outsideClick) {
-                element.addEventListener("click", handleOutsideClick);
-            }
-            if (config.escapeKey) {
-                window.addEventListener("keydown", handleKeyDown);
-            }
+            config.outsideClick && element.addEventListener("click", handleOutsideClick, { signal: controller.signal });
+            config.escapeKey && window.addEventListener("keydown", handleKeyDown, { signal: controller.signal });
         }
 
-        return () => {
-            if (element) {
-                if (config.outsideClick) {
-                    element.removeEventListener("click", handleOutsideClick);
-                }
-                if (config.escapeKey) {
-                    window.removeEventListener("keydown", handleKeyDown);
-                }
-            }
-        };
+        return () => controller.abort();
     }, [ handleClose, config.outsideClick, config.escapeKey ]);
 
     return ref;

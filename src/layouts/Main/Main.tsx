@@ -1,5 +1,5 @@
 import { RequireAuth, Sidebar } from "components/common";
-import { FC } from "react";
+import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 
 import styles from "./main.module.scss";

@@ -1,15 +1,15 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Loader, Page, SortableList, Toolbar } from "components/common";
+import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
-import { useCustomQuery } from "hooks/useCustomQuery";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { Skill } from "types/entities";
+import type { Skill } from "types/entities";
 
 import styles from "./skills.module.scss";
 
@@ -19,12 +19,12 @@ type SkillForm = {
 };
 
 export const Skills: FC = () => {
-    const query = useCustomQuery([ "skills" ], SkillService.findAll);
+    const query = useQuery([ "skills" ], SkillService.findAll);
 
     const queryClient = useQueryClient();
 
     const handleSaveSkillsOrder = async (skills: Skill[]) => {
-        await SkillService.saveAll(skills);
+        await SkillService.sort(skills.map(skill => skill.id));
         await queryClient.invalidateQueries([ "skills", "projects" ]);
         toast.success("Skills order saved successfully!");
     };
@@ -35,6 +35,10 @@ export const Skills: FC = () => {
         handleToggleDnd,
         handleOnSetItems
     } = useDragAndDrop(query, handleSaveSkillsOrder);
+
+    const [ searchQuery, setSearchQuery ] = useState("");
+
+    const filteredSkillItems = skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()));
 
     const [ skillForm, setSkillForm ] = useState<SkillForm>({ show: false });
 
@@ -56,8 +60,9 @@ export const Skills: FC = () => {
                             handleClose={handleClose}
                         />
                     }
+                    <SearchBar handleChange={setSearchQuery} />
                     <SortableList
-                        items={skillItems}
+                        items={filteredSkillItems}
                         setItems={setSkillItems}
                         onSetItems={handleOnSetItems}
                         renderItem={skill => (
@@ -76,11 +81,14 @@ export const Skills: FC = () => {
                     <Toolbar
                         tools={[
                             {
+                                name: "Toggle drag and drop",
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
+                                disabled: skillItems.length !== filteredSkillItems.length,
                                 children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
                             },
                             {
+                                name: "Add skill",
                                 handleClick: () => setSkillForm({ show: true }),
                                 children: <FaPlus size={22} />
                             }

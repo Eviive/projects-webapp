@@ -1,7 +1,8 @@
-import { UseQueryResult } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { UseQueryResult } from "@tanstack/react-query";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { DndItem, DndState } from "types/app";
+import type { DndItem, DndState } from "types/app";
 import { getTitleAndMessage } from "utils/errors";
 
 type useDragAndDropReturnType<T extends DndItem> = {
@@ -13,7 +14,7 @@ type useDragAndDropReturnType<T extends DndItem> = {
 
 export const useDragAndDrop = <T extends DndItem>(
     query: UseQueryResult<T[]>,
-    saveOrder: (items: T[]) => Promise<void>
+    saveOrder: (items: T[]) => (void | Promise<void>)
 ): useDragAndDropReturnType<T> => {
 
     const [ items, setItems ] = useState<T[]>(query.data?.sort((a, b) => a.sort - b.sort) ?? []);
@@ -49,10 +50,10 @@ export const useDragAndDrop = <T extends DndItem>(
     };
 
     const handleOnSetItems = (items: T[]) => {
-        for (const s of query.data ?? []) {
-            const newItem = items.find(s => s.id === s.id);
+        for (const item of query.data ?? []) {
+            const newItem = items.find(i => i.id === item.id);
             if (newItem) {
-                s.sort = newItem.sort;
+                item.sort = newItem.sort;
             }
         }
 
@@ -65,5 +66,4 @@ export const useDragAndDrop = <T extends DndItem>(
         handleToggleDnd,
         handleOnSetItems
     };
-
 };

@@ -25,7 +25,7 @@
             @content;
         }
     }
-};
+}
 
 @mixin pseudo($loc: after, $content: '', $abs: absolute, $pos: 0 auto auto 0) {
     &::#{$loc} {
@@ -38,4 +38,4 @@
         }
         @content;
     }
-};
+}

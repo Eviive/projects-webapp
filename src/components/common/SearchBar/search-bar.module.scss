@@ -1,0 +1,32 @@
+@use "src/styles/mixins";
+
+.wrapper {
+    border-radius: 25px;
+    background-color: var(--search-area-bg);
+    padding-right: 12px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+    color: var(--light-font);
+    @include mixins.box-shadow($down: 5px, $blur: 20px, $spread: -10px);
+    overflow: hidden;
+}
+
+.input {
+    border: none;
+    flex: 1;
+    outline: none;
+    height: 100%;
+    padding: 0 20px;
+    font-size: 16px;
+    background-color: var(--search-area-bg);
+    color: var(--main-color);
+
+    &::placeholder {
+        color: var(--main-color);
+        opacity: .6;
+    }
+}

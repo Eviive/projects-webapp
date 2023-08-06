@@ -1,5 +1,6 @@
-import { defaultDropAnimationSideEffects, DragOverlay, DropAnimation } from "@dnd-kit/core";
-import { FC, PropsWithChildren } from "react";
+import type { DropAnimation } from "@dnd-kit/core";
+import { defaultDropAnimationSideEffects, DragOverlay } from "@dnd-kit/core";
+import type { FC, PropsWithChildren } from "react";
 
 const dropAnimationConfig: DropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({

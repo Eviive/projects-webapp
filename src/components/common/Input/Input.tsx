@@ -1,4 +1,4 @@
-import { FC, FormEventHandler, InputHTMLAttributes, ReactNode } from "react";
+import type { FC, FormEventHandler, InputHTMLAttributes, ReactNode } from "react";
 
 type Attributes = InputHTMLAttributes<HTMLInputElement> & { name: string; };
 

@@ -1,9 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
 import { HealthService } from "api/services";
 import { Loader, Page } from "components/common";
-import { HttpStatusCard, TracesTable } from "components/health";
-import { useCustomQuery } from "hooks/useCustomQuery";
+import { HttpExchangesTable, HttpStatusCard } from "components/health";
 import { GridLayout } from "layouts";
-import { FC } from "react";
+import type { FC } from "react";
 import { AiFillBug, AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineExclamationCircle } from "react-icons/ai";
 
 import styles from "./health.module.scss";
@@ -33,7 +33,7 @@ const HTTP_STATUS = [
 
 export const Health: FC = () => {
 
-    const query = useCustomQuery([ "httpExchanges" ], HealthService.httpExchanges);
+    const query = useQuery([ "httpExchanges" ], HealthService.httpExchanges);
 
     return (
         <Page title="Health">
@@ -42,12 +42,12 @@ export const Health: FC = () => {
                 ? <div className={styles.healthWrapper}>
                     <div className={styles.healthContent}>
                         <GridLayout className={styles.statusCardsWrapper}>
-                            {HTTP_STATUS.map((status, index) => {
-                                const value = query.data.exchanges.filter(t => t.response.status === status.code).length;
-                                return <HttpStatusCard key={index} {...status} value={value} />;
+                            {HTTP_STATUS.map(status => {
+                                const value = query.data.filter(httpExchange => httpExchange.response.status === status.code).length;
+                                return <HttpStatusCard key={status.code} {...status} value={value} />;
                             })}
                         </GridLayout>
-                        <TracesTable httpTraces={query.data.exchanges} />
+                        <HttpExchangesTable httpExchanges={query.data} />
                     </div>
                 </div>
 

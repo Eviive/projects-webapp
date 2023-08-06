@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { ClipLoader } from "react-spinners";
 
 import styles from "./loader.module.scss";

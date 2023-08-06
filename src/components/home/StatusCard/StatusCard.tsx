@@ -1,5 +1,5 @@
-import { FC, ReactNode } from "react";
-import { Status } from "types/health";
+import type { FC, ReactNode } from "react";
+import type { Status } from "types/health";
 
 import styles from "./status-card.module.scss";
 

@@ -1,8 +1,8 @@
 import { StatusCard } from "components/home";
 import { GridLayout } from "layouts";
-import { FC } from "react";
+import type { FC } from "react";
 import { FaDatabase, FaHdd, FaServer, FaWifi } from "react-icons/fa";
-import { Health } from "types/health";
+import type { Health } from "types/health";
 
 type Props = {
     data: Health;
