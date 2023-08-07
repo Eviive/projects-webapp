@@ -10,6 +10,7 @@ import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import type { Skill } from "types/entities";
+import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./skills.module.scss";
 
@@ -24,9 +25,13 @@ export const Skills: FC = () => {
     const queryClient = useQueryClient();
 
     const handleSaveSkillsOrder = async (skills: Skill[]) => {
-        await SkillService.sort(skills.map(skill => skill.id));
-        await queryClient.invalidateQueries([ "skills", "projects" ]);
-        toast.success("Skills order saved successfully!");
+        try {
+            await SkillService.sort(skills.map(skill => skill.id));
+            await queryClient.invalidateQueries([ "skills", "projects" ]);
+            toast.success("Skills order saved successfully!");
+        } catch (e) {
+            console.error("Error while saving skills order", getTitleAndMessage(e));
+        }
     };
 
     const {

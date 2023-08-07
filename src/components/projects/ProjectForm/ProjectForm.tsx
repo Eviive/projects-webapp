@@ -46,9 +46,8 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
         if (submissionState.isSubmittingEdition) return;
         if (!isDirty) return handleClose(false, false);
         dispatchSubmissionState("editionStarted");
+        const editing = !!initialProject;
         try {
-            const editing = !!initialProject;
-
             const project: Project = {
                 ...data,
                 image: {
@@ -77,7 +76,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
             console.log(`Project ${editing ? "updated" : "created"} successfully!`);
             handleClose(true, false);
         } catch (e) {
-            toast.error(getTitleAndMessage(e));
+            console.error(editing ? "Project update failed" : "Project creation failed", getTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("editionFinished");
         }
@@ -93,7 +92,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
             console.log("Project deleted successfully!");
             handleClose(false, true);
         } catch (e) {
-            toast.error(getTitleAndMessage(e));
+            console.error("Project deletion failed", getTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("deletionFinished");
         }

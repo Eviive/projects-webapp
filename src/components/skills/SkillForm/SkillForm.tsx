@@ -37,9 +37,8 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
         if (submissionState.isSubmittingEdition) return;
         if (!isDirty) return handleClose(false, false);
         dispatchSubmissionState("editionStarted");
+        const editing = !!initialSkill;
         try {
-            const editing = !!initialSkill;
-
             const skill: Skill = {
                 ...data,
                 image: {
@@ -68,7 +67,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
             console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
             handleClose(true, false);
         } catch (e) {
-            toast.error(getTitleAndMessage(e));
+            console.error(editing ? "Skill update failed" : "Skill creation failed", getTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("editionFinished");
         }
@@ -84,7 +83,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
             console.log("Skill deleted successfully!");
             handleClose(false, true);
         } catch (e) {
-            toast.error(getTitleAndMessage(e));
+            console.error("Skill deletion failed", getTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("deletionFinished");
         }
