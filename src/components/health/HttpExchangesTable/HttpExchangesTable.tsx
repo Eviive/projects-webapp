@@ -2,7 +2,7 @@ import { HttpExchangeDetails } from "components/health";
 import type { FC } from "react";
 import { useState } from "react";
 import { CgDetailsMore } from "react-icons/cg";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import type { HttpExchange } from "types/health";
 import { formatClassNames } from "utils/components";
 
@@ -85,12 +85,12 @@ export const HttpExchangesTable: FC<Props> = ({ httpExchanges }) => {
                 </div>
                 <div className={styles.pagination}>
                     <button onClick={() => setPage(page - 1)} disabled={page === 0}>
-                        <GrFormPrevious size={25} color="inherit" />
+                        <MdNavigateBefore size={25} />
                     </button>
                     {pageButtons()}
                     <span>{`${httpExchanges.length > 0 ? page + 1 : 0} / ${Math.ceil(httpExchanges.length / 10)}`}</span>
                     <button onClick={() => setPage(page + 1)} disabled={page >= (httpExchanges.length / 10) - 1}>
-                        <GrFormNext size={25} color="inherit" />
+                        <MdNavigateNext size={25} />
                     </button>
                 </div>
             </div>
