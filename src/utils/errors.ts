@@ -8,6 +8,11 @@ export const getTitleAndMessage = (e: unknown): string => {
             title: e.response?.data?.error ?? e.name,
             message: e.response?.data?.message ?? e.message
         };
+    } else if (e instanceof Error) {
+        titleAndMessage = {
+            title: e.name,
+            message: e.message
+        };
     } else {
         titleAndMessage = {
             title: "Unknown error",
@@ -17,5 +22,5 @@ export const getTitleAndMessage = (e: unknown): string => {
 
     return Array.isArray(titleAndMessage.message)
         ? titleAndMessage.message.join("\n")
-        : `${titleAndMessage.title}: ${titleAndMessage.message}`;
+        : `${titleAndMessage.title}, ${titleAndMessage.message}`;
 };

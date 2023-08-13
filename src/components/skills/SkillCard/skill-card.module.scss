@@ -21,6 +21,7 @@
 }
 
 .drag-handle {
+    z-index: 1;
     position: absolute;
     top: 0;
     right: 0;
@@ -43,6 +44,7 @@
     img {
         max-width: 100%;
         object-fit: contain;
+        filter: drop-shadow(0px 1px 1px hsl(0deg, 0%, 0%, 0.5));
     }
 
     svg {

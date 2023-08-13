@@ -40,7 +40,7 @@ export const Login: FC = () => {
                 toast.error("You must be an administrator to access the dashboard.");
             }
         } catch (e) {
-            toast.error(getTitleAndMessage(e));
+            console.error("Login failed", getTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }

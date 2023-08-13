@@ -1,9 +1,7 @@
 import type { UseQueryResult } from "@tanstack/react-query";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import type { DndItem, DndState } from "types/app";
-import { getTitleAndMessage } from "utils/errors";
 
 type useDragAndDropReturnType<T extends DndItem> = {
     items: [ T[], Dispatch<SetStateAction<T[]>> ];
@@ -34,11 +32,7 @@ export const useDragAndDrop = <T extends DndItem>(
         setDndState(prevDndState => ({ ...prevDndState, isDndSubmitting: true }));
 
         if (dndState.isDndActive && dndState.isDndTouched) {
-            try {
-                await saveOrder(items);
-            } catch (e) {
-                toast.error(getTitleAndMessage(e));
-            }
+            await saveOrder(items);
         }
 
         setDndState(prevDndState => ({

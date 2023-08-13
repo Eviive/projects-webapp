@@ -24,16 +24,20 @@ const deleteUser = (id: number) => request<void>(`/${URL}/${id}`, {
 
 const login = (authRequest: AuthRequest) => request<AuthResponse, AuthRequest>(`/${URL}/login`, {
     method: "POST",
-    data: authRequest
-}, false);
+    data: authRequest,
+    needsAuth: false
+});
 
 const logout = () => request<void>(`/${URL}/logout`, {
-    method: "POST"
-}, false);
+    method: "POST",
+    needsAuth: false
+});
 
-const refresh = () => request<AuthResponse>(`/${URL}/refresh`, {
-    method: "POST"
-}, false);
+const refresh = (showErrorToast = true) => request<AuthResponse>(`/${URL}/refresh`, {
+    method: "POST",
+    needsAuth: false,
+    showErrorToast
+});
 
 export const UserService = {
     findById,

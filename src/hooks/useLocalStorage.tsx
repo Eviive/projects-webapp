@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
+import { getTitleAndMessage } from "utils/errors";
 
 /*
 	There is a comma after the type parameter ("T,") because there is a clash between the JSX and TypeScript syntax.
@@ -17,7 +18,7 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): [ T, Dispatch
 
             localStorage.setItem(key, JSON.stringify(defaultValue));
         } catch (e) {
-            console.error(e);
+            console.error(getTitleAndMessage(e));
         }
 
         return defaultValue;
@@ -36,7 +37,7 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): [ T, Dispatch
                 localStorage.setItem(key, JSON.stringify(newValueOrFactory));
             }
         } catch (e) {
-            console.error(e);
+            console.error(getTitleAndMessage(e));
         }
     };
 

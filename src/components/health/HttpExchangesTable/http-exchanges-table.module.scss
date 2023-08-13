@@ -74,6 +74,10 @@
         &:disabled {
             cursor: not-allowed;
         }
+
+        svg {
+            color: inherit;
+        }
     }
 
     span {
