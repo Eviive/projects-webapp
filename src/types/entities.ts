@@ -14,7 +14,8 @@ export type Role = {
 export type Project = {
     id: number;
     title: string;
-    description: string;
+    descriptionEn: string;
+    descriptionFr: string;
     creationDate: string;
     repoUrl: string;
     demoUrl: string;
@@ -34,7 +35,8 @@ export type Skill = {
 export type Image = {
     id: number;
     uuid?: string;
-    alt: string;
+    altEn: string;
+    altFr: string;
 };
 
 export type Page<E> = {
