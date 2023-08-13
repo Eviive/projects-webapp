@@ -53,7 +53,8 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                 image: {
                     id: data.image.id,
                     uuid: initialProject?.image?.uuid,
-                    alt: data.image.alt
+                    altEn: data.image.altEn,
+                    altFr: data.image.altFr
                 }
             };
             if (!editing) {
@@ -110,9 +111,11 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                         ...register("title", {
                             onChange: () => {
                                 if (!getValues("title") || getValues("title").trim().length === 0) {
-                                    setValue("image.alt", "");
+                                    getValues("image.altEn") || setValue("image.altEn", "");
+                                    getValues("image.altFr") || setValue("image.altFr", "");
                                 } else {
-                                    setValue("image.alt", `The ${getValues("title")}'s UI`);
+                                    getValues("image.altEn") || setValue("image.altEn", `The ${getValues("title")}'s UI`);
+                                    getValues("image.altFr") || setValue("image.altFr", `L'UI de ${getValues("title")}`);
                                 }
                             }
                         }),
@@ -126,10 +129,10 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                 <div className={styles.field}>
                     <label htmlFor="input-description">Description :</label>
                     <textarea
-                        {...register("description")}
+                        {...register("descriptionEn")}
                         id="input-description"
                         rows={3}
-                        maxLength={512}
+                        maxLength={510}
                         required
                     ></textarea>
                 </div>
@@ -203,11 +206,21 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
 
                 <Input
                     attributes={{
-                        ...register("image.alt"),
+                        ...register("image.altEn"),
                         maxLength: 255,
                         required: true
                     }}
-                    label="Image alt"
+                    label="Image english alt"
+                    wrapperClassName={styles.field}
+                />
+
+                <Input
+                    attributes={{
+                        ...register("image.altFr"),
+                        maxLength: 255,
+                        required: true
+                    }}
+                    label="Image french alt"
                     wrapperClassName={styles.field}
                 />
 

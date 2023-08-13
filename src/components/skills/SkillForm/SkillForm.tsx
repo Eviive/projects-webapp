@@ -44,7 +44,8 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
                 image: {
                     id: data.image.id,
                     uuid: initialSkill?.image?.uuid,
-                    alt: data.image.alt
+                    altEn: data.image.altEn,
+                    altFr: data.image.altFr
                 }
             };
             if (!editing) {
@@ -101,9 +102,11 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
                         ...register("name", {
                             onChange: () => {
                                 if (!getValues("name") || getValues("name").trim().length === 0) {
-                                    setValue("image.alt", "");
+                                    getValues("image.altEn") || setValue("image.altEn", "");
+                                    getValues("image.altFr") || setValue("image.altFr", "");
                                 } else {
-                                    setValue("image.alt", `${getValues("name")}'s logo`);
+                                    getValues("image.altEn") || setValue("image.altEn", `${getValues("name")}'s logo`);
+                                    getValues("image.altFr") || setValue("image.altFr", `Logo de ${getValues("name")}`);
                                 }
                             }
                         }),
@@ -126,11 +129,21 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
 
                 <Input
                     attributes={{
-                        ...register("image.alt"),
+                        ...register("image.altEn"),
                         maxLength: 255,
                         required: true
                     }}
-                    label="Image alt"
+                    label="Image english alt"
+                    wrapperClassName={styles.field}
+                />
+
+                <Input
+                    attributes={{
+                        ...register("image.altFr"),
+                        maxLength: 255,
+                        required: true
+                    }}
+                    label="Image french alt"
                     wrapperClassName={styles.field}
                 />
 
