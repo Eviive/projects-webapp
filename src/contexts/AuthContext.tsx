@@ -6,11 +6,14 @@ type IAuthContext = {
     setAccessToken: Dispatch<SetStateAction<string>>;
 };
 
-const AuthContext = createContext<IAuthContext>({
-    accessToken: "",
-    setAccessToken: () => console.warn("setAccessToken called without AuthContextProvider")
-});
+const AuthContext = createContext<IAuthContext | null>(null);
 
 export const AuthContextProvider = AuthContext.Provider;
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => {
+    const authContext = useContext(AuthContext);
+    if (!authContext) {
+        throw new Error("useAuthContext called without AuthContextProvider");
+    }
+    return authContext;
+};
