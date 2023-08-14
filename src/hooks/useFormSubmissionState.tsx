@@ -1,16 +1,16 @@
+import type { Dispatch } from "react";
 import { useReducer } from "react";
-
-type SubmissionState = {
-    isSubmittingEdition: boolean;
-    isSubmittingDeletion: boolean;
-};
 
 type SubmissionAction = "edition" | "deletion";
 type SubmissionActionStarted = `${SubmissionAction}Started`;
 type SubmissionActionFinished = `${SubmissionAction}Finished`;
+type AvailableSubmissionActions = SubmissionActionStarted | SubmissionActionFinished;
 
-export const useFormSubmissionState = () => {
-    const reducer = (state: SubmissionState, action: SubmissionActionStarted | SubmissionActionFinished) => {
+type SubmissionStateKey = `isSubmitting${Capitalize<SubmissionAction>}`;
+type SubmissionState = { [key in SubmissionStateKey]: boolean };
+
+export const useFormSubmissionState = (): [ SubmissionState, Dispatch<AvailableSubmissionActions> ] => {
+    const reducer = (state: SubmissionState, action: AvailableSubmissionActions): SubmissionState => {
         switch (action) {
             case "editionStarted":
                 return { ...state, isSubmittingEdition: true };
