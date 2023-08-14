@@ -3,9 +3,9 @@ import { UserService } from "api/services";
 import { AxiosError } from "axios";
 import type { JwtPayload } from "jwt-decode";
 import decode from "jwt-decode";
+import { getTitleAndMessage } from "libs/utils";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
-import { getTitleAndMessage } from "utils/errors";
 
 const isExpired = (token: string) => {
     try {

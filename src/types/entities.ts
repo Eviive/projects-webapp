@@ -39,6 +39,8 @@ export type Image = {
     altFr: string;
 };
 
+export type WithImageFile<E extends { image: Image }> = E & { image: { file: FileList } };
+
 export type Page<E> = {
     content: E[];
     pageable: {

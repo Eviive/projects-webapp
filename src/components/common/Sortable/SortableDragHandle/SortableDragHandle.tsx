@@ -1,7 +1,7 @@
 import { useSortableItemContext } from "contexts/SortableItemContext";
+import { formatClassNames } from "libs/utils";
 import type { FC } from "react";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { formatClassNames } from "utils/components";
 
 import styles from "./sortable-drag-handle.module.scss";
 

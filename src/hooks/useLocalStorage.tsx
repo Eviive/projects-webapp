@@ -1,6 +1,6 @@
+import { getTitleAndMessage } from "libs/utils";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import { getTitleAndMessage } from "utils/errors";
 
 /*
 	There is a comma after the type parameter ("T,") because there is a clash between the JSX and TypeScript syntax.

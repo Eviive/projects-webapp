@@ -5,7 +5,7 @@ import { SortableOverlay } from "components/common";
 import { GridLayout } from "layouts";
 import type { ComponentProps, Dispatch, ReactNode, SetStateAction } from "react";
 import { Fragment, useMemo, useState } from "react";
-import type { DndItem } from "types/app";
+import type { DndItem } from "types/dnd";
 
 type Props<T extends DndItem> = {
     items: T[];

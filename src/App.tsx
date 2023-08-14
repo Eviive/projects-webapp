@@ -2,11 +2,11 @@ import { UserService } from "api/services";
 import { Loader } from "components/common";
 import { AuthContextProvider } from "contexts/AuthContext";
 import { useAxiosInterceptors } from "hooks/useAxiosInterceptors";
+import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
-import { getTitleAndMessage } from "utils/errors";
 
 import "./styles/reset.scss";
 

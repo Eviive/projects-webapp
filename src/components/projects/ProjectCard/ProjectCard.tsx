@@ -1,10 +1,10 @@
 import { ImageService } from "api/services";
 import { Anchor, SortableDragHandle, SortableItem } from "components/common";
+import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
 import type { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FiEdit, FiExternalLink, FiGithub } from "react-icons/fi";
 import type { Project } from "types/entities";
-import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "utils/entities";
 
 import styles from "./project-card.module.scss";
 
@@ -54,7 +54,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => 
                     </div>
                 </div>
                 <div className={styles.cardDescription}>
-                    <p>{project.description}</p>
+                    <p>{project.descriptionEn}</p>
                     <div className={styles.cardSkills}>
                         {skills}
                     </div>
@@ -63,7 +63,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => 
             <div className={styles.cardImage}>
                 <img
                     src={ImageService.getImageUrl(project.image) ?? PROJECT_PLACEHOLDER}
-                    alt={project.image.alt}
+                    alt={project.image.altEn}
                     title={project.title}
                     onError={e => e.currentTarget.src = PROJECT_PLACEHOLDER}
                     loading="lazy"
