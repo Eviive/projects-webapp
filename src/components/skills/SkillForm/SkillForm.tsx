@@ -1,15 +1,19 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
+import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
+import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
+import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import type { Skill } from "types/entities";
-import { getTitleAndMessage } from "utils/errors";
+import type { Skill, WithImageFile } from "types/entities";
 
 import styles from "./skill-form.module.scss";
+
+type SkillFormValues = WithImageFile<Skill>;
 
 type Props = {
     skill?: Skill;
@@ -17,23 +21,24 @@ type Props = {
     handleClose: (isTouched: boolean, isDeleted: boolean) => void;
 };
 
-type SkillWithFile = Skill & { image: { file: FileList } };
-
 export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, handleClose }) => {
 
     const queryClient = useQueryClient();
 
     const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
+    const form = useForm<SkillFormValues>({ defaultValues: initialSkill });
     const {
         register,
         handleSubmit,
         getValues,
         setValue,
         formState: { isDirty }
-    } = useForm<SkillWithFile>({ defaultValues: initialSkill });
+    } = form;
 
-    const submitHandler: SubmitHandler<SkillWithFile> = async data => {
+    const [ oldName, setOldName ] = useState(initialSkill?.name ?? "");
+
+    const submitHandler: SubmitHandler<SkillFormValues> = async data => {
         if (submissionState.isSubmittingEdition) return;
         if (!isDirty) return handleClose(false, false);
         dispatchSubmissionState("editionStarted");
@@ -96,62 +101,41 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
             handleClose={() => handleClose(false, false)}
             config={{ outsideClick: false, escapeKey: true }}
         >
-            <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-                <Input
-                    attributes={{
-                        ...register("name", {
-                            onChange: () => {
-                                if (!getValues("name") || getValues("name").trim().length === 0) {
-                                    getValues("image.altEn") || setValue("image.altEn", "");
-                                    getValues("image.altFr") || setValue("image.altFr", "");
-                                } else {
-                                    getValues("image.altEn") || setValue("image.altEn", `${getValues("name")}'s logo`);
-                                    getValues("image.altFr") || setValue("image.altFr", `Logo de ${getValues("name")}`);
+            <FormProvider {...form}>
+                <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+                    <Input
+                        attributes={{
+                            ...register("name", {
+                                onChange: () => {
+                                    const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
+                                          isNameEmpty = !name.trim(),
+                                          isOldNameEmpty = !oldName.trim(),
+                                          isAltEnEmpty = !altEn.trim(),
+                                          isAltFrEmpty = !altFr.trim(),
+                                          isAltEnFormatted = altEn.trim() === (isOldNameEmpty ? "" : `${oldName}'s logo`),
+                                          isAltFrFormatted = altFr.trim() === (isOldNameEmpty ? "" : `Logo de ${oldName}`);
+
+                                    (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name}'s logo`);
+                                    (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name}`);
+
+                                    setOldName(name);
                                 }
-                            }
-                        }),
-                        required: true,
-                        maxLength: 50
-                    }}
-                    label="Name"
-                    wrapperClassName={styles.field}
-                />
+                            }),
+                            required: true,
+                            maxLength: 50
+                        }}
+                        label="Name"
+                        wrapperClassName={styles.field}
+                    />
 
-                <Input
-                    attributes={{
-                        ...register("image.file"),
-                        type: "file",
-                        accept: "image/*"
-                    }}
-                    label="Image file"
-                    wrapperClassName={styles.field}
-                />
+                    <ImageForm inputsClassName={styles.field} />
 
-                <Input
-                    attributes={{
-                        ...register("image.altEn"),
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Image english alt"
-                    wrapperClassName={styles.field}
-                />
-
-                <Input
-                    attributes={{
-                        ...register("image.altFr"),
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Image french alt"
-                    wrapperClassName={styles.field}
-                />
-
-                <div className={styles.buttonsWrapper}>
-                    {!!initialSkill && <Button loading={submissionState.isSubmittingDeletion} handleClick={handleDelete}>Delete</Button>}
-                    <Button className={styles.submit} loading={submissionState.isSubmittingEdition}>Submit</Button>
-                </div>
-            </form>
+                    <div className={styles.buttonsWrapper}>
+                        {!!initialSkill && <Button loading={submissionState.isSubmittingDeletion} handleClick={handleDelete}>Delete</Button>}
+                        <Button className={styles.submit} loading={submissionState.isSubmittingEdition}>Submit</Button>
+                    </div>
+                </form>
+            </FormProvider>
         </Modal>
     );
 };
