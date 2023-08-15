@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
 import { ErrorPage } from "components/common";
+import { AuthContextProvider } from "contexts/AuthContext";
 import { MainLayout } from "layouts";
 import { Health, Home, Login, Projects, Skills } from "pages";
 import { StrictMode } from "react";
@@ -65,9 +66,11 @@ const router = createBrowserRouter([
 
 root.render(
     <StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-            <ReactQueryDevtools></ReactQueryDevtools>
-        </QueryClientProvider>
+        <AuthContextProvider>
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router} />
+                <ReactQueryDevtools></ReactQueryDevtools>
+            </QueryClientProvider>
+        </AuthContextProvider>
     </StrictMode>
 );
