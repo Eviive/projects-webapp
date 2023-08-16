@@ -1,12 +1,11 @@
 import type { Dispatch } from "react";
 import { useReducer } from "react";
 
-type SubmissionAction = "edition" | "deletion";
-type SubmissionActionStarted = `${SubmissionAction}Started`;
-type SubmissionActionFinished = `${SubmissionAction}Finished`;
-type AvailableSubmissionActions = SubmissionActionStarted | SubmissionActionFinished;
+type SubmissionActionType = "edition" | "deletion";
+type SubmissionActionState = "started" | "finished";
+type AvailableSubmissionActions = `${SubmissionActionType}${Capitalize<SubmissionActionState>}`;
 
-type SubmissionStateKey = `isSubmitting${Capitalize<SubmissionAction>}`;
+type SubmissionStateKey = `isSubmitting${Capitalize<SubmissionActionType>}`;
 type SubmissionState = { [key in SubmissionStateKey]: boolean };
 
 export const useFormSubmissionState = (): [ SubmissionState, Dispatch<AvailableSubmissionActions> ] => {
