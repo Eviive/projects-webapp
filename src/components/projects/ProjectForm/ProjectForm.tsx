@@ -118,14 +118,13 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                                 onChange: () => {
                                     const [ title, altEn, altFr ] = getValues([ "title", "image.altEn", "image.altFr" ]),
                                           isTitleEmpty = !title.trim(),
-                                          isOldTitleEmpty = !oldTitle.trim(),
                                           isAltEnEmpty = !altEn.trim(),
                                           isAltFrEmpty = !altFr.trim(),
-                                          isAltEnFormatted = altEn.trim() === (isOldTitleEmpty ? "" : `The ${oldTitle}'s UI`),
-                                          isAltFrFormatted = altFr.trim() === (isOldTitleEmpty ? "" : `L'UI de ${oldTitle}`);
+                                          isAltEnFormatted = altEn.trim() === `The ${oldTitle.trim()}'s UI`,
+                                          isAltFrFormatted = altFr.trim() === `L'UI de ${oldTitle.trim()}`;
 
-                                    (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isTitleEmpty ? "" : `The ${title}'s UI`);
-                                    (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isTitleEmpty ? "" : `L'UI de ${title}`);
+                                    (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isTitleEmpty ? "" : `The ${title.trim()}'s UI`);
+                                    (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isTitleEmpty ? "" : `L'UI de ${title.trim()}`);
 
                                     setOldTitle(title);
                                 }

@@ -109,14 +109,13 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
                                 onChange: () => {
                                     const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
                                           isNameEmpty = !name.trim(),
-                                          isOldNameEmpty = !oldName.trim(),
                                           isAltEnEmpty = !altEn.trim(),
                                           isAltFrEmpty = !altFr.trim(),
-                                          isAltEnFormatted = altEn.trim() === (isOldNameEmpty ? "" : `${oldName}'s logo`),
-                                          isAltFrFormatted = altFr.trim() === (isOldNameEmpty ? "" : `Logo de ${oldName}`);
+                                          isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
+                                          isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
 
-                                    (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name}'s logo`);
-                                    (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name}`);
+                                    (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
+                                    (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
 
                                     setOldName(name);
                                 }
