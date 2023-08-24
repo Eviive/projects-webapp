@@ -24,7 +24,7 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
     );
 };
 
-export const useAuthContext = () => {
+export const useAuthContext = (): IAuthContext => {
     const authContext = useContext(AuthContext);
     if (authContext === null) {
         throw new Error("useAuthContext called without AuthContextProvider");

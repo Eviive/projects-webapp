@@ -7,7 +7,7 @@ const SortableItemContext = createContext<ISortableItemContext | null>(null);
 
 export const SortableItemContextProvider = SortableItemContext.Provider;
 
-export const useSortableItemContext = () => {
+export const useSortableItemContext = (): ISortableItemContext => {
     const sortableItemContext = useContext(SortableItemContext);
     if (sortableItemContext === null) {
         throw new Error("useSortableItemContext called without SortableItemContextProvider");
