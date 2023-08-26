@@ -5,8 +5,11 @@ import styles from "./grid.module.scss";
 
 type Props = {
     className?: string;
+    minWidth?: string;
     gap?: string;
-    size?: string;
+    columnCount?: number | "infinity";
+    centerVertically?: boolean;
+    centerHorizontally?: boolean;
 };
 
 export const Grid: FC<PropsWithChildren<Props>> = props => {
@@ -14,8 +17,11 @@ export const Grid: FC<PropsWithChildren<Props>> = props => {
         <ul
             className={formatClassNames(styles.layout, props.className)}
             style={{
-                "--size": props.size,
-                "--gap": props.gap
+                "--item-min-width": props.minWidth,
+                "--gap": props.gap,
+                "--column-count": props.columnCount,
+                justifyItems: props.centerHorizontally && "center",
+                alignItems: props.centerVertically && "center"
             } as CSSProperties}
         >
             {props.children}

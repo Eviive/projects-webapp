@@ -41,7 +41,7 @@ export const Health: FC = () => {
 
                 ? <div className={styles.healthWrapper}>
                     <div className={styles.healthContent}>
-                        <GridLayout className={styles.statusCardsWrapper}>
+                        <GridLayout columnCount={4}>
                             {HTTP_STATUS.map(status => {
                                 const value = query.data.filter(httpExchange => httpExchange.response.status === status.code).length;
                                 return <HttpStatusCard key={status.code} {...status} value={value} />;

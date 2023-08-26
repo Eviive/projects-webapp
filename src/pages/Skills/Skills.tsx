@@ -78,9 +78,10 @@ export const Skills: FC = () => {
                             />
                         )}
                         wrapperProps={{
-                            className: styles.cardsWrapper,
-                            size: "125px",
-                            gap: "2em"
+                            minWidth: "125px",
+                            gap: "2em",
+                            columnCount: "infinity",
+                            centerHorizontally: true
                         }}
                     />
                     <Toolbar

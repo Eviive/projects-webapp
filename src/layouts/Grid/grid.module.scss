@@ -1,10 +1,16 @@
-@use "src/styles/mixins";
-
 .layout {
-    --size: 250px;
+    --item-min-width: 250px;
     --gap: 1em;
+    --column-count: 3;
+
+    --gap-count: calc(var(--column-count) - 1);
+    --total-gap-width: calc(var(--gap-count) * var(--gap));
+    --item-max-width: calc((100% - var(--total-gap-width)) / var(--column-count));
+
+    --item-width: max(var(--item-min-width), var(--item-max-width));
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--item-width), 1fr));
     grid-auto-rows: 1fr;
     gap: var(--gap);
 }

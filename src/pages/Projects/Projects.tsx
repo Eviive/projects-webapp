@@ -77,8 +77,7 @@ export const Projects: FC = () => {
                             />
                         )}
                         wrapperProps={{
-                            className: styles.cardsWrapper,
-                            size: "350px",
+                            minWidth: "350px",
                             gap: "2.5em"
                         }}
                     />
