@@ -99,7 +99,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
         <Modal
             title={initialSkill ? `Editing ${initialSkill.name}` : "Creating skill"}
             handleClose={() => handleClose(false, false)}
-            config={{ outsideClick: false, escapeKey: true }}
+            config={{ outsideClick: !isDirty, escapeKey: !isDirty }}
         >
             <FormProvider {...form}>
                 <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>

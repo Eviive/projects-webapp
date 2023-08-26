@@ -108,7 +108,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
         <Modal
             title={initialProject ? `Editing ${initialProject.title}` : "Creating project"}
             handleClose={() => handleClose(false, false)}
-            config={{ outsideClick: false, escapeKey: true }}
+            config={{ outsideClick: !isDirty, escapeKey: !isDirty }}
         >
             <FormProvider {...form}>
                 <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
@@ -137,10 +137,21 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                     />
 
                     <div className={styles.field}>
-                        <label htmlFor="input-description">Description :</label>
+                        <label htmlFor="input-description-en">English description :</label>
                         <textarea
                             {...register("descriptionEn")}
-                            id="input-description"
+                            id="input-description-en"
+                            rows={3}
+                            maxLength={510}
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div className={styles.field}>
+                        <label htmlFor="input-description-fr">French description :</label>
+                        <textarea
+                            {...register("descriptionFr")}
+                            id="input-description-fr"
                             rows={3}
                             maxLength={510}
                             required
