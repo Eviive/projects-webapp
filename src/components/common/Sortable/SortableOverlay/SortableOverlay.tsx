@@ -14,6 +14,6 @@ const dropAnimationConfig: DropAnimation = {
 
 export const SortableOverlay: FC<PropsWithChildren> = props => {
     return (
-        <DragOverlay dropAnimation={dropAnimationConfig}>{props.children}</DragOverlay>
+        <DragOverlay dropAnimation={dropAnimationConfig} zIndex={99}>{props.children}</DragOverlay>
     );
 };

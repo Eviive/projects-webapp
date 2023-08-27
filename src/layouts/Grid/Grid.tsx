@@ -20,8 +20,8 @@ export const Grid: FC<PropsWithChildren<Props>> = props => {
                 "--item-min-width": props.minWidth,
                 "--gap": props.gap,
                 "--column-count": props.columnCount,
-                justifyItems: props.centerHorizontally && "center",
-                alignItems: props.centerVertically && "center"
+                justifyItems: props.centerHorizontally ? "center" : undefined,
+                alignItems: props.centerVertically ? "center" : undefined
             } as CSSProperties}
         >
             {props.children}

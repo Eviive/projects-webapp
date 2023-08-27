@@ -11,7 +11,7 @@ type Props<T extends DndItem> = {
     items: T[];
     setItems: Dispatch<SetStateAction<T[]>>;
     onSetItems?: (items: T[]) => void;
-    renderItem: (t: T) => ReactNode;
+    renderItem: (t: T, isOverlay?: boolean) => ReactNode;
     wrapperProps?: Omit<ComponentProps<typeof GridLayout>, "children">;
 };
 
@@ -64,7 +64,7 @@ export const SortableList = <T extends DndItem>(props: Props<T>) => {
                 </GridLayout>
             </SortableContext>
             <SortableOverlay>
-                {activeItem ? props.renderItem(activeItem) : null}
+                {!!activeItem && props.renderItem(activeItem, true)}
             </SortableOverlay>
         </DndContext>
     );

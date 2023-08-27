@@ -10,29 +10,30 @@ type Props = {
     skill: Skill;
     handleAction: () => void;
     isDndActive: boolean;
+    isOverlay?: boolean;
 };
 
-export const SkillCard: FC<Props> = props => {
+export const SkillCard: FC<Props> = ({ skill, handleAction, isDndActive, isOverlay }) => {
     return (
         <SortableItem
-            id={props.skill.id}
+            id={skill.id}
             itemProps={{
                 className: styles.card,
-                onClick: props.handleAction
+                onClick: handleAction
             }}
         >
-            {props.isDndActive && <SortableDragHandle className={styles.dragHandle} />}
+            {isDndActive && <SortableDragHandle className={styles.dragHandle} isDragging={isOverlay} />}
             <div className={styles.cardImage}>
                 <img
-                    src={ImageService.getImageUrl(props.skill.image) ?? SKILL_PLACEHOLDER}
-                    alt={props.skill.image.altEn}
-                    title={props.skill.name}
+                    src={ImageService.getImageUrl(skill.image) ?? SKILL_PLACEHOLDER}
+                    alt={skill.image.altEn}
+                    title={skill.name}
                     onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
                     loading="lazy"
                 />
             </div>
             <div className={styles.cardContent}>
-                {props.skill.name}
+                {skill.name}
             </div>
         </SortableItem>
     );

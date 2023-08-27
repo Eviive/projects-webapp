@@ -70,11 +70,12 @@ export const Skills: FC = () => {
                         items={filteredSkillItems}
                         setItems={setSkillItems}
                         onSetItems={handleOnSetItems}
-                        renderItem={skill => (
+                        renderItem={(skill, isOverlay) => (
                             <SkillCard
                                 skill={skill}
                                 handleAction={() => setSkillForm({ skill, show: true })}
                                 isDndActive={dndState.isDndActive}
+                                isOverlay={isOverlay}
                             />
                         )}
                         wrapperProps={{

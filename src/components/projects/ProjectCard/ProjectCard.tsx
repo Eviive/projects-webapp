@@ -12,9 +12,10 @@ type Props = {
     project: Project;
     handleEdit: () => void;
     isDndActive: boolean;
+    isOverlay?: boolean;
 };
 
-export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => {
+export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive, isOverlay }) => {
 
     project.skills.sort((a, b) => a.sort - b.sort);
 
@@ -41,7 +42,7 @@ export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive }) => 
                         <span>{Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(new Date(project.creationDate))}</span>
                     </div>
                     <div className={styles.cardLinks}>
-                        {isDndActive && <SortableDragHandle />}
+                        {isDndActive && <SortableDragHandle isDragging={isOverlay} />}
                         <button onClick={handleEdit}>
                             <FiEdit size={22} />
                         </button>
