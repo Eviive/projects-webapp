@@ -3,15 +3,15 @@ import type { Page, Project, Skill } from "types/entities";
 
 const URL = "project";
 
-const findById = (id: number) => request<Project>(`/${URL}/${id}`, {}, false);
+const findById = (id: number) => request<Project>(`/${URL}/${id}`, { needsAuth: false });
 
-const findAll = () => request<Project[]>(`/${URL}`, {}, false);
+const findAll = () => request<Project[]>(`/${URL}`, { needsAuth: false });
 
-const findAllFeatured = () => request<Project[]>(`/${URL}/featured`, {}, false);
+const findAllFeatured = () => request<Project[]>(`/${URL}/featured`, { needsAuth: false });
 
-const findAllNotFeatured = () => request<Project[]>(`/${URL}/not-featured`, {}, false);
+const findAllNotFeatured = () => request<Project[]>(`/${URL}/not-featured`, { needsAuth: false });
 
-const findAllNotFeaturedPaginated = (page: number) => request<Page<Project>>(`/${URL}/not-featured/paginated`, { params: { page } }, false);
+const findAllNotFeaturedPaginated = (page?: number, size?: number) => request<Page<Project>>(`/${URL}/not-featured/paginated`, { params: { page, size }, needsAuth: false });
 
 const save = (project: Project, file?: File | null) => {
     if (!file) {

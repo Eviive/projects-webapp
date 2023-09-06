@@ -3,9 +3,9 @@ import type { Skill } from "types/entities";
 
 const URL = "skill";
 
-const findById = (id: number) => request<Skill>(`/${URL}/${id}`, {}, false);
+const findById = (id: number) => request<Skill>(`/${URL}/${id}`, { needsAuth: false });
 
-const findAll = () => request<Skill[]>(`/${URL}`, {}, false);
+const findAll = () => request<Skill[]>(`/${URL}`, { needsAuth: false });
 
 const save = (skill: Skill, file?: File | null) => {
     if (!file) {

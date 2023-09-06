@@ -24,9 +24,13 @@ export const Projects: FC = () => {
     const queryClient = useQueryClient();
 
     const handleSaveProjectsOrder = async (projects: Project[]) => {
-        await ProjectService.sort(projects.map(project => project.id));
-        await queryClient.invalidateQueries([ "projects" ]);
-        toast.success("Projects order saved successfully!");
+        try {
+            await ProjectService.sort(projects.map(project => project.id));
+            await queryClient.invalidateQueries([ "projects" ]);
+            toast.success("Projects order saved successfully!");
+        } catch (e) {
+            console.error("Error while saving projects order", e);
+        }
     };
 
     const {
@@ -65,16 +69,16 @@ export const Projects: FC = () => {
                         items={filteredProjectItems}
                         setItems={setProjectItems}
                         onSetItems={handleOnSetItems}
-                        renderItem={project => (
+                        renderItem={(project, isOverlay) => (
                             <ProjectCard
                                 project={project}
                                 handleEdit={() => setProjectForm({ project, show: true })}
                                 isDndActive={dndState.isDndActive}
+                                isOverlay={isOverlay}
                             />
                         )}
                         wrapperProps={{
-                            className: styles.cardsWrapper,
-                            size: "350px",
+                            minWidth: "350px",
                             gap: "2.5em"
                         }}
                     />

@@ -9,11 +9,8 @@ export const useCloseEvents = <E extends HTMLElement>(handleClose: () => void, c
 
     const ref = useRef<E | null>(null);
 
-    config = {
-        ...config,
-        outsideClick: config.outsideClick ?? true,
-        escapeKey: config.escapeKey ?? true
-    };
+    config.outsideClick ??= true;
+    config.escapeKey ??= true;
 
     useEffect(() => {
         const element = ref.current;

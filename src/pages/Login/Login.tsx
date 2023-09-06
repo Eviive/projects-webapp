@@ -1,6 +1,7 @@
 import { UserService } from "api/services";
 import { Button, Input, Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
+import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
 import { useLayoutEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -9,7 +10,6 @@ import toast from "react-hot-toast";
 import { FaLock, FaUser } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import type { AuthRequest } from "types/forms";
-import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./login.module.scss";
 
@@ -40,7 +40,7 @@ export const Login: FC = () => {
                 toast.error("You must be an administrator to access the dashboard.");
             }
         } catch (e) {
-            toast.error(getTitleAndMessage(e));
+            console.error("Login failed", getTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }
@@ -57,7 +57,8 @@ export const Login: FC = () => {
                     >
                         <Input
                             attributes={{
-                                ...register("username", { required: true }),
+                                ...register("username"),
+                                required: true,
                                 autoComplete: "username"
                             }}
                             label={<FaUser size={14} />}
@@ -65,8 +66,9 @@ export const Login: FC = () => {
                         />
                         <Input
                             attributes={{
-                                ...register("password", { required: true }),
+                                ...register("password"),
                                 type: "password",
+                                required: true,
                                 autoComplete: "current-password"
                             }}
                             label={<FaLock size={14} />}

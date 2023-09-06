@@ -1,6 +1,6 @@
+import { formatClassNames } from "libs/utils";
 import type { FC, MouseEventHandler, PropsWithChildren } from "react";
 import { PulseLoader } from "react-spinners";
-import { formatClassNames } from "utils/components";
 
 import styles from "./button.module.scss";
 

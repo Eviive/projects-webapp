@@ -3,6 +3,7 @@ import { SkillService } from "api/services";
 import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
+import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -24,9 +25,13 @@ export const Skills: FC = () => {
     const queryClient = useQueryClient();
 
     const handleSaveSkillsOrder = async (skills: Skill[]) => {
-        await SkillService.sort(skills.map(skill => skill.id));
-        await queryClient.invalidateQueries([ "skills", "projects" ]);
-        toast.success("Skills order saved successfully!");
+        try {
+            await SkillService.sort(skills.map(skill => skill.id));
+            await queryClient.invalidateQueries([ "skills", "projects" ]);
+            toast.success("Skills order saved successfully!");
+        } catch (e) {
+            console.error("Error while saving skills order", getTitleAndMessage(e));
+        }
     };
 
     const {
@@ -65,17 +70,19 @@ export const Skills: FC = () => {
                         items={filteredSkillItems}
                         setItems={setSkillItems}
                         onSetItems={handleOnSetItems}
-                        renderItem={skill => (
+                        renderItem={(skill, isOverlay) => (
                             <SkillCard
                                 skill={skill}
                                 handleAction={() => setSkillForm({ skill, show: true })}
                                 isDndActive={dndState.isDndActive}
+                                isOverlay={isOverlay}
                             />
                         )}
                         wrapperProps={{
-                            className: styles.cardsWrapper,
-                            size: "125px",
-                            gap: "2em"
+                            minWidth: "125px",
+                            gap: "2em",
+                            columnCount: "infinity",
+                            centerHorizontally: true
                         }}
                     />
                     <Toolbar

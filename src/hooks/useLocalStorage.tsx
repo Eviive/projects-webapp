@@ -1,3 +1,4 @@
+import { getTitleAndMessage } from "libs/utils";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
@@ -17,7 +18,7 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): [ T, Dispatch
 
             localStorage.setItem(key, JSON.stringify(defaultValue));
         } catch (e) {
-            console.error(e);
+            console.error(getTitleAndMessage(e));
         }
 
         return defaultValue;
@@ -36,7 +37,7 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): [ T, Dispatch
                 localStorage.setItem(key, JSON.stringify(newValueOrFactory));
             }
         } catch (e) {
-            console.error(e);
+            console.error(getTitleAndMessage(e));
         }
     };
 

@@ -1,12 +1,10 @@
 import { useSortableItemContext } from "contexts/SortableItemContext";
 import type { FC } from "react";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { formatClassNames } from "utils/components";
-
-import styles from "./sortable-drag-handle.module.scss";
 
 type Props = {
     className?: string;
+    isDragging?: boolean;
 };
 
 export const SortableDragHandle: FC<Props> = props => {
@@ -18,7 +16,8 @@ export const SortableDragHandle: FC<Props> = props => {
 
     return (
         <button
-            className={formatClassNames(styles.dragHandle, props.className)}
+            className={props.className}
+            style={{ cursor: props.isDragging ? "grabbing" : "grab" }}
             ref={setActivatorNodeRef}
             {...attributes}
             {...listeners}

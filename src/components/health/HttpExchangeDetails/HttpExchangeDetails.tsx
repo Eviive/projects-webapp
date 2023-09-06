@@ -1,8 +1,8 @@
 import { Modal } from "components/common";
+import { formatClassNames } from "libs/utils";
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import type { HttpExchange } from "types/health";
-import { formatClassNames } from "utils/components";
 
 import styles from "./http-exchange-details.module.scss";
 
