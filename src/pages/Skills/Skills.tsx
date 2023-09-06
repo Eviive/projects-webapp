@@ -3,6 +3,7 @@ import { SkillService } from "api/services";
 import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
 import { SkillCard, SkillForm } from "components/skills";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
+import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -10,7 +11,6 @@ import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import type { Skill } from "types/entities";
-import { getTitleAndMessage } from "utils/errors";
 
 import styles from "./skills.module.scss";
 
@@ -70,17 +70,19 @@ export const Skills: FC = () => {
                         items={filteredSkillItems}
                         setItems={setSkillItems}
                         onSetItems={handleOnSetItems}
-                        renderItem={skill => (
+                        renderItem={(skill, isOverlay) => (
                             <SkillCard
                                 skill={skill}
                                 handleAction={() => setSkillForm({ skill, show: true })}
                                 isDndActive={dndState.isDndActive}
+                                isOverlay={isOverlay}
                             />
                         )}
                         wrapperProps={{
-                            className: styles.cardsWrapper,
-                            size: "125px",
-                            gap: "2em"
+                            minWidth: "125px",
+                            gap: "2em",
+                            columnCount: "infinity",
+                            centerHorizontally: true
                         }}
                     />
                     <Toolbar

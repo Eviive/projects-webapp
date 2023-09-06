@@ -10,7 +10,7 @@ type Props = {
 
 export const StatusCards: FC<Props> = ({ data }) => {
     return (
-        <GridLayout>
+        <GridLayout columnCount={4}>
             <StatusCard
                 title="API"
                 icon={<FaServer size={30} />}

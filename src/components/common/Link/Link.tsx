@@ -1,7 +1,7 @@
+import { formatClassNames } from "libs/utils";
 import type { FC } from "react";
 import { NavLink } from "react-router-dom";
 import type { Route } from "types/app";
-import { formatClassNames } from "utils/components";
 
 type Props = {
     route: Route;

@@ -1,7 +1,7 @@
 import type { UseQueryResult } from "@tanstack/react-query";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
-import type { DndItem, DndState } from "types/app";
+import type { DndItem, DndState } from "types/dnd";
 
 type useDragAndDropReturnType<T extends DndItem> = {
     items: [ T[], Dispatch<SetStateAction<T[]>> ];

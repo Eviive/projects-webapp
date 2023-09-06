@@ -1,10 +1,10 @@
 import { HttpExchangeDetails } from "components/health";
+import { formatClassNames } from "libs/utils";
 import type { FC } from "react";
 import { useState } from "react";
 import { CgDetailsMore } from "react-icons/cg";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import type { HttpExchange } from "types/health";
-import { formatClassNames } from "utils/components";
 
 import styles from "./http-exchanges-table.module.scss";
 

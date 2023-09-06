@@ -5,12 +5,5 @@
     @include mixins.size();
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     gap: 4em;
-}
-
-.cards-wrapper {
-    width: 100%;
-    grid-template-columns: repeat(auto-fill, var(--size));
 }

@@ -1,25 +1,27 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService, SkillService } from "api/services";
 import { Button, Input, Modal } from "components/common";
+import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
+import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
+import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import type { Project } from "types/entities";
-import { getTitleAndMessage } from "utils/errors";
+import type { Project, WithImageFile } from "types/entities";
 
 import styles from "./project-form.module.scss";
+
+type ProjectFormValues = WithImageFile<Project>;
 
 type Props = {
     project?: Project;
     numberOfProjects: number;
     handleClose: (isTouched: boolean, isDeleted: boolean) => void;
 };
-
-type ProjectWithFile = Project & { image: { file: FileList } };
 
 export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjects, handleClose }) => {
 
@@ -29,6 +31,7 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
 
     const query = useQuery([ "skills" ], SkillService.findAll);
 
+    const form = useForm<ProjectFormValues>({ defaultValues: initialProject });
     const {
         register,
         handleSubmit,
@@ -36,13 +39,15 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
         getValues,
         setValue,
         formState: { isDirty }
-    } = useForm<ProjectWithFile>({ defaultValues: initialProject });
+    } = form;
+
+    const [ oldTitle, setOldTitle ] = useState(initialProject?.title ?? "");
 
     const skillsOptions = query.data
         ?.sort((a, b) => a.sort - b.sort)
         ?.map(skill => ({ id: skill.id, label: skill.name, value: skill.id }));
 
-    const submitHandler: SubmitHandler<ProjectWithFile> = async data => {
+    const submitHandler: SubmitHandler<ProjectFormValues> = async data => {
         if (submissionState.isSubmittingEdition) return;
         if (!isDirty) return handleClose(false, false);
         dispatchSubmissionState("editionStarted");
@@ -53,7 +58,8 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
                 image: {
                     id: data.image.id,
                     uuid: initialProject?.image?.uuid,
-                    alt: data.image.alt
+                    altEn: data.image.altEn,
+                    altFr: data.image.altFr
                 }
             };
             if (!editing) {
@@ -102,129 +108,130 @@ export const ProjectForm: FC<Props> = ({ project: initialProject, numberOfProjec
         <Modal
             title={initialProject ? `Editing ${initialProject.title}` : "Creating project"}
             handleClose={() => handleClose(false, false)}
-            config={{ outsideClick: false, escapeKey: true }}
+            config={{ outsideClick: !isDirty, escapeKey: !isDirty }}
         >
-            <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-                <Input
-                    attributes={{
-                        ...register("title", {
-                            onChange: () => {
-                                if (!getValues("title") || getValues("title").trim().length === 0) {
-                                    setValue("image.alt", "");
-                                } else {
-                                    setValue("image.alt", `The ${getValues("title")}'s UI`);
+            <FormProvider {...form}>
+                <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+                    <Input
+                        attributes={{
+                            ...register("title", {
+                                onChange: () => {
+                                    const [ title, altEn, altFr ] = getValues([ "title", "image.altEn", "image.altFr" ]),
+                                          isTitleEmpty = !title.trim(),
+                                          isAltEnEmpty = !altEn.trim(),
+                                          isAltFrEmpty = !altFr.trim(),
+                                          isAltEnFormatted = altEn.trim() === `The ${oldTitle.trim()}'s UI`,
+                                          isAltFrFormatted = altFr.trim() === `L'UI de ${oldTitle.trim()}`;
+
+                                    (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isTitleEmpty ? "" : `The ${title.trim()}'s UI`);
+                                    (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isTitleEmpty ? "" : `L'UI de ${title.trim()}`);
+
+                                    setOldTitle(title);
                                 }
-                            }
-                        }),
-                        required: true,
-                        maxLength: 50
-                    }}
-                    label="Title"
-                    wrapperClassName={styles.field}
-                />
-
-                <div className={styles.field}>
-                    <label htmlFor="input-description">Description :</label>
-                    <textarea
-                        {...register("description")}
-                        id="input-description"
-                        rows={3}
-                        maxLength={512}
-                        required
-                    ></textarea>
-                </div>
-
-                <Input
-                    attributes={{
-                        ...register("creationDate"),
-                        type: "date",
-                        required: true
-                    }}
-                    label="Creation date"
-                    wrapperClassName={styles.field}
-                />
-
-                <Input
-                    attributes={{
-                        ...register("repoUrl"),
-                        type: "url",
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Repository URL"
-                    wrapperClassName={styles.field}
-                />
-
-                <Input
-                    attributes={{
-                        ...register("demoUrl"),
-                        type: "url",
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Demonstration URL"
-                    wrapperClassName={styles.field}
-                />
-
-                <div className={styles.field}>
-                    <label>Skills :</label>
-                    <Controller
-                        control={control}
-                        name="skills"
-                        render={({ field }) => (
-                            <Select
-                                ref={field.ref}
-                                placeholder=""
-                                options={skillsOptions}
-                                components={makeAnimated()}
-                                value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
-                                onChange={v => {
-                                    const selectedIds = [ ...v.values() ].map(s => s.id);
-                                    field.onChange(query.data?.filter(s => selectedIds.includes(s.id)) ?? []);
-                                }}
-                                isLoading={query.isLoading}
-                                isDisabled={query.isLoading || query.isError}
-                                isMulti
-                                required
-                            />
-                        )}
+                            }),
+                            required: true,
+                            maxLength: 50
+                        }}
+                        label="Title"
+                        wrapperClassName={styles.field}
                     />
-                </div>
 
-                <Input
-                    attributes={{
-                        ...register("image.file"),
-                        type: "file",
-                        accept: "image/*"
-                    }}
-                    label="Image file"
-                    wrapperClassName={styles.field}
-                />
+                    <div className={styles.field}>
+                        <label htmlFor="input-description-en">English description :</label>
+                        <textarea
+                            {...register("descriptionEn")}
+                            id="input-description-en"
+                            rows={3}
+                            maxLength={510}
+                            required
+                        ></textarea>
+                    </div>
 
-                <Input
-                    attributes={{
-                        ...register("image.alt"),
-                        maxLength: 255,
-                        required: true
-                    }}
-                    label="Image alt"
-                    wrapperClassName={styles.field}
-                />
+                    <div className={styles.field}>
+                        <label htmlFor="input-description-fr">French description :</label>
+                        <textarea
+                            {...register("descriptionFr")}
+                            id="input-description-fr"
+                            rows={3}
+                            maxLength={510}
+                            required
+                        ></textarea>
+                    </div>
 
-                <Input
-                    attributes={{
-                        ...register("featured"),
-                        type: "checkbox"
-                    }}
-                    label="Featured"
-                    wrapperClassName={styles.field}
-                />
+                    <Input
+                        attributes={{
+                            ...register("creationDate"),
+                            type: "date",
+                            required: true
+                        }}
+                        label="Creation date"
+                        wrapperClassName={styles.field}
+                    />
 
-                <div className={styles.buttonsWrapper}>
-                    {!!initialProject && <Button loading={submissionState.isSubmittingDeletion} handleClick={handleDelete}>Delete</Button>}
-                    <Button className={styles.submit} loading={submissionState.isSubmittingEdition}>Submit</Button>
-                </div>
-            </form>
+                    <Input
+                        attributes={{
+                            ...register("repoUrl"),
+                            type: "url",
+                            maxLength: 255,
+                            required: true
+                        }}
+                        label="Repository URL"
+                        wrapperClassName={styles.field}
+                    />
+
+                    <Input
+                        attributes={{
+                            ...register("demoUrl"),
+                            type: "url",
+                            maxLength: 255,
+                            required: true
+                        }}
+                        label="Demonstration URL"
+                        wrapperClassName={styles.field}
+                    />
+
+                    <div className={styles.field}>
+                        <label>Skills :</label>
+                        <Controller
+                            control={control}
+                            name="skills"
+                            render={({ field }) => (
+                                <Select
+                                    ref={field.ref}
+                                    placeholder=""
+                                    options={skillsOptions}
+                                    components={makeAnimated()}
+                                    value={skillsOptions?.filter(option => field.value?.map(s => s.id)?.includes(option.id))}
+                                    onChange={v => {
+                                        const selectedIds = [ ...v.values() ].map(s => s.id);
+                                        field.onChange(query.data?.filter(s => selectedIds.includes(s.id)) ?? []);
+                                    }}
+                                    isLoading={query.isLoading}
+                                    isDisabled={query.isLoading || query.isError}
+                                    isMulti
+                                    required
+                                />
+                            )}
+                        />
+                    </div>
+
+                    <ImageForm inputsClassName={styles.field} />
+
+                    <Input
+                        attributes={{
+                            ...register("featured"),
+                            type: "checkbox"
+                        }}
+                        label="Featured"
+                        wrapperClassName={styles.field}
+                    />
+
+                    <div className={styles.buttonsWrapper}>
+                        {!!initialProject && <Button loading={submissionState.isSubmittingDeletion} handleClick={handleDelete}>Delete</Button>}
+                        <Button className={styles.submit} loading={submissionState.isSubmittingEdition}>Submit</Button>
+                    </div>
+                </form>
+            </FormProvider>
         </Modal>
     );
 };

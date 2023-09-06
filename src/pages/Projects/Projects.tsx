@@ -69,16 +69,16 @@ export const Projects: FC = () => {
                         items={filteredProjectItems}
                         setItems={setProjectItems}
                         onSetItems={handleOnSetItems}
-                        renderItem={project => (
+                        renderItem={(project, isOverlay) => (
                             <ProjectCard
                                 project={project}
                                 handleEdit={() => setProjectForm({ project, show: true })}
                                 isDndActive={dndState.isDndActive}
+                                isOverlay={isOverlay}
                             />
                         )}
                         wrapperProps={{
-                            className: styles.cardsWrapper,
-                            size: "350px",
+                            minWidth: "350px",
                             gap: "2.5em"
                         }}
                     />
