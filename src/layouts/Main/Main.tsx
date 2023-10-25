@@ -8,9 +8,9 @@ const Main: FC = () => {
     return (
         <>
             <Sidebar />
-            <main className={styles.main}>
+            <div className={styles.content}>
                 <Outlet />
-            </main>
+            </div>
         </>
     );
 };

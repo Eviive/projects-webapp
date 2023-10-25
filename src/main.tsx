@@ -1,3 +1,4 @@
+import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
@@ -26,51 +27,56 @@ const queryClient = new QueryClient({
     }
 });
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+    [
+        {
+            path: "/",
+            element: <App />,
+            errorElement: <ErrorPage />,
+            children: [
+                {
+                    path: "/",
+                    element: <MainLayout />,
+                    children: [
+                        {
+                            index: true,
+                            element: <Home />
+                        },
+                        {
+                            path: "/projects",
+                            element: <Projects />
+                        },
+                        {
+                            path: "/skills",
+                            element: <Skills />
+                        },
+                        {
+                            path: "/health",
+                            element: <Health />
+                        }
+                    ]
+                },
+                {
+                    path: "/login",
+                    element: <Login />
+                }
+            ]
+        }
+    ],
     {
-        path: "/",
-        element: <App />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: "/",
-                element: <MainLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <Home />
-                    },
-                    {
-                        path: "/projects",
-                        element: <Projects />
-                    },
-                    {
-                        path: "/skills",
-                        element: <Skills />
-                    },
-                    {
-                        path: "/health",
-                        element: <Health />
-                    }
-                ]
-            },
-            {
-                path: "/login",
-                element: <Login />
-            }
-        ]
+        basename: import.meta.env.VITE_ROUTER_BASE_URL
     }
-], {
-    basename: import.meta.env.VITE_ROUTER_BASE_URL
-});
+);
 
 root.render(
     <StrictMode>
-        <AuthContextProvider>
-            <QueryClientProvider client={queryClient}>
-                <RouterProvider router={router} />
-                <ReactQueryDevtools></ReactQueryDevtools>
-            </QueryClientProvider>
-        </AuthContextProvider>
+        <NextUIProvider className="overlay">
+            <AuthContextProvider>
+                <QueryClientProvider client={queryClient}>
+                    <RouterProvider router={router} />
+                    <ReactQueryDevtools></ReactQueryDevtools>
+                </QueryClientProvider>
+            </AuthContextProvider>
+        </NextUIProvider>
     </StrictMode>
 );

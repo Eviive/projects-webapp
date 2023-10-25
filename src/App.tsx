@@ -33,7 +33,7 @@ export const App: FC = () => {
     }, [ setAccessToken ]);
 
     return (
-        <>
+        <main className="dark text-foreground bg-background">
             { isLoading
                 ? <Loader />
                 : <Outlet />
@@ -42,6 +42,6 @@ export const App: FC = () => {
                 position="bottom-center"
                 reverseOrder={true}
             />
-        </>
+        </main>
     );
 };
