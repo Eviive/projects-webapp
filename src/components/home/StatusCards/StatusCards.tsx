@@ -13,7 +13,7 @@ export const StatusCards: FC<Props> = ({ data }) => {
         <GridLayout columnCount={4}>
             <StatusCard
                 title="API"
-                icon={<FaServer size={30} />}
+                icon={<FaServer size={35} />}
                 status={data.status}
             />
             <StatusCard

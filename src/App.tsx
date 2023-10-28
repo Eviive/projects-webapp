@@ -33,10 +33,10 @@ export const App: FC = () => {
     }, [ setAccessToken ]);
 
     return (
-        <main className="dark text-foreground bg-background">
-            { isLoading
-                ? <Loader />
-                : <Outlet />
+        <main>
+            { !isLoading
+                ? <Outlet/>
+                : <Loader/>
             }
             <Toaster
                 position="bottom-center"

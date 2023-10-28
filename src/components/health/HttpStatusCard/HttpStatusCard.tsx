@@ -1,6 +1,6 @@
+import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import type { FC, ReactNode } from "react";
-
-import styles from "./http-status-card.module.scss";
+import { HttpStatusChip } from "../HttpStatusChip/HttpStatusChip";
 
 type Props = {
     name: string;
@@ -11,12 +11,23 @@ type Props = {
 
 export const HttpStatusCard: FC<Props> = props => {
     return (
-        <li className={styles.card} style={{ backgroundColor: `var(--status-${props.code})` }}>
-            <div className={styles.cardTitle}>
+        <Card
+            as="li"
+            classNames={{
+                base: "basis-64 grow shrink flex flex-col gap-1 font-bold rounded-lg",
+                header: "flex gap-2 text-lg",
+                body: "flex flex-row justify-between items-center text-3xl"
+            }}
+        >
+            <CardHeader>
+                {props.name}
+                <HttpStatusChip code={props.code} />
+            </CardHeader>
+            <Divider />
+            <CardBody>
                 {props.icon}
-                <h1>{`${props.code} ${props.name}`}</h1>
-            </div>
-            <h2 className={styles.cardValue}>{props.value}</h2>
-        </li>
+                {props.value}
+            </CardBody>
+        </Card>
     );
 };

@@ -1,99 +1,118 @@
+import { Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@nextui-org/react";
+import { Button } from "components/common";
 import { HttpExchangeDetails } from "components/health";
-import { formatClassNames } from "libs/utils";
-import type { FC } from "react";
-import { useState } from "react";
-import { CgDetailsMore } from "react-icons/cg";
-import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+import type { FC, Key, ReactNode } from "react";
+import { useMemo, useState } from "react";
+import { AiFillEye } from "react-icons/ai";
 import type { HttpExchange } from "types/health";
 
-import styles from "./http-exchanges-table.module.scss";
+const dateFormatter = new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" });
 
 type Props = {
     httpExchanges: HttpExchange[];
 };
 
-export const HttpExchangesTable: FC<Props> = ({ httpExchanges }) => {
-
-    const [ page, setPage ] = useState(0);
-
-    const pageButtons = () => {
-        const buttons = [];
-        for (let i = 0; i < httpExchanges.length / 10; i++) {
-            buttons.push(
-                <button
-                    key={i}
-                    className={formatClassNames(page === i && styles.active)}
-                    onClick={() => setPage(i)}
-                >
-                    {i + 1}
-                </button>
-            );
-        }
-        return buttons;
-    };
+export const HttpExchangesTable: FC<Props> = props => {
 
     const [ httpExchangeDetails, setHttpExchangeDetails ] = useState<HttpExchange | null>(null);
 
+    const [ page, setPage ] = useState(1);
+
+    const rowsPerPage = 10;
+    const pages = Math.ceil(props.httpExchanges.length / rowsPerPage);
+
+    const items = useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        return props.httpExchanges.slice(start, end);
+    }, [ page, props.httpExchanges ]);
+
+    const getCell = (httpExchange: HttpExchange, columnKey: Key): ReactNode | null => {
+        switch (columnKey) {
+            case "date":
+                return dateFormatter.format(new Date(httpExchange.timestamp));
+            case "method":
+                return httpExchange.request.method;
+            case "timeTaken":
+                return Math.trunc(parseFloat(httpExchange.timeTaken.substring(2, httpExchange.timeTaken.length - 1)) * 1000);
+            case "status": {
+                const statusCode = [ 401, 403 ].includes(httpExchange.response.status)
+                    ? httpExchange.response.status
+                    : Math.floor(httpExchange.response.status / 100) * 100;
+                return (
+                    <Chip className={`status-${statusCode}`} size="sm" variant="flat">
+                        {httpExchange.response.status}
+                    </Chip>
+                );
+            }
+            case "path":
+                return new URL(httpExchange.request.uri).pathname;
+            case "details":
+                return (
+                    <div className="flex justify-end items-center">
+                        <Tooltip content="View details">
+                            <Button
+                                className="text-foreground-500"
+                                isIconOnly
+                                size="sm"
+                                variant="light"
+                                onPress={() => setHttpExchangeDetails(httpExchange)}
+                            >
+                                <AiFillEye size={20} />
+                            </Button>
+                        </Tooltip>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
     return (
         <>
-            {!!httpExchangeDetails && <HttpExchangeDetails httpExchange={httpExchangeDetails} handleClose={() => setHttpExchangeDetails(null)} />}
-            <div className={styles.httpExchangesContainer}>
-                <div className={styles.tableResponsive}>
-                    <table className={styles.httpExchangesTable}>
-                        <thead className={styles.tableHead}>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>Method</th>
-                                <th>Time&nbsp;taken (ms)</th>
-                                <th>Status</th>
-                                <th>Path</th>
-                                <th>Details</th>
-                            </tr>
-                        </thead>
-                        <tbody className={styles.tableBody}>
-                            {httpExchanges.slice(page * 10, (page + 1) * 10).map(httpExchange => {
-                                const bgColor = `var(--status-${[ 401, 403 ].includes(httpExchange.response.status) ? httpExchange.response.status : Math.floor(httpExchange.response.status / 100) * 100})`;
-                                return (
-                                    <tr key={httpExchange.uuid}>
-                                        <td>
-                                            {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(httpExchange.timestamp))}
-                                        </td>
-                                        <td>
-                                            {httpExchange.request.method}
-                                        </td>
-                                        <td>
-                                            {Math.trunc(parseFloat(httpExchange.timeTaken.substring(2, httpExchange.timeTaken.length - 1)) * 1000)}
-                                        </td>
-                                        <td>
-                                            <span className={styles.statusCell} style={{ backgroundColor: bgColor }}>
-                                                {httpExchange.response.status}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {new URL(httpExchange.request.uri).pathname}
-                                        </td>
-                                        <td className={styles.detailsCell}>
-                                            <button onClick={() => setHttpExchangeDetails(httpExchange)}>
-                                                <CgDetailsMore size={30} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-                <div className={styles.pagination}>
-                    <button onClick={() => setPage(page - 1)} disabled={page === 0}>
-                        <MdNavigateBefore size={25} />
-                    </button>
-                    {pageButtons()}
-                    <span>{`${httpExchanges.length > 0 ? page + 1 : 0} / ${Math.ceil(httpExchanges.length / 10)}`}</span>
-                    <button onClick={() => setPage(page + 1)} disabled={page >= (httpExchanges.length / 10) - 1}>
-                        <MdNavigateNext size={25} />
-                    </button>
-                </div>
-            </div>
+            {!!httpExchangeDetails && (
+                <HttpExchangeDetails
+                    httpExchange={httpExchangeDetails}
+                    handleClose={() => setHttpExchangeDetails(null)}
+                />
+            )}
+
+            <Table
+                aria-label="Http Exchanges"
+                bottomContent={
+                    <div className="flex w-full justify-center">
+                        <Pagination
+                            page={page}
+                            onChange={setPage}
+                            total={pages}
+                            isCompact
+                            showControls
+                            showShadow
+                        />
+                    </div>
+                }
+            >
+                <TableHeader>
+                    <TableColumn key="date">Date</TableColumn>
+                    <TableColumn key="method">Method</TableColumn>
+                    <TableColumn key="timeTaken">Time&nbsp;taken (ms)</TableColumn>
+                    <TableColumn key="status">Status</TableColumn>
+                    <TableColumn key="path">Path</TableColumn>
+                    <TableColumn key="details">Details</TableColumn>
+                </TableHeader>
+                <TableBody items={items}>
+                    {item => (
+                        <TableRow key={item.uuid}>
+                            {(columnKey) => (
+                                <TableCell key={columnKey}>
+                                    {getCell(item, columnKey)}
+                                </TableCell>
+                            )}
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
         </>
     );
 };

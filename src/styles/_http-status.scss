@@ -1,0 +1,36 @@
+@layer utilities {
+    .status-100 {
+        @apply text-default-600;
+        @apply bg-opacity-20;
+    }
+    .status-200 {
+        @apply text-success;
+        @apply bg-success;
+        @apply bg-opacity-10;
+    }
+    .status-300 {
+        @apply text-primary;
+        @apply bg-primary;
+        @apply bg-opacity-10;
+    }
+    .status-400 {
+        @apply text-yellow-500;
+        @apply bg-yellow-500;
+        @apply bg-opacity-10;
+    }
+    .status-401 {
+        @apply text-warning;
+        @apply bg-warning;
+        @apply bg-opacity-10;
+    }
+    .status-403 {
+        @apply text-orange-600;
+        @apply bg-orange-600;
+        @apply bg-opacity-10;
+    }
+    .status-500 {
+        @apply text-danger;
+        @apply bg-danger;
+        @apply bg-opacity-10;
+    }
+}

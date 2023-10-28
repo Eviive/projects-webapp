@@ -1,4 +1,5 @@
 @use "mixins";
+@use "http-status";
 
 @tailwind base;
 @tailwind components;
@@ -47,17 +48,6 @@ html {
         --secondary-3: 210deg, 3%, 63%;
 
         --accent-1: 347deg, 84%, 50%;
-
-        --status-100: hsl(0deg, 0%, 0%);
-        --status-200: hsl(121deg 34% 51%);
-        --status-300: hsl(0deg, 0%, 50%);
-        --status-400: hsl(216deg 89% 60%);
-        --status-401: hsl(30deg 91% 58%);
-        --status-403: hsl(21deg, 100%, 50%);
-        --status-500: hsl(355deg, 60%, 52%);
-
-        --sidebar-width-open: 250px;
-        --sidebar-width-close: 60px;
 
         font-size: 16px;
         -webkit-font-smoothing: antialiased;

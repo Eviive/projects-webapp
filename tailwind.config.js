@@ -7,6 +7,11 @@ export default {
         "./src/**/*.{js,ts,jsx,tsx}",
         "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
     ],
+    safelist: [
+        {
+            pattern: /status-(\d){3}/
+        }
+    ],
     theme: {
         extend: {
             width: {
