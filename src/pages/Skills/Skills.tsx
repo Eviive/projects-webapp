@@ -12,8 +12,6 @@ import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import type { Skill } from "types/entities";
 
-import styles from "./skills.module.scss";
-
 type SkillForm = {
     skill?: Skill;
     show: boolean;
@@ -57,7 +55,7 @@ export const Skills: FC = () => {
         <Page title="Skills">
             { query.isSuccess
 
-                ? <div className={styles.skillsWrapper}>
+                ? <div className="w-full h-full px-[5%] py-12 flex flex-col gap-12">
                     {skillForm.show &&
                         <SkillForm
                             skill={skillForm.skill}

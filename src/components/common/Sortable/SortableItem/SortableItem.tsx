@@ -2,11 +2,11 @@ import type { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { SortableItemContextProvider } from "contexts/SortableItemContext";
-import type { ComponentProps, CSSProperties, FC, PropsWithChildren } from "react";
+import type { CSSProperties, FC, PropsWithChildren } from "react";
 
 type Props = {
     id?: UniqueIdentifier;
-    itemProps?: Omit<ComponentProps<"li">, "children">;
+    className?: string;
 };
 
 export const SortableItem: FC<PropsWithChildren<Props>> = props => {
@@ -35,7 +35,7 @@ export const SortableItem: FC<PropsWithChildren<Props>> = props => {
             listeners,
             setActivatorNodeRef
         }}>
-            <li ref={setNodeRef} style={style} {...props.itemProps}>
+            <li ref={setNodeRef} className={props.className} style={style}>
                 {props.children}
             </li>
         </SortableItemContextProvider>

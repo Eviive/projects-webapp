@@ -1,11 +1,8 @@
 import { Button } from "components/common";
 import type { FC, PropsWithChildren } from "react";
 
-import styles from "./toolbar.module.scss";
-
 type Tool = {
     name: string;
-    className?: string;
     handleClick: () => (void | Promise<void>);
     loading?: boolean;
     disabled?: boolean;
@@ -16,23 +13,22 @@ type Props = {
 };
 
 export const Toolbar: FC<Props> = props => {
-
-    const buttons = props.tools.map(tool => (
-        <Button
-            key={tool.name}
-            className={tool.className}
-            loading={tool.loading}
-            disabled={tool.disabled}
-            handleClick={tool.handleClick}
-            round={true}
-        >
-            {tool.children}
-        </Button>
-    ));
-
     return (
-        <div className={styles.toolbar}>
-            {buttons}
+        <div className="z-50 fixed bottom-6 right-6 flex gap-4">
+            {props.tools.map(tool => (
+                <Button
+                    key={tool.name}
+                    isLoading={tool.loading}
+                    isDisabled={tool.disabled}
+                    onClick={tool.handleClick}
+                    isIconOnly
+                    size="lg"
+                    radius="full"
+                    color="danger"
+                >
+                    {!tool.loading && tool.children}
+                </Button>
+            ))}
         </div>
     );
 };
