@@ -12,28 +12,33 @@ import { MdRefresh } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import type { Route } from "types/app";
 
-import styles from "./sidebar.module.scss";
+const classNames = {
+    sidebar: "z-50 fixed top-0 w-sidebar h-full flex flex-col justify-between font-medium bg-content2/60 backdrop-blur shadow overflow-x-hidden transition-width duration-300 hover:w-sidebar-expanded",
+    sidebarItem: "w-sidebar-expanded flex items-center gap-1.5 select-none transition-colors duration-300 hover:bg-content3/40 hover:shadow-inner",
+    sidebarItemActive: "bg-content3/40 shadow-inner",
+    sidebarIcon: "w-sidebar h-sidebar-item p-3.5 text-foreground"
+};
 
 const routes: Route[] = [
     {
         name: "Home",
         path: "/",
-        icon: <FaHome />
+        icon: <FaHome className={classNames.sidebarIcon} />
     },
     {
         name: "Projects",
         path: "/projects",
-        icon: <BsBriefcaseFill />
+        icon: <BsBriefcaseFill className={classNames.sidebarIcon} />
     },
     {
         name: "Skills",
         path: "/skills",
-        icon: <FaTools />
+        icon: <FaTools className={classNames.sidebarIcon} />
     },
     {
         name: "Health",
         path: "/health",
-        icon: <GiHealthNormal />
+        icon: <GiHealthNormal className={classNames.sidebarIcon} />
     }
 ];
 
@@ -59,28 +64,28 @@ export const Sidebar: FC = () => {
     };
 
     return (
-        <nav className={styles.sidebar}>
+        <nav className={classNames.sidebar}>
             <ul>
                 {routes.map(route => (
                     <li key={route.name}>
                         <Link
                             route={route}
-                            className={styles.sidebarItem}
-                            activeClassName={styles.active}
+                            className={classNames.sidebarItem}
+                            activeClassName={classNames.sidebarItemActive}
                         />
                     </li>
                 ))}
             </ul>
             <ul>
                 <li>
-                    <button className={styles.sidebarItem} onClick={handleRefresh}>
-                        <MdRefresh />
+                    <button className={classNames.sidebarItem} onClick={handleRefresh}>
+                        <MdRefresh className={classNames.sidebarIcon} />
                         Refresh data
                     </button>
                 </li>
                 <li>
-                    <button className={styles.sidebarItem} onClick={handleLogout}>
-                        <TbLogout />
+                    <button className={classNames.sidebarItem} onClick={handleLogout}>
+                        <TbLogout className={classNames.sidebarIcon} />
                         Sign out
                     </button>
                 </li>

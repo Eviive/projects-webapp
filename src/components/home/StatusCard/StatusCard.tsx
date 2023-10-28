@@ -1,7 +1,6 @@
+import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import type { FC, ReactNode } from "react";
 import type { Status } from "types/health";
-
-import styles from "./status-card.module.scss";
 
 type Props = {
     title: string;
@@ -18,12 +17,23 @@ const STATUS_COLORS: Record<Status, string> = {
 
 export const StatusCard: FC<Props> = props => {
     return (
-        <li className={styles.card} style={{ backgroundColor: STATUS_COLORS[props.status] }}>
-            <h3>{props.title}</h3>
-            <div className={styles.cardContent}>
+        <Card classNames={{
+            base: "basis-64 grow shrink flex flex-col gap-1 font-bold rounded-lg",
+            header: "text-lg",
+            body: "flex flex-row justify-between items-center text-3xl"
+        }}>
+            <CardHeader>
+                <span
+                    className="w-2.5 h-2.5 rounded-full inline-block mr-2"
+                    style={{ backgroundColor: STATUS_COLORS[props.status] }}
+                />
+                <h3>{props.title}</h3>
+            </CardHeader>
+            <Divider />
+            <CardBody>
                 {props.icon}
                 <p>{props.status}</p>
-            </div>
-        </li>
+            </CardBody>
+        </Card>
     );
 };

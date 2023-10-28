@@ -40,7 +40,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, handleClose }) =>
                 </button>
             </div>
             <div className={styles.detailsContent}>
-                {content === "request"
+                { content === "request"
 
                     ? <>
                         <span><strong>Timestamp:</strong> {new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "short" }).format(new Date(httpExchange.timestamp))}</span>

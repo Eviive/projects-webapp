@@ -1,3 +1,4 @@
+import { Card, CardBody } from "@nextui-org/react";
 import { UserService } from "api/services";
 import { Button, Input, Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
@@ -7,11 +8,8 @@ import { useLayoutEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { FaLock, FaUser } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import type { AuthRequest } from "types/forms";
-
-import styles from "./login.module.scss";
 
 export const Login: FC = () => {
 
@@ -30,6 +28,7 @@ export const Login: FC = () => {
     }, [ accessToken ]);
 
     const submitHandler: SubmitHandler<AuthRequest> = async data => {
+        console.log("Login", data);
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
@@ -49,33 +48,33 @@ export const Login: FC = () => {
     return (
         <Page title="Login">
             { redirect
+
                 ? <Navigate to="/" />
-                : <div className={styles.loginWrapper}>
-                    <form
-                        className={styles.loginForm}
-                        onSubmit={handleSubmit(submitHandler)}
-                    >
-                        <Input
-                            attributes={{
-                                ...register("username"),
-                                required: true,
-                                autoComplete: "username"
-                            }}
-                            label={<FaUser size={14} />}
-                            wrapperClassName={styles.inputWrapper}
-                        />
-                        <Input
-                            attributes={{
-                                ...register("password"),
-                                type: "password",
-                                required: true,
-                                autoComplete: "current-password"
-                            }}
-                            label={<FaLock size={14} />}
-                            wrapperClassName={styles.inputWrapper}
-                        />
-                        <Button loading={isSubmitting}>Sign In</Button>
-                    </form>
+
+                : <div className="h-screen-dynamic grid place-items-center">
+                    <Card className="w-96 max-w-[85%]">
+                        <CardBody>
+                            <form
+                                className="p-3 grid grid-rows-3 gap-8"
+                                onSubmit={handleSubmit(submitHandler)}
+                            >
+                                <Input
+                                    {...register("username")}
+                                    required={true}
+                                    autoComplete="username"
+                                    label="Username"
+                                />
+                                <Input
+                                    {...register("password")}
+                                    type="password"
+                                    required={true}
+                                    autoComplete="current-password"
+                                    label="Password"
+                                />
+                                <Button type="submit" isLoading={isSubmitting}>Sign In</Button>
+                            </form>
+                        </CardBody>
+                    </Card>
                 </div>
             }
         </Page>

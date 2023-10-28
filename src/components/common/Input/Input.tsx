@@ -1,33 +1,20 @@
-import type { FC, FormEventHandler, InputHTMLAttributes, ReactNode } from "react";
+import { Input as NextUIInput } from "@nextui-org/react";
+import type { ComponentProps, FC } from "react";
+import { forwardRef } from "react";
 
-type Attributes = InputHTMLAttributes<HTMLInputElement> & { name: string; };
+type Props = ComponentProps<typeof NextUIInput>;
 
-type Props = {
-    attributes: Attributes;
-    label?: ReactNode;
-    wrapperClassName?: string;
-    handleInvalid?: FormEventHandler<HTMLInputElement>;
-};
-
-export const Input: FC<Props> = ({ attributes, label, wrapperClassName, handleInvalid }) => {
-
-    const type = attributes.type ?? "text";
-
-    const labelContent = typeof label === "string" ? `${label} :` : label;
-
+const Input: FC<Props> = forwardRef<HTMLInputElement, Props>((props, ref) => {
     return (
-        <div className={wrapperClassName}>
-            {!!labelContent && <label htmlFor={`input-${attributes.name}`}>{labelContent}</label>}
-            <input
-                {...attributes}
-                id={`input-${attributes.name}`}
-                type={type}
-                placeholder={attributes.placeholder}
-                pattern={attributes.pattern}
-                required={attributes.required}
-                onInput={handleInvalid && (e => e.currentTarget.setCustomValidity(""))}
-                onInvalid={handleInvalid}
-            />
-        </div>
+        <NextUIInput
+            {...props}
+            ref={ref}
+            id={`input-${props.name}`}
+            isRequired={props.isRequired ?? props.required}
+        />
     );
-};
+});
+
+Input.displayName = "Input";
+
+export { Input };

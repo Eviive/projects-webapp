@@ -8,7 +8,19 @@ export default {
         "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
     ],
     theme: {
-        extend: {}
+        extend: {
+            width: {
+                "sidebar": "60px",
+                "sidebar-expanded": "250px"
+            },
+            height: {
+                "screen-dynamic": "100dvh",
+                "sidebar-item": "60px"
+            },
+            spacing: {
+                "sidebar": "60px"
+            }
+        }
     },
     darkMode: "class",
     plugins: [

@@ -11,14 +11,13 @@ import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import type { Project } from "types/entities";
 
-import styles from "./projects.module.scss";
-
 type ProjectForm = {
     project?: Project;
     show: boolean;
 };
 
 export const Projects: FC = () => {
+
     const query = useQuery([ "projects" ], ProjectService.findAll);
 
     const queryClient = useQueryClient();
@@ -56,7 +55,7 @@ export const Projects: FC = () => {
         <Page title="Projects">
             { query.isSuccess
 
-                ? <div className={styles.projectsWrapper}>
+                ? <div className="w-full h-full px-[5%] py-16 flex flex-col justify-center items-center gap-16">
                     {projectForm.show &&
                         <ProjectForm
                             project={projectForm.project}
