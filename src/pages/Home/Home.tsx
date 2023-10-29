@@ -19,7 +19,7 @@ export const Home: FC = () => {
                         <div>
                             <h1 className="text-3xl font-medium">
                                 Welcome to the&nbsp;
-                                <strong className="text-transparent font-bold bg-gradient-to-b bg-clip-text from-[hsl(var(--accent-1))] to-pink-500">
+                                <strong className="text-transparent font-bold bg-gradient-to-b bg-clip-text from-[hsl(347deg_84%_50%)] to-pink-600">
                                     {queryInfo.data.app.name}
                                 </strong>
                                 &nbsp;dashboard !

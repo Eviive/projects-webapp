@@ -1,29 +1,19 @@
-import { formatClassNames } from "libs/utils";
-import type { FC } from "react";
+import { Link as NextUILink } from "@nextui-org/react";
+import type { ComponentProps, FC, PropsWithChildren } from "react";
 import { NavLink } from "react-router-dom";
 import type { Route } from "types/app";
 
 type Props = {
     route: Route;
-    className?: string;
-    activeClassName?: string;
-    pendingClassName?: string;
+    uiProps?: ComponentProps<typeof NextUILink>;
 };
 
-export const Link: FC<Props> = ({ route, className, activeClassName, pendingClassName }) => {
+export const Link: FC<PropsWithChildren<Props>> = props => {
     return (
-        <NavLink
-            to={route.path}
-            className={({ isActive, isPending }) =>
-                formatClassNames(
-                    className,
-                    isActive && activeClassName,
-                    isPending && pendingClassName
-                )
-            }
-        >
-            {route.icon}
-            {route.name}
-        </NavLink>
+        <NextUILink as="div" {...props.uiProps}>
+            <NavLink to={props.route.path}>
+                {props.children ?? props.route.name}
+            </NavLink>
+        </NextUILink>
     );
 };

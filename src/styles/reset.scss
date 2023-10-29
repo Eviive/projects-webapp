@@ -5,33 +5,8 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font-family: inherit;
-    box-sizing: border-box;
-}
-
-ol, ul {
-    list-style: none;
-}
-
 a, button {
-    color: inherit;
-    text-decoration: none;
-    background-color: transparent;
     -webkit-tap-highlight-color: transparent;
-    cursor: pointer;
-}
-
-progress, input:is([type="checkbox"], [type="radio"], [type="range"]) {
-    accent-color: hsl(var(--accent-1));
-}
-
-textarea {
-    resize: vertical;
 }
 
 html {
@@ -40,44 +15,13 @@ html {
     scroll-behavior: smooth;
 
     body {
-        --primary-1: 240deg, 5%, 89%;
-        --primary-2: 240deg, 5%, 70%;
-
-        --secondary-1: 212deg, 10%, 26%;
-        --secondary-2: 210deg, 10%, 23%;
-        --secondary-3: 210deg, 3%, 63%;
-
-        --accent-1: 347deg, 84%, 50%;
-
-        font-size: 16px;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
 
         &:has(.no-scroll) {
             overflow-y: hidden;
         }
-
-        #root {
-            .overlay {
-                min-height: 100vh;
-                min-height: 100dvh;
-                display: flex;
-                flex-direction: column;
-
-                main {
-                    flex-grow: 1;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 40px;
-                }
-            }
-        }
     }
-}
-
-.loader {
-    min-height: 100vh;
-    min-height: 100dvh;
 }
 
 ::-webkit-scrollbar {

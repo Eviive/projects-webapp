@@ -1,6 +1,5 @@
-import { Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@nextui-org/react";
-import { Button } from "components/common";
-import { HttpExchangeDetails } from "components/health";
+import { Button, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@nextui-org/react";
+import { HttpExchangeDetails, HttpStatusChip } from "components/health";
 import type { FC, Key, ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { AiFillEye } from "react-icons/ai";
@@ -32,31 +31,34 @@ export const HttpExchangesTable: FC<Props> = props => {
         switch (columnKey) {
             case "date":
                 return dateFormatter.format(new Date(httpExchange.timestamp));
+
             case "method":
                 return httpExchange.request.method;
+
             case "timeTaken":
                 return Math.trunc(parseFloat(httpExchange.timeTaken.substring(2, httpExchange.timeTaken.length - 1)) * 1000);
+
             case "status": {
                 const statusCode = [ 401, 403 ].includes(httpExchange.response.status)
                     ? httpExchange.response.status
                     : Math.floor(httpExchange.response.status / 100) * 100;
                 return (
-                    <Chip className={`status-${statusCode}`} size="sm" variant="flat">
-                        {httpExchange.response.status}
-                    </Chip>
+                    <HttpStatusChip code={statusCode} />
                 );
             }
+
             case "path":
                 return new URL(httpExchange.request.uri).pathname;
+
             case "details":
                 return (
                     <div className="flex justify-end items-center">
                         <Tooltip content="View details">
                             <Button
                                 className="text-foreground-500"
-                                isIconOnly
-                                size="sm"
                                 variant="light"
+                                size="sm"
+                                isIconOnly
                                 onPress={() => setHttpExchangeDetails(httpExchange)}
                             >
                                 <AiFillEye size={20} />
@@ -64,6 +66,7 @@ export const HttpExchangesTable: FC<Props> = props => {
                         </Tooltip>
                     </div>
                 );
+
             default:
                 return null;
         }

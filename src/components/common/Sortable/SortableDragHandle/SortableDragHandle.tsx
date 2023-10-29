@@ -1,4 +1,4 @@
-import { Button } from "components/common";
+import { Button } from "@nextui-org/react";
 import { useSortableItemContext } from "contexts/SortableItemContext";
 import type { FC } from "react";
 import { RxDragHandleDots2 } from "react-icons/rx";

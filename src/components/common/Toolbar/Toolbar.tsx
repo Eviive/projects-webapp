@@ -1,4 +1,4 @@
-import { Button } from "components/common";
+import { Button } from "@nextui-org/react";
 import type { FC, PropsWithChildren } from "react";
 
 type Tool = {

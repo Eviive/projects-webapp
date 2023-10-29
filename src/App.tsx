@@ -33,7 +33,7 @@ export const App: FC = () => {
     }, [ setAccessToken ]);
 
     return (
-        <main>
+        <>
             { !isLoading
                 ? <Outlet/>
                 : <Loader/>
@@ -42,6 +42,6 @@ export const App: FC = () => {
                 position="bottom-center"
                 reverseOrder={true}
             />
-        </main>
+        </>
     );
 };

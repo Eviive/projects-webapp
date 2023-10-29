@@ -1,14 +1,14 @@
-import { RequireAuth, Sidebar } from "components/common";
+import { Header, RequireAuth } from "components/common";
 import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 
 const Main: FC = () => {
     return (
         <>
-            <Sidebar />
-            <div className="grow ml-sidebar flex flex-col">
+            <Header />
+            <main className="grow flex flex-col">
                 <Outlet />
-            </div>
+            </main>
         </>
     );
 };

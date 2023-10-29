@@ -9,8 +9,8 @@ export const HttpStatusChip: FC<Props> = props => {
     return (
         <Chip
             className={`status-${props.code}`}
-            size="sm"
             variant="flat"
+            size="sm"
         >
             {props.code}
         </Chip>

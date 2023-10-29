@@ -14,16 +14,8 @@ export default {
     ],
     theme: {
         extend: {
-            width: {
-                "sidebar": "60px",
-                "sidebar-expanded": "250px"
-            },
             height: {
-                "screen-dynamic": "100dvh",
-                "sidebar-item": "60px"
-            },
-            spacing: {
-                "sidebar": "60px"
+                "screen-dynamic": "100dvh"
             }
         }
     },

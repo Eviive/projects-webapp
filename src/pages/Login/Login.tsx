@@ -1,6 +1,6 @@
-import { Card, CardBody } from "@nextui-org/react";
+import { Button, Card, CardBody } from "@nextui-org/react";
 import { UserService } from "api/services";
-import { Button, Input, Page } from "components/common";
+import { Input, Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";

@@ -70,7 +70,7 @@ const router = createBrowserRouter(
 
 root.render(
     <StrictMode>
-        <NextUIProvider className="overlay">
+        <NextUIProvider className="min-h-screen min-h-screen-dynamic flex flex-col">
             <AuthContextProvider>
                 <QueryClientProvider client={queryClient}>
                     <RouterProvider router={router} />
