@@ -14,7 +14,7 @@ export const Home: FC = () => {
         <Page title="Home">
             { (queryInfo.isSuccess && queryHealth.isSuccess)
 
-                ? <div className="w-full h-full px-[5%] py-20">
+                ? <div className="w-full h-full px-[5%] py-16">
                     <div className="flex flex-col gap-20">
                         <div>
                             <h1 className="text-3xl font-medium">

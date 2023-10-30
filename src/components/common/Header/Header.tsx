@@ -1,9 +1,8 @@
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
-import { Link } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
-import { getTitleAndMessage } from "libs/utils";
+import { formatClassNames, getTitleAndMessage } from "libs/utils";
 import type { FC, Key } from "react";
 import { useMemo } from "react";
 import toast from "react-hot-toast";
@@ -12,7 +11,7 @@ import { BsChevronDown } from "react-icons/bs";
 import { MdOutlineDesktopWindows, MdRefresh } from "react-icons/md";
 import { RiToolsLine } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
+import { matchPath, useLocation, useNavigate } from "react-router-dom";
 import type { HeaderItem, HeaderMenu } from "types/header";
 
 export const Header: FC = () => {
@@ -23,7 +22,9 @@ export const Header: FC = () => {
 
     const navigate = useNavigate();
 
-    const headerItems: (HeaderItem | HeaderMenu)[] = useMemo(() => ([
+    const location = useLocation();
+
+    const headerItems = useMemo<(HeaderItem | HeaderMenu)[]>(() => ([
         {
             name: "Home",
             type: "route",
@@ -89,9 +90,7 @@ export const Header: FC = () => {
         }
     ]), [ queryClient, setAccessToken ]);
 
-    const handleMenuAction = (key: Key, menu: HeaderMenu) => {
-        const item = menu.children.find(child => child.name === key);
-        if (!item) return;
+    const handleItemAction = (item: HeaderItem) => {
         switch (item.type) {
             case "route":
                 navigate(item.path);
@@ -102,52 +101,68 @@ export const Header: FC = () => {
         }
     };
 
-    // {item.children
-    //     .filter(child => child.type === "route")
-    //     .find(child => child.type === "route" && matchPath(child.path, window.location.pathname))
-    //     ? "ACTIVE" : "INACTIVE"}
+    const handleMenuAction = (menu: HeaderMenu, key: Key) => {
+        const item = menu.children.find(child => child.name === key);
+        if (item) {
+            handleItemAction(item);
+        }
+    };
+
+    const isHeaderItemActive = (item: HeaderItem): boolean => {
+        return item.type === "route" && matchPath(item.path, location.pathname) !== null;
+    };
+
+    const isHeaderMenuActive = (menu: HeaderMenu): boolean => {
+        return menu.children.some(isHeaderItemActive);
+    };
 
     return (
-        <Navbar position="static" isBordered>
-            <NavbarBrand className="h-full d-flex items-center text-lg font-bold">
-                <Image
-                    className="object-cover h-full p-3"
-                    src="/logo.svg"
-                    alt="The logo of the Personal-API dashboard"
-                    radius="none"
-                    disableSkeleton
-                />
-                <h1>Dashboard</h1>
-            </NavbarBrand>
-            <NavbarContent justify="center" className="gap-6">
+        <Navbar
+            position="static"
+            isBordered
+            classNames={{
+                brand: "h-full d-flex items-center text-lg font-bold",
+                content: "gap-6",
+                item: "flex relative h-full items-center data-[active=true]:after:content-[''] data-[active=true]:after:absolute data-[active=true]:after:bottom-0 data-[active=true]:after:left-0 data-[active=true]:after:right-0 data-[active=true]:after:h-[2px] data-[active=true]:after:rounded-[2px] data-[active=true]:after:bg-danger"
+            }}
+        >
+            <NavbarContent justify="start">
+                <NavbarBrand>
+                    <Image
+                        className="object-cover h-full p-3"
+                        src="/logo.svg"
+                        alt="The logo of the Personal-API dashboard"
+                        radius="none"
+                        disableSkeleton
+                    />
+                    <h1>Dashboard</h1>
+                </NavbarBrand>
+            </NavbarContent>
+            <NavbarContent justify="center">
                 {headerItems.map(item => {
                     switch (item.type) {
                         case "route":
                         case "action":
                             return (
-                                <NavbarItem key={item.name}>
+                                <NavbarItem key={item.name} isActive={isHeaderItemActive(item)}>
                                     <Button
-                                        as={item.type === "route" ? "div" : undefined}
                                         className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent"
                                         variant="light"
                                         radius="sm"
                                         disableRipple
-                                        onPress={item.type === "action" ? item.handleAction : undefined}
+                                        onPress={() => handleItemAction(item)}
                                     >
-                                        { item.type === "route"
-                                            ? <Link route={item} uiProps={{ className: "text-inherit" }} />
-                                            : item.name
-                                        }
+                                        {item.name}
                                     </Button>
                                 </NavbarItem>
                             );
                         case "menu":
                             return (
                                 <Dropdown key={item.name}>
-                                    <NavbarItem>
+                                    <NavbarItem isActive={isHeaderMenuActive(item)}>
                                         <DropdownTrigger>
                                             <Button
-                                                className="min-w-0 p-0 gap-1.5 text-medium bg-transparent data-[hover=true]:bg-transparent"
+                                                className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent gap-1.5"
                                                 variant="light"
                                                 radius="sm"
                                                 disableRipple
@@ -160,12 +175,15 @@ export const Header: FC = () => {
                                     <DropdownMenu
                                         aria-label={item.name}
                                         variant="flat"
-                                        onAction={key => handleMenuAction(key, item)}
+                                        onAction={key => handleMenuAction(item, key)}
                                     >
                                         {item.children.map(child => (
                                             <DropdownItem
                                                 key={child.name}
-                                                className={child.danger ? "text-danger" : undefined}
+                                                className={formatClassNames(
+                                                    child.danger && "text-danger",
+                                                    isHeaderItemActive(child) && "text-danger data-[hover=true]:text-danger"
+                                                )}
                                                 color={child.danger ? "danger" : undefined}
                                                 startContent={child.icon}
                                             >

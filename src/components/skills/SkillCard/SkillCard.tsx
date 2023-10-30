@@ -38,6 +38,7 @@ export const SkillCard: FC<Props> = ({ skill, ...props }) => {
                         alt={skill.image.altEn}
                         width={100}
                         radius="sm"
+                        disableSkeleton={props.isOverlay}
                         loading="lazy"
                     />
                 </CardBody>

@@ -37,7 +37,7 @@ export const Health: FC = () => {
         <Page title="Health">
             { query.isSuccess
 
-                ? <div className="w-full h-full px-[5%] py-20 flex flex-col gap-12">
+                ? <div className="w-full h-full px-[5%] py-16 flex flex-col gap-12">
                     <GridLayout columnCount={4}>
                         {HTTP_STATUS.map(status => (
                             <HttpStatusCard

@@ -13,7 +13,7 @@ type HeaderActionItem = {
 
 export type HeaderItem = (HeaderRouteItem | HeaderActionItem);
 
-export type WithIcon<I extends HeaderItem> = I & {
+export type WithMenuAttributes<I extends HeaderItem> = I & {
     icon: ReactNode;
     danger?: boolean;
 };
@@ -21,5 +21,5 @@ export type WithIcon<I extends HeaderItem> = I & {
 export type HeaderMenu = {
     name: string;
     type: "menu";
-    children: WithIcon<HeaderItem>[];
+    children: WithMenuAttributes<HeaderItem>[];
 };

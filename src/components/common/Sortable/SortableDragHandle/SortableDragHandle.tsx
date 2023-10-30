@@ -20,7 +20,6 @@ export const SortableDragHandle: FC<Props> = props => {
             <Button
                 as="div"
                 className={props.className}
-                style={{ cursor: props.isDragging ? "grabbing" : "grab" }}
                 isIconOnly
                 size="sm"
             >
@@ -28,6 +27,8 @@ export const SortableDragHandle: FC<Props> = props => {
                     ref={setActivatorNodeRef}
                     {...attributes}
                     {...listeners}
+                    className="w-full h-full grid place-items-center"
+                    style={{ cursor: props.isDragging ? "grabbing" : "grab" }}
                 >
                     <RxDragHandleDots2 size={25}/>
                 </button>
