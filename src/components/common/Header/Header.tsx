@@ -1,10 +1,10 @@
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@nextui-org/react";
+import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
 import { useAuthContext } from "contexts/AuthContext";
 import { formatClassNames, getTitleAndMessage } from "libs/utils";
 import type { FC, Key } from "react";
-import { useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { BiPlusMedical } from "react-icons/bi";
 import { BsChevronDown } from "react-icons/bs";
@@ -23,6 +23,8 @@ export const Header: FC = () => {
     const navigate = useNavigate();
 
     const location = useLocation();
+
+    const [ isMenuOpen, setIsMenuOpen ] = useState(false);
 
     const headerItems = useMemo<(HeaderItem | HeaderMenu)[]>(() => ([
         {
@@ -99,6 +101,7 @@ export const Header: FC = () => {
                 item.handleAction();
                 break;
         }
+        setIsMenuOpen(false);
     };
 
     const handleMenuAction = (menu: HeaderMenu, key: Key) => {
@@ -116,86 +119,148 @@ export const Header: FC = () => {
         return menu.children.some(isHeaderItemActive);
     };
 
+    const brand = (
+        <NavbarBrand>
+            <Image
+                className="object-cover h-full p-3.5"
+                src="/logo.svg"
+                alt="The logo of the Personal-API dashboard"
+                radius="none"
+                disableSkeleton
+            />
+            <h1 className="lg:block md:hidden">Dashboard</h1>
+        </NavbarBrand>
+    );
+
+    const renderNavbarMenuItem = (item: HeaderItem | HeaderMenu, isLastMenuChild = false) => {
+        switch (item.type) {
+            case "route":
+            case "action":
+                return (
+                    <NavbarMenuItem key={item.name}>
+                        <Button
+                            data-active={isHeaderItemActive(item)}
+                            className={formatClassNames(
+                                "min-w-0 p-0 text-lg bg-transparent data-[hover=true]:bg-transparent",
+                                "data-[active=true]:underline decoration-danger underline-offset-4",
+                                isLastMenuChild && "mb-2",
+                                item.danger && "text-danger"
+                            )}
+                            radius="sm"
+                            disableRipple
+                            onPress={() => handleItemAction(item)}
+                        >
+                            {item.name}
+                        </Button>
+                    </NavbarMenuItem>
+                );
+            case "menu":
+                return (
+                    <Fragment key={item.name}>
+                        <li className="flex items-center gap-2 text-small text-gray-500">
+                            {item.name}
+                            <Divider className="w-auto grow"/>
+                        </li>
+                        {item.children.map((child, i) => renderNavbarMenuItem(child, i === item.children.length - 1))}
+                    </Fragment>
+                );
+        }
+    };
+
+    const renderNavbarContentItem = (item: HeaderItem | HeaderMenu) => {
+        switch (item.type) {
+            case "route":
+            case "action":
+                return (
+                    <NavbarItem key={item.name} isActive={isHeaderItemActive(item)}>
+                        <Button
+                            className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent"
+                            variant="light"
+                            radius="sm"
+                            disableRipple
+                            onPress={() => handleItemAction(item)}
+                        >
+                            {item.name}
+                        </Button>
+                    </NavbarItem>
+                );
+            case "menu":
+                return (
+                    <Dropdown key={item.name}>
+                        <NavbarItem isActive={isHeaderMenuActive(item)}>
+                            <DropdownTrigger>
+                                <Button
+                                    className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent gap-1.5"
+                                    variant="light"
+                                    radius="sm"
+                                    disableRipple
+                                    endContent={<BsChevronDown />}
+                                >
+                                    {item.name}
+                                </Button>
+                            </DropdownTrigger>
+                        </NavbarItem>
+                        <DropdownMenu
+                            aria-label={item.name}
+                            variant="flat"
+                            onAction={key => handleMenuAction(item, key)}
+                        >
+                            {item.children.map(child => (
+                                <DropdownItem
+                                    key={child.name}
+                                    className={formatClassNames(
+                                        isHeaderItemActive(child) && "text-danger data-[hover=true]:text-danger",
+                                        child.danger && "text-danger"
+                                    )}
+                                    color={child.danger ? "danger" : undefined}
+                                    startContent={child.icon}
+                                >
+                                    {child.name}
+                                </DropdownItem>
+                            ))}
+                        </DropdownMenu>
+                    </Dropdown>
+                );
+        }
+    };
+
     return (
         <Navbar
             position="static"
             isBordered
+            isMenuOpen={isMenuOpen}
+            onMenuOpenChange={setIsMenuOpen}
             classNames={{
+                menu: "overflow-y-hidden",
+                menuItem: "",
                 brand: "h-full d-flex items-center text-lg font-bold",
                 content: "gap-6",
-                item: "flex relative h-full items-center data-[active=true]:after:content-[''] data-[active=true]:after:absolute data-[active=true]:after:bottom-0 data-[active=true]:after:left-0 data-[active=true]:after:right-0 data-[active=true]:after:h-[2px] data-[active=true]:after:rounded-[2px] data-[active=true]:after:bg-danger"
+                item: [
+                    "flex relative h-full items-center",
+                    "data-[active=true]:after:content-[''] data-[active=true]:after:absolute data-[active=true]:after:bottom-0 data-[active=true]:after:left-0 data-[active=true]:after:right-0",
+                    "data-[active=true]:after:h-[2px] data-[active=true]:after:rounded-[2px] data-[active=true]:after:bg-danger"
+                ]
             }}
         >
-            <NavbarContent justify="start">
-                <NavbarBrand>
-                    <Image
-                        className="object-cover h-full p-3"
-                        src="/logo.svg"
-                        alt="The logo of the Personal-API dashboard"
-                        radius="none"
-                        disableSkeleton
-                    />
-                    <h1>Dashboard</h1>
-                </NavbarBrand>
+            {/* Desktop layout */}
+            <NavbarContent justify="start" className="hidden md:flex">
+                {brand}
             </NavbarContent>
-            <NavbarContent justify="center">
-                {headerItems.map(item => {
-                    switch (item.type) {
-                        case "route":
-                        case "action":
-                            return (
-                                <NavbarItem key={item.name} isActive={isHeaderItemActive(item)}>
-                                    <Button
-                                        className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent"
-                                        variant="light"
-                                        radius="sm"
-                                        disableRipple
-                                        onPress={() => handleItemAction(item)}
-                                    >
-                                        {item.name}
-                                    </Button>
-                                </NavbarItem>
-                            );
-                        case "menu":
-                            return (
-                                <Dropdown key={item.name}>
-                                    <NavbarItem isActive={isHeaderMenuActive(item)}>
-                                        <DropdownTrigger>
-                                            <Button
-                                                className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent gap-1.5"
-                                                variant="light"
-                                                radius="sm"
-                                                disableRipple
-                                                endContent={<BsChevronDown />}
-                                            >
-                                                {item.name}
-                                            </Button>
-                                        </DropdownTrigger>
-                                    </NavbarItem>
-                                    <DropdownMenu
-                                        aria-label={item.name}
-                                        variant="flat"
-                                        onAction={key => handleMenuAction(item, key)}
-                                    >
-                                        {item.children.map(child => (
-                                            <DropdownItem
-                                                key={child.name}
-                                                className={formatClassNames(
-                                                    child.danger && "text-danger",
-                                                    isHeaderItemActive(child) && "text-danger data-[hover=true]:text-danger"
-                                                )}
-                                                color={child.danger ? "danger" : undefined}
-                                                startContent={child.icon}
-                                            >
-                                                {child.name}
-                                            </DropdownItem>
-                                        ))}
-                                    </DropdownMenu>
-                                </Dropdown>
-                            );
-                    }
-                })}
+            <NavbarContent justify="center" className="hidden md:flex">
+                {headerItems.map(renderNavbarContentItem)}
             </NavbarContent>
+
+            {/* Mobile layout */}
+            <NavbarContent justify="start" className="md:hidden">
+                <NavbarMenuToggle />
+            </NavbarContent>
+            <NavbarMenu>
+                {headerItems.map(item => renderNavbarMenuItem(item))}
+            </NavbarMenu>
+            <NavbarContent justify="center" className="md:hidden">
+                {brand}
+            </NavbarContent>
+
             <NavbarContent justify="end" />
         </Navbar>
     );

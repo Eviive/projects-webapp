@@ -11,11 +11,12 @@ type HeaderActionItem = {
     handleAction: () => void | Promise<void>;
 };
 
-export type HeaderItem = (HeaderRouteItem | HeaderActionItem);
+export type HeaderItem = (HeaderRouteItem | HeaderActionItem) & {
+    danger?: boolean;
+};
 
 export type WithMenuAttributes<I extends HeaderItem> = I & {
     icon: ReactNode;
-    danger?: boolean;
 };
 
 export type HeaderMenu = {

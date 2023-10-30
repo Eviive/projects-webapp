@@ -30,7 +30,11 @@ export const HttpExchangesTable: FC<Props> = props => {
     const getCell = (httpExchange: HttpExchange, columnKey: Key): ReactNode | null => {
         switch (columnKey) {
             case "date":
-                return dateFormatter.format(new Date(httpExchange.timestamp));
+                return (
+                    <span className="whitespace-nowrap">
+                        {dateFormatter.format(new Date(httpExchange.timestamp))}
+                    </span>
+                );
 
             case "method":
                 return httpExchange.request.method;
