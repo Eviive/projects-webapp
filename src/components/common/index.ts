@@ -9,6 +9,7 @@ export { Loader } from "./Loader/Loader";
 export { Modal } from "./Modal/Modal";
 export { Toolbar } from "./Toolbar/Toolbar";
 export { SearchBar } from "./SearchBar/SearchBar";
+export { ContextMenu } from "./ContextMenu/ContextMenu";
 
 export { SortableList } from "./Sortable/SortableList/SortableList";
 export { SortableItem } from "./Sortable/SortableItem/SortableItem";

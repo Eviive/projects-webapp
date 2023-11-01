@@ -1,15 +1,19 @@
-import { Header, RequireAuth } from "components/common";
+import { ContextMenu, Header, RequireAuth } from "components/common";
+import { ContextMenuContextProvider } from "contexts/ContextMenuContext";
 import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 
 const Main: FC = () => {
     return (
-        <>
-            <Header />
-            <main className="grow flex flex-col">
-                <Outlet />
-            </main>
-        </>
+        <ContextMenuContextProvider>
+            <ContextMenu.Wrapper className="grow flex flex-col">
+                <Header />
+                <main className="grow flex flex-col">
+                    <Outlet />
+                    <ContextMenu />
+                </main>
+            </ContextMenu.Wrapper>
+        </ContextMenuContextProvider>
     );
 };
 
