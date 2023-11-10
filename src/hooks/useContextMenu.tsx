@@ -1,24 +1,38 @@
 import { useContextMenuContext } from "contexts/ContextMenuContext";
+import type { MouseEvent } from "react";
 import type { ContextMenuSection } from "types/context-menu";
 
 export const useContextMenu = () => {
 
-    const { sections, setSections, mouse, setMouse } = useContextMenuContext();
+    const { state, setState } = useContextMenuContext();
 
-    const addSection = (section: ContextMenuSection) => {
-        setSections(prevSections => [ ...prevSections, section ]);
+    const addSections = (e: MouseEvent, ...sections: ContextMenuSection[]) => {
+        e.preventDefault();
+        setState(prevState => {
+            const prevSections = prevState.status === "open"
+                ? prevState.sections
+                : [];
+
+            return {
+                ...prevState,
+                status: "open",
+                position: {
+                    x: e.pageX,
+                    y: e.pageY
+                },
+                sections: [ ...prevSections, ...sections ]
+            };
+        });
     };
 
     const closeContextMenu = () => {
-        setSections([]);
-        setMouse(null);
+        setState({ status: "closed" });
     };
 
     return {
-        sections,
-        addSection,
-        closeContextMenu,
-        mouse,
-        setMouse
+        state,
+        setState,
+        addSections,
+        closeContextMenu
     };
 };

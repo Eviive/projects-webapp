@@ -4,12 +4,24 @@ type ContextMenuItem = {
     title: string;
     icon: ReactNode;
     handleAction: () => void;
-    visible?: boolean;
+    danger?: boolean;
 };
 
 export type ContextMenuSection = {
     title: string;
     items: ContextMenuItem[];
+};
+
+export type ContextMenuState = ContextMenuStateOpen | ContextMenuStateClosed;
+
+type ContextMenuStateOpen = {
+    status: "open";
+    position: Mouse;
+    sections: ContextMenuSection[];
+};
+
+type ContextMenuStateClosed = {
+    status: "closed";
 };
 
 export type Mouse = {

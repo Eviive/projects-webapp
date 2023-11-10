@@ -7,7 +7,10 @@ type Dimensions = {
 
 export const useDimensions = <E extends HTMLElement = HTMLElement>() => {
 
-    const [ dimensions, setDimensions ] = useState<Dimensions | null>(null);
+    const [ dimensions, setDimensions ] = useState<Dimensions>({
+        width: 0,
+        height: 0
+    });
 
     const ref = useCallback((node: E) => {
         if (node === null) return;

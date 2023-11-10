@@ -6,13 +6,11 @@ import { Outlet } from "react-router-dom";
 const Main: FC = () => {
     return (
         <ContextMenuContextProvider>
-            <ContextMenu.Wrapper className="grow flex flex-col">
-                <Header />
-                <main className="grow flex flex-col">
-                    <Outlet />
-                    <ContextMenu />
-                </main>
-            </ContextMenu.Wrapper>
+            <Header />
+            <main className="grow flex flex-col">
+                <Outlet />
+                <ContextMenu />
+            </main>
         </ContextMenuContextProvider>
     );
 };

@@ -1,15 +1,14 @@
 import { httpClient } from "api/client";
 import { UserService } from "api/services";
 import { AxiosError } from "axios";
-import type { JwtPayload } from "jwt-decode";
-import decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { getTitleAndMessage } from "libs/utils";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 
 const isExpired = (token: string) => {
     try {
-        const { exp: expiresAt } = decode<JwtPayload>(token);
+        const { exp: expiresAt } = jwtDecode(token);
 
         return expiresAt && Date.now() >= expiresAt * 1000;
     } catch (e) {

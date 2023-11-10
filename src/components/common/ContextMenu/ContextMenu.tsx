@@ -4,15 +4,10 @@ import type { FC, Key } from "react";
 import { useCallback } from "react";
 import { useCloseEvents } from "../../../hooks/useCloseEvents";
 import { useDimensions } from "../../../hooks/useDimensions";
-import { ContextMenuWrapper } from "./ContextMenuWrapper/ContextMenuWrapper";
 
-type ContextMenuFC = FC & {
-    Wrapper: typeof ContextMenuWrapper;
-};
+export const ContextMenu: FC = () => {
 
-export const ContextMenu: ContextMenuFC = () => {
-
-    const { sections, closeContextMenu, mouse } = useContextMenu();
+    const { state, closeContextMenu } = useContextMenu();
 
     const { ref: dimensionsRef, dimensions } = useDimensions();
 
@@ -24,36 +19,42 @@ export const ContextMenu: ContextMenuFC = () => {
     }, [ closeRef, dimensionsRef ]);
 
     const handleAction = (key: Key) => {
-        sections
+        if (state.status === "closed") return;
+
+        state
+            .sections
             .flatMap(section => section.items)
             .find(item => item.title === key)
             ?.handleAction();
+
         closeContextMenu();
     };
 
     return (
         <>
-            {mouse && (
+            {state.status === "open" && (
                 <Listbox
                     ref={mergedRefs}
                     className="z-50 absolute w-[260px] bg-background border-small border-default-100 rounded-small shadow-sm"
                     style={{
-                        top: mouse.y + (dimensions?.height ?? 0) > document.body.clientHeight ? document.body.clientHeight - (dimensions?.height ?? 0) : mouse.y,
-                        left: mouse.x + (dimensions?.width ?? 0) > document.body.clientWidth ? document.body.clientWidth - (dimensions?.width ?? 0) : mouse.x
+                        top: state.position.y + dimensions.height > document.body.clientHeight ? document.body.clientHeight - dimensions.height : state.position.y,
+                        left: state.position.x + dimensions.width > document.body.clientWidth ? document.body.clientWidth - dimensions.width : state.position.x
                     }}
                     variant="flat"
                     aria-label="Context menu"
                     onAction={handleAction}
                 >
-                    {sections.map((section, i) => (
+                    {state.sections.map((section, i) => (
                         <ListboxSection
                             key={section.title}
                             title={section.title}
-                            showDivider={i !== sections.length - 1}
+                            showDivider={i !== state.sections.length - 1}
                         >
                             {section.items.map(item => (
                                 <ListboxItem
                                     key={item.title}
+                                    className={item.danger ? "text-danger" : undefined}
+                                    color={item.danger ? "danger" : undefined}
                                     startContent={item.icon}
                                 >
                                     {item.title}
@@ -66,5 +67,3 @@ export const ContextMenu: ContextMenuFC = () => {
         </>
     );
 };
-
-ContextMenu.Wrapper = ContextMenuWrapper;
