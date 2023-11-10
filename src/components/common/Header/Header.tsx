@@ -92,22 +92,22 @@ export const Header: FC = () => {
         }
     ]), [ queryClient, setAccessToken ]);
 
-    const handleItemAction = (item: HeaderItem) => {
+    const handleItemAction = async (item: HeaderItem) => {
         switch (item.type) {
             case "route":
                 navigate(item.path);
                 break;
             case "action":
-                item.handleAction();
+                await item.handleAction();
                 break;
         }
         setIsMenuOpen(false);
     };
 
-    const handleMenuAction = (menu: HeaderMenu, key: Key) => {
+    const handleMenuAction = async (menu: HeaderMenu, key: Key) => {
         const item = menu.children.find(child => child.name === key);
         if (item) {
-            handleItemAction(item);
+            await handleItemAction(item);
         }
     };
 

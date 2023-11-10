@@ -16,23 +16,21 @@ export const SortableDragHandle: FC<Props> = props => {
     } = useSortableItemContext();
 
     return (
-        <>
-            <Button
-                as="div"
-                className={props.className}
-                isIconOnly
-                size="sm"
+        <Button
+            as="div"
+            className={props.className}
+            isIconOnly
+            size="sm"
+        >
+            <button
+                ref={setActivatorNodeRef}
+                {...attributes}
+                {...listeners}
+                className="w-full h-full grid place-items-center"
+                style={{ cursor: props.isDragging ? "grabbing" : "grab" }}
             >
-                <button
-                    ref={setActivatorNodeRef}
-                    {...attributes}
-                    {...listeners}
-                    className="w-full h-full grid place-items-center"
-                    style={{ cursor: props.isDragging ? "grabbing" : "grab" }}
-                >
-                    <RxDragHandleDots2 size={25}/>
-                </button>
-            </Button>
-        </>
+                <RxDragHandleDots2 size={25}/>
+            </button>
+        </Button>
     );
 };

@@ -18,11 +18,13 @@ export const Home: FC = () => {
                     <div className="flex flex-col gap-20">
                         <div>
                             <h1 className="text-3xl font-medium">
-                                Welcome to the&nbsp;
+                                Welcome to the
+                                {" "}
                                 <strong className="text-transparent font-bold bg-gradient-to-b bg-clip-text from-[hsl(347deg_84%_50%)] to-pink-600">
                                     {queryInfo.data.app.name}
                                 </strong>
-                                &nbsp;dashboard !
+                                {" "}
+                                dashboard !
                             </h1>
                             <h2 className="text-lg">
                                 {queryInfo.data.app.stage.toUpperCase()} v{queryInfo.data.app.version}

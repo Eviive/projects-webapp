@@ -43,7 +43,7 @@ export const useAxiosInterceptors = (accessToken: string, setAccessToken: Dispat
 
                     if (!resRefresh.roles.includes("ROLE_ADMIN")) {
                         setAccessToken("");
-                        return Promise.reject("User is not admin");
+                        return Promise.reject(new Error("User is not admin"));
                     }
 
                     const newToken = resRefresh.accessToken;
