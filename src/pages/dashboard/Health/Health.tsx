@@ -35,7 +35,7 @@ export const Health: FC = () => {
 
     return (
         <Page title="Health">
-            { query.isSuccess
+            {query.isSuccess
 
                 ? <div className="w-full h-full px-[5%] py-16 flex flex-col gap-12">
                     <GridLayout columnCount={4}>

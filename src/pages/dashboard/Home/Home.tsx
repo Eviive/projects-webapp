@@ -12,7 +12,7 @@ export const Home: FC = () => {
 
     return (
         <Page title="Home">
-            { (queryInfo.isSuccess && queryHealth.isSuccess)
+            {(queryInfo.isSuccess && queryHealth.isSuccess)
 
                 ? <div className="w-full h-full px-[5%] py-16">
                     <div className="flex flex-col gap-20">

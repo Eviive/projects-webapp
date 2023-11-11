@@ -53,7 +53,7 @@ export const Skills: FC = () => {
 
     return (
         <Page title="Skills">
-            { query.isSuccess
+            {query.isSuccess
 
                 ? <div className="w-full h-full px-[5%] py-12 flex flex-col gap-12">
                     {skillForm.show &&

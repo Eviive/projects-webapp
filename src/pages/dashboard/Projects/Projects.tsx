@@ -53,7 +53,7 @@ export const Projects: FC = () => {
 
     return (
         <Page title="Projects">
-            { query.isSuccess
+            {query.isSuccess
 
                 ? <div className="w-full h-full px-[5%] py-12 flex flex-col justify-center items-center gap-16">
                     {projectForm.show &&
