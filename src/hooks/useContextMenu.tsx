@@ -6,7 +6,7 @@ export const useContextMenu = () => {
 
     const { state, setState } = useContextMenuContext();
 
-    const addSections = (e: MouseEvent, ...sections: ContextMenuSection[]) => {
+    const addSections = (e: MouseEvent, section: ContextMenuSection) => {
         e.preventDefault();
         setState(prevState => {
             const prevSections = prevState.status === "open"
@@ -20,7 +20,7 @@ export const useContextMenu = () => {
                     x: e.pageX,
                     y: e.pageY
                 },
-                sections: [ ...prevSections, ...sections ]
+                sections: [ ...prevSections, section ]
             };
         });
     };

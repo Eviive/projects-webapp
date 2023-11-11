@@ -5,7 +5,6 @@ import { App } from "App";
 import { ErrorPage } from "components/common";
 import { AuthContextProvider } from "contexts/AuthContext";
 import { MainLayout } from "layouts";
-import { Health, Home, Login, Projects, Skills } from "pages";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -40,25 +39,40 @@ const router = createBrowserRouter(
                     children: [
                         {
                             index: true,
-                            element: <Home />
+                            lazy: async () => {
+                                const { Home } = await import("pages/dashboard");
+                                return { Component: Home };
+                            }
                         },
                         {
                             path: "/projects",
-                            element: <Projects />
+                            lazy: async () => {
+                                const { Projects } = await import("pages/dashboard");
+                                return { Component: Projects };
+                            }
                         },
                         {
                             path: "/skills",
-                            element: <Skills />
+                            lazy: async () => {
+                                const { Skills } = await import("pages/dashboard");
+                                return { Component: Skills };
+                            }
                         },
                         {
                             path: "/health",
-                            element: <Health />
+                            lazy: async () => {
+                                const { Health } = await import("pages/dashboard");
+                                return { Component: Health };
+                            }
                         }
                     ]
                 },
                 {
                     path: "/login",
-                    element: <Login />
+                    lazy: async () => {
+                        const { Login } = await import("pages/auth");
+                        return { Component: Login };
+                    }
                 }
             ]
         }
