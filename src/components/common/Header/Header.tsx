@@ -157,9 +157,9 @@ export const Header: FC = () => {
             case "menu":
                 return (
                     <Fragment key={item.name}>
-                        <li className="flex items-center gap-2 text-small text-gray-500">
+                        <li className="flex items-center gap-2 text-small text-gray-600">
                             {item.name}
-                            <Divider className="w-auto grow"/>
+                            <Divider className="grow w-auto bg-gray-600"/>
                         </li>
                         {item.children.map((child, i) => renderNavbarMenuItem(child, i === item.children.length - 1))}
                     </Fragment>
@@ -226,7 +226,7 @@ export const Header: FC = () => {
 
     return (
         <Navbar
-            position="static"
+            position={isMenuOpen ? "sticky" : "static"}
             isBordered
             isMenuOpen={isMenuOpen}
             onMenuOpenChange={setIsMenuOpen}
