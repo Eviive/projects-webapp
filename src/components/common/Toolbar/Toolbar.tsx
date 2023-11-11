@@ -18,13 +18,13 @@ export const Toolbar: FC<Props> = props => {
             {props.tools.map(tool => (
                 <Button
                     key={tool.name}
+                    size="lg"
+                    color="danger"
+                    radius="full"
+                    isIconOnly
                     isLoading={tool.loading}
                     isDisabled={tool.disabled}
-                    onClick={tool.handleClick}
-                    isIconOnly
-                    size="lg"
-                    radius="full"
-                    color="danger"
+                    onPress={tool.handleClick}
                 >
                     {!tool.loading && tool.children}
                 </Button>

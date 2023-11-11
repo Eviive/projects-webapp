@@ -5,7 +5,12 @@ type Dimensions = {
     height: number;
 };
 
-export const useDimensions = <E extends HTMLElement = HTMLElement>() => {
+type UseDimensionsOutput<E extends HTMLElement> = {
+    ref: (node: E) => void;
+    dimensions: Dimensions;
+};
+
+export const useDimensions = <E extends HTMLElement = HTMLElement>(): UseDimensionsOutput<E> => {
 
     const [ dimensions, setDimensions ] = useState<Dimensions>({
         width: 0,

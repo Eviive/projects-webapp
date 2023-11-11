@@ -35,7 +35,7 @@ export const ContextMenu: FC = () => {
             {state.status === "open" && (
                 <Listbox
                     ref={mergedRefs}
-                    className="z-50 absolute w-[260px] bg-background border-small border-default-100 rounded-small shadow-sm"
+                    className="z-50 absolute w-[260px] bg-background border-small border-default-100 rounded-small shadow-medium"
                     style={{
                         top: state.position.y + dimensions.height > document.body.clientHeight ? document.body.clientHeight - dimensions.height : state.position.y,
                         left: state.position.x + dimensions.width > document.body.clientWidth ? document.body.clientWidth - dimensions.width : state.position.x

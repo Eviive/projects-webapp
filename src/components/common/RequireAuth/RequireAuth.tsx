@@ -19,7 +19,7 @@ export const RequireAuth = (WrappedComponent: FC) => {
             }
         }, [ accessToken, navigate ]);
 
-        return <>{isAuthenticated ? <WrappedComponent /> : null}</>;
+        return <>{isAuthenticated && <WrappedComponent />}</>;
     };
 
     EnhancedComponent.displayName = `RequireAuth(${WrappedComponent.displayName})`;

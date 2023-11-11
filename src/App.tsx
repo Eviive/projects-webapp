@@ -12,11 +12,11 @@ import "./styles/reset.scss";
 
 export const App: FC = () => {
 
-    const [ isLoading, setIsLoading ] = useState(true);
-
     const { accessToken, setAccessToken } = useAuthContext();
 
     useAxiosInterceptors(accessToken, setAccessToken);
+
+    const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -34,7 +34,7 @@ export const App: FC = () => {
 
     return (
         <>
-            { !isLoading
+            {!isLoading
                 ? <Outlet/>
                 : <Loader/>
             }

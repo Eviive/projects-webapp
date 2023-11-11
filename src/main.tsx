@@ -8,6 +8,7 @@ import { MainLayout } from "layouts";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ThemeContextProvider } from "./contexts/ThemeContext";
 
 const rootElement = document.querySelector("#root");
 if (!rootElement) throw new Error("Root element not found");
@@ -84,13 +85,15 @@ const router = createBrowserRouter(
 
 root.render(
     <StrictMode>
-        <NextUIProvider className="min-h-screen min-h-screen-dynamic flex flex-col">
-            <AuthContextProvider>
-                <QueryClientProvider client={queryClient}>
-                    <RouterProvider router={router} />
-                    <ReactQueryDevtools></ReactQueryDevtools>
-                </QueryClientProvider>
-            </AuthContextProvider>
-        </NextUIProvider>
+        <ThemeContextProvider>
+            <NextUIProvider className="min-h-screen min-h-screen-dynamic flex flex-col">
+                <AuthContextProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <RouterProvider router={router} />
+                        <ReactQueryDevtools></ReactQueryDevtools>
+                    </QueryClientProvider>
+                </AuthContextProvider>
+            </NextUIProvider>
+        </ThemeContextProvider>
     </StrictMode>
 );

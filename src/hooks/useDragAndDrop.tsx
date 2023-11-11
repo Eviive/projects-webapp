@@ -3,7 +3,7 @@ import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import type { DndItem, DndState } from "types/dnd";
 
-type useDragAndDropReturnType<T extends DndItem> = {
+type UseDragAndDropOutput<T extends DndItem> = {
     items: [ T[], Dispatch<SetStateAction<T[]>> ];
     dndState: DndState;
     handleToggleDnd: () => (void | Promise<void>);
@@ -13,7 +13,7 @@ type useDragAndDropReturnType<T extends DndItem> = {
 export const useDragAndDrop = <T extends DndItem>(
     query: UseQueryResult<T[]>,
     saveOrder: (items: T[]) => (void | Promise<void>)
-): useDragAndDropReturnType<T> => {
+): UseDragAndDropOutput<T> => {
 
     const [ items, setItems ] = useState<T[]>(query.data?.sort((a, b) => a.sort - b.sort) ?? []);
 

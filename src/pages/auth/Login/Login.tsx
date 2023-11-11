@@ -47,7 +47,7 @@ export const Login: FC = () => {
 
     return (
         <Page title="Login">
-            { redirect
+            {redirect
 
                 ? <Navigate to="/" />
 

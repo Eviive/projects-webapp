@@ -2,12 +2,13 @@ import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger,
 import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
 import { useAuthContext } from "contexts/AuthContext";
+import { useThemeContext } from "contexts/ThemeContext";
 import { formatClassNames, getTitleAndMessage } from "libs/utils";
 import type { FC, Key } from "react";
 import { Fragment, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { BiPlusMedical } from "react-icons/bi";
-import { BsChevronDown } from "react-icons/bs";
+import { BsChevronDown, BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import { MdOutlineDesktopWindows, MdRefresh } from "react-icons/md";
 import { RiToolsLine } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
@@ -24,7 +25,7 @@ export const Header: FC = () => {
 
     const location = useLocation();
 
-    const [ isMenuOpen, setIsMenuOpen ] = useState(false);
+    const { theme, toggleTheme } = useThemeContext();
 
     const headerItems = useMemo<(HeaderItem | HeaderMenu)[]>(() => ([
         {
@@ -91,6 +92,8 @@ export const Header: FC = () => {
             ]
         }
     ]), [ queryClient, setAccessToken ]);
+
+    const [ isMenuOpen, setIsMenuOpen ] = useState(false);
 
     const handleItemAction = async (item: HeaderItem) => {
         switch (item.type) {
@@ -261,7 +264,20 @@ export const Header: FC = () => {
                 {brand}
             </NavbarContent>
 
-            <NavbarContent justify="end" />
+            <NavbarContent justify="end">
+                <NavbarItem>
+                    <Button
+                        variant="flat"
+                        isIconOnly
+                        onPress={toggleTheme}
+                    >
+                        {theme === "dark"
+                            ? <BsFillMoonFill size={20} />
+                            : <BsFillSunFill size={20} />
+                        }
+                    </Button>
+                </NavbarItem>
+            </NavbarContent>
         </Navbar>
     );
 };

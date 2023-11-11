@@ -19,8 +19,8 @@ export const SortableDragHandle: FC<Props> = props => {
         <Button
             as="div"
             className={props.className}
-            isIconOnly
             size="sm"
+            isIconOnly
         >
             <button
                 ref={setActivatorNodeRef}

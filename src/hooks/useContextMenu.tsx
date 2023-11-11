@@ -2,7 +2,12 @@ import { useContextMenuContext } from "contexts/ContextMenuContext";
 import type { MouseEvent } from "react";
 import type { ContextMenuSection } from "types/context-menu";
 
-export const useContextMenu = () => {
+type UseContextMenuOutput = Pick<ReturnType<typeof useContextMenuContext>, "state" | "setState"> & {
+    addSections: (e: MouseEvent, section: ContextMenuSection) => void;
+    closeContextMenu: () => void;
+};
+
+export const useContextMenu = (): UseContextMenuOutput => {
 
     const { state, setState } = useContextMenuContext();
 
