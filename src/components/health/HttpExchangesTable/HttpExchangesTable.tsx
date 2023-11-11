@@ -78,13 +78,10 @@ export const HttpExchangesTable: FC<Props> = props => {
 
     return (
         <>
-            {!!httpExchangeDetails && (
-                <HttpExchangeDetails
-                    httpExchange={httpExchangeDetails}
-                    handleClose={() => setHttpExchangeDetails(null)}
-                />
-            )}
-
+            <HttpExchangeDetails
+                httpExchange={httpExchangeDetails}
+                handleClose={() => setHttpExchangeDetails(null)}
+            />
             <Table
                 aria-label="Http Exchanges"
                 bottomContent={
