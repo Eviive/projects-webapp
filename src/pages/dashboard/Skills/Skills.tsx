@@ -61,7 +61,10 @@ export const Skills: FC = () => {
                         numberOfSkills={skillItems.length}
                         handleClose={handleClose}
                     />
-                    <SearchBar handleChange={setSearchQuery} />
+                    <SearchBar
+                        value={searchQuery}
+                        handleChange={setSearchQuery}
+                    />
                     <SortableList
                         items={filteredSkillItems}
                         setItems={setSkillItems}

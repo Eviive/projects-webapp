@@ -1,6 +1,7 @@
-import { Button, ButtonGroup, Input } from "@nextui-org/react";
+import { Button, ButtonGroup } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
+import { FormInput } from "components/common";
 import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
 import { getTitleAndMessage } from "libs/utils";
@@ -27,8 +28,8 @@ export const SkillForm: FC<Props> = props => {
 
     const form = useForm<SkillFormValue>({ defaultValues: props.skill ?? undefined });
     const {
-        register,
         handleSubmit,
+        control,
         getValues,
         setValue,
         formState: { isDirty }
@@ -99,31 +100,36 @@ export const SkillForm: FC<Props> = props => {
                 className="mb-2 flex flex-col gap-4 items-center"
                 onSubmit={handleSubmit(submitHandler)}
             >
-                <Input
-                    {...register("name", {
-                        onChange: () => {
-                            const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
-                                  isNameEmpty = !name.trim(),
-                                  isAltEnEmpty = !altEn.trim(),
-                                  isAltFrEmpty = !altFr.trim(),
-                                  isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
-                                  isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
-
-                            (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
-                            (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
-
-                            setOldName(name);
+                <FormInput
+                    name="name"
+                    control={control}
+                    rules={{
+                        required: "Name is required",
+                        maxLength: {
+                            value: 50,
+                            message: "Name cannot exceed 50 characters"
                         }
-                    })}
-                    // defaultValue={props.skill?.name ?? ""}
+                    }}
+                    handleChange={() => {
+                        const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
+                              isNameEmpty = !name.trim(),
+                              isAltEnEmpty = !altEn.trim(),
+                              isAltFrEmpty = !altFr.trim(),
+                              isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
+                              isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
+
+                        (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
+                        (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
+
+                        setOldName(name);
+                    }}
                     label="Name"
-                    maxLength={50}
                     isRequired
                 />
 
                 <ImageForm />
 
-                <ButtonGroup className="mt-2 w-full">
+                <ButtonGroup className="w-full">
                     {!!props.skill && (
                         <Button
                             className="w-full"

@@ -1,6 +1,6 @@
-import { Button, Card, CardBody, Input } from "@nextui-org/react";
+import { Button, Card, CardBody } from "@nextui-org/react";
 import { UserService } from "api/services";
-import { Page } from "components/common";
+import { FormInput, Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
@@ -19,7 +19,7 @@ export const Login: FC = () => {
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
 
-    const { register, handleSubmit } = useForm<AuthRequest>();
+    const { control, handleSubmit } = useForm<AuthRequest>();
 
     useLayoutEffect(() => {
         if (accessToken) {
@@ -53,14 +53,22 @@ export const Login: FC = () => {
                             className="p-3 grid grid-rows-3 gap-8"
                             onSubmit={handleSubmit(submitHandler)}
                         >
-                            <Input
-                                {...register("username")}
+                            <FormInput
+                                name="username"
+                                control={control}
+                                rules={{
+                                    required: "Username is required"
+                                }}
                                 label="Username"
                                 autoComplete="username"
                                 isRequired
                             />
-                            <Input
-                                {...register("password")}
+                            <FormInput
+                                name="password"
+                                control={control}
+                                rules={{
+                                    required: "Password is required"
+                                }}
                                 type="password"
                                 label="Password"
                                 autoComplete="current-password"

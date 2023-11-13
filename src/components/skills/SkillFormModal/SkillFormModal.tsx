@@ -16,18 +16,26 @@ export const SkillFormModal: FC<Props> = props => {
             isOpen={props.isOpen}
             onOpenChange={props.onOpenChange}
             onClose={() => props.handleClose(false, false)}
+            isDismissable={false}
         >
             <ModalContent>
-                <ModalHeader>{props.skill ? `Editing ${props.skill.name}` : "Creating skill"}</ModalHeader>
-                <ModalBody>
-                    {props.isOpen && (
-                        <SkillForm
-                            skill={props.skill}
-                            numberOfSkills={props.numberOfSkills}
-                            handleClose={props.handleClose}
-                        />
-                    )}
-                </ModalBody>
+                {onClose => (
+                    <>
+                        <ModalHeader>{props.skill ? `Editing ${props.skill.name}` : "Creating skill"}</ModalHeader>
+                        <ModalBody>
+                            {props.isOpen && (
+                                <SkillForm
+                                    skill={props.skill}
+                                    numberOfSkills={props.numberOfSkills}
+                                    handleClose={(isTouched, isDeleted) => {
+                                        props.handleClose(isTouched, isDeleted);
+                                        onClose();
+                                    }}
+                                />
+                            )}
+                        </ModalBody>
+                    </>
+                )}
             </ModalContent>
         </Modal>
     );
