@@ -3,7 +3,6 @@ export { Header } from "./Header/Header";
 export { Link } from "./Link/Link";
 export { Anchor } from "./Anchor/Anchor";
 export { Page } from "./Page/Page";
-export { Input } from "./Input/Input";
 export { RequireAuth } from "./RequireAuth/RequireAuth";
 export { Loader } from "./Loader/Loader";
 export { Modal } from "./Modal/Modal";

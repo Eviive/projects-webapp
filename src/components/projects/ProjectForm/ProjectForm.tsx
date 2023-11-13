@@ -1,7 +1,7 @@
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService, SkillService } from "api/services";
-import { Input, Modal } from "components/common";
+import { Modal } from "components/common";
 import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
 import { getTitleAndMessage } from "libs/utils";

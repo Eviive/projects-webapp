@@ -1,7 +1,6 @@
-import { Button } from "@nextui-org/react";
+import { Button, ButtonGroup, Input } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Input, Modal } from "components/common";
 import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
 import { getTitleAndMessage } from "libs/utils";
@@ -12,23 +11,21 @@ import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { Skill, WithImageFile } from "types/entities";
 
-import styles from "./skill-form.module.scss";
-
-type SkillFormValues = WithImageFile<Skill>;
+type SkillFormValue = WithImageFile<Skill>;
 
 type Props = {
-    skill?: Skill;
+    skill: Skill | null;
     numberOfSkills: number;
     handleClose: (isTouched: boolean, isDeleted: boolean) => void;
 };
 
-export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, handleClose }) => {
+export const SkillForm: FC<Props> = props => {
 
     const queryClient = useQueryClient();
 
     const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
-    const form = useForm<SkillFormValues>({ defaultValues: initialSkill });
+    const form = useForm<SkillFormValue>({ defaultValues: props.skill ?? undefined });
     const {
         register,
         handleSubmit,
@@ -37,25 +34,25 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
         formState: { isDirty }
     } = form;
 
-    const [ oldName, setOldName ] = useState(initialSkill?.name ?? "");
+    const [ oldName, setOldName ] = useState(props.skill?.name ?? "");
 
-    const submitHandler: SubmitHandler<SkillFormValues> = async data => {
+    const submitHandler: SubmitHandler<SkillFormValue> = async data => {
         if (submissionState.isSubmittingEdition) return;
-        if (!isDirty) return handleClose(false, false);
+        if (!isDirty) return props.handleClose(false, false);
         dispatchSubmissionState("editionStarted");
-        const editing = !!initialSkill;
+        const editing = !!props.skill;
         try {
             const skill: Skill = {
                 ...data,
                 image: {
                     id: data.image.id,
-                    uuid: initialSkill?.image?.uuid,
+                    uuid: props.skill?.image?.uuid,
                     altEn: data.image.altEn,
                     altFr: data.image.altFr
                 }
             };
             if (!editing) {
-                skill.sort = numberOfSkills + 1;
+                skill.sort = props.numberOfSkills + 1;
             }
 
             const imageFile = data.image.file.item(0);
@@ -72,7 +69,7 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
 
             await queryClient.invalidateQueries([ "skills" ]);
             console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
-            handleClose(true, false);
+            props.handleClose(true, false);
         } catch (e) {
             console.error(editing ? "Skill update failed" : "Skill creation failed", getTitleAndMessage(e));
         } finally {
@@ -82,13 +79,13 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
 
     const handleDelete = async () => {
         if (submissionState.isSubmittingDeletion) return;
-        if (!initialSkill) return;
+        if (!props.skill) return;
         dispatchSubmissionState("deletionStarted");
         try {
-            await SkillService.delete(initialSkill.id);
+            await SkillService.delete(props.skill.id);
             await queryClient.invalidateQueries([ "skills" ]);
             console.log("Skill deleted successfully!");
-            handleClose(false, true);
+            props.handleClose(false, true);
         } catch (e) {
             console.error("Skill deletion failed", getTitleAndMessage(e));
         } finally {
@@ -97,45 +94,57 @@ export const SkillForm: FC<Props> = ({ skill: initialSkill, numberOfSkills, hand
     };
 
     return (
-        <Modal
-            title={initialSkill ? `Editing ${initialSkill.name}` : "Creating skill"}
-            handleClose={() => handleClose(false, false)}
-            config={{ outsideClick: !isDirty, escapeKey: !isDirty }}
-        >
-            <FormProvider {...form}>
-                <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-                    <Input
-                        attributes={{
-                            ...register("name", {
-                                onChange: () => {
-                                    const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
-                                          isNameEmpty = !name.trim(),
-                                          isAltEnEmpty = !altEn.trim(),
-                                          isAltFrEmpty = !altFr.trim(),
-                                          isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
-                                          isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
+        <FormProvider {...form}>
+            <form
+                className="mb-2 flex flex-col gap-4 items-center"
+                onSubmit={handleSubmit(submitHandler)}
+            >
+                <Input
+                    {...register("name", {
+                        onChange: () => {
+                            const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
+                                  isNameEmpty = !name.trim(),
+                                  isAltEnEmpty = !altEn.trim(),
+                                  isAltFrEmpty = !altFr.trim(),
+                                  isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
+                                  isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
 
-                                    (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
-                                    (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
+                            (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
+                            (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
 
-                                    setOldName(name);
-                                }
-                            }),
-                            required: true,
-                            maxLength: 50
-                        }}
-                        label="Name"
-                        wrapperClassName={styles.field}
-                    />
+                            setOldName(name);
+                        }
+                    })}
+                    // defaultValue={props.skill?.name ?? ""}
+                    label="Name"
+                    maxLength={50}
+                    isRequired
+                />
 
-                    <ImageForm inputsClassName={styles.field} />
+                <ImageForm />
 
-                    <div className={styles.buttonsWrapper}>
-                        {!!initialSkill && <Button loading={submissionState.isSubmittingDeletion} handleClick={handleDelete}>Delete</Button>}
-                        <Button className={styles.submit} loading={submissionState.isSubmittingEdition}>Submit</Button>
-                    </div>
-                </form>
-            </FormProvider>
-        </Modal>
+                <ButtonGroup className="mt-2 w-full">
+                    {!!props.skill && (
+                        <Button
+                            className="w-full"
+                            variant="flat"
+                            color="danger"
+                            isLoading={submissionState.isSubmittingDeletion}
+                            onPress={handleDelete}
+                        >
+                            Delete
+                        </Button>
+                    )}
+                    <Button
+                        className="w-full"
+                        type="submit"
+                        variant="flat"
+                        isLoading={submissionState.isSubmittingEdition}
+                    >
+                        Submit
+                    </Button>
+                </ButtonGroup>
+            </form>
+        </FormProvider>
     );
 };

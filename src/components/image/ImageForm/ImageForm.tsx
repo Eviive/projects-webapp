@@ -1,48 +1,35 @@
-import { Input } from "components/common";
+import { Input } from "@nextui-org/react";
 import type { FC } from "react";
 import { useFormContext } from "react-hook-form";
 import type { Image, WithImageFile } from "types/entities";
 
 type ImageFormValues = WithImageFile<{ image: Image }>;
 
-type Props = {
-    inputsClassName?: string;
-};
-
-export const ImageForm: FC<Props> = ({ inputsClassName }) => {
+export const ImageForm: FC = () => {
 
     const { register } = useFormContext<ImageFormValues>();
 
     return (
         <>
             <Input
-                attributes={{
-                    ...register("image.file"),
-                    type: "file",
-                    accept: "image/*"
-                }}
+                {...register("image.file")}
                 label="Image file"
-                wrapperClassName={inputsClassName}
+                type="file"
+                accept="image/*"
             />
 
             <Input
-                attributes={{
-                    ...register("image.altEn"),
-                    maxLength: 255,
-                    required: true
-                }}
+                {...register("image.altEn")}
                 label="Image english alt"
-                wrapperClassName={inputsClassName}
+                maxLength={255}
+                isRequired
             />
 
             <Input
-                attributes={{
-                    ...register("image.altFr"),
-                    maxLength: 255,
-                    required: true
-                }}
+                {...register("image.altFr")}
                 label="Image french alt"
-                wrapperClassName={inputsClassName}
+                maxLength={255}
+                isRequired
             />
         </>
     );

@@ -1,4 +1,4 @@
-import { Input } from "components/common";
+import { Input } from "@nextui-org/react";
 import type { FC } from "react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
