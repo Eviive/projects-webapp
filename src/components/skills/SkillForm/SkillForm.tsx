@@ -1,15 +1,13 @@
-import { Button, ButtonGroup } from "@nextui-org/react";
+import { Button, ButtonGroup, Input } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { FormInput } from "components/common";
 import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
 import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import type { Skill, WithImageFile } from "types/entities";
 
 type SkillFormValue = WithImageFile<Skill>;
@@ -29,16 +27,18 @@ export const SkillForm: FC<Props> = props => {
     const form = useForm<SkillFormValue>({ defaultValues: props.skill ?? undefined });
     const {
         handleSubmit,
-        control,
         getValues,
         setValue,
-        formState: { isDirty }
+        control,
+        formState: {
+            isDirty
+        }
     } = form;
 
     const [ oldName, setOldName ] = useState(props.skill?.name ?? "");
 
     const submitHandler: SubmitHandler<SkillFormValue> = async data => {
-        if (submissionState.isSubmittingEdition) return;
+        if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
         if (!isDirty) return props.handleClose(false, false);
         dispatchSubmissionState("editionStarted");
         const editing = !!props.skill;
@@ -57,10 +57,6 @@ export const SkillForm: FC<Props> = props => {
             }
 
             const imageFile = data.image.file.item(0);
-            if (imageFile?.size && imageFile.size > 3 * 1024 * 1024) {
-                toast.error("Image size cannot exceed 3MB");
-                return;
-            }
 
             if (editing) {
                 await SkillService.update(skill, imageFile);
@@ -79,7 +75,7 @@ export const SkillForm: FC<Props> = props => {
     };
 
     const handleDelete = async () => {
-        if (submissionState.isSubmittingDeletion) return;
+        if (submissionState.isSubmittingDeletion || submissionState.isSubmittingEdition) return;
         if (!props.skill) return;
         dispatchSubmissionState("deletionStarted");
         try {
@@ -100,31 +96,38 @@ export const SkillForm: FC<Props> = props => {
                 className="mb-2 flex flex-col gap-4 items-center"
                 onSubmit={handleSubmit(submitHandler)}
             >
-                <FormInput
+                <Controller
                     name="name"
                     control={control}
                     rules={{
                         required: "Name is required",
                         maxLength: {
                             value: 50,
-                            message: "Name cannot exceed 50 characters"
+                            message: `Name cannot exceed 50 characters (currently ${getValues("name")?.length})`
+                        },
+                        onChange: () => {
+                            const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
+                                  isNameEmpty = !name.trim(),
+                                  isAltEnEmpty = !altEn.trim(),
+                                  isAltFrEmpty = !altFr.trim(),
+                                  isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
+                                  isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
+
+                            (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
+                            (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
+
+                            setOldName(name);
                         }
                     }}
-                    handleChange={() => {
-                        const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
-                              isNameEmpty = !name.trim(),
-                              isAltEnEmpty = !altEn.trim(),
-                              isAltFrEmpty = !altFr.trim(),
-                              isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
-                              isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
-
-                        (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
-                        (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
-
-                        setOldName(name);
-                    }}
-                    label="Name"
-                    isRequired
+                    defaultValue=""
+                    render={({ field, fieldState }) => (
+                        <Input
+                            {...field}
+                            label="Name"
+                            errorMessage={fieldState.error?.message}
+                            isRequired
+                        />
+                    )}
                 />
 
                 <ImageForm />
@@ -133,7 +136,6 @@ export const SkillForm: FC<Props> = props => {
                     {!!props.skill && (
                         <Button
                             className="w-full"
-                            variant="flat"
                             color="danger"
                             isLoading={submissionState.isSubmittingDeletion}
                             onPress={handleDelete}
@@ -144,7 +146,6 @@ export const SkillForm: FC<Props> = props => {
                     <Button
                         className="w-full"
                         type="submit"
-                        variant="flat"
                         isLoading={submissionState.isSubmittingEdition}
                     >
                         Submit

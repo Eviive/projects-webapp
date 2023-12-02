@@ -26,5 +26,5 @@ export const getTitleAndMessage = (e: unknown): string => {
         };
     }
 
-    return `${titleAndMessage.title}, ${Array.isArray(titleAndMessage.message) ? titleAndMessage.message.join(" ") : titleAndMessage.message}`;
+    return `${titleAndMessage.title}: ${Array.isArray(titleAndMessage.message) ? titleAndMessage.message.join(" ") : titleAndMessage.message}`;
 };

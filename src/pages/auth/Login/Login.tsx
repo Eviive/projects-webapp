@@ -1,6 +1,6 @@
-import { Button, Card, CardBody } from "@nextui-org/react";
+import { Button, Card, CardBody, Input } from "@nextui-org/react";
 import { UserService } from "api/services";
-import { FormInput, Page } from "components/common";
+import { Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
@@ -19,7 +19,7 @@ export const Login: FC = () => {
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
 
-    const { control, handleSubmit } = useForm<AuthRequest>();
+    const { register, handleSubmit } = useForm<AuthRequest>();
 
     useLayoutEffect(() => {
         if (accessToken) {
@@ -53,22 +53,20 @@ export const Login: FC = () => {
                             className="p-3 grid grid-rows-3 gap-8"
                             onSubmit={handleSubmit(submitHandler)}
                         >
-                            <FormInput
-                                name="username"
-                                control={control}
-                                rules={{
+                            <Input
+                                {...register("username", {
                                     required: "Username is required"
-                                }}
+                                })}
+                                name="username"
                                 label="Username"
                                 autoComplete="username"
                                 isRequired
                             />
-                            <FormInput
-                                name="password"
-                                control={control}
-                                rules={{
+                            <Input
+                                {...register("password", {
                                     required: "Password is required"
-                                }}
+                                })}
+                                name="password"
                                 type="password"
                                 label="Password"
                                 autoComplete="current-password"
