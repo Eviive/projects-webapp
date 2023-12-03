@@ -30,9 +30,7 @@ export const SkillForm: FC<Props> = props => {
         getValues,
         setValue,
         control,
-        formState: {
-            isDirty
-        }
+        formState: { isDirty }
     } = form;
 
     const [ oldName, setOldName ] = useState(props.skill?.name ?? "");
@@ -126,6 +124,7 @@ export const SkillForm: FC<Props> = props => {
                             label="Name"
                             errorMessage={fieldState.error?.message}
                             isRequired
+                            isDisabled={field.disabled}
                         />
                     )}
                 />

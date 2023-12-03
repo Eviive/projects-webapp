@@ -1,20 +1,16 @@
+import { useDisclosure } from "@nextui-org/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services";
 import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
-import { ProjectCard, ProjectForm } from "components/projects";
+import { ProjectCard, ProjectFormModal } from "components/projects";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import type { FC } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import type { Project } from "types/entities";
-
-type ProjectForm = {
-    project?: Project;
-    show: boolean;
-};
 
 export const Projects: FC = () => {
 
@@ -41,14 +37,18 @@ export const Projects: FC = () => {
 
     const [ searchQuery, setSearchQuery ] = useState("");
 
-    const filteredProjectItems = projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
+    const filteredProjectItems = useMemo(() => (
+        projectItems.filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()))
+    ), [ projectItems, searchQuery ]);
 
-    const [ projectForm, setProjectForm ] = useState<ProjectForm>({ show: false });
+    const [ projectForm, setProjectForm ] = useState<Project | null>(null);
+
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const handleClose = (isTouched: boolean, isDeleted: boolean) => {
-        isTouched && toast.success(`Project ${projectForm.project ? "updated" : "created"} successfully!`);
+        isTouched && toast.success(`Project ${projectForm ? "updated" : "created"} successfully!`);
         isDeleted && toast.success("Project deleted successfully!");
-        setProjectForm({ show: false });
+        setProjectForm(null);
     };
 
     return (
@@ -56,14 +56,14 @@ export const Projects: FC = () => {
             {query.isSuccess
 
                 ? <div className="w-full h-full px-[5%] py-12 flex flex-col justify-center items-center gap-16">
-                    {projectForm.show &&
-                        <ProjectForm
-                            project={projectForm.project}
-                            numberOfProjects={projectItems.length}
-                            handleClose={handleClose}
-                        />
-                    }
-                    <SearchBar handleChange={setSearchQuery} />
+                    <ProjectFormModal
+                        isOpen={isOpen}
+                        onOpenChange={onOpenChange}
+                        project={projectForm}
+                        numberOfProjects={projectItems.length}
+                        handleClose={handleClose}
+                    />
+                    <SearchBar value={searchQuery} handleChange={setSearchQuery} />
                     <SortableList
                         items={filteredProjectItems}
                         setItems={setProjectItems}
@@ -71,14 +71,19 @@ export const Projects: FC = () => {
                         renderItem={(project, isOverlay) => (
                             <ProjectCard
                                 project={project}
-                                handleEdit={() => setProjectForm({ project, show: true })}
+                                handleAction={() => {
+                                    setProjectForm(project);
+                                    onOpen();
+                                }}
                                 isDndActive={dndState.isDndActive}
                                 isOverlay={isOverlay}
                             />
                         )}
                         wrapperProps={{
                             minWidth: "350px",
-                            gap: "2.5em"
+                            gap: "2.5em",
+                            columnCount: 3,
+                            centerHorizontally: true
                         }}
                     />
                     <Toolbar
@@ -92,7 +97,7 @@ export const Projects: FC = () => {
                             },
                             {
                                 name: "Add project",
-                                handleClick: () => setProjectForm({ show: true }),
+                                handleClick: onOpen,
                                 children: <FaPlus size={22} />
                             }
                         ]}

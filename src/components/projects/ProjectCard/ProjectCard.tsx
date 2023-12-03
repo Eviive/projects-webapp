@@ -1,75 +1,97 @@
+import { Card, CardBody, CardHeader, Chip, Divider, Image } from "@nextui-org/react";
 import { ImageService } from "api/services";
-import { Anchor, SortableDragHandle, SortableItem } from "components/common";
+import { SortableDragHandle, SortableItem } from "components/common";
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
 import type { FC } from "react";
-import { FaHeart } from "react-icons/fa";
-import { FiEdit, FiExternalLink, FiGithub } from "react-icons/fi";
+import { useMemo } from "react";
+import { FaHeart } from "react-icons/fa6";
 import type { Project } from "types/entities";
 
-import styles from "./project-card.module.scss";
+const dateFormatter = Intl.DateTimeFormat("en-GB", { dateStyle: "short" });
 
 type Props = {
     project: Project;
-    handleEdit: () => void;
+    handleAction: () => void;
     isDndActive: boolean;
     isOverlay?: boolean;
 };
 
-export const ProjectCard: FC<Props> = ({ project, handleEdit, isDndActive, isOverlay }) => {
+export const ProjectCard: FC<Props> = ({ project, ...props }) => {
 
-    project.skills.sort((a, b) => a.sort - b.sort);
+    const skills = useMemo(() => {
+        project.skills.sort((a, b) => a.sort - b.sort);
 
-    const skills = project.skills.map(s =>
-        <img
-            key={s.id}
-            src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
-            alt={s.name}
-            title={s.name}
-            onError={e => e.currentTarget.src = SKILL_PLACEHOLDER}
-            loading="lazy"
-        />
-    );
+        return project.skills.map(s =>
+            <Image
+                key={s.id}
+                className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
+                alt={s.image.altEn}
+                width={35}
+                radius="none"
+                disableSkeleton={props.isOverlay}
+                loading="lazy"
+            />
+        );
+    }, [ project.skills, props.isOverlay ]);
 
     return (
-        <SortableItem id={project.id} itemProps={{ className: styles.card }}>
-            <div className={styles.cardContent}>
-                <div className={styles.cardHeader}>
-                    <div className={styles.cardTitle}>
-                        <div>
-                            <h1>{project.title}</h1>
-                            {project.featured && <FaHeart size={20} fill="red" />}
-                        </div>
-                        <span>{Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(new Date(project.creationDate))}</span>
+        <SortableItem id={project.id} className="flex justify-self-stretch">
+            <Card
+                as="div"
+                classNames={{
+                    base: "grow",
+                    header: "px-4 justify-between text-left",
+                    body: "p-4 justify-between gap-3"
+                }}
+                isPressable={!props.isDndActive}
+                onPress={props.handleAction}
+            >
+                <CardHeader>
+                    <div>
+                        <b className="flex items-center gap-1.5 truncate">
+                            {project.title}
+                            {project.featured && (
+                                <Chip
+                                    classNames={{
+                                        base: "text-danger bg-danger bg-opacity-25",
+                                        content: "p-0"
+                                    }}
+                                    variant="flat"
+                                    size="sm"
+                                >
+                                    <FaHeart className="p-0.5" size={16} />
+                                </Chip>
+                            )}
+                        </b>
+                        <small className="text-default-500">{dateFormatter.format(new Date(project.creationDate))}</small>
                     </div>
-                    <div className={styles.cardLinks}>
-                        {isDndActive && <SortableDragHandle isDragging={isOverlay} />}
-                        <button onClick={handleEdit}>
-                            <FiEdit size={22} />
-                        </button>
-                        <Anchor href={project.repoUrl}>
-                            <FiGithub size={22} />
-                        </Anchor>
-                        <Anchor href={project.demoUrl}>
-                            <FiExternalLink size={22} />
-                        </Anchor>
-                    </div>
-                </div>
-                <div className={styles.cardDescription}>
+                    {props.isDndActive && <SortableDragHandle className="ml-1" isDragging={props.isOverlay} />}
+                </CardHeader>
+                <Divider />
+                <CardBody>
                     <p>{project.descriptionEn}</p>
-                    <div className={styles.cardSkills}>
-                        {skills}
+
+                    <div>
+                        <Image
+                            classNames={{
+                                wrapper: "mx-auto",
+                                img: "object-cover aspect-[16/10] drop-shadow-lg"
+                            }}
+                            src={ImageService.getImageUrl(project.image) ?? PROJECT_PLACEHOLDER}
+                            alt={project.image.altEn}
+                            width={512}
+                            radius="sm"
+                            disableSkeleton={props.isOverlay}
+                            loading="lazy"
+                        />
+
+                        <div className="flex justify-center gap-3 mt-5 mb-1">
+                            {skills}
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div className={styles.cardImage}>
-                <img
-                    src={ImageService.getImageUrl(project.image) ?? PROJECT_PLACEHOLDER}
-                    alt={project.image.altEn}
-                    title={project.title}
-                    onError={e => e.currentTarget.src = PROJECT_PLACEHOLDER}
-                    loading="lazy"
-                />
-            </div>
+                </CardBody>
+            </Card>
         </SortableItem>
     );
 };

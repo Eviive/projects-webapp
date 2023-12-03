@@ -26,18 +26,18 @@ html {
 
 ::-webkit-scrollbar {
     @include mixins.size(8px);
-    background-color: hsl(240deg, 5%, 89%);
+    @apply bg-content1;
+}
+
+::-webkit-scrollbar-corner {
+    @apply bg-content1;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: hsl(240deg, 5%, 65%);
+    @apply bg-content3;
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: hsl(240deg, 5%, 50%);
-}
-
-::-webkit-scrollbar-corner {
-    background: hsl(240deg, 5%, 89%);
+    @apply bg-content4;
 }

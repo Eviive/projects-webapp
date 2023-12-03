@@ -6,7 +6,7 @@ import { SkillCard, SkillFormModal } from "components/skills";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import { getTitleAndMessage } from "libs/utils";
 import type { FC } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
@@ -14,6 +14,7 @@ import { RxDragHandleDots2 } from "react-icons/rx";
 import type { Skill } from "types/entities";
 
 export const Skills: FC = () => {
+
     const query = useQuery([ "skills" ], SkillService.findAll);
 
     const queryClient = useQueryClient();
@@ -37,7 +38,9 @@ export const Skills: FC = () => {
 
     const [ searchQuery, setSearchQuery ] = useState("");
 
-    const filteredSkillItems = skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()));
+    const filteredSkillItems = useMemo(() => (
+        skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
+    ), [ skillItems, searchQuery ]);
 
     const [ skillForm, setSkillForm ] = useState<Skill | null>(null);
 

@@ -54,6 +54,7 @@ export const ImageForm: FC = () => {
                         label="Image english alt"
                         errorMessage={fieldState.error?.message}
                         isRequired
+                        isDisabled={field.disabled}
                     />
                 )}
             />
@@ -75,6 +76,7 @@ export const ImageForm: FC = () => {
                         label="Image french alt"
                         errorMessage={fieldState.error?.message}
                         isRequired
+                        isDisabled={field.disabled}
                     />
                 )}
             />
