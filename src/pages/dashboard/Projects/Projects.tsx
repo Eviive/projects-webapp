@@ -55,7 +55,7 @@ export const Projects: FC = () => {
         <Page title="Projects">
             {query.isSuccess
 
-                ? <div className="w-full h-full px-[5%] py-12 flex flex-col justify-center items-center gap-16">
+                ? <div className="w-full h-full px-[5%] py-12 flex flex-col justify-center items-center gap-12">
                     <ProjectFormModal
                         isOpen={isOpen}
                         onOpenChange={onOpenChange}

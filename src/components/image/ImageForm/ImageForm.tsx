@@ -9,33 +9,41 @@ export const ImageForm: FC = () => {
 
     const {
         control,
-        register,
-        getValues,
-        formState: {
-            errors
-        }
+        getValues
     } = useFormContext<ImageFormValues>();
 
     return (
         <>
-            <div>
-                <label>Image file</label>
-                <input
-                    {...register("image.file", {
-                        validate: value => {
-                            const imageFile = value.item(0);
-                            if (imageFile?.size && imageFile.size > 3 * 1024 * 1024) {
-                                return `Image size cannot exceed 3MB (currently ${(imageFile.size / 1024 / 1024).toFixed(1)})`;
-                            }
+            <Controller
+                name="image.file"
+                control={control}
+                rules={{
+                    validate: value => {
+                        console.log(value);
+                        const imageFile = value.item(0);
+                        if (imageFile?.size && imageFile.size > 3 * 1024 * 1024) {
+                            return `Image size cannot exceed 3MB (currently ${(imageFile.size / 1024 / 1024).toFixed(1)})`;
                         }
-                    })}
-                    type="file"
-                    accept="image/*"
-                />
-                {errors.image?.file && (
-                    <span>{errors.image?.file.message}</span>
+                    }
+                }}
+                render={({ field, fieldState }) => (
+                    <div className="flex flex-col w-full">
+                        <label>Image file</label>
+                        <input
+                            ref={field.ref}
+                            name={field.name}
+                            onChange={v => field.onChange(v.target.files)}
+                            onBlur={field.onBlur}
+                            disabled={field.disabled}
+                            type="file"
+                            accept="image/*"
+                        />
+                        {fieldState.error && (
+                            <span className="text-tiny text-danger">{fieldState.error.message}</span>
+                        )}
+                    </div>
                 )}
-            </div>
+            />
 
             <Controller
                 name="image.altEn"

@@ -1,11 +1,8 @@
 export { ErrorPage } from "./Error/ErrorPage";
 export { Header } from "./Header/Header";
-export { Link } from "./Link/Link";
-export { Anchor } from "./Anchor/Anchor";
 export { Page } from "./Page/Page";
 export { RequireAuth } from "./RequireAuth/RequireAuth";
 export { Loader } from "./Loader/Loader";
-export { Modal } from "./Modal/Modal";
 export { Toolbar } from "./Toolbar/Toolbar";
 export { SearchBar } from "./SearchBar/SearchBar";
 export { ContextMenu } from "./ContextMenu/ContextMenu";

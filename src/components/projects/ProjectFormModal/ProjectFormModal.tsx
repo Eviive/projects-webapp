@@ -16,6 +16,9 @@ export const ProjectFormModal: FC<Props> = props => {
             isOpen={props.isOpen}
             onOpenChange={props.onOpenChange}
             onClose={() => props.handleClose(false, false)}
+            classNames={{
+                wrapper: "items-center"
+            }}
             scrollBehavior="inside"
             isDismissable={false}
         >

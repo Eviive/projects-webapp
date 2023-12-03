@@ -1,6 +1,6 @@
-import { Button, ButtonGroup, Checkbox, Input, Textarea } from "@nextui-org/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { ProjectService } from "api/services";
+import { Button, ButtonGroup, Checkbox, Image, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ImageService, ProjectService, SkillService } from "api/services";
 import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
 import { getTitleAndMessage } from "libs/utils";
@@ -10,6 +10,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { Project, WithImageFile } from "types/entities";
+import { SKILL_PLACEHOLDER } from "../../../libs/constants";
 
 type ProjectFormValues = WithImageFile<Project>;
 
@@ -25,7 +26,7 @@ export const ProjectForm: FC<Props> = props => {
 
     const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
-    // const query = useQuery([ "skills" ], SkillService.findAll);
+    const query = useQuery([ "skills" ], SkillService.findAll);
 
     const form = useForm<ProjectFormValues>({ defaultValues: props.project ?? undefined });
     const {
@@ -37,12 +38,6 @@ export const ProjectForm: FC<Props> = props => {
     } = form;
 
     const [ oldTitle, setOldTitle ] = useState(props.project?.title ?? "");
-
-    // const skillsOptions = useMemo(() => (
-    //     query.data
-    //         ?.sort((a, b) => a.sort - b.sort)
-    //         ?.map(skill => ({ id: skill.id, label: skill.name, value: skill.id }))
-    // ), [ query.data ]);
 
     const submitHandler: SubmitHandler<ProjectFormValues> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
@@ -253,46 +248,61 @@ export const ProjectForm: FC<Props> = props => {
                     )}
                 />
 
-                {/*<Controller*/}
-                {/*    control={control}*/}
-                {/*    name="skills"*/}
-                {/*    render={({ field, fieldState }) => {*/}
-                {/*        console.log({*/}
-                {/*            selectedKeys: skillsOptions ? field.value.map(s => s.id) : [],*/}
-                {/*            keys: skillsOptions*/}
-                {/*        });*/}
-                {/*        return <Select*/}
-                {/*            ref={field.ref}*/}
-                {/*            name={field.name}*/}
-                {/*            label="Skills"*/}
-                {/*            selectionMode="multiple"*/}
-                {/*            items={skillsOptions ?? []}*/}
-                {/*            selectedKeys={skillsOptions ? field.value.map(s => s.id) : []}*/}
-                {/*            onSelectionChange={selection => {*/}
-                {/*                if (selection === "all") {*/}
-                {/*                    field.onChange(query.data ?? []);*/}
-                {/*                    return;*/}
-                {/*                }*/}
+                <Controller
+                    control={control}
+                    name="skills"
+                    render={({ field, fieldState }) => (
+                        <Select
+                            ref={field.ref}
+                            name={field.name}
+                            label="Skills"
+                            selectionMode="multiple"
+                            items={query.isSuccess ? query.data : []}
+                            selectedKeys={query.isSuccess ? field.value.map(s => s.id.toString()) : []}
+                            onSelectionChange={selection => {
+                                if (!query.isSuccess) return;
 
-                {/*                field.onChange(query.data?.filter(s => selection.has(s.id)) ?? []);*/}
-                {/*            }}*/}
-                {/*            onBlur={field.onBlur}*/}
-                {/*            errorMessage={fieldState.error?.message}*/}
-                {/*            isLoading={query.isLoading}*/}
-                {/*            disabled={query.isLoading || query.isError || field.disabled}*/}
-                {/*            isDisabled={query.isLoading || query.isError || field.disabled}*/}
-                {/*        >*/}
-                {/*            {option => (*/}
-                {/*                <SelectItem*/}
-                {/*                    key={option.value}*/}
-                {/*                    value={option.value}*/}
-                {/*                >*/}
-                {/*                    {option.label}*/}
-                {/*                </SelectItem>*/}
-                {/*            )}*/}
-                {/*        </Select>;*/}
-                {/*    }}*/}
-                {/*/>*/}
+                                if (selection === "all") {
+                                    field.onChange(query.data);
+                                    return;
+                                }
+
+                                field.onChange(
+                                    query.data.filter(s =>
+                                        selection.has(s.id) ||
+                                        selection.has(s.id.toString())
+                                    ) ?? []
+                                );
+                            }}
+                            onBlur={field.onBlur}
+                            errorMessage={fieldState.error?.message}
+                            isLoading={query.isLoading}
+                            disabled={!query.isSuccess || field.disabled}
+                            isDisabled={!query.isSuccess || field.disabled}
+                        >
+                            {skill => (
+                                <SelectItem
+                                    key={skill.id}
+                                    value={skill.id}
+                                    textValue={skill.name}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <Image
+                                            key={skill.id}
+                                            className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                                            src={ImageService.getImageUrl(skill.image) ?? SKILL_PLACEHOLDER}
+                                            alt={skill.image.altEn}
+                                            width={22}
+                                            radius="none"
+                                            loading="lazy"
+                                        />
+                                        {skill.name}
+                                    </div>
+                                </SelectItem>
+                            )}
+                        </Select>
+                    )}
+                />
 
                 <ImageForm />
 

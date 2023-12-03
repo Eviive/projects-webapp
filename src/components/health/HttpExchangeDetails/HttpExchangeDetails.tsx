@@ -73,7 +73,8 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, handleClose }) =>
     return (
         <Modal
             classNames={{
-                body: "h-[500px] flex-none"
+                body: "h-[500px] flex-none",
+                wrapper: "items-center"
             }}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
