@@ -17,11 +17,13 @@ const STATUS_COLORS: Record<Status, string> = {
 
 export const StatusCard: FC<Props> = props => {
     return (
-        <Card classNames={{
-            base: "basis-64 grow shrink flex flex-col gap-1 font-bold rounded-lg",
-            header: "text-lg",
-            body: "flex flex-row justify-between items-center text-3xl"
-        }}>
+        <Card
+            classNames={{
+                base: "basis-64 grow shrink flex flex-col gap-1 font-bold rounded-lg",
+                header: "text-lg",
+                body: "flex flex-row justify-between items-center text-3xl"
+            }}
+        >
             <CardHeader>
                 <span
                     className="w-2.5 h-2.5 rounded-full inline-block mr-2"

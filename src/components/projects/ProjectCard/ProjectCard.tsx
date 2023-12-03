@@ -5,7 +5,9 @@ import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
 import type { FC } from "react";
 import { useMemo } from "react";
 import { FaHeart } from "react-icons/fa6";
+import { MdDelete, MdEdit } from "react-icons/md";
 import type { Project } from "types/entities";
+import { useContextMenu } from "../../../hooks/useContextMenu";
 
 const dateFormatter = Intl.DateTimeFormat("en-GB", { dateStyle: "short" });
 
@@ -17,6 +19,8 @@ type Props = {
 };
 
 export const ProjectCard: FC<Props> = ({ project, ...props }) => {
+
+    const { addSection } = useContextMenu();
 
     const skills = useMemo(() => {
         project.skills.sort((a, b) => a.sort - b.sort);
@@ -38,14 +42,30 @@ export const ProjectCard: FC<Props> = ({ project, ...props }) => {
     return (
         <SortableItem id={project.id} className="flex justify-self-stretch">
             <Card
-                as="div"
                 classNames={{
                     base: "grow",
                     header: "px-4 justify-between text-left",
                     body: "p-4 justify-between gap-3"
                 }}
-                isPressable={!props.isDndActive}
-                onPress={props.handleAction}
+                onContextMenu={!props.isOverlay
+                    ? e => addSection(e, {
+                        title: project.title,
+                        items: [
+                            {
+                                title: "Edit",
+                                icon: <MdEdit size={25} />,
+                                handleAction: props.handleAction
+                            },
+                            {
+                                title: "Delete",
+                                icon: <MdDelete size={25} />,
+                                handleAction: () => console.log("Delete"),
+                                danger: true
+                            }
+                        ]
+                    })
+                    : undefined
+                }
             >
                 <CardHeader>
                     <div>

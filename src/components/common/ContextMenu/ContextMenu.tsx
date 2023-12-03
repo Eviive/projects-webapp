@@ -1,9 +1,9 @@
 import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react";
+import { useCloseEvents } from "hooks/useCloseEvents";
 import { useContextMenu } from "hooks/useContextMenu";
+import { useDimensions } from "hooks/useDimensions";
 import type { FC, Key } from "react";
 import { useCallback } from "react";
-import { useCloseEvents } from "../../../hooks/useCloseEvents";
-import { useDimensions } from "../../../hooks/useDimensions";
 
 export const ContextMenu: FC = () => {
 
@@ -42,6 +42,13 @@ export const ContextMenu: FC = () => {
                     }}
                     variant="flat"
                     aria-label="Context menu"
+                    disabledKeys={
+                        state
+                            .sections
+                            .flatMap(section => section.items)
+                            .filter(item => item.disabled)
+                            .map(item => item.title)
+                    }
                     onAction={handleAction}
                 >
                     {state.sections.map((section, i) => (

@@ -35,11 +35,17 @@ export const useCloseEvents = <E extends HTMLElement = HTMLElement>(handleClose:
 
         const handleKeyDown = (e: KeyboardEvent) => e.key === "Escape" && handleClose();
 
+        const handleFocusOut = (e: FocusEvent) => {
+            if (!element?.contains(e.relatedTarget as Node)) {
+                handleClose();
+            }
+        };
+
         const controller = new AbortController();
 
         config.outsideClick && window.addEventListener("mousedown", handleOutsideClick, { signal: controller.signal });
         config.escapeKey && window.addEventListener("keydown", handleKeyDown, { signal: controller.signal });
-        config.focusOut && window.addEventListener("focusout", handleClose, { signal: controller.signal });
+        config.focusOut && window.addEventListener("focusout", handleFocusOut, { signal: controller.signal });
 
         return () => {
             controller.abort();

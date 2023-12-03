@@ -3,7 +3,7 @@ import type { MouseEvent } from "react";
 import type { ContextMenuSection } from "types/context-menu";
 
 type UseContextMenuOutput = Pick<ReturnType<typeof useContextMenuContext>, "state" | "setState"> & {
-    addSections: (e: MouseEvent, section: ContextMenuSection) => void;
+    addSection: (e: MouseEvent, section: ContextMenuSection) => void;
     closeContextMenu: () => void;
 };
 
@@ -11,7 +11,7 @@ export const useContextMenu = (): UseContextMenuOutput => {
 
     const { state, setState } = useContextMenuContext();
 
-    const addSections = (e: MouseEvent, section: ContextMenuSection) => {
+    const addSection = (e: MouseEvent, section: ContextMenuSection) => {
         e.preventDefault();
         setState(prevState => {
             const prevSections = prevState.status === "open"
@@ -37,7 +37,7 @@ export const useContextMenu = (): UseContextMenuOutput => {
     return {
         state,
         setState,
-        addSections,
+        addSection,
         closeContextMenu
     };
 };

@@ -1,21 +1,22 @@
-import { useDisclosure } from "@nextui-org/react";
+import { Spinner, useDisclosure } from "@nextui-org/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
+import { Loader, Page, SearchBar, SortableList } from "components/common";
 import { SkillCard, SkillFormModal } from "components/skills";
+import { useContextMenu } from "hooks/useContextMenu";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import { getTitleAndMessage } from "libs/utils";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import { BsCheckLg } from "react-icons/bs";
-import { FaPlus } from "react-icons/fa";
-import { RxDragHandleDots2 } from "react-icons/rx";
+import { MdAdd, MdCheck, MdDragIndicator } from "react-icons/md";
 import type { Skill } from "types/entities";
 
 export const Skills: FC = () => {
 
     const query = useQuery([ "skills" ], SkillService.findAll);
+
+    const { addSection } = useContextMenu();
 
     const queryClient = useQueryClient();
 
@@ -35,6 +36,16 @@ export const Skills: FC = () => {
         handleToggleDnd,
         handleOnSetItems
     } = useDragAndDrop(query, handleSaveSkillsOrder);
+
+    const getDndContextMenuIcon = (): ReactNode => {
+        if (!dndState.isDndActive) {
+            return <MdDragIndicator size={25} />;
+        }
+
+        return dndState.isDndSubmitting
+            ? <Spinner className="m-0.5" color="danger" size="sm" />
+            : <MdCheck size={25}/>;
+    };
 
     const [ searchQuery, setSearchQuery ] = useState("");
 
@@ -56,7 +67,25 @@ export const Skills: FC = () => {
         <Page title="Skills">
             {query.isSuccess
 
-                ? <div className="w-full h-full px-[5%] py-12 flex flex-col gap-12">
+                ? <div
+                    className="w-full h-full px-[5%] py-12 flex flex-col gap-12"
+                    onContextMenu={e => addSection(e, {
+                        title: "Skills",
+                        items: [
+                            {
+                                title: "Add",
+                                icon: <MdAdd size={25} />,
+                                handleAction: onOpen
+                            },
+                            {
+                                title: "Sort",
+                                icon: getDndContextMenuIcon(),
+                                handleAction: handleToggleDnd,
+                                disabled: skillItems.length !== filteredSkillItems.length || dndState.isDndSubmitting
+                            }
+                        ]
+                    })}
+                >
                     <SkillFormModal
                         isOpen={isOpen}
                         onOpenChange={onOpenChange}
@@ -79,7 +108,7 @@ export const Skills: FC = () => {
                                     setSkillForm(skill);
                                     onOpen();
                                 }}
-                                isDndActive={dndState.isDndActive}
+                                isDndActive={dndState.isDndActive && !dndState.isDndSubmitting}
                                 isOverlay={isOverlay}
                             />
                         )}
@@ -89,22 +118,6 @@ export const Skills: FC = () => {
                             columnCount: "infinity",
                             centerHorizontally: true
                         }}
-                    />
-                    <Toolbar
-                        tools={[
-                            {
-                                name: "Toggle drag and drop",
-                                handleClick: handleToggleDnd,
-                                loading: dndState.isDndSubmitting,
-                                disabled: skillItems.length !== filteredSkillItems.length,
-                                children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
-                            },
-                            {
-                                name: "Add skill",
-                                handleClick: onOpen,
-                                children: <FaPlus size={22} />
-                            }
-                        ]}
                     />
                 </div>
 
