@@ -251,6 +251,7 @@ export const ProjectForm: FC<Props> = props => {
                 <Controller
                     control={control}
                     name="skills"
+                    defaultValue={[]}
                     render={({ field, fieldState }) => (
                         <Select
                             ref={field.ref}
