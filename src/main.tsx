@@ -1,13 +1,13 @@
+import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
-import { ErrorPage } from "components/common";
 import { AuthContextProvider } from "contexts/AuthContext";
-import { MainLayout } from "layouts";
+import { ThemeContextProvider } from "contexts/ThemeContext";
+import { ErrorPage } from "pages/Error/ErrorPage";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ThemeContextProvider } from "./contexts/ThemeContext";
 
 const rootElement = document.querySelector("#root");
 if (!rootElement) throw new Error("Root element not found");
@@ -35,33 +35,36 @@ const router = createBrowserRouter(
             children: [
                 {
                     path: "/",
-                    element: <MainLayout />,
+                    lazy: async () => {
+                        const { MainLayout } = await import("layouts");
+                        return { Component: MainLayout };
+                    },
                     children: [
                         {
                             index: true,
                             lazy: async () => {
-                                const { Home } = await import("pages/dashboard");
+                                const { Home } = await import("pages/Home/Home");
                                 return { Component: Home };
                             }
                         },
                         {
                             path: "/projects",
                             lazy: async () => {
-                                const { Projects } = await import("pages/dashboard");
+                                const { Projects } = await import("pages/Projects/Projects");
                                 return { Component: Projects };
                             }
                         },
                         {
                             path: "/skills",
                             lazy: async () => {
-                                const { Skills } = await import("pages/dashboard");
+                                const { Skills } = await import("pages/Skills/Skills");
                                 return { Component: Skills };
                             }
                         },
                         {
                             path: "/health",
                             lazy: async () => {
-                                const { Health } = await import("pages/dashboard");
+                                const { Health } = await import("pages/Health/Health");
                                 return { Component: Health };
                             }
                         }
@@ -70,7 +73,7 @@ const router = createBrowserRouter(
                 {
                     path: "/login",
                     lazy: async () => {
-                        const { Login } = await import("pages/auth");
+                        const { Login } = await import("pages/Login/Login");
                         return { Component: Login };
                     }
                 }
@@ -85,14 +88,14 @@ const router = createBrowserRouter(
 root.render(
     <StrictMode>
         <ThemeContextProvider>
-            <div className="min-h-screen min-h-screen-dynamic flex flex-col">
+            <NextUIProvider className="min-h-screen min-h-screen-dynamic flex flex-col">
                 <AuthContextProvider>
                     <QueryClientProvider client={queryClient}>
                         <RouterProvider router={router} />
                         <ReactQueryDevtools />
                     </QueryClientProvider>
                 </AuthContextProvider>
-            </div>
+            </NextUIProvider>
         </ThemeContextProvider>
     </StrictMode>
 );

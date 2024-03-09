@@ -1,4 +1,3 @@
-export { ErrorPage } from "./Error/ErrorPage";
 export { Header } from "./Header/Header";
 export { Page } from "./Page/Page";
 export { RequireAuth } from "./RequireAuth/RequireAuth";

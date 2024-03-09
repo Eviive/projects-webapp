@@ -12,7 +12,7 @@ import { FaPlus } from "react-icons/fa";
 import { MdAdd, MdCheck, MdDragIndicator } from "react-icons/md";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import type { Project } from "types/entities";
-import { useContextMenu } from "../../../hooks/useContextMenu";
+import { useContextMenu } from "../../hooks/useContextMenu";
 
 export const Projects: FC = () => {
 
