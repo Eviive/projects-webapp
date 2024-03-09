@@ -5,7 +5,7 @@ import { Loader, Page, SearchBar, SortableList } from "components/common";
 import { SkillCard, SkillFormModal } from "components/skills";
 import { useContextMenu } from "hooks/useContextMenu";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
-import { getTitleAndMessage } from "libs/utils";
+import { getTitleAndMessage } from "lib/utils";
 import type { FC, ReactNode } from "react";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -44,7 +44,7 @@ export const Skills: FC = () => {
 
         return dndState.isDndSubmitting
             ? <Spinner className="m-0.5" color="danger" size="sm" />
-            : <MdCheck size={25}/>;
+            : <MdCheck size={25} />;
     };
 
     const [ searchQuery, setSearchQuery ] = useState("");

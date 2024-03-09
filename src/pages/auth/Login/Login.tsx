@@ -2,7 +2,7 @@ import { Button, Card, CardBody, Input } from "@nextui-org/react";
 import { UserService } from "api/services";
 import { Page } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
-import { getTitleAndMessage } from "libs/utils";
+import { getTitleAndMessage } from "lib/utils";
 import type { FC } from "react";
 import { useLayoutEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";

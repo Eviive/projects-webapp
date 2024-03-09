@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
-import type { Falsy } from "types/utils";
+import type { ClassValue } from "clsx";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-const isNotFalsy = <V>(value: V | Falsy): value is V => Number.isNaN(value) ? false : !!value;
-
-export const formatClassNames = (...classNames: (string | Falsy)[]) => classNames.filter(isNotFalsy).join(" ");
+export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 export const getTitleAndMessage = (e: unknown): string => {
     import.meta.env.PROD || console.error(e);

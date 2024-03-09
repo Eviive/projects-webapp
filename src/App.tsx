@@ -2,7 +2,7 @@ import { UserService } from "api/services";
 import { Loader } from "components/common";
 import { useAuthContext } from "contexts/AuthContext";
 import { useAxiosInterceptors } from "hooks/useAxiosInterceptors";
-import { getTitleAndMessage } from "libs/utils";
+import { getTitleAndMessage } from "lib/utils";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -35,8 +35,8 @@ export const App: FC = () => {
     return (
         <>
             {!isLoading
-                ? <Outlet/>
-                : <Loader/>
+                ? <Outlet />
+                : <Loader />
             }
             <Toaster
                 position="bottom-center"

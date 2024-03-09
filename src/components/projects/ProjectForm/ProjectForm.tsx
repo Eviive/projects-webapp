@@ -3,14 +3,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ImageService, ProjectService, SkillService } from "api/services";
 import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
-import { getTitleAndMessage } from "libs/utils";
+import { SKILL_PLACEHOLDER } from "lib/constants";
+import { getTitleAndMessage } from "lib/utils";
 import type { FC } from "react";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { Project, WithImageFile } from "types/entities";
-import { SKILL_PLACEHOLDER } from "../../../libs/constants";
 
 type ProjectFormValues = WithImageFile<Project>;
 

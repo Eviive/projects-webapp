@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
-import { getTitleAndMessage } from "libs/utils";
+import { getTitleAndMessage } from "lib/utils";
 import toast from "react-hot-toast";
 
 export const httpClient = axios.create({

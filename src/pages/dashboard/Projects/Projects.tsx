@@ -46,7 +46,7 @@ export const Projects: FC = () => {
 
         return dndState.isDndSubmitting
             ? <Spinner className="m-0.5" color="danger" size="sm" />
-            : <MdCheck size={25}/>;
+            : <MdCheck size={25} />;
     };
 
     const [ searchQuery, setSearchQuery ] = useState("");
@@ -125,7 +125,7 @@ export const Projects: FC = () => {
                                 handleClick: handleToggleDnd,
                                 loading: dndState.isDndSubmitting,
                                 disabled: projectItems.length !== filteredProjectItems.length,
-                                children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25}/>
+                                children: dndState.isDndActive ? <BsCheckLg size={25} /> : <RxDragHandleDots2 size={25} />
                             },
                             {
                                 name: "Add project",

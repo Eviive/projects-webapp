@@ -1,4 +1,4 @@
-import { getTitleAndMessage } from "libs/utils";
+import { getTitleAndMessage } from "lib/utils";
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 

@@ -2,7 +2,7 @@ import { httpClient } from "api/client";
 import { UserService } from "api/services";
 import { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
-import { getTitleAndMessage } from "libs/utils";
+import { getTitleAndMessage } from "lib/utils";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 

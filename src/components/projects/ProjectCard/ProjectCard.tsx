@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader, Chip, Divider, Image } from "@nextui-org/react";
 import { ImageService } from "api/services";
 import { SortableDragHandle, SortableItem } from "components/common";
-import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
+import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "lib/constants";
 import type { FC } from "react";
 import { useMemo } from "react";
 import { FaHeart } from "react-icons/fa6";

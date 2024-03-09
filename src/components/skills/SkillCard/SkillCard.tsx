@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, Divider, Image } from "@nextui-org/react";
 import { ImageService } from "api/services";
 import { SortableDragHandle, SortableItem } from "components/common";
 import { useContextMenu } from "hooks/useContextMenu";
-import { SKILL_PLACEHOLDER } from "libs/constants";
+import { SKILL_PLACEHOLDER } from "lib/constants";
 import type { FC } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { Skill } from "types/entities";

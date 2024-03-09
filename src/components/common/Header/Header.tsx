@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
 import { useAuthContext } from "contexts/AuthContext";
 import { useThemeContext } from "contexts/ThemeContext";
-import { formatClassNames, getTitleAndMessage } from "libs/utils";
+import { cn, getTitleAndMessage } from "lib/utils";
 import type { FC, Key } from "react";
 import { Fragment, useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -143,7 +143,7 @@ export const Header: FC = () => {
                     <NavbarMenuItem key={item.name}>
                         <Button
                             data-active={isHeaderItemActive(item)}
-                            className={formatClassNames(
+                            className={cn(
                                 "min-w-0 p-0 text-lg bg-transparent data-[hover=true]:bg-transparent",
                                 "data-[active=true]:underline decoration-danger underline-offset-4",
                                 isLastMenuChild && "mb-2",
@@ -162,7 +162,7 @@ export const Header: FC = () => {
                     <Fragment key={item.name}>
                         <li className="flex items-center gap-2 text-small text-gray-600">
                             {item.name}
-                            <Divider className="grow w-auto bg-gray-600"/>
+                            <Divider className="grow w-auto bg-gray-600" />
                         </li>
                         {item.children.map((child, i) => renderNavbarMenuItem(child, i === item.children.length - 1))}
                     </Fragment>
@@ -211,7 +211,7 @@ export const Header: FC = () => {
                             {item.children.map(child => (
                                 <DropdownItem
                                     key={child.name}
-                                    className={formatClassNames(
+                                    className={cn(
                                         isHeaderItemActive(child) && "text-danger data-[hover=true]:text-danger",
                                         child.danger && "text-danger"
                                     )}

@@ -29,7 +29,7 @@ export const SortableDragHandle: FC<Props> = props => {
                 className="w-full h-full grid place-items-center"
                 style={{ cursor: props.isDragging ? "grabbing" : "grab" }}
             >
-                <RxDragHandleDots2 size={25}/>
+                <RxDragHandleDots2 size={25} />
             </button>
         </Button>
     );
