@@ -64,7 +64,6 @@ export type HttpExchange = {
 export type Info = {
     app: {
         name: string;
-        description: string;
         version: string;
         stage: string;
     };
