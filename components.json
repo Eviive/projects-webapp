@@ -5,8 +5,8 @@
     "tsx": true,
     "tailwind": {
         "config": "tailwind.config.js",
-        "css": "src/styles/globals.scss",
-        "baseColor": "slate",
+        "css": "src/styles/reset.scss",
+        "baseColor": "zinc",
         "cssVariables": true,
         "prefix": ""
     },

@@ -9,7 +9,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import type { Project, WithImageFile } from "types/entities";
 
 type ProjectFormValues = WithImageFile<Project>;

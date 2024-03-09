@@ -6,13 +6,13 @@ import { useThemeContext } from "contexts/ThemeContext";
 import { cn, getTitleAndMessage } from "lib/utils";
 import type { FC, Key } from "react";
 import { Fragment, useMemo, useState } from "react";
-import toast from "react-hot-toast";
 import { BiPlusMedical } from "react-icons/bi";
 import { BsChevronDown, BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import { MdOutlineDesktopWindows, MdRefresh } from "react-icons/md";
 import { RiToolsLine } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import type { HeaderItem, HeaderMenu } from "types/header";
 
 export const Header: FC = () => {

@@ -1,15 +1,20 @@
-import { Button, Card, CardBody, Input } from "@nextui-org/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { UserService } from "api/services";
 import { Page } from "components/common";
+import { Button } from "components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
+import { Input } from "components/ui/input";
 import { useAuthContext } from "contexts/AuthContext";
 import { getTitleAndMessage } from "lib/utils";
 import type { FC } from "react";
 import { useLayoutEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import type { AuthRequest } from "types/forms";
+import { authRequestSchema } from "types/forms";
 
 export const Login: FC = () => {
 
@@ -17,15 +22,21 @@ export const Login: FC = () => {
 
     const navigate = useNavigate();
 
-    const [ isSubmitting, setIsSubmitting ] = useState(false);
-
-    const { register, handleSubmit } = useForm<AuthRequest>();
-
     useLayoutEffect(() => {
         if (accessToken) {
             navigate("/", { replace: true });
         }
     }, [ accessToken, navigate ]);
+
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
+
+    const form = useForm<AuthRequest>({
+        resolver: zodResolver(authRequestSchema),
+        defaultValues: {
+            username: "",
+            password: ""
+        }
+    });
 
     const submitHandler: SubmitHandler<AuthRequest> = async data => {
         if (isSubmitting) return;
@@ -47,34 +58,45 @@ export const Login: FC = () => {
     return (
         <Page title="Login">
             <div className="h-screen-dynamic grid place-items-center">
-                <Card className="w-96 max-w-[85%]">
-                    <CardBody>
-                        <form
-                            className="p-3 grid grid-rows-3 gap-8"
-                            onSubmit={handleSubmit(submitHandler)}
-                        >
-                            <Input
-                                {...register("username", {
-                                    required: "Username is required"
-                                })}
-                                name="username"
-                                label="Username"
-                                autoComplete="username"
-                                isRequired
-                            />
-                            <Input
-                                {...register("password", {
-                                    required: "Password is required"
-                                })}
-                                name="password"
-                                type="password"
-                                label="Password"
-                                autoComplete="current-password"
-                                isRequired
-                            />
-                            <Button type="submit" isLoading={isSubmitting}>Sign In</Button>
+                <Card className="w-[350px] max-w-[85%]">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(submitHandler)}>
+                            <CardHeader>
+                                <CardTitle>Sign In</CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="username"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Username</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} autoComplete="username" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="password" autoComplete="current-password" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </CardContent>
+                            <CardFooter>
+                                <Button type="submit">Submit</Button>
+                            </CardFooter>
                         </form>
-                    </CardBody>
+                    </Form>
                 </Card>
             </div>
         </Page>

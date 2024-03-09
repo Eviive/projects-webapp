@@ -1,11 +1,11 @@
 import { UserService } from "api/services";
 import { Loader } from "components/common";
+import { Toaster } from "components/ui/sonner";
 import { useAuthContext } from "contexts/AuthContext";
 import { useAxiosInterceptors } from "hooks/useAxiosInterceptors";
 import { getTitleAndMessage } from "lib/utils";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 
 import "./styles/reset.scss";
@@ -38,10 +38,7 @@ export const App: FC = () => {
                 ? <Outlet />
                 : <Loader />
             }
-            <Toaster
-                position="bottom-center"
-                reverseOrder={true}
-            />
+            <Toaster />
         </>
     );
 };

@@ -3,16 +3,16 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services";
 import { Loader, Page, SearchBar, SortableList, Toolbar } from "components/common";
 import { ProjectCard, ProjectFormModal } from "components/projects";
+import { useContextMenu } from "hooks/useContextMenu";
 import { useDragAndDrop } from "hooks/useDragAndDrop";
 import type { FC, ReactNode } from "react";
 import { useMemo, useState } from "react";
-import toast from "react-hot-toast";
 import { BsCheckLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { MdAdd, MdCheck, MdDragIndicator } from "react-icons/md";
 import { RxDragHandleDots2 } from "react-icons/rx";
+import { toast } from "sonner";
 import type { Project } from "types/entities";
-import { useContextMenu } from "../../hooks/useContextMenu";
 
 export const Projects: FC = () => {
 

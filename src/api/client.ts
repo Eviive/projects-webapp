@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
 import { getTitleAndMessage } from "lib/utils";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export const httpClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,

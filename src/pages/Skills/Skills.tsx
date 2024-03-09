@@ -8,8 +8,8 @@ import { useDragAndDrop } from "hooks/useDragAndDrop";
 import { getTitleAndMessage } from "lib/utils";
 import type { FC, ReactNode } from "react";
 import { useMemo, useState } from "react";
-import toast from "react-hot-toast";
 import { MdAdd, MdCheck, MdDragIndicator } from "react-icons/md";
+import { toast } from "sonner";
 import type { Skill } from "types/entities";
 
 export const Skills: FC = () => {
