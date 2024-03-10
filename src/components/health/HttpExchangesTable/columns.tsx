@@ -1,4 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
+import { HttpExchangeDetails } from "components/health/HttpExchangeDetails/HttpExchangeDetails";
 import { HttpStatusChip } from "components/health/HttpStatusChip/HttpStatusChip";
 import { Button } from "components/ui/button";
 import { DataTableColumnHeader } from "components/ui/data-table-column-header";
@@ -10,7 +11,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", ti
 
 const columnHelper = createColumnHelper<HttpExchange>();
 
-export const getColumns = (openDetails: (httpExchange: HttpExchange) => void) => [
+export const columns = [
     columnHelper.accessor(
         row => new Date(row.timestamp),
         {
@@ -63,16 +64,20 @@ export const getColumns = (openDetails: (httpExchange: HttpExchange) => void) =>
                 <div className="flex items-end">
                     <TooltipProvider>
                         <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    className="text-foreground-500 ms-auto"
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => openDetails(row.original)}
-                                >
-                                    <AiFillEye size={20} />
-                                </Button>
-                            </TooltipTrigger>
+                            <HttpExchangeDetails
+                                httpExchange={row.original}
+                                trigger={
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            className="text-foreground-500 ms-auto"
+                                            variant="outline"
+                                            size="icon"
+                                        >
+                                            <AiFillEye size={20} />
+                                        </Button>
+                                    </TooltipTrigger>
+                                }
+                            />
                             <TooltipContent>
                                 View details
                             </TooltipContent>

@@ -7,11 +7,21 @@ import { DataTableViewOptions } from "components/ui/data-table-view-options";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
 import { useState } from "react";
 
-type DataTableProps<TData> = Pick<TableOptions<TData>, "columns" | "data"> & {
-    isSelectable?: boolean;
+type SuccessProps = {
+    isError?: false;
 };
 
-export const DataTable = <TData, >({ columns, data, isSelectable }: DataTableProps<TData>) => {
+type ErrorProps = {
+    isError: true;
+    errorMessage: string;
+};
+
+type DataTableProps<TData> = Pick<TableOptions<TData>, "columns" | "data"> & {
+    noRowsMessage?: string;
+    isSelectable?: boolean;
+} & (SuccessProps | ErrorProps);
+
+export const DataTable = <TData, >({ columns, data, ...props }: DataTableProps<TData>) => {
 
     const [ sorting, setSorting ] = useState<SortingState>([]);
 
@@ -68,7 +78,10 @@ export const DataTable = <TData, >({ columns, data, isSelectable }: DataTablePro
                             : (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className="h-24 text-center">
-                                        No results.
+                                        {props.isError
+                                            ? props.errorMessage
+                                            : props.noRowsMessage ?? "No results."
+                                        }
                                     </TableCell>
                                 </TableRow>
                             )
@@ -76,7 +89,7 @@ export const DataTable = <TData, >({ columns, data, isSelectable }: DataTablePro
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} isSelectable={isSelectable} />
+            <DataTablePagination table={table} isSelectable={props.isSelectable} />
         </div>
     );
 };
