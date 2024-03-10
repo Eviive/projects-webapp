@@ -1,13 +1,13 @@
 import { Card, CardBody, CardHeader, Chip, Divider, Image } from "@nextui-org/react";
 import { ImageService } from "api/services";
 import { SortableDragHandle, SortableItem } from "components/common";
+import { useContextMenu } from "hooks/useContextMenu";
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "lib/constants";
 import type { FC } from "react";
 import { useMemo } from "react";
 import { FaHeart } from "react-icons/fa6";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { Project } from "types/entities";
-import { useContextMenu } from "../../../hooks/useContextMenu";
 
 const dateFormatter = Intl.DateTimeFormat("en-GB", { dateStyle: "short" });
 

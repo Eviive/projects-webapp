@@ -1,8 +1,8 @@
 import type { useDisclosure } from "@nextui-org/react";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
+import { SkillForm } from "components/skills";
 import type { FC } from "react";
 import type { Skill } from "types/entities";
-import { SkillForm } from "../SkillForm/SkillForm";
 
 type Props = Pick<ReturnType<typeof useDisclosure>, "isOpen" | "onOpenChange"> & {
     skill: Skill | null;

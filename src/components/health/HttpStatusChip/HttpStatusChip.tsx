@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/react";
+import { Badge } from "components/ui/badge";
 import type { FC } from "react";
 
 type Props = {
@@ -6,13 +6,17 @@ type Props = {
 };
 
 export const HttpStatusChip: FC<Props> = props => {
+
+    const colorCode = [ 401, 403 ].includes(props.code)
+        ? props.code
+        : Math.floor(props.code / 100) * 100;
+
     return (
-        <Chip
-            className={`status-${props.code}`}
-            variant="flat"
-            size="sm"
+        <Badge
+            className={`status-${colorCode}`}
+            variant="outline"
         >
             {props.code}
-        </Chip>
+        </Badge>
     );
 };

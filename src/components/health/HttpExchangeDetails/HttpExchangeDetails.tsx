@@ -90,7 +90,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, handleClose }) =>
                         }}
                         items={tabs}
                     >
-                        {(tab) => (
+                        {tab => (
                             <Tab key={tab.name} title={tab.name}>
                                 {tab.content}
                             </Tab>

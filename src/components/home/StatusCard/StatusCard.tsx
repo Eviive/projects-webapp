@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import type { FC, ReactNode } from "react";
 import type { Status } from "types/health";
@@ -19,12 +19,14 @@ const STATUS_COLORS: Record<Status, string> = {
 export const StatusCard: FC<Props> = props => {
     return (
         <Card className="basis-64 grow shrink flex flex-col gap-1 font-bold rounded-lg">
-            <CardHeader className="space-y-0 p-3 flex-row items-center text-lg">
-                <span
-                    className="w-2.5 h-2.5 rounded-full inline-block mr-2"
-                    style={{ backgroundColor: STATUS_COLORS[props.status] }}
-                />
-                <h3>{props.title}</h3>
+            <CardHeader className="space-y-0 p-3">
+                <CardTitle className="text-lg flex flex-row items-center">
+                    <span
+                        className="w-2.5 h-2.5 rounded-full inline-block mr-2"
+                        style={{ backgroundColor: STATUS_COLORS[props.status] }}
+                    />
+                    {props.title}
+                </CardTitle>
             </CardHeader>
             <Separator />
             <CardContent className="p-3 flex flex-row justify-between items-center text-3xl">

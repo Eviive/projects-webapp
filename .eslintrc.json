@@ -105,6 +105,10 @@
                 "beforeSelfClosing": "always",
                 "afterOpening": "never"
             }
+        ],
+        "arrow-parens": [
+            "error",
+            "as-needed"
         ]
     },
     "settings": {

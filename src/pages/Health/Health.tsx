@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { HealthService } from "api/services";
-import { Loader, Page } from "components/common";
+import { Page } from "components/common";
 import { HttpExchangesTable, HttpStatusCard } from "components/health";
 import { GridLayout } from "layouts";
 import type { FC } from "react";
@@ -31,27 +31,30 @@ const HTTP_STATUS = [
 
 export const Health: FC = () => {
 
-    const query = useQuery([ "httpExchanges" ], HealthService.httpExchanges);
+    const query = useQuery({
+        queryKey: [ "httpExchanges" ],
+        queryFn: HealthService.httpExchanges
+    });
 
     return (
         <Page title="Health">
-            {query.isSuccess
-
-                ? <div className="w-full h-full px-[5%] py-16 flex flex-col gap-12">
-                    <GridLayout columnCount={4}>
-                        {HTTP_STATUS.map(status => (
-                            <HttpStatusCard
-                                key={status.code}
-                                {...status}
-                                value={query.data.filter(httpExchange => httpExchange.response.status === status.code).length}
-                            />
-                        ))}
-                    </GridLayout>
-                    <HttpExchangesTable httpExchanges={query.data} />
-                </div>
-
-                : <Loader />
-            }
+            <div className="w-full h-full px-[5%] py-16 flex flex-col gap-12">
+                <GridLayout columnCount={4}>
+                    {HTTP_STATUS.map(status => (
+                        <HttpStatusCard
+                            key={status.code}
+                            {...status}
+                            value={
+                                query.isSuccess
+                                    ? query.data.filter(httpExchange => httpExchange.response.status === status.code).length
+                                    : null
+                            }
+                            isError={query.isError}
+                        />
+                    ))}
+                </GridLayout>
+                <HttpExchangesTable queryHttpExchanges={query} />
+            </div>
         </Page>
     );
 };
