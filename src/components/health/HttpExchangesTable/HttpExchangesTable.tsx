@@ -10,16 +10,13 @@ type Props = {
 
 export const HttpExchangesTable: FC<Props> = ({ queryHttpExchanges: query }) => {
     return (
-        <>
-            {!query.isLoading && (
-                <DataTable
-                    columns={columns}
-                    data={query.data ?? []}
-                    noRowsMessage="No HTTP exchanges found"
-                    isError={query.isError}
-                    errorMessage="Failed to load HTTP exchanges"
-                />
-            )}
-        </>
+        <DataTable
+            columns={columns}
+            data={query.data ?? []}
+            noRowsMessage="No HTTP exchanges found"
+            isLoading={query.isLoading}
+            isError={query.isError}
+            errorMessage="Failed to load HTTP exchanges"
+        />
     );
 };

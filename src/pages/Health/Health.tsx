@@ -47,8 +47,9 @@ export const Health: FC = () => {
                             value={
                                 query.isSuccess
                                     ? query.data.filter(httpExchange => httpExchange.response.status === status.code).length
-                                    : null
+                                    : 0
                             }
+                            isLoading={query.isLoading}
                             isError={query.isError}
                         />
                     ))}

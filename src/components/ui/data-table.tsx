@@ -1,11 +1,12 @@
 "use client";
 
-import type { SortingState } from "@tanstack/react-table";
-import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, type TableOptions, useReactTable } from "@tanstack/react-table";
+import type { ColumnDef, SortingState, TableOptions } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { DataTablePagination } from "components/ui/data-table-pagination";
 import { DataTableViewOptions } from "components/ui/data-table-view-options";
+import { Skeleton } from "components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type SuccessProps = {
     isError?: false;
@@ -19,11 +20,32 @@ type ErrorProps = {
 type DataTableProps<TData> = Pick<TableOptions<TData>, "columns" | "data"> & {
     noRowsMessage?: string;
     isSelectable?: boolean;
+    isLoading?: boolean;
 } & (SuccessProps | ErrorProps);
 
-export const DataTable = <TData, >({ columns, data, ...props }: DataTableProps<TData>) => {
+export const DataTable = <TData, >(props: DataTableProps<TData>) => {
 
     const [ sorting, setSorting ] = useState<SortingState>([]);
+
+    const data = useMemo<TData[]>(() => {
+        if (!props.isLoading) {
+            return props.data;
+        }
+
+        return Array.from({ length: 10 });
+    }, [ props.data, props.isLoading ]);
+
+    const columns = useMemo<ColumnDef<TData>[]>(() => {
+        if (!props.isLoading) {
+            return props.columns;
+        }
+
+        return props.columns.map(column => ({
+            ...column,
+            cell: () => <Skeleton className="h-6" />,
+            enableSorting: false
+        }));
+    }, [ props.columns, props.isLoading ]);
 
     const table = useReactTable({
         data,
