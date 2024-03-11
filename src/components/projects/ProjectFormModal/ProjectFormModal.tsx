@@ -2,7 +2,8 @@ import type { useDisclosure } from "@nextui-org/react";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import { ProjectForm } from "components/projects";
 import type { FC } from "react";
-import type { Project } from "types/entities";
+
+import type { Project } from "types/entities/project";
 
 type Props = Pick<ReturnType<typeof useDisclosure>, "isOpen" | "onOpenChange"> & {
     project: Project | null;

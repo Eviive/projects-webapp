@@ -3,7 +3,7 @@
 import { Root } from "@radix-ui/react-label";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
 

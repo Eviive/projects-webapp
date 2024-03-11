@@ -1,4 +1,4 @@
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import type { HTMLAttributes } from "react";
 
 const Skeleton = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => {

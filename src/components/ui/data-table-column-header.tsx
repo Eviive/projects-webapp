@@ -1,7 +1,7 @@
 import type { Column } from "@tanstack/react-table";
 import { Button } from "components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "components/ui/dropdown-menu";
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import type { HTMLAttributes } from "react";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { LuArrowDown, LuArrowUp, LuChevronsUpDown } from "react-icons/lu";

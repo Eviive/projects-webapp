@@ -1,70 +1,60 @@
-import { Card, CardBody, CardHeader, Divider, Image } from "@nextui-org/react";
 import { ImageService } from "api/services";
-import { SortableDragHandle, SortableItem } from "components/common";
-import { useContextMenu } from "hooks/useContextMenu";
+import { SkillFormModal } from "components/skills/SkillFormModal/SkillFormModal";
+import { Button } from "components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
+import { Separator } from "components/ui/separator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { SKILL_PLACEHOLDER } from "lib/constants";
 import type { FC } from "react";
-import { MdDelete, MdEdit } from "react-icons/md";
-import type { Skill } from "types/entities";
+import { MdEdit } from "react-icons/md";
+
+import type { Skill } from "types/entities/skill";
 
 type Props = {
     skill: Skill;
-    handleAction: () => void;
-    isDndActive: boolean;
-    isOverlay?: boolean;
 };
 
-export const SkillCard: FC<Props> = ({ skill, ...props }) => {
-
-    const { addSection } = useContextMenu();
-
+export const SkillCard: FC<Props> = ({ skill }) => {
     return (
-        <SortableItem id={skill.id} className="flex justify-self-stretch">
-            <Card
-                classNames={{
-                    base: "grow",
-                    header: "px-4 justify-between text-left",
-                    body: "p-4 justify-end items-center"
-                }}
-                onContextMenu={!props.isOverlay
-                    ? e => addSection(e, {
-                        title: skill.name,
-                        items: [
-                            {
-                                title: "Edit",
-                                icon: <MdEdit size={25} />,
-                                handleAction: props.handleAction
-                            },
-                            {
-                                title: "Delete",
-                                icon: <MdDelete size={25} />,
-                                handleAction: () => console.log("Delete"),
-                                danger: true
-                            }
-                        ]
-                    })
-                    : undefined
-                }
-            >
-                <CardHeader>
-                    <b className="truncate text-sm">
+        <Card className="justify-self-stretch">
+            <CardHeader className="p-3">
+                <CardTitle className="text-sm flex items-center justify-between gap-2">
+                    <span className="max-w-[calc(100% - 36px)] truncate">
                         {skill.name}
-                    </b>
-                    {props.isDndActive && <SortableDragHandle className="ml-1" isDragging={props.isOverlay} />}
-                </CardHeader>
-                <Divider />
-                <CardBody>
-                    <Image
-                        className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                        src={ImageService.getImageUrl(skill.image) ?? SKILL_PLACEHOLDER}
-                        alt={skill.image.altEn}
-                        width={100}
-                        radius="sm"
-                        disableSkeleton={props.isOverlay}
-                        loading="lazy"
-                    />
-                </CardBody>
-            </Card>
-        </SortableItem>
+                    </span>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <SkillFormModal
+                                skill={skill}
+                                trigger={
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            className="text-foreground-500 h-7 w-7"
+                                            variant="outline"
+                                            size="icon"
+                                        >
+                                            <MdEdit size={18} />
+                                        </Button>
+                                    </TooltipTrigger>
+                                }
+                            />
+                            <TooltipContent>
+                                Edit
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </CardTitle>
+            </CardHeader>
+            <Separator />
+            <CardContent className="p-4 flex justify-center items-center">
+                <img
+                    className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)] overflow-hidden rounded-sm"
+                    src={ImageService.getImageUrl(skill.image) ?? SKILL_PLACEHOLDER}
+                    alt={skill.image.altEn}
+                    width={100}
+                    loading="lazy"
+                />
+            </CardContent>
+        </Card>
     );
 };

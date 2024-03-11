@@ -1,15 +1,20 @@
 import { request } from "api/client";
-import type { Skill } from "types/entities";
+
+import type { Skill, SkillCreation } from "types/entities/skill";
 
 const URL = "skill";
 
 const findById = (id: number) => request<Skill>(`/${URL}/${id}`, { needsAuth: false });
 
-const findAll = () => request<Skill[]>(`/${URL}`, { needsAuth: false });
+const findAll = async () => {
+    const skills = await request<Skill[]>(`/${URL}`, { needsAuth: false });
+    skills.sort((a, b) => a.sort - b.sort);
+    return skills;
+};
 
-const save = (skill: Skill, file?: File | null) => {
+const save = (skill: SkillCreation, file?: File | null) => {
     if (!file) {
-        return request<Skill, Skill>(`/${URL}`, {
+        return request<Skill, SkillCreation>(`/${URL}`, {
             method: "POST",
             data: skill
         });
@@ -52,7 +57,7 @@ const deleteSkill = (id: number) => request<void>(`/${URL}/${id}`, {
     method: "DELETE"
 });
 
-const buildFormData = (skill: Skill, file: File) => {
+const buildFormData = (skill: Skill | SkillCreation, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("skill", new Blob([ JSON.stringify(skill) ], { type: "application/json" }));

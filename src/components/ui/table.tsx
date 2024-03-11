@@ -1,5 +1,5 @@
-import { cn } from "lib/utils";
-import type { TdHTMLAttributes, ThHTMLAttributes , HTMLAttributes } from "react";
+import { cn } from "lib/utils/style";
+import type { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from "react";
 import { forwardRef } from "react";
 
 const Table = forwardRef<

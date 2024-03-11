@@ -1,6 +1,6 @@
 import { Content, Indicator, Item, Link, List, Root, Trigger, Viewport } from "@radix-ui/react-navigation-menu";
 import { cva } from "class-variance-authority";
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";

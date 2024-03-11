@@ -1,7 +1,7 @@
 "use client";
 
 import { Close, Content, Description, Overlay, Portal, Root, Title, Trigger } from "@radix-ui/react-dialog";
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import { X } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
 import { forwardRef } from "react";

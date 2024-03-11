@@ -1,128 +1,94 @@
-import { Spinner, useDisclosure } from "@nextui-org/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { SkillService } from "api/services";
-import { Loader, Page, SearchBar, SortableList } from "components/common";
+import { Loader, Page, SearchBar } from "components/common";
 import { SkillCard, SkillFormModal } from "components/skills";
-import { useContextMenu } from "hooks/useContextMenu";
-import { useDragAndDrop } from "hooks/useDragAndDrop";
-import { getTitleAndMessage } from "lib/utils";
-import type { FC, ReactNode } from "react";
+import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
+import { Button } from "components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
+import { GridLayout } from "layouts";
+import { getTitleAndMessage } from "lib/utils/error";
+import type { FC } from "react";
 import { useMemo, useState } from "react";
-import { MdAdd, MdCheck, MdDragIndicator } from "react-icons/md";
-import { toast } from "sonner";
-import type { Skill } from "types/entities";
+import { FaPlus } from "react-icons/fa6";
+import { LuAlertCircle } from "react-icons/lu";
 
 export const Skills: FC = () => {
 
-    const query = useQuery([ "skills" ], SkillService.findAll);
+    const query = useQuery({
+        queryKey: [ "skills" ],
+        queryFn: SkillService.findAll
+    });
 
-    const { addSection } = useContextMenu();
+    const error = query.isError ? getTitleAndMessage(query.error) : null;
 
-    const queryClient = useQueryClient();
-
-    const handleSaveSkillsOrder = async (skills: Skill[]) => {
-        try {
-            await SkillService.sort(skills.map(skill => skill.id));
-            await queryClient.invalidateQueries([ "skills", "projects" ]);
-            toast.success("Skills order saved successfully!");
-        } catch (e) {
-            console.error("Error while saving skills order", getTitleAndMessage(e));
-        }
-    };
-
-    const {
-        items: [ skillItems, setSkillItems ],
-        dndState,
-        handleToggleDnd,
-        handleOnSetItems
-    } = useDragAndDrop(query, handleSaveSkillsOrder);
-
-    const getDndContextMenuIcon = (): ReactNode => {
-        if (!dndState.isDndActive) {
-            return <MdDragIndicator size={25} />;
-        }
-
-        return dndState.isDndSubmitting
-            ? <Spinner className="m-0.5" color="danger" size="sm" />
-            : <MdCheck size={25} />;
-    };
-
-    const [ searchQuery, setSearchQuery ] = useState("");
+    const [ searchBarValue, setSearchBarValue ] = useState("");
+    const [ searchQuery, setSearchQuery ] = useState(searchBarValue);
 
     const filteredSkillItems = useMemo(() => (
-        skillItems.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
-    ), [ skillItems, searchQuery ]);
-
-    const [ skillForm, setSkillForm ] = useState<Skill | null>(null);
-
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-    const handleClose = (isTouched: boolean, isDeleted: boolean) => {
-        isTouched && toast.success(`Skill ${skillForm ? "updated" : "created"} successfully!`);
-        isDeleted && toast.success("Skill deleted successfully!");
-        setSkillForm(null);
-    };
+        query.isSuccess
+            ? query.data.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
+            : []
+    ), [ query.isSuccess, query.data, searchQuery ]);
 
     return (
         <Page title="Skills">
-            {query.isSuccess
-
-                ? <div
-                    className="w-full h-full px-[5%] py-12 flex flex-col gap-12"
-                    onContextMenu={e => addSection(e, {
-                        title: "Skills",
-                        items: [
-                            {
-                                title: "Add",
-                                icon: <MdAdd size={25} />,
-                                handleAction: onOpen
-                            },
-                            {
-                                title: "Sort",
-                                icon: getDndContextMenuIcon(),
-                                handleAction: handleToggleDnd,
-                                disabled: skillItems.length !== filteredSkillItems.length || dndState.isDndSubmitting
-                            }
-                        ]
-                    })}
-                >
-                    <SkillFormModal
-                        isOpen={isOpen}
-                        onOpenChange={onOpenChange}
-                        skill={skillForm}
-                        numberOfSkills={skillItems.length}
-                        handleClose={handleClose}
-                    />
+            <div className="grow w-full h-full px-[5%] py-12 flex flex-col gap-12">
+                <div className="self-center max-w-md w-full flex items-center gap-2">
                     <SearchBar
-                        value={searchQuery}
-                        handleChange={setSearchQuery}
+                        value={searchBarValue}
+                        handleChange={setSearchBarValue}
+                        debounce={300}
+                        handleDebounce={setSearchQuery}
+                        isDisabled={query.isLoading || query.isError}
                     />
-                    <SortableList
-                        items={filteredSkillItems}
-                        setItems={setSkillItems}
-                        onSetItems={handleOnSetItems}
-                        renderItem={(skill, isOverlay) => (
-                            <SkillCard
-                                skill={skill}
-                                handleAction={() => {
-                                    setSkillForm(skill);
-                                    onOpen();
-                                }}
-                                isDndActive={dndState.isDndActive && !dndState.isDndSubmitting}
-                                isOverlay={isOverlay}
+                    <TooltipProvider>
+                        <Tooltip>
+                            <SkillFormModal
+                                skill={null}
+                                trigger={
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            className="text-foreground-500"
+                                            variant="outline"
+                                            size="icon"
+                                        >
+                                            <FaPlus size={20} />
+                                        </Button>
+                                    </TooltipTrigger>
+                                }
                             />
-                        )}
-                        wrapperProps={{
-                            minWidth: "125px",
-                            gap: "2em",
-                            columnCount: "infinity",
-                            centerHorizontally: true
-                        }}
-                    />
+                            <TooltipContent>
+                                Add a new skill
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
-
-                : <Loader />
-            }
+                {query.isSuccess && (
+                    <GridLayout
+                        minWidth="140px"
+                        gap="2em"
+                        columnCount="infinity"
+                        centerHorizontally
+                    >
+                        {filteredSkillItems.map(skill => (
+                            <SkillCard
+                                key={skill.id}
+                                skill={skill}
+                            />
+                        ))}
+                    </GridLayout>
+                )}
+                {query.isLoading && (
+                    <Loader />
+                )}
+                {query.isError && error !== null && (
+                    <Alert variant="destructive">
+                        <LuAlertCircle className="h-4 w-4" />
+                        <AlertTitle>{error.title}</AlertTitle>
+                        <AlertDescription>{error.message}</AlertDescription>
+                    </Alert>
+                )}
+            </div>
         </Page>
     );
 };

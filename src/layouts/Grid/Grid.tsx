@@ -1,4 +1,4 @@
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import type { CSSProperties, FC, PropsWithChildren } from "react";
 
 import styles from "./grid.module.scss";

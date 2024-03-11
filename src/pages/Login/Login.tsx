@@ -6,15 +6,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { useAuthContext } from "contexts/AuthContext";
-import { getTitleAndMessage } from "lib/utils";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
 import { useLayoutEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import type { AuthRequest } from "types/forms";
-import { authRequestSchema } from "types/forms";
+import type { AuthRequest } from "types/auth";
+import { authRequestSchema } from "types/auth";
 
 export const Login: FC = () => {
 
@@ -49,7 +49,7 @@ export const Login: FC = () => {
                 toast.error("You must be an administrator to access the dashboard.");
             }
         } catch (e) {
-            console.error("Login failed", getTitleAndMessage(e));
+            console.error("Login failed", getFormattedTitleAndMessage(e));
         } finally {
             setIsSubmitting(false);
         }

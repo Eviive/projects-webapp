@@ -4,13 +4,14 @@ import { ImageService, ProjectService, SkillService } from "api/services";
 import { ImageForm } from "components/image";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
 import { SKILL_PLACEHOLDER } from "lib/constants";
-import { getTitleAndMessage } from "lib/utils";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { Project, WithImageFile } from "types/entities";
+import type { WithImageFile } from "types/entities";
+import type { Project } from "types/entities/project";
 
 type ProjectFormValues = WithImageFile<Project>;
 
@@ -74,7 +75,7 @@ export const ProjectForm: FC<Props> = props => {
             console.log(`Project ${editing ? "updated" : "created"} successfully!`);
             props.handleClose(true, false);
         } catch (e) {
-            console.error(editing ? "Project update failed" : "Project creation failed", getTitleAndMessage(e));
+            console.error(editing ? "Project update failed" : "Project creation failed", getFormattedTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("editionFinished");
         }
@@ -90,7 +91,7 @@ export const ProjectForm: FC<Props> = props => {
             console.log("Project deleted successfully!");
             props.handleClose(false, true);
         } catch (e) {
-            console.error("Project deletion failed", getTitleAndMessage(e));
+            console.error("Project deletion failed", getFormattedTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("deletionFinished");
         }

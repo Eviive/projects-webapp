@@ -1,5 +1,6 @@
 import { request } from "api/client";
-import type { Image } from "types/entities";
+
+import type { Image } from "types/entities/image";
 
 const URL = "image";
 

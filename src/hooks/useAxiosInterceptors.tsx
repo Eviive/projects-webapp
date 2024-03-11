@@ -2,7 +2,7 @@ import { httpClient } from "api/client";
 import { UserService } from "api/services";
 import { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
-import { getTitleAndMessage } from "lib/utils";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 
@@ -12,7 +12,7 @@ const isExpired = (token: string) => {
 
         return expiresAt && Date.now() >= expiresAt * 1000;
     } catch (e) {
-        console.error("Error while decoding token", getTitleAndMessage(e));
+        console.error("Error while decoding token", getFormattedTitleAndMessage(e));
         return true;
     }
 };
@@ -49,7 +49,7 @@ export const useAxiosInterceptors = (accessToken: string, setAccessToken: Dispat
                     req.headers["Authorization"] = `Bearer ${newToken}`;
                     setAccessToken(newToken);
                 } catch (e) {
-                    console.error("Error while refreshing token", getTitleAndMessage(e));
+                    console.error("Error while refreshing token", getFormattedTitleAndMessage(e));
                     setAccessToken("");
                     return Promise.reject(e);
                 }

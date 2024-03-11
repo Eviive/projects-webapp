@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
-import { getTitleAndMessage } from "lib/utils";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
 import { toast } from "sonner";
 
 export const httpClient = axios.create({
@@ -40,7 +40,7 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
             ...restConfig
         });
     } catch (e) {
-        showErrorToast && toast.error(getTitleAndMessage(e));
+        showErrorToast && toast.error(getFormattedTitleAndMessage(e));
         throw e;
     }
     return res.data;

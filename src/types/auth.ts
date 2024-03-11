@@ -1,5 +1,18 @@
 import { z } from "zod";
 
+export type User = {
+    id: number;
+    username: string;
+    firstName: string;
+    lastName: string;
+    roles: Role[];
+};
+
+export type Role = {
+    id: number;
+    name: string;
+};
+
 export const authRequestSchema = z.object({
     username: z
         .string({

@@ -7,7 +7,8 @@ import type { FC } from "react";
 import { useMemo } from "react";
 import { FaHeart } from "react-icons/fa6";
 import { MdDelete, MdEdit } from "react-icons/md";
-import type { Project } from "types/entities";
+
+import type { Project } from "types/entities/project";
 
 const dateFormatter = Intl.DateTimeFormat("en-GB", { dateStyle: "short" });
 

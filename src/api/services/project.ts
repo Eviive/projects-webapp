@@ -1,5 +1,8 @@
 import { request } from "api/client";
-import type { Page, Project, Skill } from "types/entities";
+import type { Page } from "types/app";
+
+import type { Project } from "types/entities/project";
+import type { Skill } from "types/entities/skill";
 
 const URL = "project";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Indicator, Root } from "@radix-ui/react-checkbox";
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import { Check } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";

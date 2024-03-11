@@ -12,7 +12,8 @@ import { FaPlus } from "react-icons/fa";
 import { MdAdd, MdCheck, MdDragIndicator } from "react-icons/md";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import { toast } from "sonner";
-import type { Project } from "types/entities";
+
+import type { Project } from "types/entities/project";
 
 export const Projects: FC = () => {
 
@@ -95,7 +96,7 @@ export const Projects: FC = () => {
                         numberOfProjects={projectItems.length}
                         handleClose={handleClose}
                     />
-                    <SearchBar value={searchQuery} handleChange={setSearchQuery} />
+                    <SearchBar value={searchQuery} handleDebounce={setSearchQuery} />
                     <SortableList
                         items={filteredProjectItems}
                         setItems={setProjectItems}

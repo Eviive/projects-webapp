@@ -1,12 +1,8 @@
 import { AxiosError } from "axios";
-import type { ClassValue } from "clsx";
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 
-export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
-
-export const getTitleAndMessage = (e: unknown): string => {
+export const getTitleAndMessage = (e: unknown): { title: string, message: string } => {
     import.meta.env.PROD || console.error(e);
+
     let titleAndMessage: { title: string, message: string | string[] };
 
     if (e instanceof AxiosError) {
@@ -20,11 +16,19 @@ export const getTitleAndMessage = (e: unknown): string => {
             message: e.message
         };
     } else {
-        titleAndMessage = {
+        return {
             title: "Unknown error",
             message: "Please try again later."
         };
     }
 
-    return `${titleAndMessage.title}: ${Array.isArray(titleAndMessage.message) ? titleAndMessage.message.join(" ") : titleAndMessage.message}`;
+    return {
+        title: titleAndMessage.title,
+        message: Array.isArray(titleAndMessage.message) ? titleAndMessage.message.join(" ") : titleAndMessage.message
+    };
+};
+
+export const getFormattedTitleAndMessage = (e: unknown): string => {
+    const { title, message } = getTitleAndMessage(e);
+    return `${title}: ${message}`;
 };

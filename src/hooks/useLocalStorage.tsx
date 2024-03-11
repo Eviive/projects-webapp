@@ -1,4 +1,4 @@
-import { getTitleAndMessage } from "lib/utils";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 
@@ -21,7 +21,7 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): UseLocalStora
 
             localStorage.setItem(key, JSON.stringify(defaultValue));
         } catch (e) {
-            console.error(getTitleAndMessage(e));
+            console.error(getFormattedTitleAndMessage(e));
         }
 
         return defaultValue;
@@ -40,7 +40,7 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): UseLocalStora
                 return newState;
             });
         } catch (e) {
-            console.error(getTitleAndMessage(e));
+            console.error(getFormattedTitleAndMessage(e));
         }
     }, [ key ]);
 

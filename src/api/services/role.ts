@@ -1,5 +1,5 @@
 import { request } from "api/client";
-import type { Role } from "types/entities";
+import type { Role } from "types/auth";
 
 const URL = "role";
 

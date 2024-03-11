@@ -1,21 +1,24 @@
-import { Button, ButtonGroup, Input } from "@nextui-org/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services";
 import { ImageForm } from "components/image";
+import { Button } from "components/ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
+import { Input } from "components/ui/input";
 import { useFormSubmissionState } from "hooks/useFormSubmissionState";
-import { getTitleAndMessage } from "lib/utils";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import type { Skill, WithImageFile } from "types/entities";
+import { FormProvider, useForm } from "react-hook-form";
+import type { Skill, SkillCreation, SkillCreationWithFile, SkillEditionWithFile } from "types/entities/skill";
+import { skillCreationSchema, skillEditionWithFileSchema } from "types/entities/skill";
 
-type SkillFormValue = WithImageFile<Skill>;
+type SkillForm = SkillCreationWithFile | SkillEditionWithFile;
 
 type Props = {
     skill: Skill | null;
-    numberOfSkills: number;
-    handleClose: (isTouched: boolean, isDeleted: boolean) => void;
+    closeDialog: () => void;
 };
 
 export const SkillForm: FC<Props> = props => {
@@ -24,49 +27,73 @@ export const SkillForm: FC<Props> = props => {
 
     const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
 
-    const form = useForm<SkillFormValue>({ defaultValues: props.skill ?? undefined });
+    const form = useForm<SkillForm>({
+        resolver: zodResolver(
+            props.skill === null
+                ? skillCreationSchema
+                : skillEditionWithFileSchema
+        ),
+        defaultValues: props.skill ?? {
+            name: "",
+            image: {
+                altEn: "",
+                altFr: ""
+            }
+        }
+    });
     const {
-        handleSubmit,
+        formState: {
+            isDirty
+        },
+        control,
         getValues,
         setValue,
-        control,
-        formState: { isDirty }
+        handleSubmit
     } = form;
 
-    const [ oldName, setOldName ] = useState(props.skill?.name ?? "");
+    const [ oldName, setOldName ] = useState(getValues("name"));
 
-    const submitHandler: SubmitHandler<SkillFormValue> = async data => {
+    const submitHandler: SubmitHandler<SkillForm> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
-        if (!isDirty) return props.handleClose(false, false);
+
+        if (!isDirty) return props.closeDialog();
+
         dispatchSubmissionState("editionStarted");
+
         const editing = !!props.skill;
+
+        const imageFile = data.image.file?.item(0);
+
         try {
-            const skill: Skill = {
-                ...data,
-                image: {
-                    id: data.image.id,
-                    uuid: props.skill?.image?.uuid,
-                    altEn: data.image.altEn,
-                    altFr: data.image.altFr
-                }
-            };
-            if (!editing) {
-                skill.sort = props.numberOfSkills + 1;
-            }
-
-            const imageFile = data.image.file.item(0);
-
-            if (editing) {
+            if (editing && "id" in data) {
+                const skill: Skill = {
+                    ...data,
+                    image: {
+                        id: data.image.id,
+                        uuid: data.image.uuid,
+                        altEn: data.image.altEn,
+                        altFr: data.image.altFr
+                    }
+                };
                 await SkillService.update(skill, imageFile);
             } else {
+                const skill: SkillCreation = {
+                    ...data,
+                    image: {
+                        altEn: data.image.altEn,
+                        altFr: data.image.altFr
+                    }
+                };
                 await SkillService.save(skill, imageFile);
             }
 
-            await queryClient.invalidateQueries([ "skills" ]);
-            console.log(`Skill ${editing ? "updated" : "created"} successfully!`);
-            props.handleClose(true, false);
+            await queryClient.invalidateQueries({
+                queryKey: [ "skills" ]
+            });
+
+            props.closeDialog();
         } catch (e) {
-            console.error(editing ? "Skill update failed" : "Skill creation failed", getTitleAndMessage(e));
+            console.error(editing ? "Skill update failed" : "Skill creation failed", getFormattedTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("editionFinished");
         }
@@ -74,15 +101,21 @@ export const SkillForm: FC<Props> = props => {
 
     const handleDelete = async () => {
         if (submissionState.isSubmittingDeletion || submissionState.isSubmittingEdition) return;
+
         if (!props.skill) return;
+
         dispatchSubmissionState("deletionStarted");
+
         try {
             await SkillService.delete(props.skill.id);
-            await queryClient.invalidateQueries([ "skills" ]);
-            console.log("Skill deleted successfully!");
-            props.handleClose(false, true);
+
+            await queryClient.invalidateQueries({
+                queryKey: [ "skills" ]
+            });
+
+            props.closeDialog();
         } catch (e) {
-            console.error("Skill deletion failed", getTitleAndMessage(e));
+            console.error("Skill deletion failed", getFormattedTitleAndMessage(e));
         } finally {
             dispatchSubmissionState("deletionFinished");
         }
@@ -91,18 +124,13 @@ export const SkillForm: FC<Props> = props => {
     return (
         <FormProvider {...form}>
             <form
-                className="mb-2 flex flex-col gap-4 items-center"
+                className="mb-2 flex flex-col gap-4"
                 onSubmit={handleSubmit(submitHandler)}
             >
-                <Controller
-                    name="name"
+                <FormField
                     control={control}
+                    name="name"
                     rules={{
-                        required: "Name is required",
-                        maxLength: {
-                            value: 50,
-                            message: `Name cannot exceed 50 characters (currently ${getValues("name")?.length})`
-                        },
                         onChange: () => {
                             const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
                                   isNameEmpty = !name.trim(),
@@ -117,39 +145,38 @@ export const SkillForm: FC<Props> = props => {
                             setOldName(name);
                         }
                     }}
-                    defaultValue=""
-                    render={({ field, fieldState }) => (
-                        <Input
-                            {...field}
-                            label="Name"
-                            errorMessage={fieldState.error?.message}
-                            isRequired
-                            isDisabled={field.disabled}
-                        />
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
                     )}
                 />
 
                 <ImageForm />
 
-                <ButtonGroup className="w-full">
+                <div className="w-full flex justify-center gap-3">
                     {!!props.skill && (
                         <Button
-                            className="w-full"
-                            color="danger"
-                            isLoading={submissionState.isSubmittingDeletion}
-                            onPress={handleDelete}
+                            className="w-full max-w-[50%]"
+                            variant="destructive"
+                            disabled={submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion}
+                            onClick={handleDelete}
                         >
                             Delete
                         </Button>
                     )}
                     <Button
-                        className="w-full"
+                        className="w-full max-w-[50%]"
                         type="submit"
-                        isLoading={submissionState.isSubmittingEdition}
+                        disabled={submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion}
                     >
                         Submit
                     </Button>
-                </ButtonGroup>
+                </div>
             </form>
         </FormProvider>
     );

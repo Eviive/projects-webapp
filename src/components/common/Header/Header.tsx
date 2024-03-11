@@ -3,7 +3,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
 import { useAuthContext } from "contexts/AuthContext";
 import { useThemeContext } from "contexts/ThemeContext";
-import { cn, getTitleAndMessage } from "lib/utils";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { cn } from "lib/utils/style";
 import type { FC, Key } from "react";
 import { Fragment, useMemo, useState } from "react";
 import { BiPlusMedical } from "react-icons/bi";
@@ -81,7 +82,7 @@ export const Header: FC = () => {
                         try {
                             await UserService.logout();
                         } catch (e) {
-                            console.error("Logout failed", getTitleAndMessage(e));
+                            console.error("Logout failed", getFormattedTitleAndMessage(e));
                         } finally {
                             setAccessToken("");
                             toast.success("You have been logged out");

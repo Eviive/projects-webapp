@@ -2,7 +2,7 @@
 
 import { CheckboxItem, Content, Item, ItemIndicator, Label, Portal, RadioGroup, RadioItem, Root, Separator, Sub, SubContent, SubTrigger, Trigger } from "@radix-ui/react-dropdown-menu";
 import { Group } from "@radix-ui/react-select";
-import { cn } from "lib/utils";
+import { cn } from "lib/utils/style";
 import { Check, ChevronRight, Circle } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
 import { forwardRef } from "react";
