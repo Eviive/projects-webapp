@@ -5,12 +5,19 @@ import { useState } from "react";
 
 import type { Skill } from "types/entities/skill";
 
-type Props = {
-    skill: Skill | null;
-    trigger: ReactNode;
+type EditionProps = {
+    skill: Skill;
 };
 
-export const SkillFormModal: FC<Props> = props => {
+type CreationProps = {
+    skill?: never;
+};
+
+type Props = {
+    trigger: ReactNode;
+} & (EditionProps | CreationProps);
+
+export const SkillFormDialog: FC<Props> = props => {
 
     const [ open, setOpen ] = useState(false);
 
@@ -21,7 +28,7 @@ export const SkillFormModal: FC<Props> = props => {
                 <DialogHeader>
                     <DialogTitle>{props.skill ? `Editing ${props.skill.name}` : "Creating skill"}</DialogTitle>
                 </DialogHeader>
-                <SkillForm skill={props.skill} closeDialog={() => setOpen(false)} />
+                <SkillForm skill={props.skill ?? null} closeDialog={() => setOpen(false)} />
             </DialogContent>
         </Dialog>
     );

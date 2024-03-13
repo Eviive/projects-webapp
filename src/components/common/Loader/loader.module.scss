@@ -1,6 +1,6 @@
 .loader {
-    --size: var(--loader-size, 50px);
-    --color: var(--loader-color, hsl(var(--accent-foreground)));
+    --size: var(--loader-size, 40px);
+    --color: var(--loader-color, hsl(var(--foreground)));
     --line-size: calc(var(--size) / 6.25);
     --mask-size: calc(100% - var(--line-size));
 

@@ -1,7 +1,5 @@
-import type { UniqueIdentifier } from "@dnd-kit/core";
-
 export type DndItem = {
-    id: UniqueIdentifier;
+    id: number;
     sort: number;
 };
 
@@ -9,4 +7,9 @@ export type DndState = {
     isDndActive: boolean;
     isDndTouched: boolean;
     isDndSubmitting: boolean;
+};
+
+export type DndSaveItem = {
+    id: number;
+    sort: number;
 };

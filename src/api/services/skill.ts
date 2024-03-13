@@ -1,4 +1,5 @@
 import { request } from "api/client";
+import type { DndSaveItem } from "types/dnd";
 
 import type { Skill, SkillCreation } from "types/entities/skill";
 
@@ -29,13 +30,6 @@ const save = (skill: SkillCreation, file?: File | null) => {
     });
 };
 
-const sort = (sortedIds: number[]) => {
-    return request<void, number[]>(`/${URL}/sort`, {
-        method: "POST",
-        data: sortedIds
-    });
-};
-
 const update = (skill: Skill, file?: File | null) => {
     if (!file) {
         return request<Skill, Skill>(`/${URL}/${skill.id}`, {
@@ -50,6 +44,13 @@ const update = (skill: Skill, file?: File | null) => {
         headers: {
             "Content-Type": "multipart/form-data"
         }
+    });
+};
+
+const sort = (sorts: DndSaveItem[]) => {
+    return request<void, DndSaveItem[]>(`/${URL}/sort`, {
+        method: "PATCH",
+        data: sorts
     });
 };
 
@@ -68,7 +69,7 @@ export const SkillService = {
     findById,
     findAll,
     save,
-    sort,
     update,
+    sort,
     delete: deleteSkill
 };

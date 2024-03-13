@@ -1,4 +1,5 @@
-import type { FC } from "react";
+import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { type FC } from "react";
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 
 export const ErrorPage: FC = () => {
@@ -9,11 +10,9 @@ export const ErrorPage: FC = () => {
         <div>
             <h1>Oops!</h1>
             <p>Sorry, an unexpected error has occurred.</p>
-            {isRouteErrorResponse(error) &&
-                <p>
-                    <i>{error.statusText}</i>
-                </p>
-            }
+            <p>
+                <i>{isRouteErrorResponse(error) ? error.statusText : getFormattedTitleAndMessage(error)}</i>
+            </p>
         </div>
     );
 };

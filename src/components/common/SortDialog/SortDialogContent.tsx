@@ -3,22 +3,54 @@ import { DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, useSensor
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { SortDialogDragHandle } from "components/common/SortDialog/SortDialogDragHandle";
+import { Button } from "components/ui/button";
 import { ScrollArea } from "components/ui/scroll-area";
 import { Separator } from "components/ui/separator";
-import { Fragment, type ReactNode, useMemo, useState } from "react";
+import { type ForwardedRef, forwardRef, Fragment, type PropsWithoutRef, type ReactNode, type RefAttributes, useImperativeHandle, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import type { DndItem } from "types/dnd";
+import type { DndItem, DndSaveItem } from "types/dnd";
 import { SortDialogItem } from "./SortDialogItem";
 import { SortDialogOverlay } from "./SortDialogOverlay";
+
+export type SortDialogContentRef = () => DndSaveItem[] | null;
 
 type Props<E extends DndItem> = {
     initialItems: E[];
     render: (item: E) => ReactNode;
+    closeDialog: (resetSort: boolean) => void;
 };
 
-export const SortDialogContent = <E extends DndItem>(props: Props<E>) => {
+const SortDialogContent = <E extends DndItem>(props: Props<E>, ref: ForwardedRef<SortDialogContentRef>) => {
 
     const [ items, setItems ] = useState(props.initialItems);
+
+    const [ initialSort ] = useState(
+        props.initialItems.map(item => item.sort)
+    );
+
+    useImperativeHandle(ref, () => {
+        return () => {
+            const firstMovedIndex = items
+                .findIndex((item, i) => item.sort !== initialSort[i]);
+            const lastMovedItem = firstMovedIndex !== -1
+                ? items.findLastIndex((item, i) => item.sort !== initialSort[i])
+                : -1;
+
+            if (firstMovedIndex === -1 || lastMovedItem === -1) return null;
+
+            const movedItems = items.slice(firstMovedIndex, lastMovedItem + 1);
+
+            const sorts = movedItems
+                .map(item => item.sort)
+                .sort((a, b) => a - b);
+
+            return movedItems
+                .map((item, i) => ({
+                    id: item.id,
+                    sort: sorts[i]
+                }));
+        };
+    }, [ initialSort, items ]);
 
     const [ active, setActive ] = useState<Active | null>(null);
 
@@ -42,18 +74,7 @@ export const SortDialogContent = <E extends DndItem>(props: Props<E>) => {
                 const activeIndex = prevItems.findIndex(item => item.id === active.id);
                 const overIndex = prevItems.findIndex(item => item.id === over.id);
 
-                const newItems = arrayMove(prevItems, activeIndex, overIndex);
-
-                const movedItems = newItems.slice(Math.min(activeIndex, overIndex), Math.max(activeIndex, overIndex) + 1);
-
-                movedItems
-                    .map(item => item.sort)
-                    .sort((a, b) => a - b)
-                    .forEach((sort, i) => {
-                        movedItems[i].sort = sort;
-                    });
-
-                return newItems;
+                return arrayMove(prevItems, activeIndex, overIndex);
             });
         }
 
@@ -61,41 +82,61 @@ export const SortDialogContent = <E extends DndItem>(props: Props<E>) => {
     };
 
     return (
-        <DndContext
-            sensors={sensors}
-            modifiers={[ restrictToVerticalAxis, restrictToFirstScrollableAncestor ]}
-            onDragStart={({ active }) => setActive(active)}
-            onDragCancel={() => setActive(null)}
-            onDragEnd={handleDragEnd}
-        >
-            <SortableContext items={items} strategy={verticalListSortingStrategy}>
-                <ScrollArea className="h-[500px]">
-                    <ul className="mr-[calc(var(--scrollbar-size)*1.5)]">
-                        {items.map((item, i) => (
-                            <Fragment key={item.id}>
-                                <SortDialogItem id={item.id}>
-                                    {props.render(item)}
+        <>
+            <DndContext
+                sensors={sensors}
+                modifiers={[ restrictToVerticalAxis, restrictToFirstScrollableAncestor ]}
+                onDragStart={({ active }) => setActive(active)}
+                onDragCancel={() => setActive(null)}
+                onDragEnd={handleDragEnd}
+            >
+                <SortableContext items={items} strategy={verticalListSortingStrategy}>
+                    <ScrollArea className="h-[500px]">
+                        <ul className="mr-[calc(var(--scrollbar-size)*1.5)]">
+                            {items.map((item, i) => (
+                                <Fragment key={item.id}>
+                                    <Separator />
+                                    <SortDialogItem id={item.id}>
+                                        {props.render(item)}
+                                        <SortDialogDragHandle />
+                                    </SortDialogItem>
+                                    {i === items.length - 1 && (
+                                        <Separator />
+                                    )}
+                                </Fragment>
+                            ))}
+                        </ul>
+                    </ScrollArea>
+                </SortableContext>
+                {createPortal(
+                    <SortDialogOverlay>
+                        {!!activeItem && (
+                            <>
+                                <Separator />
+                                <SortDialogItem id={activeItem.id} isOverlay>
+                                    {props.render(activeItem)}
                                     <SortDialogDragHandle />
                                 </SortDialogItem>
-                                {i < items.length - 1 && (
-                                    <Separator />
-                                )}
-                            </Fragment>
-                        ))}
-                    </ul>
-                </ScrollArea>
-            </SortableContext>
-            {createPortal(
-                <SortDialogOverlay>
-                    {!!activeItem && (
-                        <SortDialogItem id={activeItem.id} isOverlay>
-                            {props.render(activeItem)}
-                            <SortDialogDragHandle />
-                        </SortDialogItem>
-                    )}
-                </SortDialogOverlay>,
-                document.body
-            )}
-        </DndContext>
+                                <Separator />
+                            </>
+                        )}
+                    </SortDialogOverlay>,
+                    document.body
+                )}
+            </DndContext>
+            <div className="flex justify-between">
+                <Button variant="outline" onClick={() => props.closeDialog(true)}>
+                    Cancel
+                </Button>
+                <Button onClick={() => props.closeDialog(false)}>
+                    Save
+                </Button>
+            </div>
+        </>
     );
 };
+
+const SortDialogContentWithForwardedRef = forwardRef(SortDialogContent) as
+    <E extends DndItem>(props: PropsWithoutRef<Props<E>> & RefAttributes<SortDialogContentRef>) => ReactNode;
+
+export { SortDialogContentWithForwardedRef as SortDialogContent };

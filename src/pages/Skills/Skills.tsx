@@ -1,18 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { ImageService, SkillService } from "api/services";
-import { Loader, Page, SearchBar, SortDialog } from "components/common";
-import { SkillCard, SkillFormModal } from "components/skills";
+import { useMutationState, useQuery } from "@tanstack/react-query";
+import { SkillService } from "api/services";
+import { Loader, Page, SearchBar } from "components/common";
+import { SkillCard, SkillFormDialog, SkillSortDialog, sortSkillsMutationKey } from "components/skills";
 import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
 import { Button } from "components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { GridLayout } from "layouts";
-import { SKILL_PLACEHOLDER } from "lib/constants";
 import { getTitleAndMessage } from "lib/utils/error";
-import type { FC } from "react";
-import { useMemo, useState } from "react";
+import { type FC, useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { LuAlertCircle } from "react-icons/lu";
 import { MdDragHandle } from "react-icons/md";
+import type { DndSaveItem } from "types/dnd";
 
 export const Skills: FC = () => {
 
@@ -23,14 +22,47 @@ export const Skills: FC = () => {
 
     const error = query.isError ? getTitleAndMessage(query.error) : null;
 
+    const optimisticSkillSorts = useMutationState<DndSaveItem[]>({
+        filters: {
+            mutationKey: sortSkillsMutationKey,
+            status: "pending"
+        },
+        select: mutation => mutation.state.variables as DndSaveItem[]
+    });
+
+    const optimisticSkillSortItems = useMemo(() => {
+        const items: Record<number, number> = {};
+
+        for (const sortItem of optimisticSkillSorts.flatMap(i => i)) {
+            items[sortItem.id] = sortItem.sort;
+        }
+
+        return items;
+    }, [ optimisticSkillSorts ]);
+
+    const optimisticSkills = useMemo(() => {
+        if (!query.isSuccess) return [];
+
+        const optSkills = [ ...query.data ];
+
+        for (const skill of optSkills) {
+            if (optimisticSkillSortItems[skill.id] !== undefined) {
+                skill.sort = optimisticSkillSortItems[skill.id];
+            }
+        }
+
+        optSkills.sort((a, b) => a.sort - b.sort);
+
+        return optSkills;
+    }, [ query.data, query.isSuccess, optimisticSkillSortItems ]);
+
     const [ searchBarValue, setSearchBarValue ] = useState("");
     const [ searchQuery, setSearchQuery ] = useState(searchBarValue);
 
-    const filteredSkillItems = useMemo(() => (
-        query.isSuccess
-            ? query.data.filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
-            : []
-    ), [ query.isSuccess, query.data, searchQuery ]);
+    const optimisticFilteredSkills = useMemo(() => {
+        return optimisticSkills
+            .filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()));
+    }, [ optimisticSkills, searchQuery ]);
 
     return (
         <Page title="Skills">
@@ -45,8 +77,7 @@ export const Skills: FC = () => {
                     />
                     <TooltipProvider>
                         <Tooltip>
-                            <SkillFormModal
-                                skill={null}
+                            <SkillFormDialog
                                 trigger={
                                     <TooltipTrigger asChild>
                                         <Button
@@ -66,21 +97,8 @@ export const Skills: FC = () => {
                     </TooltipProvider>
                     <TooltipProvider>
                         <Tooltip>
-                            <SortDialog
-                                itemsName="skills"
-                                initialItems={query.data ?? null}
-                                render={skill => (
-                                    <div className="grow flex items-center gap-3">
-                                        <img
-                                            className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)] overflow-hidden rounded-sm"
-                                            src={ImageService.getImageUrl(skill.image) ?? SKILL_PLACEHOLDER}
-                                            alt={skill.image.altEn}
-                                            width={36}
-                                            loading="lazy"
-                                        />
-                                        {skill.name}
-                                    </div>
-                                )}
+                            <SkillSortDialog
+                                initialSkills={optimisticSkills}
                                 trigger={
                                     <TooltipTrigger asChild>
                                         <Button
@@ -107,10 +125,11 @@ export const Skills: FC = () => {
                         columnCount="infinity"
                         centerHorizontally
                     >
-                        {filteredSkillItems.map(skill => (
+                        {optimisticFilteredSkills.map(skill => (
                             <SkillCard
                                 key={skill.id}
                                 skill={skill}
+                                isOptimistic={optimisticSkillSortItems[skill.id] !== undefined}
                             />
                         ))}
                     </GridLayout>

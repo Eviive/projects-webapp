@@ -46,7 +46,7 @@ export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
                 style={style}
                 className={cn(
                     "p-3 flex justify-between items-center gap-3 text-ms bg-background",
-                    props.isOverlay && "rounded-sm shadow-md bg-white"
+                    props.isOverlay && "shadow-md"
                 )}
             >
                 {props.children}
