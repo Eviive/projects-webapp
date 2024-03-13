@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
 
 type UseCountUpOutput = {
     count: number;
@@ -18,21 +18,25 @@ export const useCountUp = (endValue: number, duration: number = 1000): UseCountU
         if (!start) return;
 
         let startTimestamp: number;
+        let animationFrameId: number;
+
         const animate = (timestamp: number) => {
             if (startTimestamp === undefined) {
                 startTimestamp = timestamp;
             }
 
             const elapsed = timestamp - startTimestamp;
-            const progress = easeOutCubic(Math.min(elapsed / duration, 1));
+            const progress = easeOutQuad(Math.min(elapsed / duration, 1));
             setCount(Math.floor(endValue * progress));
 
             if (elapsed < duration) {
-                requestAnimationFrame(animate);
+                animationFrameId = requestAnimationFrame(animate);
             }
         };
 
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(animationFrameId);
     }, [ start, endValue, duration ]);
 
     return {

@@ -1,20 +1,18 @@
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
+import { Button } from "components/ui/button";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "components/ui/navigation-menu";
 import { useAuthContext } from "contexts/AuthContext";
 import { useThemeContext } from "contexts/ThemeContext";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import { cn } from "lib/utils/style";
-import type { FC, Key } from "react";
-import { Fragment, useMemo, useState } from "react";
-import { BiPlusMedical } from "react-icons/bi";
-import { BsChevronDown, BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
-import { MdOutlineDesktopWindows, MdRefresh } from "react-icons/md";
-import { RiToolsLine } from "react-icons/ri";
-import { TbLogout } from "react-icons/tb";
-import { matchPath, useLocation, useNavigate } from "react-router-dom";
+import { type FC, useState } from "react";
+import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+import { LuActivity, LuFolderCog, LuSettings2 } from "react-icons/lu";
+import { matchPath, NavLink, useLocation } from "react-router-dom";
 import { toast } from "sonner";
-import type { HeaderItem, HeaderMenu } from "types/header";
+import type { HeaderItem, HeaderRouteItem } from "types/header";
+import { type HeaderMenu } from "types/header";
 
 export const Header: FC = () => {
 
@@ -22,62 +20,66 @@ export const Header: FC = () => {
 
     const queryClient = useQueryClient();
 
-    const navigate = useNavigate();
-
     const location = useLocation();
 
     const { theme, toggleTheme } = useThemeContext();
 
-    const headerItems = useMemo<(HeaderItem | HeaderMenu)[]>(() => ([
+    const headerItems: (HeaderItem | HeaderMenu)[] = [
         {
-            name: "Home",
             type: "route",
+            name: "Home",
             path: "/"
         },
         {
-            name: "Data",
             type: "menu",
+            name: "Data",
+            description: "Manage the Personal-API data, your IT student projects and your technical skills.",
+            icon: <LuFolderCog size={30} />,
             children: [
                 {
-                    name: "Projects",
                     type: "route",
-                    path: "/projects",
-                    icon: <MdOutlineDesktopWindows size={22} />
+                    name: "Projects",
+                    description: "View and manage the projects you've worked on.",
+                    path: "/projects"
                 },
                 {
+                    type: "route",
                     name: "Skills",
-                    type: "route",
-                    path: "/skills",
-                    icon: <RiToolsLine size={22} />
+                    description: "Track and manage your technical skills.",
+                    path: "/skills"
                 }
             ]
         },
         {
+            type: "menu",
             name: "Monitoring",
-            type: "menu",
+            description: "View and analyze the metrics of the Personal-API.",
+            icon: <LuActivity size={30} />,
             children: [
                 {
-                    name: "Health",
                     type: "route",
-                    path: "/health",
-                    icon: <BiPlusMedical size={22} />
+                    name: "Health",
+                    description: "View information about the latest API requests.",
+                    path: "/health"
                 }
             ]
         },
         {
-            name: "Management",
             type: "menu",
+            name: "Management",
+            description: "Manage the Personal-API dashboard.",
+            icon: <LuSettings2 size={30} />,
             children: [
                 {
-                    name: "Refresh",
                     type: "action",
-                    icon: <MdRefresh size={22} />,
+                    name: "Refresh",
+                    description: "Update all dashboard information with the latest data.",
                     handleAction: () => queryClient.invalidateQueries()
                 },
                 {
-                    name: "Logout",
                     type: "action",
-                    icon: <TbLogout size={22} />,
+                    name: "Logout",
+                    description: "Sign out of the dashboard.",
                     handleAction: async () => {
                         try {
                             await UserService.logout();
@@ -92,193 +94,148 @@ export const Header: FC = () => {
                 }
             ]
         }
-    ]), [ queryClient, setAccessToken ]);
+    ];
 
-    const [ isMenuOpen, setIsMenuOpen ] = useState(false);
+    const [ /*isMenuOpen*/, setIsMenuOpen ] = useState(false);
 
-    const handleItemAction = async (item: HeaderItem) => {
-        switch (item.type) {
-            case "route":
-                navigate(item.path);
-                break;
-            case "action":
-                await item.handleAction();
-                break;
-        }
-        setIsMenuOpen(false);
-    };
-
-    const handleMenuAction = async (menu: HeaderMenu, key: Key) => {
-        const item = menu.children.find(child => child.name === key);
-        if (item) {
-            await handleItemAction(item);
-        }
-    };
-
-    const isHeaderItemActive = (item: HeaderItem): boolean => {
-        return item.type === "route" && matchPath(item.path, location.pathname) !== null;
+    const isHeaderRouteItemActive = (item: HeaderRouteItem): boolean => {
+        return matchPath(item.path, location.pathname) !== null;
     };
 
     const isHeaderMenuActive = (menu: HeaderMenu): boolean => {
-        return menu.children.some(isHeaderItemActive);
+        return menu.children.some(i => i.type === "route" && isHeaderRouteItemActive(i));
     };
 
-    const brand = (
-        <NavbarBrand>
-            <Image
-                className="object-cover h-full p-3.5"
-                src="/logo.svg"
-                alt="The logo of the Personal-API dashboard"
-                radius="none"
-                disableSkeleton
-            />
-            <h1 className="lg:block md:hidden">Dashboard</h1>
-        </NavbarBrand>
-    );
-
-    const renderNavbarMenuItem = (item: HeaderItem | HeaderMenu, isLastMenuChild = false) => {
+    const renderNavbarItem = (item: HeaderItem | HeaderMenu) => {
         switch (item.type) {
             case "route":
-            case "action":
                 return (
-                    <NavbarMenuItem key={item.name}>
-                        <Button
-                            data-active={isHeaderItemActive(item)}
+                    <NavigationMenuItem key={item.name}>
+                        <NavigationMenuLink
+                            asChild
                             className={cn(
-                                "min-w-0 p-0 text-lg bg-transparent data-[hover=true]:bg-transparent",
-                                "data-[active=true]:underline decoration-danger underline-offset-4",
-                                isLastMenuChild && "mb-2",
-                                item.danger && "text-danger"
+                                navigationMenuTriggerStyle(),
+                                "cursor-pointer",
+                                item.danger && "text-danger hover:text-danger focus:text-danger"
                             )}
-                            radius="sm"
-                            disableRipple
-                            onPress={() => handleItemAction(item)}
+                            active={isHeaderRouteItemActive(item)}
                         >
-                            {item.name}
-                        </Button>
-                    </NavbarMenuItem>
+                            <NavLink to={item.path}>
+                                {item.name}
+                            </NavLink>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
                 );
-            case "menu":
-                return (
-                    <Fragment key={item.name}>
-                        <li className="flex items-center gap-2 text-small text-gray-600">
-                            {item.name}
-                            <Divider className="grow w-auto bg-gray-600" />
-                        </li>
-                        {item.children.map((child, i) => renderNavbarMenuItem(child, i === item.children.length - 1))}
-                    </Fragment>
-                );
-        }
-    };
-
-    const renderNavbarContentItem = (item: HeaderItem | HeaderMenu) => {
-        switch (item.type) {
-            case "route":
             case "action":
                 return (
-                    <NavbarItem key={item.name} isActive={isHeaderItemActive(item)}>
-                        <Button
-                            className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent"
-                            variant="light"
-                            radius="sm"
-                            disableRipple
-                            onPress={() => handleItemAction(item)}
+                    <NavigationMenuItem key={item.name}>
+                        <NavigationMenuLink
+                            className={cn(
+                                navigationMenuTriggerStyle(),
+                                "cursor-pointer",
+                                item.danger && "text-danger hover:text-danger focus:text-danger"
+                            )}
+                            onClick={async () => {
+                                await item.handleAction();
+                                setIsMenuOpen(false);
+                            }}
                         >
                             {item.name}
-                        </Button>
-                    </NavbarItem>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
                 );
             case "menu":
                 return (
-                    <Dropdown key={item.name}>
-                        <NavbarItem isActive={isHeaderMenuActive(item)}>
-                            <DropdownTrigger>
-                                <Button
-                                    className="min-w-0 p-0 text-medium bg-transparent data-[hover=true]:bg-transparent gap-1.5"
-                                    variant="light"
-                                    radius="sm"
-                                    disableRipple
-                                    endContent={<BsChevronDown />}
-                                >
-                                    {item.name}
-                                </Button>
-                            </DropdownTrigger>
-                        </NavbarItem>
-                        <DropdownMenu
-                            aria-label={item.name}
-                            variant="flat"
-                            onAction={key => handleMenuAction(item, key)}
-                        >
-                            {item.children.map(child => (
-                                <DropdownItem
-                                    key={child.name}
-                                    className={cn(
-                                        isHeaderItemActive(child) && "text-danger data-[hover=true]:text-danger",
-                                        child.danger && "text-danger"
-                                    )}
-                                    color={child.danger ? "danger" : undefined}
-                                    startContent={child.icon}
-                                >
-                                    {child.name}
-                                </DropdownItem>
-                            ))}
-                        </DropdownMenu>
-                    </Dropdown>
+                    <NavigationMenuItem key={item.name}>
+                        <NavigationMenuTrigger {...isHeaderMenuActive(item) && { "data-active": "" }}>
+                            {item.name}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <ul className="grid gap-3 p-6 h-[320px] w-[500px] grid-cols-[.75fr_1fr] grid-rows-3">
+                                <li className="row-span-3 flex h-full w-full flex-col rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline shadow-md">
+                                    {item.icon}
+                                    <span className="mb-2 mt-4 text-lg font-medium">{item.name}</span>
+                                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                                </li>
+                                {item.children.map(child => (
+                                    <li key={child.name}>
+                                        {child.type === "route"
+                                            ? (
+                                                <NavigationMenuLink
+                                                    asChild
+                                                    active={isHeaderRouteItemActive(child)}
+                                                >
+                                                    <NavLink
+                                                        to={child.path}
+                                                        className={cn(
+                                                            "h-full w-full block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                                            isHeaderRouteItemActive(child) && "bg-accent text-accent-foreground",
+                                                            child.danger && "text-danger hover:text-danger focus:text-danger"
+                                                        )}
+                                                    >
+                                                        <span className="text-sm font-medium leading-none">{child.name}</span>
+                                                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                                            {child.description}
+                                                        </p>
+                                                    </NavLink>
+                                                </NavigationMenuLink>
+                                            )
+                                            : (
+                                                <NavigationMenuLink
+                                                    className={cn(
+                                                        "h-full w-full block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer",
+                                                        child.danger && "text-danger hover:text-danger focus:text-danger"
+                                                    )}
+                                                    onClick={child.handleAction}
+                                                >
+                                                    <span className="text-sm font-medium leading-none">{child.name}</span>
+                                                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                                        {child.description}
+                                                    </p>
+                                                </NavigationMenuLink>
+                                            )
+                                        }
+                                    </li>
+                                ))}
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
                 );
         }
     };
 
     return (
-        <Navbar
-            position={isMenuOpen ? "sticky" : "static"}
-            isBordered
-            isMenuOpen={isMenuOpen}
-            onMenuOpenChange={setIsMenuOpen}
-            classNames={{
-                menu: "overflow-y-hidden",
-                menuItem: "",
-                brand: "h-full d-flex items-center text-lg font-bold",
-                content: "gap-6",
-                item: [
-                    "flex relative h-full items-center",
-                    "data-[active=true]:after:content-[''] data-[active=true]:after:absolute data-[active=true]:after:bottom-0 data-[active=true]:after:left-0 data-[active=true]:after:right-0",
-                    "data-[active=true]:after:h-[2px] data-[active=true]:after:rounded-[2px] data-[active=true]:after:bg-danger"
-                ]
-            }}
-        >
-            {/* Desktop layout */}
-            <NavbarContent justify="start" className="hidden md:flex">
-                {brand}
-            </NavbarContent>
-            <NavbarContent justify="center" className="hidden md:flex">
-                {headerItems.map(renderNavbarContentItem)}
-            </NavbarContent>
+        <nav className="flex z-40 w-full h-auto items-center justify-center data-[menu-open=true]:border-none static border-b border-divider backdrop-blur-lg data-[menu-open=true]:backdrop-blur-xl backdrop-saturate-150 bg-background/70">
+            <header className="z-40 flex px-6 gap-4 w-full flex-row relative flex-nowrap items-center justify-between h-16 max-w-[1024px]">
+                <div className="flex h-full items-center text-lg font-bold basis-0 grow">
+                    <img
+                        className="object-cover h-full p-3.5"
+                        src="/logo.svg"
+                        alt="The logo of the Personal-API dashboard"
+                    />
+                    <h1 className="lg:block md:hidden">Dashboard</h1>
+                </div>
 
-            {/* Mobile layout */}
-            <NavbarContent justify="start" className="md:hidden">
-                <NavbarMenuToggle />
-            </NavbarContent>
-            <NavbarMenu>
-                {headerItems.map(item => renderNavbarMenuItem(item))}
-            </NavbarMenu>
-            <NavbarContent justify="center" className="md:hidden">
-                {brand}
-            </NavbarContent>
+                <NavigationMenu className="basis-0 grow">
+                    <NavigationMenuList>
+                        {headerItems.map(renderNavbarItem)}
+                    </NavigationMenuList>
+                </NavigationMenu>
 
-            <NavbarContent justify="end">
-                <NavbarItem>
+                <div className="basis-0 grow flex justify-end items-center">
                     <Button
-                        variant="flat"
-                        isIconOnly
-                        onPress={toggleTheme}
+                        className="text-foreground-500"
+                        variant="outline"
+                        size="icon"
+                        onClick={toggleTheme}
                     >
                         {theme === "dark"
                             ? <BsFillMoonFill size={20} />
                             : <BsFillSunFill size={20} />
                         }
                     </Button>
-                </NavbarItem>
-            </NavbarContent>
-        </Navbar>
+                </div>
+            </header>
+        </nav>
     );
 };

@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import type { Route } from "types/app";
 
-type HeaderRouteItem = Route & {
+export type HeaderRouteItem = Route & {
     type: "route";
 };
 
-type HeaderActionItem = {
-    name: string;
+export type HeaderActionItem = {
     type: "action";
+    name: string;
     handleAction: () => (void | Promise<void>);
 };
 
@@ -16,11 +16,13 @@ export type HeaderItem = (HeaderRouteItem | HeaderActionItem) & {
 };
 
 export type WithMenuAttributes<I extends HeaderItem> = I & {
-    icon: ReactNode;
+    description: string;
 };
 
 export type HeaderMenu = {
-    name: string;
     type: "menu";
+    name: string;
+    description: string;
+    icon: ReactNode;
     children: WithMenuAttributes<HeaderItem>[];
 };
