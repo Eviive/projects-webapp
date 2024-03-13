@@ -41,7 +41,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
                         <TabsTrigger value="request">Request</TabsTrigger>
                         <TabsTrigger value="response">Response</TabsTrigger>
                     </TabsList>
-                    <ScrollArea className="h-[400px]">
+                    <ScrollArea className="h-[500px]">
                         <TabsContent value="request" className="flex flex-col gap-2 [overflow-wrap:anywhere]">
                             <span>
                                 <strong>Timestamp:</strong>

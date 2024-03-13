@@ -57,6 +57,10 @@
         @apply border-border;
     }
 
+    :root {
+        --scrollbar-size: 8px;
+    }
+
     body {
         @apply bg-background text-foreground;
     }
@@ -82,7 +86,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-    @include mixins.size(8px);
+    @include mixins.size(var(--scrollbar-size));
     @apply bg-content1;
 }
 
