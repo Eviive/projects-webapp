@@ -1,32 +1,27 @@
 import { useTheme } from "hooks/useTheme";
 import type { FC, PropsWithChildren } from "react";
-import { createContext, useContext, useLayoutEffect, useMemo } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 type IThemeContext = ReturnType<typeof useTheme>;
 
 const ThemeContext = createContext<IThemeContext | null>(null);
 
 export const ThemeContextProvider: FC<PropsWithChildren> = ({ children }) => {
-
-    const { theme, toggleTheme, setDarkTheme, setLightTheme } = useTheme();
+    const {
+        theme,
+        systemTheme,
+        setLightTheme,
+        setDarkTheme,
+        setSystemTheme
+    } = useTheme();
 
     const themeContextValue = useMemo<IThemeContext>(() => ({
         theme,
-        toggleTheme,
+        systemTheme,
+        setLightTheme,
         setDarkTheme,
-        setLightTheme
-    }), [ theme, toggleTheme, setDarkTheme, setLightTheme ]);
-
-    useLayoutEffect(() => {
-        const root = document.documentElement;
-        if (theme === "dark") {
-            root.classList.add("dark");
-            root.classList.remove("light");
-        } else {
-            root.classList.add("light");
-            root.classList.remove("dark");
-        }
-    }, [ theme ]);
+        setSystemTheme
+    }), [ theme, systemTheme, setLightTheme, setDarkTheme, setSystemTheme ]);
 
     return (
         <ThemeContext.Provider value={themeContextValue}>

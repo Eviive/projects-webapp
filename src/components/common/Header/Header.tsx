@@ -1,18 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services";
-import { Button } from "components/ui/button";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "components/ui/navigation-menu";
+import { NavigationMenu, NavigationMenuList } from "components/ui/navigation-menu";
 import { useAuthContext } from "contexts/AuthContext";
-import { useThemeContext } from "contexts/ThemeContext";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
-import { cn } from "lib/utils/style";
-import { type FC, useState } from "react";
-import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+import { type FC } from "react";
 import { LuActivity, LuFolderCog, LuSettings2 } from "react-icons/lu";
-import { matchPath, NavLink, useLocation } from "react-router-dom";
 import { toast } from "sonner";
-import type { HeaderItem, HeaderRouteItem } from "types/header";
-import { type HeaderMenu } from "types/header";
+import type { HeaderItem as HeaderItemType, HeaderMenu as HeaderMenuType } from "types/header";
+import { HeaderItem } from "./HeaderItem";
+import { HeaderMenu } from "./HeaderMenu";
+import { HeaderThemeSwitcher } from "./HeaderThemeSwitcher";
 
 export const Header: FC = () => {
 
@@ -20,11 +17,7 @@ export const Header: FC = () => {
 
     const queryClient = useQueryClient();
 
-    const location = useLocation();
-
-    const { theme, toggleTheme } = useThemeContext();
-
-    const headerItems: (HeaderItem | HeaderMenu)[] = [
+    const headerItems: (HeaderItemType | HeaderMenuType)[] = [
         {
             type: "route",
             name: "Home",
@@ -96,114 +89,6 @@ export const Header: FC = () => {
         }
     ];
 
-    const [ /*isMenuOpen*/, setIsMenuOpen ] = useState(false);
-
-    const isHeaderRouteItemActive = (item: HeaderRouteItem): boolean => {
-        return matchPath(item.path, location.pathname) !== null;
-    };
-
-    const isHeaderMenuActive = (menu: HeaderMenu): boolean => {
-        return menu.children.some(i => i.type === "route" && isHeaderRouteItemActive(i));
-    };
-
-    const renderNavbarItem = (item: HeaderItem | HeaderMenu) => {
-        switch (item.type) {
-            case "route":
-                return (
-                    <NavigationMenuItem key={item.name}>
-                        <NavigationMenuLink
-                            asChild
-                            className={cn(
-                                navigationMenuTriggerStyle(),
-                                "cursor-pointer",
-                                item.danger && "text-danger hover:text-danger focus:text-danger"
-                            )}
-                            active={isHeaderRouteItemActive(item)}
-                        >
-                            <NavLink to={item.path}>
-                                {item.name}
-                            </NavLink>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                );
-            case "action":
-                return (
-                    <NavigationMenuItem key={item.name}>
-                        <NavigationMenuLink
-                            className={cn(
-                                navigationMenuTriggerStyle(),
-                                "cursor-pointer",
-                                item.danger && "text-danger hover:text-danger focus:text-danger"
-                            )}
-                            onClick={async () => {
-                                await item.handleAction();
-                                setIsMenuOpen(false);
-                            }}
-                        >
-                            {item.name}
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                );
-            case "menu":
-                return (
-                    <NavigationMenuItem key={item.name}>
-                        <NavigationMenuTrigger {...isHeaderMenuActive(item) && { "data-active": "" }}>
-                            {item.name}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <ul className="grid gap-3 p-6 h-[320px] w-[500px] grid-cols-[.75fr_1fr] grid-rows-3">
-                                <li className="row-span-3 flex h-full w-full flex-col rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline shadow-md">
-                                    {item.icon}
-                                    <span className="mb-2 mt-4 text-lg font-medium">{item.name}</span>
-                                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                                </li>
-                                {item.children.map(child => (
-                                    <li key={child.name}>
-                                        {child.type === "route"
-                                            ? (
-                                                <NavigationMenuLink
-                                                    asChild
-                                                    active={isHeaderRouteItemActive(child)}
-                                                >
-                                                    <NavLink
-                                                        to={child.path}
-                                                        className={cn(
-                                                            "h-full w-full block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                                                            isHeaderRouteItemActive(child) && "bg-accent text-accent-foreground",
-                                                            child.danger && "text-danger hover:text-danger focus:text-danger"
-                                                        )}
-                                                    >
-                                                        <span className="text-sm font-medium leading-none">{child.name}</span>
-                                                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                                            {child.description}
-                                                        </p>
-                                                    </NavLink>
-                                                </NavigationMenuLink>
-                                            )
-                                            : (
-                                                <NavigationMenuLink
-                                                    className={cn(
-                                                        "h-full w-full block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer",
-                                                        child.danger && "text-danger hover:text-danger focus:text-danger"
-                                                    )}
-                                                    onClick={child.handleAction}
-                                                >
-                                                    <span className="text-sm font-medium leading-none">{child.name}</span>
-                                                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                                        {child.description}
-                                                    </p>
-                                                </NavigationMenuLink>
-                                            )
-                                        }
-                                    </li>
-                                ))}
-                            </ul>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-                );
-        }
-    };
-
     return (
         <nav className="flex z-40 w-full h-auto items-center justify-center data-[menu-open=true]:border-none static border-b border-divider backdrop-blur-lg data-[menu-open=true]:backdrop-blur-xl backdrop-saturate-150 bg-background/70">
             <header className="z-40 flex px-6 gap-4 w-full flex-row relative flex-nowrap items-center justify-between h-16 max-w-[1024px]">
@@ -218,23 +103,23 @@ export const Header: FC = () => {
 
                 <NavigationMenu className="basis-0 grow">
                     <NavigationMenuList>
-                        {headerItems.map(renderNavbarItem)}
+                        {headerItems.map(item => {
+                            switch (item.type) {
+                                case "route":
+                                case "action":
+                                    return (
+                                        <HeaderItem key={item.name} item={item} />
+                                    );
+                                case "menu":
+                                    return (
+                                        <HeaderMenu key={item.name} menu={item} />
+                                    );
+                            }
+                        })}
                     </NavigationMenuList>
                 </NavigationMenu>
 
-                <div className="basis-0 grow flex justify-end items-center">
-                    <Button
-                        className="text-foreground-500"
-                        variant="outline"
-                        size="icon"
-                        onClick={toggleTheme}
-                    >
-                        {theme === "dark"
-                            ? <BsFillMoonFill size={20} />
-                            : <BsFillSunFill size={20} />
-                        }
-                    </Button>
-                </div>
+                <HeaderThemeSwitcher />
             </header>
         </nav>
     );

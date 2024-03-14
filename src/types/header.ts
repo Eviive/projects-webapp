@@ -15,7 +15,7 @@ export type HeaderItem = (HeaderRouteItem | HeaderActionItem) & {
     danger?: boolean;
 };
 
-export type WithMenuAttributes<I extends HeaderItem> = I & {
+export type HeaderMenuItem = HeaderItem & {
     description: string;
 };
 
@@ -24,5 +24,5 @@ export type HeaderMenu = {
     name: string;
     description: string;
     icon: ReactNode;
-    children: WithMenuAttributes<HeaderItem>[];
+    children: HeaderMenuItem[];
 };

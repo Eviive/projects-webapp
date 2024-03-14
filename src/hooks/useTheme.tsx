@@ -1,31 +1,42 @@
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { useMediaQuery } from "hooks/useMediaQuery";
+import { useLayoutEffect } from "react";
 import type { Theme } from "types/app";
 
 type UseThemeOutput = {
     theme: Theme;
-    toggleTheme: () => void;
+    systemTheme: Exclude<Theme, "system">;
     setDarkTheme: () => void;
     setLightTheme: () => void;
+    setSystemTheme: () => void;
 };
 
 const COLOR_SCHEME_MEDIA_QUERY = "(prefers-color-scheme: dark)";
 
 export const useTheme = (): UseThemeOutput => {
 
-    const isDarkThemeOS = useMediaQuery(COLOR_SCHEME_MEDIA_QUERY, matches => {
-        setTheme(matches ? "dark" : "light");
-    });
+    const isSystemDarkTheme = useMediaQuery(COLOR_SCHEME_MEDIA_QUERY);
+
+    const systemTheme = isSystemDarkTheme ? "dark" : "light";
 
     const [ theme, setTheme ] = useLocalStorage<Theme>(
         "theme",
-        isDarkThemeOS ? "dark" : "light"
+        "system"
     );
+
+    useLayoutEffect(() => {
+        const root = document.documentElement;
+        const currentTheme = theme === "system" ? systemTheme : theme;
+
+        root.classList.remove("light", "dark");
+        root.classList.add(currentTheme);
+    }, [ systemTheme, theme ]);
 
     return {
         theme,
-        toggleTheme: () => setTheme(prevTheme => prevTheme === "dark" ? "light" : "dark"),
+        systemTheme,
+        setLightTheme: () => setTheme("light"),
         setDarkTheme: () => setTheme("dark"),
-        setLightTheme: () => setTheme("light")
+        setSystemTheme: () => setTheme("system")
     };
 };
