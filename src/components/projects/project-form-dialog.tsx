@@ -1,5 +1,5 @@
 import { ProjectForm } from "components/projects/project-form";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "components/ui/dialog";
+import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import { type FC, type ReactNode, useState } from "react";
 import type { Project } from "types/entities/project";
 
@@ -20,14 +20,21 @@ export const ProjectFormDialog: FC<Props> = props => {
     const [ open, setOpen ] = useState(false);
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>{props.trigger}</DialogTrigger>
-            <DialogContent className="max-w-xl">
-                <DialogHeader>
-                    <DialogTitle>{props.project ? `Editing ${props.project.title}` : "Creating project"}</DialogTitle>
-                </DialogHeader>
+        <ResponsiveDrawerDialog
+            trigger={props.trigger}
+            header={{
+                title: props.project ? `Editing ${props.project.title}` : "Creating project"
+            }}
+            content={
                 <ProjectForm project={props.project ?? null} closeDialog={() => setOpen(false)} />
-            </DialogContent>
-        </Dialog>
+            }
+            open={open}
+            onOpenChange={setOpen}
+            classNames={{
+                dialog: {
+                    content: "max-w-xl"
+                }
+            }}
+        />
     );
 };

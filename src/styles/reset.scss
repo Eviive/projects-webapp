@@ -60,7 +60,7 @@
         --scrollbar-size: 8px;
     }
 
-    body {
+    body, #root {
         @apply bg-background text-foreground;
     }
 }

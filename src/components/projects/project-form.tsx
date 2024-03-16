@@ -281,7 +281,7 @@ export const ProjectForm: FC<Props> = props => {
                     render={({ field }) => (
                         <FormItem className="col-span-2">
                             <FormLabel>Skills</FormLabel>
-                            <Select value={field.value.id.toString()} onValueChange={field.onChange}>
+                            <Select value={field.value?.id.toString()} onValueChange={field.onChange}>
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue />

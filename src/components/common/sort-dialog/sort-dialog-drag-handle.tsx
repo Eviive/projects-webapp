@@ -20,7 +20,7 @@ export const SortDialogDragHandle: FC = () => {
             variant="ghost"
             size="icon"
         >
-            <MdDragHandle size={30} />
+            <MdDragHandle className="h-full w-full" data-vaul-no-drag />
         </Button>
     );
 };

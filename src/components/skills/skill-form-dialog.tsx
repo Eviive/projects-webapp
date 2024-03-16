@@ -1,5 +1,5 @@
 import { SkillForm } from "components/skills/skill-form";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "components/ui/dialog";
+import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 
@@ -22,14 +22,21 @@ export const SkillFormDialog: FC<Props> = props => {
     const [ open, setOpen ] = useState(false);
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>{props.trigger}</DialogTrigger>
-            <DialogContent className="max-w-md">
-                <DialogHeader>
-                    <DialogTitle>{props.skill ? `Editing ${props.skill.name}` : "Creating skill"}</DialogTitle>
-                </DialogHeader>
+        <ResponsiveDrawerDialog
+            trigger={props.trigger}
+            header={{
+                title: props.skill ? `Editing ${props.skill.name}` : "Creating skill"
+            }}
+            content={
                 <SkillForm skill={props.skill ?? null} closeDialog={() => setOpen(false)} />
-            </DialogContent>
-        </Dialog>
+            }
+            open={open}
+            onOpenChange={setOpen}
+            classNames={{
+                dialog: {
+                    content: "max-w-md"
+                }
+            }}
+        />
     );
 };

@@ -1,4 +1,5 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "components/ui/dialog";
+import { DialogTitle } from "components/ui/dialog";
+import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import { ScrollArea } from "components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
 import type { FC, ReactNode } from "react";
@@ -30,12 +31,12 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
     };
 
     return (
-        <Dialog>
-            <DialogTrigger asChild>{trigger}</DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>HTTP Exchange Details</DialogTitle>
-                </DialogHeader>
+        <ResponsiveDrawerDialog
+            trigger={trigger}
+            header={{
+                title: <DialogTitle>HTTP Exchange Details</DialogTitle>
+            }}
+            content={
                 <Tabs defaultValue="request" className="flex flex-col gap-3">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="request">Request</TabsTrigger>
@@ -66,7 +67,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
                         </TabsContent>
                     </ScrollArea>
                 </Tabs>
-            </DialogContent>
-        </Dialog>
+            }
+        />
     );
 };

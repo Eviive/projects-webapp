@@ -1,6 +1,6 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 import { SortDialogContent, type SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "components/ui/dialog";
+import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import { type ReactNode, useRef, useState } from "react";
 import type { DndItem, DndSaveItem } from "types/dnd";
 
@@ -31,21 +31,23 @@ export const SortDialog = <E extends DndItem>(props: Props<E>) => {
     };
 
     return (
-        <Dialog open={open} onOpenChange={handleClose}>
-            <DialogTrigger asChild>{props.trigger}</DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Sorting {props.itemsName}</DialogTitle>
-                </DialogHeader>
-                {!!props.initialItems && (
+        <ResponsiveDrawerDialog
+            trigger={props.trigger}
+            header={{
+                title: `Sorting ${props.itemsName}`
+            }}
+            content={
+                !!props.initialItems && (
                     <SortDialogContent
                         ref={contentRef}
                         initialItems={props.initialItems}
                         render={props.render}
                         closeDialog={resetSort => handleClose(false, resetSort)}
                     />
-                )}
-            </DialogContent>
-        </Dialog>
+                )
+            }
+            open={open}
+            onOpenChange={handleClose}
+        />
     );
 };

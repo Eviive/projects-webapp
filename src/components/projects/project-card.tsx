@@ -81,7 +81,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                 <p className="line-clamp-4">{project.descriptionEn}</p>
                 <div>
                     <img
-                        className="object-cover aspect-[16/10] drop-shadow-lg rounded-sm"
+                        className="mx-auto object-cover aspect-[16/10] drop-shadow-lg rounded-sm"
                         src={ImageService.getImageUrl(project.image) ?? PROJECT_PLACEHOLDER}
                         alt={project.image.altEn}
                         width={512}
