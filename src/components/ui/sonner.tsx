@@ -1,6 +1,6 @@
 "use client";
 
-import { useThemeContext } from "contexts/ThemeContext";
+import { useThemeContext } from "contexts/theme-context";
 import { cn } from "lib/utils/style";
 import type { ComponentProps } from "react";
 import { Toaster as Sonner } from "sonner";

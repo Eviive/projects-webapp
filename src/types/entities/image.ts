@@ -47,6 +47,8 @@ export const imageCreationSchema = z.object({
 // Image creation with file
 export const imageCreationWithFileSchema = imageCreationSchema.merge(imageFileSchema);
 
+export type ImageCreationWithFile = z.infer<typeof imageCreationWithFileSchema>;
+
 // Image
 export const imageSchema = imageCreationWithFileSchema
     .omit({

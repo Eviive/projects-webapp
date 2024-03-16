@@ -1,7 +1,7 @@
 import { request } from "api/client";
 import type { Page } from "types/app";
 
-import type { Project } from "types/entities/project";
+import type { Project, ProjectCreation } from "types/entities/project";
 import type { Skill } from "types/entities/skill";
 
 const URL = "project";
@@ -16,9 +16,9 @@ const findAllNotFeatured = () => request<Project[]>(`/${URL}/not-featured`, { ne
 
 const findAllNotFeaturedPaginated = (page?: number, size?: number) => request<Page<Project>>(`/${URL}/not-featured/paginated`, { params: { page, size }, needsAuth: false });
 
-const save = (project: Project, file?: File | null) => {
+const save = (project: ProjectCreation, file?: File | null) => {
     if (!file) {
-        return request<Project, Project>(`/${URL}`, {
+        return request<Project, ProjectCreation>(`/${URL}`, {
             method: "POST",
             data: project
         });
@@ -61,7 +61,7 @@ const deleteProject = (id: number) => request<void>(`/${URL}/${id}`, {
     method: "DELETE"
 });
 
-const buildFormData = (project: Project, file: File) => {
+const buildFormData = (project: Project | ProjectCreation, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("project", new Blob([ JSON.stringify(project) ], { type: "application/json" }));

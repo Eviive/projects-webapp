@@ -1,8 +1,8 @@
-import { UserService } from "api/services";
-import { Loader } from "components/common";
+import { UserService } from "api/services/user";
+import { Loader } from "components/ui/loader";
 import { Toaster } from "components/ui/sonner";
-import { useAuthContext } from "contexts/AuthContext";
-import { useAxiosInterceptors } from "hooks/useAxiosInterceptors";
+import { useAuthContext } from "contexts/auth-context";
+import { useAxiosInterceptors } from "hooks/use-axios-interceptors";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
