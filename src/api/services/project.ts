@@ -1,5 +1,6 @@
 import { request } from "api/client";
 import type { Page } from "types/app";
+import type { DndSaveItem } from "types/dnd";
 
 import type { Project, ProjectCreation } from "types/entities/project";
 import type { Skill } from "types/entities/skill";
@@ -33,13 +34,6 @@ const save = (project: ProjectCreation, file?: File | null) => {
     });
 };
 
-const sort = (sortedIds: number[]) => {
-    return request<void, number[]>(`/${URL}/sort`, {
-        method: "POST",
-        data: sortedIds
-    });
-};
-
 const update = (project: Project, file?: File | null) => {
     if (!file) {
         return request<Project, Project>(`/${URL}/${project.id}`, {
@@ -54,6 +48,13 @@ const update = (project: Project, file?: File | null) => {
         headers: {
             "Content-Type": "multipart/form-data"
         }
+    });
+};
+
+const sort = (sorts: DndSaveItem[]) => {
+    return request<void, DndSaveItem[]>(`/${URL}/sort`, {
+        method: "PATCH",
+        data: sorts
     });
 };
 
@@ -75,7 +76,7 @@ export const ProjectService = {
     findAllNotFeatured,
     findAllNotFeaturedPaginated,
     save,
-    sort,
     update,
+    sort,
     delete: deleteProject
 };

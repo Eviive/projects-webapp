@@ -17,7 +17,7 @@ const dateFormatter = Intl.DateTimeFormat("en-GB", { dateStyle: "short" });
 
 type Props = {
     project: Project;
-    isOptimistic?: boolean;
+    isOptimistic: boolean;
 };
 
 export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {

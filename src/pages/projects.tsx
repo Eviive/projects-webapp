@@ -1,8 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutationState, useQuery } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
 import { Page } from "components/common/page";
 import { ProjectCard } from "components/projects/project-card";
 import { ProjectFormDialog } from "components/projects/project-form-dialog";
+import { ProjectSortDialog, sortProjectsMutationKey } from "components/projects/project-sort-dialog";
 import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
 import { Button } from "components/ui/button";
 import { Loader } from "components/ui/loader";
@@ -15,6 +16,7 @@ import { useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { LuAlertCircle } from "react-icons/lu";
 import { MdDragHandle } from "react-icons/md";
+import type { DndSaveItem } from "types/dnd";
 
 export const Projects: FC = () => {
 
@@ -25,15 +27,47 @@ export const Projects: FC = () => {
 
     const error = query.isError ? getTitleAndMessage(query.error) : null;
 
+    const optimisticProjectSorts = useMutationState<DndSaveItem[]>({
+        filters: {
+            mutationKey: sortProjectsMutationKey,
+            status: "pending"
+        },
+        select: mutation => mutation.state.variables as DndSaveItem[]
+    });
+
+    const optimisticProjectSortItems = useMemo(() => {
+        const items: Record<number, number> = {};
+
+        for (const sortItem of optimisticProjectSorts.flatMap(i => i)) {
+            items[sortItem.id] = sortItem.sort;
+        }
+
+        return items;
+    }, [ optimisticProjectSorts ]);
+
+    const optimisticProjects = useMemo(() => {
+        if (!query.isSuccess) return [];
+
+        const optProjects = [ ...query.data ];
+
+        for (const project of optProjects) {
+            if (optimisticProjectSortItems[project.id] !== undefined) {
+                project.sort = optimisticProjectSortItems[project.id];
+            }
+        }
+
+        optProjects.sort((a, b) => a.sort - b.sort);
+
+        return optProjects;
+    }, [ query.data, query.isSuccess, optimisticProjectSortItems ]);
+
     const [ searchBarValue, setSearchBarValue ] = useState("");
     const [ searchQuery, setSearchQuery ] = useState(searchBarValue);
 
-    const filteredProjectItems = useMemo(() => {
-        if (!query.isSuccess) return [];
-
-        return query.data
+    const optimisticFilteredProjects = useMemo(() => {
+        return optimisticProjects
             .filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
-    }, [ query.data, query.isSuccess, searchQuery ]);
+    }, [ optimisticProjects, searchQuery ]);
 
     return (
         <Page title="Projects">
@@ -68,21 +102,21 @@ export const Projects: FC = () => {
                     </TooltipProvider>
                     <TooltipProvider>
                         <Tooltip>
-                            {/*<SkillSortDialog*/}
-                            {/*    initialSkills={optimisticSkills}*/}
-                            {/*    trigger={*/}
-                            <TooltipTrigger asChild>
-                                <Button
-                                    className="text-foreground-500"
-                                    variant="outline"
-                                    size="icon"
-                                    disabled={query.isLoading || query.isError}
-                                >
-                                    <MdDragHandle size={24} />
-                                </Button>
-                            </TooltipTrigger>
-                            {/*    }*/}
-                            {/*/>*/}
+                            <ProjectSortDialog
+                                initialProjects={optimisticProjects}
+                                trigger={
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            className="text-foreground-500"
+                                            variant="outline"
+                                            size="icon"
+                                            disabled={query.isLoading || query.isError}
+                                        >
+                                            <MdDragHandle size={24} />
+                                        </Button>
+                                    </TooltipTrigger>
+                                }
+                            />
                             <TooltipContent>
                                 Sort projects
                             </TooltipContent>
@@ -96,10 +130,11 @@ export const Projects: FC = () => {
                         columnCount={3}
                         centerHorizontally
                     >
-                        {filteredProjectItems.map(project => (
+                        {optimisticFilteredProjects.map(project => (
                             <ProjectCard
                                 key={project.id}
                                 project={project}
+                                isOptimistic={optimisticProjectSortItems[project.id] !== undefined}
                             />
                         ))}
                     </Grid>
