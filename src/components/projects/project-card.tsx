@@ -29,7 +29,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
             <img
                 key={s.id}
                 className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                src={ImageService.getImageUrl(s.image) ?? SKILL_PLACEHOLDER}
+                src={ImageService.getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
                 alt={s.image.altEn}
                 width={35}
                 loading="lazy"
@@ -82,7 +82,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                 <div>
                     <img
                         className="mx-auto object-cover aspect-[16/10] drop-shadow-lg rounded-sm"
-                        src={ImageService.getImageUrl(project.image) ?? PROJECT_PLACEHOLDER}
+                        src={ImageService.getImageUrl(project.image, "projects") ?? PROJECT_PLACEHOLDER}
                         alt={project.image.altEn}
                         width={512}
                         loading="lazy"

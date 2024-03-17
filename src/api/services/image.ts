@@ -1,16 +1,11 @@
-import { request } from "api/client";
-
 import type { Image } from "types/entities/image";
 
-const URL = "image";
+const getImageUrl = (image: Image, type: "skills" | "projects") => {
+    if (!image.uuid) return null;
 
-const getImageUrl = (image: Image) => image.uuid ? `${import.meta.env.VITE_API_BASE_URL ?? ""}/${URL}/${image.uuid}` : null;
-
-const deleteImage = (id: number) => request<void>(`/${URL}/${id}`, {
-    method: "DELETE"
-});
+    return `${import.meta.env.VITE_AZURE_ASSETS_BASE_URL}/${type}/${image.uuid}`;
+};
 
 export const ImageService = {
-    getImageUrl,
-    deleteImage
+    getImageUrl
 };

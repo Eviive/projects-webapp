@@ -293,7 +293,7 @@ export const ProjectForm: FC<Props> = props => {
                                             <div className="flex items-center gap-2">
                                                 <img
                                                     className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                                                    src={ImageService.getImageUrl(skill.image) ?? SKILL_PLACEHOLDER}
+                                                    src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                                                     alt={skill.image.altEn}
                                                     width={22}
                                                     loading="lazy"
