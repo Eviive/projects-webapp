@@ -18,6 +18,9 @@ const configFn: UserConfigFn = () => ({
         port: 3000,
         open: true
     },
+    build: {
+        sourcemap: true
+    },
     css: {
         modules: {
             generateScopedName: "[local]_[hash:base64:5]",
