@@ -41,7 +41,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
         <Card className="flex flex-col">
             <CardHeader className="p-3 space-y-0 flex-row justify-between items-center gap-1">
                 <div>
-                    <CardTitle className="flex items-center gap-1.5 truncate">
+                    <CardTitle className="flex items-center gap-1.5 truncate leading-inherit">
                         {project.title}
                         {project.featured && (
                             <Badge className="text-danger bg-danger/25 p-1.5 focus:ring-0 focus:ring-offset-0 hover:bg-danger/25">
