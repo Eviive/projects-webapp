@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
 import { AuthContextProvider } from "contexts/auth-context";
+import { ConfirmDialogProvider } from "contexts/confirm-dialog-context";
 import { ThemeContextProvider } from "contexts/theme-context";
 import { ErrorPage } from "pages/error";
 import { StrictMode } from "react";
@@ -91,7 +92,9 @@ root.render(
             <NextUIProvider className="min-h-screen min-h-screen-dynamic flex flex-col">
                 <AuthContextProvider>
                     <QueryClientProvider client={queryClient}>
-                        <RouterProvider router={router} />
+                        <ConfirmDialogProvider>
+                            <RouterProvider router={router} />
+                        </ConfirmDialogProvider>
                         <ReactQueryDevtools />
                     </QueryClientProvider>
                 </AuthContextProvider>
