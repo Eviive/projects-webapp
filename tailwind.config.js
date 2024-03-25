@@ -1,13 +1,11 @@
 import tailwindCssAnimate from "tailwindcss-animate";
-import { nextui } from "@nextui-org/react";
 
 /** @type {import("tailwindcss").Config} */
 export default {
     darkMode: "class",
     content: [
         "./index.html",
-        "./src/**/*.{ts,tsx}",
-        "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
+        "./src/**/*.{ts,tsx}"
     ],
     prefix: "",
     theme: {
@@ -52,6 +50,9 @@ export default {
                 card: {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))"
+                },
+                danger: {
+                    DEFAULT: "hsl(var(--danger))"
                 }
             },
             borderRadius: {
@@ -84,7 +85,6 @@ export default {
         }
     ],
     plugins: [
-        tailwindCssAnimate,
-        nextui()
+        tailwindCssAnimate
     ]
 };

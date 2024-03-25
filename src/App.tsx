@@ -33,12 +33,12 @@ export const App: FC = () => {
     }, [ setAccessToken ]);
 
     return (
-        <>
+        <div className="min-h-screen min-h-screen-dynamic flex flex-col">
             {!isLoading
                 ? <Outlet />
                 : <Loader />
             }
             <Toaster />
-        </>
+        </div>
     );
 };

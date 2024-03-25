@@ -1,4 +1,3 @@
-import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { App } from "App";
@@ -89,16 +88,14 @@ const router = createBrowserRouter(
 root.render(
     <StrictMode>
         <ThemeContextProvider>
-            <NextUIProvider className="min-h-screen min-h-screen-dynamic flex flex-col">
-                <AuthContextProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <ConfirmDialogProvider>
-                            <RouterProvider router={router} />
-                        </ConfirmDialogProvider>
-                        <ReactQueryDevtools />
-                    </QueryClientProvider>
-                </AuthContextProvider>
-            </NextUIProvider>
+            <AuthContextProvider>
+                <QueryClientProvider client={queryClient}>
+                    <ConfirmDialogProvider>
+                        <RouterProvider router={router} />
+                    </ConfirmDialogProvider>
+                    <ReactQueryDevtools />
+                </QueryClientProvider>
+            </AuthContextProvider>
         </ThemeContextProvider>
     </StrictMode>
 );

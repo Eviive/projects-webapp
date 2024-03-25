@@ -26,6 +26,7 @@
         --input: 240 5.9% 90%;
         --ring: 240 5.9% 10%;
         --radius: 0.5rem;
+        --danger: 339.2 90.36% 51.18%;
     }
 
     .dark {
@@ -87,18 +88,18 @@ html {
 ::-webkit-scrollbar {
     width: var(--scrollbar-size);
     height: var(--scrollbar-size);
-    @apply bg-content1;
+    //@apply bg-content1;
 }
 
 ::-webkit-scrollbar-corner {
-    @apply bg-content1;
+    //@apply bg-content1;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-content3;
+    //@apply bg-content3;
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    @apply bg-content4;
+    //@apply bg-content4;
 }
