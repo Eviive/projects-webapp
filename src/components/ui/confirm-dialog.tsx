@@ -26,8 +26,15 @@ export const ConfirmDialog: FC<Props> = ({ state, handleClose }) => {
                             )}
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>{state.cancelButton}</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleClose(true)}>{state.confirmButton}</AlertDialogAction>
+                            <AlertDialogCancel>
+                                {state.cancelButton}
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                                variant={state.confirmDanger ? "destructive" : undefined}
+                                onClick={() => handleClose(true)}
+                            >
+                                {state.confirmButton}
+                            </AlertDialogAction>
                         </AlertDialogFooter>
                     </>
                 )}

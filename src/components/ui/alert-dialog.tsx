@@ -1,6 +1,7 @@
 "use client";
 
 import { Action, Cancel, Content, Description, Overlay, Portal, Root, Title, Trigger } from "@radix-ui/react-alert-dialog";
+import type { VariantProps } from "class-variance-authority";
 import { buttonVariants } from "components/ui/button";
 import { cn } from "lib/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
@@ -101,27 +102,37 @@ const AlertDialogDescription = forwardRef<
 
 AlertDialogDescription.displayName = Description.displayName;
 
+type AlertDialogActionProps = ComponentPropsWithoutRef<typeof Action> & {
+    variant?: VariantProps<typeof buttonVariants>["variant"];
+    size?: VariantProps<typeof buttonVariants>["size"];
+};
+
 const AlertDialogAction = forwardRef<
   ElementRef<typeof Action>,
-  ComponentPropsWithoutRef<typeof Action>
->(({ className, ...props }, ref) => (
+  AlertDialogActionProps
+>(({ className, variant = "default", size = "default", ...props }, ref) => (
     <Action
         ref={ref}
-        className={cn(buttonVariants(), className)}
+        className={cn(buttonVariants({ variant, size }), className)}
         {...props}
     />
 ));
 
 AlertDialogAction.displayName = Action.displayName;
 
+type AlertDialogCancelProps = ComponentPropsWithoutRef<typeof Cancel> & {
+    variant?: VariantProps<typeof buttonVariants>["variant"];
+    size?: VariantProps<typeof buttonVariants>["size"];
+};
+
 const AlertDialogCancel = forwardRef<
   ElementRef<typeof Cancel>,
-  ComponentPropsWithoutRef<typeof Cancel>
->(({ className, ...props }, ref) => (
+  AlertDialogCancelProps
+>(({ className, variant = "outline", size = "default", ...props }, ref) => (
     <Cancel
         ref={ref}
         className={cn(
-            buttonVariants({ variant: "outline" }),
+            buttonVariants({ variant, size }),
             "mt-2 sm:mt-0",
             className
         )}

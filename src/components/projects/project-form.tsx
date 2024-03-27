@@ -12,6 +12,7 @@ import { Input } from "components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "components/ui/select";
 import { Textarea } from "components/ui/textarea";
+import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { format } from "date-fns";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { SKILL_PLACEHOLDER } from "lib/constants";
@@ -31,6 +32,8 @@ type Props = {
 };
 
 export const ProjectForm: FC<Props> = props => {
+
+    const confirm = useConfirmDialogContext();
 
     const queryClient = useQueryClient();
 
@@ -126,6 +129,14 @@ export const ProjectForm: FC<Props> = props => {
         if (!props.project) return;
 
         dispatchSubmissionState("deletionStarted");
+
+        const confirmed = await confirm({
+            title: "Delete project",
+            body: "Are you sure you want to delete this project?",
+            confirmButton: "Delete"
+        });
+
+        if (!confirmed) return dispatchSubmissionState("deletionFinished");
 
         try {
             await ProjectService.delete(props.project.id);

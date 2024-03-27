@@ -6,6 +6,7 @@ type ConfirmDialogOpenState = {
     title: string;
     body: string | null;
     confirmButton: string;
+    confirmDanger?: boolean;
     cancelButton: string;
 };
 
@@ -57,7 +58,7 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
     );
 };
 
-export const useConfirm = () => {
+export const useConfirmDialogContext = () => {
     const confirm = useContext(ConfirmDialogContext);
     if (confirm === null) {
         throw new Error("useConfirm called without ConfirmDialogContext");

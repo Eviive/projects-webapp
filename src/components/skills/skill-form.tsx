@@ -5,6 +5,7 @@ import { ImageForm } from "components/image/image-form";
 import { Button } from "components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
+import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
@@ -22,6 +23,8 @@ type Props = {
 };
 
 export const SkillForm: FC<Props> = props => {
+
+    const confirm = useConfirmDialogContext();
 
     const queryClient = useQueryClient();
 
@@ -105,6 +108,14 @@ export const SkillForm: FC<Props> = props => {
         if (!props.skill) return;
 
         dispatchSubmissionState("deletionStarted");
+
+        const confirmed = await confirm({
+            title: "Delete skill",
+            body: "Are you sure you want to delete this skill?",
+            confirmButton: "Delete"
+        });
+
+        if (!confirmed) return dispatchSubmissionState("deletionFinished");
 
         try {
             await SkillService.delete(props.skill.id);
