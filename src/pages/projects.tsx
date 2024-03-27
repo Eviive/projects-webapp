@@ -82,26 +82,6 @@ export const Projects: FC = () => {
                     />
                     <TooltipProvider>
                         <Tooltip>
-                            <ProjectFormDialog
-                                trigger={
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            className="text-foreground-500"
-                                            variant="outline"
-                                            size="icon"
-                                        >
-                                            <FaPlus size={20} />
-                                        </Button>
-                                    </TooltipTrigger>
-                                }
-                            />
-                            <TooltipContent>
-                                Add a new project
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                        <Tooltip>
                             <ProjectSortDialog
                                 initialProjects={optimisticProjects}
                                 trigger={
@@ -119,6 +99,26 @@ export const Projects: FC = () => {
                             />
                             <TooltipContent>
                                 Sort projects
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <ProjectFormDialog
+                                trigger={
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            className="text-foreground-500"
+                                            variant="outline"
+                                            size="icon"
+                                        >
+                                            <FaPlus size={20} />
+                                        </Button>
+                                    </TooltipTrigger>
+                                }
+                            />
+                            <TooltipContent>
+                                Add a new project
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>

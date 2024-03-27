@@ -81,26 +81,6 @@ export const Skills: FC = () => {
                     />
                     <TooltipProvider>
                         <Tooltip>
-                            <SkillFormDialog
-                                trigger={
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            className="text-foreground-500"
-                                            variant="outline"
-                                            size="icon"
-                                        >
-                                            <FaPlus size={20} />
-                                        </Button>
-                                    </TooltipTrigger>
-                                }
-                            />
-                            <TooltipContent>
-                                Add a new skill
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                        <Tooltip>
                             <SkillSortDialog
                                 initialSkills={optimisticSkills}
                                 trigger={
@@ -118,6 +98,26 @@ export const Skills: FC = () => {
                             />
                             <TooltipContent>
                                 Sort skills
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <SkillFormDialog
+                                trigger={
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            className="text-foreground-500"
+                                            variant="outline"
+                                            size="icon"
+                                        >
+                                            <FaPlus size={20} />
+                                        </Button>
+                                    </TooltipTrigger>
+                                }
+                            />
+                            <TooltipContent>
+                                Add a new skill
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
