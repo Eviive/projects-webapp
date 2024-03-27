@@ -2,8 +2,8 @@
 
 import type { ColumnDef, SortingState, TableOptions } from "@tanstack/react-table";
 import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { DataTablePagination } from "components/ui/data-table-pagination";
 import { DataTableViewOptions } from "components/ui/data-table-view-options";
+import { Pagination } from "components/ui/pagination";
 import { Skeleton } from "components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
 import { useMemo, useState } from "react";
@@ -111,7 +111,14 @@ export const DataTable = <TData, >(props: DataTableProps<TData>) => {
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} isSelectable={props.isSelectable} />
+            <Pagination
+                {...table}
+                pageSize={table.getState().pagination.pageSize}
+                pageIndex={table.getState().pagination.pageIndex}
+                isSelectable={props.isSelectable}
+                selectedRows={table.getFilteredSelectedRowModel().rows.length}
+                totalRows={table.getFilteredRowModel().rows.length}
+            />
         </div>
     );
 };
