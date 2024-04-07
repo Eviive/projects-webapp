@@ -36,6 +36,8 @@ import type {
 } from "types/entities/project";
 import { projectCreationSchema, projectEditionWithFileSchema } from "types/entities/project";
 
+const listFormatter = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" });
+
 type ProjectForm = ProjectCreationWithFile | ProjectEditionWithFile;
 
 type Props = {
@@ -83,6 +85,8 @@ export const ProjectForm: FC<Props> = props => {
     } = form;
 
     const [oldTitle, setOldTitle] = useState(getValues("title"));
+
+    const selectedSkillIds = new Set(getValues("skills").map(s => s.id));
 
     const submitHandler: SubmitHandler<ProjectForm> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
@@ -309,7 +313,7 @@ export const ProjectForm: FC<Props> = props => {
 
                 <FormField
                     control={control}
-                    name="skills.0"
+                    name="skills"
                     render={({ field }) => (
                         <FormItem className="col-span-2">
                             <FormLabel>Skills</FormLabel>
@@ -323,7 +327,13 @@ export const ProjectForm: FC<Props> = props => {
                                                 !field.value && "text-muted-foreground"
                                             )}
                                         >
-                                            {field.value ? field.value.name : "Select skill"}
+                                            <span className="truncate">
+                                                {field.value
+                                                    ? listFormatter.format(
+                                                          field.value.map(s => s.name)
+                                                      )
+                                                    : "Select skills"}
+                                            </span>
                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
                                     </FormControl>
@@ -337,45 +347,78 @@ export const ProjectForm: FC<Props> = props => {
                                         <CommandInput placeholder="Search skill..." />
                                         <CommandList>
                                             <CommandEmpty>
-                                                {querySkills.isSuccess && "No skill found."}
+                                                {querySkills.isSuccess && "No skills found."}
                                                 {querySkills.isLoading && "Loading skills..."}
                                                 {querySkills.isError &&
                                                     "An error occurred while loading skills."}
                                             </CommandEmpty>
                                             {querySkills.isSuccess &&
-                                                querySkills.data.map(s => (
-                                                    <CommandItem
-                                                        key={s.id}
-                                                        value={s.name}
-                                                        onSelect={() => {
-                                                            form.setValue("skills.0", s);
-                                                        }}
-                                                    >
-                                                        <Check
-                                                            className={cn(
-                                                                "mr-2 h-4 w-4",
-                                                                s.id === field.value?.id
-                                                                    ? "opacity-100"
-                                                                    : "opacity-0"
-                                                            )}
-                                                        />
-                                                        <div className="flex items-center gap-2">
-                                                            <img
-                                                                className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                                                                src={
-                                                                    ImageService.getImageUrl(
-                                                                        s.image,
-                                                                        "skills"
-                                                                    ) ?? SKILL_PLACEHOLDER
+                                                querySkills.data.map(skill => {
+                                                    const isSelected = selectedSkillIds.has(
+                                                        skill.id
+                                                    );
+                                                    return (
+                                                        <CommandItem
+                                                            key={skill.id}
+                                                            value={skill.name}
+                                                            onSelect={() => {
+                                                                if (isSelected) {
+                                                                    selectedSkillIds.delete(
+                                                                        skill.id
+                                                                    );
+                                                                    field.onChange(
+                                                                        field.value.filter(
+                                                                            s => s.id !== skill.id
+                                                                        )
+                                                                    );
+                                                                } else {
+                                                                    selectedSkillIds.add(skill.id);
+                                                                    const nextIndex =
+                                                                        field.value.findIndex(
+                                                                            s => s.sort > skill.sort
+                                                                        );
+
+                                                                    field.onChange([
+                                                                        ...field.value.slice(
+                                                                            0,
+                                                                            nextIndex
+                                                                        ),
+                                                                        skill,
+                                                                        ...field.value.slice(
+                                                                            nextIndex
+                                                                        )
+                                                                    ]);
                                                                 }
-                                                                alt={s.image.altEn}
-                                                                width={22}
-                                                                loading="lazy"
+                                                            }}
+                                                        >
+                                                            <Check
+                                                                className={cn(
+                                                                    "mr-2 h-4 w-4",
+                                                                    field.value.find(
+                                                                        s => s.id === skill.id
+                                                                    ) !== undefined
+                                                                        ? "opacity-100"
+                                                                        : "opacity-0"
+                                                                )}
                                                             />
-                                                            {s.name}
-                                                        </div>
-                                                    </CommandItem>
-                                                ))}
+                                                            <div className="flex items-center gap-2">
+                                                                <img
+                                                                    className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                                                                    src={
+                                                                        ImageService.getImageUrl(
+                                                                            skill.image,
+                                                                            "skills"
+                                                                        ) ?? SKILL_PLACEHOLDER
+                                                                    }
+                                                                    alt={skill.image.altEn}
+                                                                    width={22}
+                                                                    loading="lazy"
+                                                                />
+                                                                {skill.name}
+                                                            </div>
+                                                        </CommandItem>
+                                                    );
+                                                })}
                                         </CommandList>
                                     </Command>
                                 </PopoverContent>
