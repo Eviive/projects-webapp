@@ -14,7 +14,7 @@ const safelistedStatusColorsUnion = safelistedStatusColors.join("|");
 
 /** @type {import("tailwindcss").Config} */
 export default {
-    darkMode: "class",
+    darkMode: "selector",
     content: ["./index.html", "./src/**/*.{ts,tsx}"],
     prefix: "",
     theme: {
