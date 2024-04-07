@@ -7,16 +7,16 @@ import { ImageForm } from "components/image/image-form";
 import { Button } from "components/ui/button";
 import { Calendar } from "components/ui/calendar";
 import { Checkbox } from "components/ui/checkbox";
+import {
+    Command,
+    CommandEmpty,
+    CommandInput,
+    CommandItem,
+    CommandList
+} from "components/ui/command";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "components/ui/select";
 import { Textarea } from "components/ui/textarea";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { format } from "date-fns";
@@ -24,17 +24,17 @@ import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { SKILL_PLACEHOLDER } from "lib/constants";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import { cn } from "lib/utils/style";
-import { CalendarIcon } from "lucide-react";
-import { type FC, useState } from "react";
+import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import type { FC } from "react";
+import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import type { ProjectCreation } from "types/entities/project";
-import {
-    type Project,
-    projectCreationSchema,
-    type ProjectCreationWithFile,
-    type ProjectEditionWithFile,
-    projectEditionWithFileSchema
+import type {
+    Project,
+    ProjectCreation,
+    ProjectCreationWithFile,
+    ProjectEditionWithFile
 } from "types/entities/project";
+import { projectCreationSchema, projectEditionWithFileSchema } from "types/entities/project";
 
 type ProjectForm = ProjectCreationWithFile | ProjectEditionWithFile;
 
@@ -313,38 +313,73 @@ export const ProjectForm: FC<Props> = props => {
                     render={({ field }) => (
                         <FormItem className="col-span-2">
                             <FormLabel>Skills</FormLabel>
-                            <Select
-                                value={field.value?.id.toString()}
-                                onValueChange={field.onChange}
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {querySkills.isSuccess &&
-                                        querySkills.data.map(skill => (
-                                            <SelectItem key={skill.id} value={skill.id.toString()}>
-                                                <div className="flex items-center gap-2">
-                                                    <img
-                                                        className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                                                        src={
-                                                            ImageService.getImageUrl(
-                                                                skill.image,
-                                                                "skills"
-                                                            ) ?? SKILL_PLACEHOLDER
-                                                        }
-                                                        alt={skill.image.altEn}
-                                                        width={22}
-                                                        loading="lazy"
-                                                    />
-                                                    {skill.name}
-                                                </div>
-                                            </SelectItem>
-                                        ))}
-                                </SelectContent>
-                            </Select>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                            variant="outline"
+                                            className={cn(
+                                                "flex w-full justify-between",
+                                                !field.value && "text-muted-foreground"
+                                            )}
+                                        >
+                                            {field.value ? field.value.name : "Select skill"}
+                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                        </Button>
+                                    </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                    align="start"
+                                    className="w-[200px] p-0"
+                                    portal={false}
+                                >
+                                    <Command>
+                                        <CommandInput placeholder="Search skill..." />
+                                        <CommandList>
+                                            <CommandEmpty>
+                                                {querySkills.isSuccess && "No skill found."}
+                                                {querySkills.isLoading && "Loading skills..."}
+                                                {querySkills.isError &&
+                                                    "An error occurred while loading skills."}
+                                            </CommandEmpty>
+                                            {querySkills.isSuccess &&
+                                                querySkills.data.map(s => (
+                                                    <CommandItem
+                                                        key={s.id}
+                                                        value={s.name}
+                                                        onSelect={() => {
+                                                            form.setValue("skills.0", s);
+                                                        }}
+                                                    >
+                                                        <Check
+                                                            className={cn(
+                                                                "mr-2 h-4 w-4",
+                                                                s.id === field.value?.id
+                                                                    ? "opacity-100"
+                                                                    : "opacity-0"
+                                                            )}
+                                                        />
+                                                        <div className="flex items-center gap-2">
+                                                            <img
+                                                                className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                                                                src={
+                                                                    ImageService.getImageUrl(
+                                                                        s.image,
+                                                                        "skills"
+                                                                    ) ?? SKILL_PLACEHOLDER
+                                                                }
+                                                                alt={s.image.altEn}
+                                                                width={22}
+                                                                loading="lazy"
+                                                            />
+                                                            {s.name}
+                                                        </div>
+                                                    </CommandItem>
+                                                ))}
+                                        </CommandList>
+                                    </Command>
+                                </PopoverContent>
+                            </Popover>
                             <FormMessage />
                         </FormItem>
                     )}

@@ -11,9 +11,9 @@ const PopoverTrigger = Trigger;
 
 const PopoverContent = forwardRef<
     ElementRef<typeof Content>,
-    ComponentPropsWithoutRef<typeof Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-    <Portal>
+    ComponentPropsWithoutRef<typeof Content> & { portal?: boolean }
+>(({ className, align = "center", sideOffset = 4, portal = true, ...props }, ref) => {
+    const content = (
         <Content
             ref={ref}
             align={align}
@@ -24,8 +24,12 @@ const PopoverContent = forwardRef<
             )}
             {...props}
         />
-    </Portal>
-));
+    );
+
+    if (!portal) return content;
+
+    return <Portal>{content}</Portal>;
+});
 
 PopoverContent.displayName = Content.displayName;
 
