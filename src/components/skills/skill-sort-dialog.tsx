@@ -6,7 +6,7 @@ import { SKILL_PLACEHOLDER } from "lib/constants";
 import type { FC, ReactNode } from "react";
 import type { Skill } from "types/entities/skill";
 
-export const sortSkillsMutationKey = [ "sortSkills" ] as const satisfies MutationKey;
+export const sortSkillsMutationKey = ["sortSkills"] as const satisfies MutationKey;
 
 type Props = {
     initialSkills: Skill[] | null;
@@ -14,12 +14,11 @@ type Props = {
 };
 
 export const SkillSortDialog: FC<Props> = props => {
-
     const queryClient = useQueryClient();
 
     const sortSkillsMutation = useMutation({
         mutationFn: SkillService.sort,
-        onSettled: () => queryClient.invalidateQueries({ queryKey: [ "skills" ] }),
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ["skills"] }),
         mutationKey: sortSkillsMutationKey
     });
 
@@ -30,9 +29,9 @@ export const SkillSortDialog: FC<Props> = props => {
             initialItems={props.initialSkills}
             mutation={sortSkillsMutation}
             render={skill => (
-                <div className="grow flex items-center gap-3">
+                <div className="flex grow items-center gap-3">
                     <img
-                        className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                        className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
                         src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                         alt={skill.image.altEn}
                         width={36}

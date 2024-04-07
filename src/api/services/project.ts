@@ -15,7 +15,11 @@ const findAllFeatured = () => request<Project[]>(`/${URL}/featured`, { needsAuth
 
 const findAllNotFeatured = () => request<Project[]>(`/${URL}/not-featured`, { needsAuth: false });
 
-const findAllNotFeaturedPaginated = (page?: number, size?: number) => request<Page<Project>>(`/${URL}/not-featured/paginated`, { params: { page, size }, needsAuth: false });
+const findAllNotFeaturedPaginated = (page?: number, size?: number) =>
+    request<Page<Project>>(`/${URL}/not-featured/paginated`, {
+        params: { page, size },
+        needsAuth: false
+    });
 
 const save = (project: ProjectCreation, file?: File | null) => {
     if (!file) {
@@ -58,14 +62,15 @@ const sort = (sorts: DndSaveItem[]) => {
     });
 };
 
-const deleteProject = (id: number) => request<void>(`/${URL}/${id}`, {
-    method: "DELETE"
-});
+const deleteProject = (id: number) =>
+    request<void>(`/${URL}/${id}`, {
+        method: "DELETE"
+    });
 
 const buildFormData = (project: Project | ProjectCreation, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("project", new Blob([ JSON.stringify(project) ], { type: "application/json" }));
+    formData.append("project", new Blob([JSON.stringify(project)], { type: "application/json" }));
     return formData;
 };
 

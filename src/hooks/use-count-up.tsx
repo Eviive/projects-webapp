@@ -9,10 +9,9 @@ type UseCountUpOutput = {
 };
 
 export const useCountUp = (endValue: number, duration: number = 1000): UseCountUpOutput => {
+    const [count, setCount] = useState(0);
 
-    const [ count, setCount ] = useState(0);
-
-    const [ start, setStart ] = useState(false);
+    const [start, setStart] = useState(false);
 
     useEffect(() => {
         if (!start) return;
@@ -37,7 +36,7 @@ export const useCountUp = (endValue: number, duration: number = 1000): UseCountU
         animationFrameId = requestAnimationFrame(animate);
 
         return () => cancelAnimationFrame(animationFrameId);
-    }, [ start, endValue, duration ]);
+    }, [start, endValue, duration]);
 
     return {
         count,

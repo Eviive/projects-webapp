@@ -18,8 +18,7 @@ type Props = {
 } & (EditionProps | CreationProps);
 
 export const SkillFormDialog: FC<Props> = props => {
-
-    const [ open, setOpen ] = useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
         <ResponsiveDrawerDialog
@@ -27,9 +26,7 @@ export const SkillFormDialog: FC<Props> = props => {
             header={{
                 title: props.skill ? `Editing ${props.skill.name}` : "Creating skill"
             }}
-            content={
-                <SkillForm skill={props.skill ?? null} closeDialog={() => setOpen(false)} />
-            }
+            content={<SkillForm skill={props.skill ?? null} closeDialog={() => setOpen(false)} />}
             open={open}
             onOpenChange={setOpen}
             classNames={{

@@ -21,7 +21,7 @@ export type Health = {
             details: {
                 database: string;
             };
-        },
+        };
         diskSpace: {
             status: Status;
             details: {
@@ -31,10 +31,10 @@ export type Health = {
                 threshold: number;
                 exists: boolean;
             };
-        },
+        };
         ping: {
             status: Status;
-        }
+        };
     };
 };
 

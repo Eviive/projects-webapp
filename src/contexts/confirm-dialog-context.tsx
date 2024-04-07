@@ -1,5 +1,13 @@
 import { ConfirmDialog } from "components/ui/confirm-dialog";
-import { createContext, type FC, type PropsWithChildren, useCallback, useContext, useRef, useState } from "react";
+import {
+    createContext,
+    type FC,
+    type PropsWithChildren,
+    useCallback,
+    useContext,
+    useRef,
+    useState
+} from "react";
 
 type ConfirmDialogOpenState = {
     open: true;
@@ -23,8 +31,7 @@ type IConfirmDialogContext = (params?: ConfirmDialogParams) => Promise<boolean>;
 export const ConfirmDialogContext = createContext<IConfirmDialogContext | null>(null);
 
 export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
-
-    const [ dialogState, setDialogState ] = useState<ConfirmDialogState>({
+    const [dialogState, setDialogState] = useState<ConfirmDialogState>({
         open: false
     });
 

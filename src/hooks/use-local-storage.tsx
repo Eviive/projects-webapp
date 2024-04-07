@@ -2,7 +2,7 @@ import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 
-type UseLocalStorageOutput<T> = [ T, Dispatch<SetStateAction<T>> ];
+type UseLocalStorageOutput<T> = [T, Dispatch<SetStateAction<T>>];
 
 /*
 	There is a comma after the type parameter ("T,") because there is a clash between the JSX and TypeScript syntax.
@@ -10,8 +10,7 @@ type UseLocalStorageOutput<T> = [ T, Dispatch<SetStateAction<T>> ];
 	See: https://stackoverflow.com/a/45576880
 */
 export const useLocalStorage = <T,>(key: string, defaultValue: T): UseLocalStorageOutput<T> => {
-
-    const [ storedValue, setStoredValue ] = useState<T>(() => {
+    const [storedValue, setStoredValue] = useState<T>(() => {
         try {
             const item = localStorage.getItem(key);
 
@@ -27,22 +26,26 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): UseLocalStora
         return defaultValue;
     });
 
-    const setValue: Dispatch<SetStateAction<T>> = useCallback(newValueOrFactory => {
-        try {
-            setStoredValue(prevState => {
-                const newState = newValueOrFactory instanceof Function
-                    ? newValueOrFactory(prevState)
-                    : newValueOrFactory;
+    const setValue: Dispatch<SetStateAction<T>> = useCallback(
+        newValueOrFactory => {
+            try {
+                setStoredValue(prevState => {
+                    const newState =
+                        newValueOrFactory instanceof Function
+                            ? newValueOrFactory(prevState)
+                            : newValueOrFactory;
 
-                if (newState === prevState) return prevState;
+                    if (newState === prevState) return prevState;
 
-                localStorage.setItem(key, JSON.stringify(newState));
-                return newState;
-            });
-        } catch (e) {
-            console.error(getFormattedTitleAndMessage(e));
-        }
-    }, [ key ]);
+                    localStorage.setItem(key, JSON.stringify(newState));
+                    return newState;
+                });
+            } catch (e) {
+                console.error(getFormattedTitleAndMessage(e));
+            }
+        },
+        [key]
+    );
 
-    return [ storedValue, setValue ];
+    return [storedValue, setValue];
 };

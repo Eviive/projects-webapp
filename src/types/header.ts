@@ -8,7 +8,7 @@ export type HeaderRouteItem = Route & {
 export type HeaderActionItem = {
     type: "action";
     name: string;
-    handleAction: () => (void | Promise<void>);
+    handleAction: () => void | Promise<void>;
 };
 
 export type HeaderItem = (HeaderRouteItem | HeaderActionItem) & {

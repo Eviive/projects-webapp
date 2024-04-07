@@ -4,9 +4,11 @@ const isMatching = (query: string): boolean => {
     return window.matchMedia(query).matches;
 };
 
-export const useMediaQuery = (mediaQuery: string, handleMatchChange?: (matches: boolean) => void): boolean => {
-
-    const [ matches, setMatches ] = useState(isMatching(mediaQuery));
+export const useMediaQuery = (
+    mediaQuery: string,
+    handleMatchChange?: (matches: boolean) => void
+): boolean => {
+    const [matches, setMatches] = useState(isMatching(mediaQuery));
 
     useEffect(() => {
         const matchMedia = window.matchMedia(mediaQuery);
@@ -24,7 +26,7 @@ export const useMediaQuery = (mediaQuery: string, handleMatchChange?: (matches: 
         return () => {
             matchMedia.removeEventListener("change", handleChange);
         };
-    }, [ handleMatchChange, mediaQuery ]);
+    }, [handleMatchChange, mediaQuery]);
 
     return matches;
 };

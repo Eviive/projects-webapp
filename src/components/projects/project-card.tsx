@@ -21,30 +21,29 @@ type Props = {
 };
 
 export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
-
     const skills = useMemo(() => {
         project.skills.sort((a, b) => a.sort - b.sort);
 
-        return project.skills.map(s =>
+        return project.skills.map(s => (
             <img
                 key={s.id}
-                className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
                 src={ImageService.getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
                 alt={s.image.altEn}
                 width={35}
                 loading="lazy"
             />
-        );
-    }, [ project.skills ]);
+        ));
+    }, [project.skills]);
 
     return (
         <Card className="flex flex-col">
-            <CardHeader className="p-3 space-y-0 flex-row justify-between items-center gap-1">
+            <CardHeader className="flex-row items-center justify-between gap-1 space-y-0 p-3">
                 <div>
-                    <CardTitle className="flex items-center gap-1.5 truncate leading-inherit">
+                    <CardTitle className="leading-inherit flex items-center gap-1.5 truncate">
                         {project.title}
                         {project.featured && (
-                            <Badge className="text-danger bg-danger/25 p-1.5 focus:ring-0 focus:ring-offset-0 hover:bg-danger/25">
+                            <Badge className="bg-danger/25 p-1.5 text-danger hover:bg-danger/25 focus:ring-0 focus:ring-offset-0">
                                 <FaHeart size={14} />
                             </Badge>
                         )}
@@ -70,26 +69,25 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                                 </TooltipTrigger>
                             }
                         />
-                        <TooltipContent>
-                            Edit
-                        </TooltipContent>
+                        <TooltipContent>Edit</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
             </CardHeader>
             <Separator />
-            <CardContent className="grow p-4 flex flex-col justify-between gap-3">
+            <CardContent className="flex grow flex-col justify-between gap-3 p-4">
                 <p className="line-clamp-4">{project.descriptionEn}</p>
                 <div>
                     <img
-                        className="mx-auto object-cover aspect-[16/10] drop-shadow-lg rounded-sm"
-                        src={ImageService.getImageUrl(project.image, "projects") ?? PROJECT_PLACEHOLDER}
+                        className="mx-auto aspect-[16/10] rounded-sm object-cover drop-shadow-lg"
+                        src={
+                            ImageService.getImageUrl(project.image, "projects") ??
+                            PROJECT_PLACEHOLDER
+                        }
                         alt={project.image.altEn}
                         width={512}
                         loading="lazy"
                     />
-                    <div className="flex justify-center gap-3 mt-3">
-                        {skills}
-                    </div>
+                    <div className="mt-3 flex justify-center gap-3">{skills}</div>
                 </div>
             </CardContent>
         </Card>

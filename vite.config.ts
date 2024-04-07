@@ -5,11 +5,7 @@ import eslint from "vite-plugin-eslint";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 
 const configFn: UserConfigFn = () => ({
-    plugins: [
-        react(),
-        viteTsconfigPaths(),
-        eslint()
-    ],
+    plugins: [react(), viteTsconfigPaths(), eslint()],
     server: {
         port: 3001,
         open: true

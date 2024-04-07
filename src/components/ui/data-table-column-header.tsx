@@ -1,6 +1,12 @@
 import type { Column } from "@tanstack/react-table";
 import { Button } from "components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "components/ui/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "components/ui/dropdown-menu";
 import { cn } from "lib/utils/style";
 import type { HTMLAttributes } from "react";
 import { AiFillEyeInvisible } from "react-icons/ai";
@@ -16,7 +22,6 @@ export const DataTableColumnHeader = <TData, TValue>({
     title,
     className
 }: DataTableColumnHeaderProps<TData, TValue>) => {
-
     if (!column.getCanSort()) {
         return <div className={cn(className)}>{title}</div>;
     }
@@ -34,9 +39,7 @@ export const DataTableColumnHeader = <TData, TValue>({
                         {column.getIsSorted() === "desc" && (
                             <LuArrowDown className="ml-2 h-4 w-4" />
                         )}
-                        {column.getIsSorted() === "asc" && (
-                            <LuArrowUp className="ml-2 h-4 w-4" />
-                        )}
+                        {column.getIsSorted() === "asc" && <LuArrowUp className="ml-2 h-4 w-4" />}
                         {column.getIsSorted() === false && (
                             <LuChevronsUpDown className="ml-2 h-4 w-4" />
                         )}

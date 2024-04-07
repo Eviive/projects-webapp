@@ -7,27 +7,20 @@ type IThemeContext = ReturnType<typeof useTheme>;
 const ThemeContext = createContext<IThemeContext | null>(null);
 
 export const ThemeContextProvider: FC<PropsWithChildren> = ({ children }) => {
-    const {
-        theme,
-        systemTheme,
-        setLightTheme,
-        setDarkTheme,
-        setSystemTheme
-    } = useTheme();
+    const { theme, systemTheme, setLightTheme, setDarkTheme, setSystemTheme } = useTheme();
 
-    const themeContextValue = useMemo<IThemeContext>(() => ({
-        theme,
-        systemTheme,
-        setLightTheme,
-        setDarkTheme,
-        setSystemTheme
-    }), [ theme, systemTheme, setLightTheme, setDarkTheme, setSystemTheme ]);
-
-    return (
-        <ThemeContext.Provider value={themeContextValue}>
-            {children}
-        </ThemeContext.Provider>
+    const themeContextValue = useMemo<IThemeContext>(
+        () => ({
+            theme,
+            systemTheme,
+            setLightTheme,
+            setDarkTheme,
+            setSystemTheme
+        }),
+        [theme, systemTheme, setLightTheme, setDarkTheme, setSystemTheme]
     );
+
+    return <ThemeContext.Provider value={themeContextValue}>{children}</ThemeContext.Provider>;
 };
 
 export const useThemeContext = (): IThemeContext => {

@@ -1,4 +1,8 @@
-import { NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "components/ui/navigation-menu";
+import {
+    NavigationMenuItem,
+    NavigationMenuLink,
+    navigationMenuTriggerStyle
+} from "components/ui/navigation-menu";
 import { isHeaderRouteItemActive } from "lib/utils/header";
 import { cn } from "lib/utils/style";
 import type { FC } from "react";
@@ -10,7 +14,6 @@ type Props = {
 };
 
 export const HeaderItem: FC<Props> = ({ item }) => {
-
     const location = useLocation();
 
     const className = cn(
@@ -27,17 +30,12 @@ export const HeaderItem: FC<Props> = ({ item }) => {
                     className={className}
                     active={isHeaderRouteItemActive(item, location)}
                 >
-                    <NavLink to={item.path}>
-                        {item.name}
-                    </NavLink>
+                    <NavLink to={item.path}>{item.name}</NavLink>
                 </NavigationMenuLink>
             )}
 
             {item.type === "action" && (
-                <NavigationMenuLink
-                    className={className}
-                    onClick={item.handleAction}
-                >
+                <NavigationMenuLink className={className} onClick={item.handleAction}>
                     {item.name}
                 </NavigationMenuLink>
             )}

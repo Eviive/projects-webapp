@@ -8,10 +8,13 @@ type AvailableSubmissionActions = `${SubmissionActionType}${Capitalize<Submissio
 type SubmissionStateKey = `isSubmitting${Capitalize<SubmissionActionType>}`;
 type SubmissionState = { [key in SubmissionStateKey]: boolean };
 
-type UseFormSubmissionStateOutput = [ SubmissionState, Dispatch<AvailableSubmissionActions> ];
+type UseFormSubmissionStateOutput = [SubmissionState, Dispatch<AvailableSubmissionActions>];
 
 export const useFormSubmissionState = (): UseFormSubmissionStateOutput => {
-    const reducer = (state: SubmissionState, action: AvailableSubmissionActions): SubmissionState => {
+    const reducer = (
+        state: SubmissionState,
+        action: AvailableSubmissionActions
+    ): SubmissionState => {
         switch (action) {
             case "editionStarted":
                 return { ...state, isSubmittingEdition: true };

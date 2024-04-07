@@ -11,12 +11,11 @@ import { Outlet } from "react-router-dom";
 import "./styles/reset.scss";
 
 export const App: FC = () => {
-
     const { accessToken, setAccessToken } = useAuthContext();
 
     useAxiosInterceptors(accessToken, setAccessToken);
 
-    const [ isLoading, setIsLoading ] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -30,14 +29,11 @@ export const App: FC = () => {
                 setIsLoading(false);
             }
         })();
-    }, [ setAccessToken ]);
+    }, [setAccessToken]);
 
     return (
-        <div className="min-h-screen min-h-screen-dynamic flex flex-col">
-            {!isLoading
-                ? <Outlet />
-                : <Loader />
-            }
+        <div className="min-h-screen-dynamic flex min-h-screen flex-col">
+            {!isLoading ? <Outlet /> : <Loader />}
             <Toaster />
         </div>
     );

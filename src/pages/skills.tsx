@@ -18,9 +18,8 @@ import { MdDragHandle } from "react-icons/md";
 import type { DndSaveItem } from "types/dnd";
 
 export const Skills: FC = () => {
-
     const query = useQuery({
-        queryKey: [ "skills" ],
+        queryKey: ["skills"],
         queryFn: SkillService.findAll
     });
 
@@ -42,12 +41,12 @@ export const Skills: FC = () => {
         }
 
         return items;
-    }, [ optimisticSkillSorts ]);
+    }, [optimisticSkillSorts]);
 
     const optimisticSkills = useMemo(() => {
         if (!query.isSuccess) return [];
 
-        const optSkills = [ ...query.data ];
+        const optSkills = [...query.data];
 
         for (const skill of optSkills) {
             if (optimisticSkillSortItems[skill.id] !== undefined) {
@@ -58,20 +57,21 @@ export const Skills: FC = () => {
         optSkills.sort((a, b) => a.sort - b.sort);
 
         return optSkills;
-    }, [ query.data, query.isSuccess, optimisticSkillSortItems ]);
+    }, [query.data, query.isSuccess, optimisticSkillSortItems]);
 
-    const [ searchBarValue, setSearchBarValue ] = useState("");
-    const [ searchQuery, setSearchQuery ] = useState(searchBarValue);
+    const [searchBarValue, setSearchBarValue] = useState("");
+    const [searchQuery, setSearchQuery] = useState(searchBarValue);
 
     const optimisticFilteredSkills = useMemo(() => {
-        return optimisticSkills
-            .filter(skill => skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase()));
-    }, [ optimisticSkills, searchQuery ]);
+        return optimisticSkills.filter(skill =>
+            skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
+        );
+    }, [optimisticSkills, searchQuery]);
 
     return (
         <Page title="Skills">
-            <div className="grow w-full h-full px-[5%] py-12 flex flex-col gap-12">
-                <div className="self-center max-w-md w-full flex items-center gap-2">
+            <div className="flex h-full w-full grow flex-col gap-12 px-[5%] py-12">
+                <div className="flex w-full max-w-md items-center gap-2 self-center">
                     <SearchBar
                         value={searchBarValue}
                         handleChange={setSearchBarValue}
@@ -96,9 +96,7 @@ export const Skills: FC = () => {
                                     </TooltipTrigger>
                                 }
                             />
-                            <TooltipContent>
-                                Sort skills
-                            </TooltipContent>
+                            <TooltipContent>Sort skills</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                     <TooltipProvider>
@@ -116,19 +114,12 @@ export const Skills: FC = () => {
                                     </TooltipTrigger>
                                 }
                             />
-                            <TooltipContent>
-                                Add a new skill
-                            </TooltipContent>
+                            <TooltipContent>Add a new skill</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                 </div>
                 {query.isSuccess && (
-                    <Grid
-                        minWidth="140px"
-                        gap="2em"
-                        columnCount="infinity"
-                        centerHorizontally
-                    >
+                    <Grid minWidth="140px" gap="2em" columnCount="infinity" centerHorizontally>
                         {optimisticFilteredSkills.map(skill => (
                             <SkillCard
                                 key={skill.id}
@@ -138,9 +129,7 @@ export const Skills: FC = () => {
                         ))}
                     </Grid>
                 )}
-                {query.isLoading && (
-                    <Loader />
-                )}
+                {query.isLoading && <Loader />}
                 {query.isError && error !== null && (
                     <Alert variant="destructive">
                         <LuAlertCircle className="h-4 w-4" />

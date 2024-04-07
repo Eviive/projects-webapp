@@ -4,12 +4,7 @@ import type { FC } from "react";
 import { MdDragHandle } from "react-icons/md";
 
 export const SortDialogDragHandle: FC = () => {
-
-    const {
-        attributes,
-        listeners,
-        setActivatorNodeRef
-    } = useSortDialogContext();
+    const { attributes, listeners, setActivatorNodeRef } = useSortDialogContext();
 
     return (
         <Button

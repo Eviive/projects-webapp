@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export const httpClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
-        "Accept": "application/json"
+        Accept: "application/json"
     },
     withCredentials: true
 });
@@ -33,9 +33,9 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
             method,
             data,
             headers: {
-                ...data && { "Content-Type": "application/json" },
+                ...(data && { "Content-Type": "application/json" }),
                 ...headers,
-                ...needsAuth && { "Authorization": "Bearer " }
+                ...(needsAuth && { Authorization: "Bearer " })
             },
             ...restConfig
         });

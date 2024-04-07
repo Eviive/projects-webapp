@@ -1,4 +1,8 @@
-import { imageCreationSchema, imageCreationWithFileSchema, imageSchema } from "types/entities/image";
+import {
+    imageCreationSchema,
+    imageCreationWithFileSchema,
+    imageSchema
+} from "types/entities/image";
 import { skillSchema } from "types/entities/skill";
 import { z } from "zod";
 
@@ -25,12 +29,10 @@ export const projectCreationSchema = z.object({
         })
         .min(1, "Description (French) is required")
         .max(510, "Description (French) must be at most 500 characters"),
-    creationDate: z
-        .coerce
-        .date({
-            required_error: "Creation date is required",
-            invalid_type_error: "Creation date must be a date"
-        }),
+    creationDate: z.coerce.date({
+        required_error: "Creation date is required",
+        invalid_type_error: "Creation date must be a date"
+    }),
     repoUrl: z
         .string({
             required_error: "Repository URL is required",
@@ -45,14 +47,11 @@ export const projectCreationSchema = z.object({
         })
         .url("Demonstration URL must be a valid URL")
         .max(255, "Demonstration URL must be at most 255 characters"),
-    featured: z
-        .boolean({
-            required_error: "Featured is required",
-            invalid_type_error: "Featured must be a boolean"
-        }),
-    skills: z
-        .array(skillSchema)
-        .min(1, "At least one skill is required"),
+    featured: z.boolean({
+        required_error: "Featured is required",
+        invalid_type_error: "Featured must be a boolean"
+    }),
+    skills: z.array(skillSchema).min(1, "At least one skill is required"),
     image: imageCreationSchema
 });
 
@@ -68,11 +67,10 @@ export type ProjectCreationWithFile = z.infer<typeof projectCreationWithFileSche
 // Project
 export const projectSchema = projectCreationSchema.extend({
     id: z.number(),
-    sort: z
-        .number({
-            required_error: "Sort is required",
-            invalid_type_error: "Sort must be a number"
-        }),
+    sort: z.number({
+        required_error: "Sort is required",
+        invalid_type_error: "Sort must be a number"
+    }),
     image: imageSchema
 });
 

@@ -1,14 +1,36 @@
 import type { Active } from "@dnd-kit/core";
-import { DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import {
+    DndContext,
+    type DragEndEvent,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy
+} from "@dnd-kit/sortable";
 import { SortDialogDragHandle } from "components/common/sort-dialog/sort-dialog-drag-handle";
 import { SortDialogItem } from "components/common/sort-dialog/sort-dialog-item";
 import { SortDialogOverlay } from "components/common/sort-dialog/sort-dialog-overlay";
 import { Button } from "components/ui/button";
 import { ScrollArea } from "components/ui/scroll-area";
 import { Separator } from "components/ui/separator";
-import { type ForwardedRef, forwardRef, Fragment, type PropsWithoutRef, type ReactNode, type RefAttributes, useImperativeHandle, useMemo, useState } from "react";
+import {
+    type ForwardedRef,
+    forwardRef,
+    Fragment,
+    type PropsWithoutRef,
+    type ReactNode,
+    type RefAttributes,
+    useImperativeHandle,
+    useMemo,
+    useState
+} from "react";
 import { createPortal } from "react-dom";
 import type { DndItem, DndSaveItem } from "types/dnd";
 
@@ -20,44 +42,42 @@ type Props<E extends DndItem> = {
     closeDialog: (resetSort: boolean) => void;
 };
 
-const SortDialogContent = <E extends DndItem>(props: Props<E>, ref: ForwardedRef<SortDialogContentRef>) => {
+const SortDialogContent = <E extends DndItem>(
+    props: Props<E>,
+    ref: ForwardedRef<SortDialogContentRef>
+) => {
+    const [items, setItems] = useState(props.initialItems);
 
-    const [ items, setItems ] = useState(props.initialItems);
+    const [initialSort] = useState(props.initialItems.map(item => item.sort));
 
-    const [ initialSort ] = useState(
-        props.initialItems.map(item => item.sort)
-    );
+    useImperativeHandle(
+        ref,
+        () => {
+            return () => {
+                const firstMovedIndex = items.findIndex((item, i) => item.sort !== initialSort[i]);
+                const lastMovedItem =
+                    firstMovedIndex !== -1
+                        ? items.findLastIndex((item, i) => item.sort !== initialSort[i])
+                        : -1;
 
-    useImperativeHandle(ref, () => {
-        return () => {
-            const firstMovedIndex = items
-                .findIndex((item, i) => item.sort !== initialSort[i]);
-            const lastMovedItem = firstMovedIndex !== -1
-                ? items.findLastIndex((item, i) => item.sort !== initialSort[i])
-                : -1;
+                if (firstMovedIndex === -1 || lastMovedItem === -1) return null;
 
-            if (firstMovedIndex === -1 || lastMovedItem === -1) return null;
+                const movedItems = items.slice(firstMovedIndex, lastMovedItem + 1);
 
-            const movedItems = items.slice(firstMovedIndex, lastMovedItem + 1);
+                const sorts = movedItems.map(item => item.sort).sort((a, b) => a - b);
 
-            const sorts = movedItems
-                .map(item => item.sort)
-                .sort((a, b) => a - b);
-
-            return movedItems
-                .map((item, i) => ({
+                return movedItems.map((item, i) => ({
                     id: item.id,
                     sort: sorts[i]
                 }));
-        };
-    }, [ initialSort, items ]);
-
-    const [ active, setActive ] = useState<Active | null>(null);
-
-    const activeItem = useMemo(
-        () => items.find(item => item.id === active?.id),
-        [ active, items ]
+            };
+        },
+        [initialSort, items]
     );
+
+    const [active, setActive] = useState<Active | null>(null);
+
+    const activeItem = useMemo(() => items.find(item => item.id === active?.id), [active, items]);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -85,7 +105,7 @@ const SortDialogContent = <E extends DndItem>(props: Props<E>, ref: ForwardedRef
         <>
             <DndContext
                 sensors={sensors}
-                modifiers={[ restrictToVerticalAxis, restrictToFirstScrollableAncestor ]}
+                modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}
                 onDragStart={({ active }) => setActive(active)}
                 onDragCancel={() => setActive(null)}
                 onDragEnd={handleDragEnd}
@@ -100,9 +120,7 @@ const SortDialogContent = <E extends DndItem>(props: Props<E>, ref: ForwardedRef
                                         {props.render(item)}
                                         <SortDialogDragHandle />
                                     </SortDialogItem>
-                                    {i === items.length - 1 && (
-                                        <Separator />
-                                    )}
+                                    {i === items.length - 1 && <Separator />}
                                 </Fragment>
                             ))}
                         </ul>
@@ -128,15 +146,14 @@ const SortDialogContent = <E extends DndItem>(props: Props<E>, ref: ForwardedRef
                 <Button variant="outline" onClick={() => props.closeDialog(true)}>
                     Cancel
                 </Button>
-                <Button onClick={() => props.closeDialog(false)}>
-                    Save
-                </Button>
+                <Button onClick={() => props.closeDialog(false)}>Save</Button>
             </div>
         </>
     );
 };
 
-const SortDialogContentWithForwardedRef = forwardRef(SortDialogContent) as
-    <E extends DndItem>(props: PropsWithoutRef<Props<E>> & RefAttributes<SortDialogContentRef>) => ReactNode;
+const SortDialogContentWithForwardedRef = forwardRef(SortDialogContent) as <E extends DndItem>(
+    props: PropsWithoutRef<Props<E>> & RefAttributes<SortDialogContentRef>
+) => ReactNode;
 
 export { SortDialogContentWithForwardedRef as SortDialogContent };

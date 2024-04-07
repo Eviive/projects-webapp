@@ -12,7 +12,12 @@ import type { FC } from "react";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
-import type { Skill, SkillCreation, SkillCreationWithFile, SkillEditionWithFile } from "types/entities/skill";
+import type {
+    Skill,
+    SkillCreation,
+    SkillCreationWithFile,
+    SkillEditionWithFile
+} from "types/entities/skill";
 import { skillCreationSchema, skillEditionWithFileSchema } from "types/entities/skill";
 
 type SkillForm = SkillCreationWithFile | SkillEditionWithFile;
@@ -23,18 +28,15 @@ type Props = {
 };
 
 export const SkillForm: FC<Props> = props => {
-
     const confirm = useConfirmDialogContext();
 
     const queryClient = useQueryClient();
 
-    const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
+    const [submissionState, dispatchSubmissionState] = useFormSubmissionState();
 
     const form = useForm<SkillForm>({
         resolver: zodResolver(
-            props.skill === null
-                ? skillCreationSchema
-                : skillEditionWithFileSchema
+            props.skill === null ? skillCreationSchema : skillEditionWithFileSchema
         ),
         defaultValues: props.skill ?? {
             name: "",
@@ -45,16 +47,14 @@ export const SkillForm: FC<Props> = props => {
         }
     });
     const {
-        formState: {
-            isDirty
-        },
+        formState: { isDirty },
         control,
         getValues,
         setValue,
         handleSubmit
     } = form;
 
-    const [ oldName, setOldName ] = useState(getValues("name"));
+    const [oldName, setOldName] = useState(getValues("name"));
 
     const submitHandler: SubmitHandler<SkillForm> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
@@ -91,12 +91,15 @@ export const SkillForm: FC<Props> = props => {
             }
 
             await queryClient.invalidateQueries({
-                queryKey: [ "skills" ]
+                queryKey: ["skills"]
             });
 
             props.closeDialog();
         } catch (e) {
-            console.error(editing ? "Skill update failed" : "Skill creation failed", getFormattedTitleAndMessage(e));
+            console.error(
+                editing ? "Skill update failed" : "Skill creation failed",
+                getFormattedTitleAndMessage(e)
+            );
         } finally {
             dispatchSubmissionState("editionFinished");
         }
@@ -121,7 +124,7 @@ export const SkillForm: FC<Props> = props => {
             await SkillService.delete(props.skill.id);
 
             await queryClient.invalidateQueries({
-                queryKey: [ "skills" ]
+                queryKey: ["skills"]
             });
 
             props.closeDialog();
@@ -134,24 +137,30 @@ export const SkillForm: FC<Props> = props => {
 
     return (
         <FormProvider {...form}>
-            <form
-                className="mb-2 flex flex-col gap-4"
-                onSubmit={handleSubmit(submitHandler)}
-            >
+            <form className="mb-2 flex flex-col gap-4" onSubmit={handleSubmit(submitHandler)}>
                 <FormField
                     control={control}
                     name="name"
                     rules={{
                         onChange: () => {
-                            const [ name, altEn, altFr ] = getValues([ "name", "image.altEn", "image.altFr" ]),
-                                  isNameEmpty = !name.trim(),
-                                  isAltEnEmpty = !altEn.trim(),
-                                  isAltFrEmpty = !altFr.trim(),
-                                  isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
-                                  isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
+                            const [name, altEn, altFr] = getValues([
+                                    "name",
+                                    "image.altEn",
+                                    "image.altFr"
+                                ]),
+                                isNameEmpty = !name.trim(),
+                                isAltEnEmpty = !altEn.trim(),
+                                isAltFrEmpty = !altFr.trim(),
+                                isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
+                                isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
 
-                            (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
-                            (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
+                            (isAltEnEmpty || isAltEnFormatted) &&
+                                setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
+                            (isAltFrEmpty || isAltFrFormatted) &&
+                                setValue(
+                                    "image.altFr",
+                                    isNameEmpty ? "" : `Logo de ${name.trim()}`
+                                );
 
                             setOldName(name);
                         }
@@ -169,12 +178,15 @@ export const SkillForm: FC<Props> = props => {
 
                 <ImageForm />
 
-                <div className="w-full flex justify-center gap-3">
+                <div className="flex w-full justify-center gap-3">
                     {!!props.skill && (
                         <Button
                             className="w-full max-w-[50%]"
                             variant="destructive"
-                            disabled={submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion}
+                            disabled={
+                                submissionState.isSubmittingEdition ||
+                                submissionState.isSubmittingDeletion
+                            }
                             onClick={handleDelete}
                         >
                             Delete
@@ -183,7 +195,10 @@ export const SkillForm: FC<Props> = props => {
                     <Button
                         className="w-full max-w-[50%]"
                         type="submit"
-                        disabled={submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion}
+                        disabled={
+                            submissionState.isSubmittingEdition ||
+                            submissionState.isSubmittingDeletion
+                        }
                     >
                         Submit
                     </Button>

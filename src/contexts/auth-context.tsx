@@ -9,19 +9,17 @@ type IAuthContext = {
 const AuthContext = createContext<IAuthContext | null>(null);
 
 export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
+    const [accessToken, setAccessToken] = useState("");
 
-    const [ accessToken, setAccessToken ] = useState("");
-
-    const authContextValue = useMemo<IAuthContext>(() => ({
-        accessToken,
-        setAccessToken
-    }), [ accessToken ]);
-
-    return (
-        <AuthContext.Provider value={authContextValue}>
-            {children}
-        </AuthContext.Provider>
+    const authContextValue = useMemo<IAuthContext>(
+        () => ({
+            accessToken,
+            setAccessToken
+        }),
+        [accessToken]
     );
+
+    return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 };
 
 export const useAuthContext = (): IAuthContext => {

@@ -14,15 +14,11 @@ type UseThemeOutput = {
 const COLOR_SCHEME_MEDIA_QUERY = "(prefers-color-scheme: dark)";
 
 export const useTheme = (): UseThemeOutput => {
-
     const isSystemDarkTheme = useMediaQuery(COLOR_SCHEME_MEDIA_QUERY);
 
     const systemTheme = isSystemDarkTheme ? "dark" : "light";
 
-    const [ theme, setTheme ] = useLocalStorage<Theme>(
-        "theme",
-        "system"
-    );
+    const [theme, setTheme] = useLocalStorage<Theme>("theme", "system");
 
     useLayoutEffect(() => {
         const root = document.documentElement;
@@ -30,7 +26,7 @@ export const useTheme = (): UseThemeOutput => {
 
         root.classList.remove("light", "dark");
         root.classList.add(currentTheme);
-    }, [ systemTheme, theme ]);
+    }, [systemTheme, theme]);
 
     return {
         theme,

@@ -12,7 +12,6 @@ import { toast } from "sonner";
 import type { HeaderItem as HeaderItemType, HeaderMenu as HeaderMenuType } from "types/header";
 
 export const Header: FC = () => {
-
     const { setAccessToken } = useAuthContext();
 
     const queryClient = useQueryClient();
@@ -26,7 +25,8 @@ export const Header: FC = () => {
         {
             type: "menu",
             name: "Data",
-            description: "Manage the Personal-API data, your IT student projects and your technical skills.",
+            description:
+                "Manage the Personal-API data, your IT student projects and your technical skills.",
             icon: <LuFolderCog size={30} />,
             children: [
                 {
@@ -90,30 +90,26 @@ export const Header: FC = () => {
     ];
 
     return (
-        <nav className="flex z-40 w-full h-auto items-center justify-center data-[menu-open=true]:border-none static border-b border-divider backdrop-blur-lg data-[menu-open=true]:backdrop-blur-xl backdrop-saturate-150 bg-background/70">
-            <header className="z-40 flex px-6 gap-4 w-full flex-row relative flex-nowrap items-center justify-between h-16 max-w-[1024px]">
-                <div className="hidden md:flex h-full items-center text-lg font-bold basis-0 grow">
+        <nav className="border-divider static z-40 flex h-auto w-full items-center justify-center border-b bg-background/70 backdrop-blur-lg backdrop-saturate-150 data-[menu-open=true]:border-none data-[menu-open=true]:backdrop-blur-xl">
+            <header className="relative z-40 flex h-16 w-full max-w-[1024px] flex-row flex-nowrap items-center justify-between gap-4 px-6">
+                <div className="hidden h-full grow basis-0 items-center text-lg font-bold md:flex">
                     <img
-                        className="object-cover h-full p-3.5"
+                        className="h-full object-cover p-3.5"
                         src="/logo.svg"
                         alt="The logo of the Personal-API dashboard"
                     />
                     <h1 className="hidden lg:block">Dashboard</h1>
                 </div>
 
-                <NavigationMenu className="basis-0 grow">
+                <NavigationMenu className="grow basis-0">
                     <NavigationMenuList>
                         {headerItems.map(item => {
                             switch (item.type) {
                                 case "route":
                                 case "action":
-                                    return (
-                                        <HeaderItem key={item.name} item={item} />
-                                    );
+                                    return <HeaderItem key={item.name} item={item} />;
                                 case "menu":
-                                    return (
-                                        <HeaderMenu key={item.name} menu={item} />
-                                    );
+                                    return <HeaderMenu key={item.name} menu={item} />;
                             }
                         })}
                     </NavigationMenuList>

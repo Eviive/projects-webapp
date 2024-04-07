@@ -8,22 +8,24 @@
         "plugin:react/recommended",
         "plugin:react/jsx-runtime",
         "plugin:react-hooks/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:jsx-a11y/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "eslint-config-prettier"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "project": [
-            "./tsconfig.json",
-            "./tsconfig.node.json"
-        ],
+        "project": ["./tsconfig.json", "./tsconfig.node.json"],
         "tsconfigRootDir": "./"
     },
-    "plugins": [
-        "react",
-        "@typescript-eslint"
-    ],
+    "plugins": ["react", "@typescript-eslint"],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "rules": {
         "@typescript-eslint/consistent-type-imports": [
             "error",
@@ -45,10 +47,5 @@
                 "html": false
             }
         ]
-    },
-    "settings": {
-        "react": {
-            "version": "detect"
-        }
     }
 }

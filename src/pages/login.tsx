@@ -17,7 +17,6 @@ import type { AuthRequest } from "types/auth";
 import { authRequestSchema } from "types/auth";
 
 export const Login: FC = () => {
-
     const { accessToken, setAccessToken } = useAuthContext();
 
     const navigate = useNavigate();
@@ -26,9 +25,9 @@ export const Login: FC = () => {
         if (accessToken) {
             navigate("/", { replace: true });
         }
-    }, [ accessToken, navigate ]);
+    }, [accessToken, navigate]);
 
-    const [ isSubmitting, setIsSubmitting ] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const form = useForm<AuthRequest>({
         resolver: zodResolver(authRequestSchema),
@@ -57,7 +56,7 @@ export const Login: FC = () => {
 
     return (
         <Page title="Login">
-            <div className="h-screen-dynamic grid place-items-center">
+            <div className="grid h-screen-dynamic place-items-center">
                 <Card className="w-[350px] max-w-[85%]">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(submitHandler)}>
@@ -85,7 +84,11 @@ export const Login: FC = () => {
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <Input {...field} type="password" autoComplete="current-password" />
+                                                <Input
+                                                    {...field}
+                                                    type="password"
+                                                    autoComplete="current-password"
+                                                />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

@@ -1,12 +1,21 @@
 import tailwindCssAnimate from "tailwindcss-animate";
 
+const safelistedStatusColors = [
+    "gray-600",
+    "green-600",
+    "blue-600",
+    "yellow-500",
+    "yellow-600",
+    "orange-600",
+    "danger"
+];
+
+const safelistedStatusColorsUnion = safelistedStatusColors.join("|");
+
 /** @type {import("tailwindcss").Config} */
 export default {
     darkMode: "class",
-    content: [
-        "./index.html",
-        "./src/**/*.{ts,tsx}"
-    ],
+    content: ["./index.html", "./src/**/*.{ts,tsx}"],
     prefix: "",
     theme: {
         container: {
@@ -81,10 +90,11 @@ export default {
     },
     safelist: [
         {
-            pattern: /status-(\d){3}/
+            pattern: new RegExp(`^text-(${safelistedStatusColorsUnion})$`)
+        },
+        {
+            pattern: new RegExp(`^bg-(${safelistedStatusColorsUnion})/10$`)
         }
     ],
-    plugins: [
-        tailwindCssAnimate
-    ]
+    plugins: [tailwindCssAnimate]
 };

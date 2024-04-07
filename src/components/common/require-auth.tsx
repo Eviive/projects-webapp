@@ -9,7 +9,7 @@ export const RequireAuth = (WrappedComponent: FC) => {
 
         const navigate = useNavigate();
 
-        const [ isAuthenticated, setIsAuthenticated ] = useState(false);
+        const [isAuthenticated, setIsAuthenticated] = useState(false);
 
         useEffect(() => {
             if (accessToken) {
@@ -17,7 +17,7 @@ export const RequireAuth = (WrappedComponent: FC) => {
             } else {
                 navigate("/login", { replace: true });
             }
-        }, [ accessToken, navigate ]);
+        }, [accessToken, navigate]);
 
         return <>{isAuthenticated && <WrappedComponent />}</>;
     };

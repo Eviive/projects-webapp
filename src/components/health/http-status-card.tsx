@@ -15,14 +15,13 @@ type Props = {
 };
 
 export const HttpStatusCard: FC<Props> = props => {
-
     const { count, setStart } = useCountUp(props.value, 1000);
 
     useEffect(() => {
         if (!props.isLoading && !props.isError) {
             setStart(true);
         }
-    }, [ props.isLoading, props.isError, setStart ]);
+    }, [props.isLoading, props.isError, setStart]);
 
     let value: number | string;
     if (props.isError) {
@@ -35,15 +34,15 @@ export const HttpStatusCard: FC<Props> = props => {
 
     return (
         <li>
-            <Card className="basis-64 grow shrink flex flex-col gap-1 font-bold rounded-lg">
+            <Card className="flex shrink grow basis-64 flex-col gap-1 rounded-lg font-bold">
                 <CardHeader className="space-y-0 p-3">
-                    <CardTitle className="text-lg flex flex-row items-center gap-2">
+                    <CardTitle className="flex flex-row items-center gap-2 text-lg">
                         {props.name}
                         <HttpStatusChip code={props.code} />
                     </CardTitle>
                 </CardHeader>
                 <Separator />
-                <CardContent className="p-3 flex flex-row justify-between items-center text-3xl">
+                <CardContent className="flex flex-row items-center justify-between p-3 text-3xl">
                     {props.icon}
                     {value}
                 </CardContent>

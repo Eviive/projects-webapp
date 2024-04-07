@@ -16,8 +16,7 @@ type Props = {
 } & (EditionProps | CreationProps);
 
 export const ProjectFormDialog: FC<Props> = props => {
-
-    const [ open, setOpen ] = useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
         <ResponsiveDrawerDialog

@@ -13,10 +13,7 @@ const dropAnimationConfig: DropAnimation = {
 
 export const SortDialogOverlay: FC<PropsWithChildren> = props => {
     return (
-        <DragOverlay
-            dropAnimation={dropAnimationConfig}
-            transition="unset"
-        >
+        <DragOverlay dropAnimation={dropAnimationConfig} transition="unset">
             {props.children}
         </DragOverlay>
     );

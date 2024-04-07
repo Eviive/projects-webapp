@@ -7,7 +7,7 @@ const Main: FC = () => {
     return (
         <>
             <Header />
-            <main className="grow flex flex-col">
+            <main className="flex grow flex-col">
                 <Outlet />
             </main>
         </>

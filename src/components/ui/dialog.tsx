@@ -1,6 +1,15 @@
 "use client";
 
-import { Close, Content, Description, Overlay, Portal, Root, Title, Trigger } from "@radix-ui/react-dialog";
+import {
+    Close,
+    Content,
+    Description,
+    Overlay,
+    Portal,
+    Root,
+    Title,
+    Trigger
+} from "@radix-ui/react-dialog";
 import { cn } from "lib/utils/style";
 import { X } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
@@ -45,8 +54,7 @@ const DialogContent = forwardRef<
             {...props}
         >
             {children}
-            <Close
-                className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+            <Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
                 <X className="h-4 w-4" />
                 <span className="sr-only">Close</span>
             </Close>
@@ -56,49 +64,33 @@ const DialogContent = forwardRef<
 
 DialogContent.displayName = Content.displayName;
 
-const DialogHeader = ({
-    className,
-    ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+const DialogHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
     <div
-        className={cn(
-            "flex flex-col space-y-1.5 text-center sm:text-left",
-            className
-        )}
+        className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)}
         {...props}
     />
 );
 
 DialogHeader.displayName = "DialogHeader";
 
-const DialogFooter = ({
-    className,
-    ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+const DialogFooter = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
     <div
-        className={cn(
-            "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-            className
-        )}
+        className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
         {...props}
     />
 );
 
 DialogFooter.displayName = "DialogFooter";
 
-const DialogTitle = forwardRef<
-    ElementRef<typeof Title>,
-    ComponentPropsWithoutRef<typeof Title>
->(({ className, ...props }, ref) => (
-    <Title
-        ref={ref}
-        className={cn(
-            "text-lg font-semibold leading-none tracking-tight",
-            className
-        )}
-        {...props}
-    />
-));
+const DialogTitle = forwardRef<ElementRef<typeof Title>, ComponentPropsWithoutRef<typeof Title>>(
+    ({ className, ...props }, ref) => (
+        <Title
+            ref={ref}
+            className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+            {...props}
+        />
+    )
+);
 
 DialogTitle.displayName = Title.displayName;
 
@@ -106,11 +98,7 @@ const DialogDescription = forwardRef<
     ElementRef<typeof Description>,
     ComponentPropsWithoutRef<typeof Description>
 >(({ className, ...props }, ref) => (
-    <Description
-        ref={ref}
-        className={cn("text-sm text-muted-foreground", className)}
-        {...props}
-    />
+    <Description ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
 ));
 
 DialogDescription.displayName = Description.displayName;

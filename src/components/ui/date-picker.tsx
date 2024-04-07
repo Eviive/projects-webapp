@@ -9,7 +9,7 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
 export const DatePicker = () => {
-    const [ date, setDate ] = useState<Date>();
+    const [date, setDate] = useState<Date>();
 
     return (
         <Popover>
@@ -26,12 +26,7 @@ export const DatePicker = () => {
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
-                <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                />
+                <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
             </PopoverContent>
         </Popover>
     );

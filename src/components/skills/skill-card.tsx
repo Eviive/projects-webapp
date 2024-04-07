@@ -18,7 +18,7 @@ type Props = {
 export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
     return (
         <Card className="justify-self-stretch">
-            <CardHeader className="p-3 space-y-0 flex-row items-center justify-between gap-1">
+            <CardHeader className="flex-row items-center justify-between gap-1 space-y-0 p-3">
                 <CardTitle className="max-w-[calc(100% - 36px)] truncate text-sm">
                     {skill.name}
                 </CardTitle>
@@ -39,16 +39,14 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
                                 </TooltipTrigger>
                             }
                         />
-                        <TooltipContent>
-                            Edit
-                        </TooltipContent>
+                        <TooltipContent>Edit</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
             </CardHeader>
             <Separator />
-            <CardContent className="p-4 flex justify-center items-center">
+            <CardContent className="flex items-center justify-center p-4">
                 <img
-                    className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                    className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
                     src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                     alt={skill.image.altEn}
                     width={100}

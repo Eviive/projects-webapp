@@ -1,6 +1,21 @@
 "use client";
 
-import { CheckboxItem, Content, Item, ItemIndicator, Label, Portal, RadioGroup, RadioItem, Root, Separator, Sub, SubContent, SubTrigger, Trigger } from "@radix-ui/react-dropdown-menu";
+import {
+    CheckboxItem,
+    Content,
+    Item,
+    ItemIndicator,
+    Label,
+    Portal,
+    RadioGroup,
+    RadioItem,
+    Root,
+    Separator,
+    Sub,
+    SubContent,
+    SubTrigger,
+    Trigger
+} from "@radix-ui/react-dropdown-menu";
 import { Group } from "@radix-ui/react-select";
 import { cn } from "lib/utils/style";
 import { Check, ChevronRight, Circle } from "lucide-react";
@@ -22,8 +37,8 @@ const DropdownMenuRadioGroup = RadioGroup;
 const DropdownMenuSubTrigger = forwardRef<
     ElementRef<typeof SubTrigger>,
     ComponentPropsWithoutRef<typeof SubTrigger> & {
-    inset?: boolean
-}
+        inset?: boolean;
+    }
 >(({ className, inset, children, ...props }, ref) => (
     <SubTrigger
         ref={ref}
@@ -143,16 +158,12 @@ DropdownMenuRadioItem.displayName = RadioItem.displayName;
 const DropdownMenuLabel = forwardRef<
     ElementRef<typeof Label>,
     ComponentPropsWithoutRef<typeof Label> & {
-    inset?: boolean
-}
+        inset?: boolean;
+    }
 >(({ className, inset, ...props }, ref) => (
     <Label
         ref={ref}
-        className={cn(
-            "px-2 py-1.5 text-sm font-semibold",
-            inset && "pl-8",
-            className
-        )}
+        className={cn("px-2 py-1.5 text-sm font-semibold", inset && "pl-8", className)}
         {...props}
     />
 ));
@@ -163,24 +174,14 @@ const DropdownMenuSeparator = forwardRef<
     ElementRef<typeof Separator>,
     ComponentPropsWithoutRef<typeof Separator>
 >(({ className, ...props }, ref) => (
-    <Separator
-        ref={ref}
-        className={cn("-mx-1 my-1 h-px bg-muted", className)}
-        {...props}
-    />
+    <Separator ref={ref} className={cn("-mx-1 my-1 h-px bg-muted", className)} {...props} />
 ));
 
 DropdownMenuSeparator.displayName = Separator.displayName;
 
-const DropdownMenuShortcut = ({
-    className,
-    ...props
-}: HTMLAttributes<HTMLSpanElement>) => {
+const DropdownMenuShortcut = ({ className, ...props }: HTMLAttributes<HTMLSpanElement>) => {
     return (
-        <span
-            className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
-            {...props}
-        />
+        <span className={cn("ml-auto text-xs tracking-widest opacity-60", className)} {...props} />
     );
 };
 

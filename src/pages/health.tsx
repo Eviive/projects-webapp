@@ -5,7 +5,12 @@ import { HttpExchangesTable } from "components/health/http-exchanges-table";
 import { HttpStatusCard } from "components/health/http-status-card";
 import { Grid } from "layouts/grid";
 import type { FC } from "react";
-import { AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineExclamationCircle, AiOutlineQuestionCircle } from "react-icons/ai";
+import {
+    AiOutlineCheckCircle,
+    AiOutlineCloseCircle,
+    AiOutlineExclamationCircle,
+    AiOutlineQuestionCircle
+} from "react-icons/ai";
 
 const HTTP_STATUS = [
     {
@@ -31,15 +36,14 @@ const HTTP_STATUS = [
 ];
 
 export const Health: FC = () => {
-
     const query = useQuery({
-        queryKey: [ "httpExchanges" ],
+        queryKey: ["httpExchanges"],
         queryFn: HealthService.httpExchanges
     });
 
     return (
         <Page title="Health">
-            <div className="w-full h-full px-[5%] py-16 flex flex-col gap-12">
+            <div className="flex h-full w-full flex-col gap-12 px-[5%] py-16">
                 <Grid columnCount={4}>
                     {HTTP_STATUS.map(status => (
                         <HttpStatusCard
@@ -47,7 +51,10 @@ export const Health: FC = () => {
                             {...status}
                             value={
                                 query.isSuccess
-                                    ? query.data.filter(httpExchange => httpExchange.response.status === status.code).length
+                                    ? query.data.filter(
+                                          httpExchange =>
+                                              httpExchange.response.status === status.code
+                                      ).length
                                     : 0
                             }
                             isLoading={query.isLoading}

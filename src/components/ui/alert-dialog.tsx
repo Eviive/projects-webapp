@@ -1,6 +1,16 @@
 "use client";
 
-import { Action, Cancel, Content, Description, Overlay, Portal, Root, Title, Trigger } from "@radix-ui/react-alert-dialog";
+import {
+    Action,
+    Cancel,
+    Content,
+    Description,
+    Overlay,
+    Portal,
+    Root,
+    Title,
+    Trigger
+} from "@radix-ui/react-alert-dialog";
 import type { VariantProps } from "class-variance-authority";
 import { buttonVariants } from "components/ui/button";
 import { cn } from "lib/utils/style";
@@ -14,8 +24,8 @@ const AlertDialogTrigger = Trigger;
 const AlertDialogPortal = Portal;
 
 const AlertDialogOverlay = forwardRef<
-  ElementRef<typeof Overlay>,
-  ComponentPropsWithoutRef<typeof Overlay>
+    ElementRef<typeof Overlay>,
+    ComponentPropsWithoutRef<typeof Overlay>
 >(({ className, ...props }, ref) => (
     <Overlay
         className={cn(
@@ -30,8 +40,8 @@ const AlertDialogOverlay = forwardRef<
 AlertDialogOverlay.displayName = Overlay.displayName;
 
 const AlertDialogContent = forwardRef<
-  ElementRef<typeof Content>,
-  ComponentPropsWithoutRef<typeof Content>
+    ElementRef<typeof Content>,
+    ComponentPropsWithoutRef<typeof Content>
 >(({ className, ...props }, ref) => (
     <AlertDialogPortal>
         <AlertDialogOverlay />
@@ -48,56 +58,33 @@ const AlertDialogContent = forwardRef<
 
 AlertDialogContent.displayName = Content.displayName;
 
-const AlertDialogHeader = ({
-    className,
-    ...props
-}: HTMLAttributes<HTMLDivElement>) => (
-    <div
-        className={cn(
-            "flex flex-col space-y-2 text-center sm:text-left",
-            className
-        )}
-        {...props}
-    />
+const AlertDialogHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+    <div className={cn("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
 );
 AlertDialogHeader.displayName = "AlertDialogHeader";
 
-const AlertDialogFooter = ({
-    className,
-    ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+const AlertDialogFooter = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
     <div
-        className={cn(
-            "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-            className
-        )}
+        className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
         {...props}
     />
 );
 AlertDialogFooter.displayName = "AlertDialogFooter";
 
 const AlertDialogTitle = forwardRef<
-  ElementRef<typeof Title>,
-  ComponentPropsWithoutRef<typeof Title>
+    ElementRef<typeof Title>,
+    ComponentPropsWithoutRef<typeof Title>
 >(({ className, ...props }, ref) => (
-    <Title
-        ref={ref}
-        className={cn("text-lg font-semibold", className)}
-        {...props}
-    />
+    <Title ref={ref} className={cn("text-lg font-semibold", className)} {...props} />
 ));
 
 AlertDialogTitle.displayName = Title.displayName;
 
 const AlertDialogDescription = forwardRef<
-  ElementRef<typeof Description>,
-  ComponentPropsWithoutRef<typeof Description>
+    ElementRef<typeof Description>,
+    ComponentPropsWithoutRef<typeof Description>
 >(({ className, ...props }, ref) => (
-    <Description
-        ref={ref}
-        className={cn("text-sm text-muted-foreground", className)}
-        {...props}
-    />
+    <Description ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
 ));
 
 AlertDialogDescription.displayName = Description.displayName;
@@ -107,16 +94,11 @@ type AlertDialogActionProps = ComponentPropsWithoutRef<typeof Action> & {
     size?: VariantProps<typeof buttonVariants>["size"];
 };
 
-const AlertDialogAction = forwardRef<
-  ElementRef<typeof Action>,
-  AlertDialogActionProps
->(({ className, variant = "default", size = "default", ...props }, ref) => (
-    <Action
-        ref={ref}
-        className={cn(buttonVariants({ variant, size }), className)}
-        {...props}
-    />
-));
+const AlertDialogAction = forwardRef<ElementRef<typeof Action>, AlertDialogActionProps>(
+    ({ className, variant = "default", size = "default", ...props }, ref) => (
+        <Action ref={ref} className={cn(buttonVariants({ variant, size }), className)} {...props} />
+    )
+);
 
 AlertDialogAction.displayName = Action.displayName;
 
@@ -125,20 +107,15 @@ type AlertDialogCancelProps = ComponentPropsWithoutRef<typeof Cancel> & {
     size?: VariantProps<typeof buttonVariants>["size"];
 };
 
-const AlertDialogCancel = forwardRef<
-  ElementRef<typeof Cancel>,
-  AlertDialogCancelProps
->(({ className, variant = "outline", size = "default", ...props }, ref) => (
-    <Cancel
-        ref={ref}
-        className={cn(
-            buttonVariants({ variant, size }),
-            "mt-2 sm:mt-0",
-            className
-        )}
-        {...props}
-    />
-));
+const AlertDialogCancel = forwardRef<ElementRef<typeof Cancel>, AlertDialogCancelProps>(
+    ({ className, variant = "outline", size = "default", ...props }, ref) => (
+        <Cancel
+            ref={ref}
+            className={cn(buttonVariants({ variant, size }), "mt-2 sm:mt-0", className)}
+            {...props}
+        />
+    )
+);
 
 AlertDialogCancel.displayName = Cancel.displayName;
 

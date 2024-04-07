@@ -1,4 +1,13 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "components/ui/alert-dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "components/ui/alert-dialog";
 import type { ConfirmDialogState } from "contexts/confirm-dialog-context";
 import type { FC } from "react";
 
@@ -26,9 +35,7 @@ export const ConfirmDialog: FC<Props> = ({ state, handleClose }) => {
                             )}
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>
-                                {state.cancelButton}
-                            </AlertDialogCancel>
+                            <AlertDialogCancel>{state.cancelButton}</AlertDialogCancel>
                             <AlertDialogAction
                                 variant={state.confirmDanger ? "destructive" : undefined}
                                 onClick={() => handleClose(true)}

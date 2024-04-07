@@ -1,5 +1,8 @@
 import type { UseMutationResult } from "@tanstack/react-query";
-import { SortDialogContent, type SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
+import {
+    SortDialogContent,
+    type SortDialogContentRef
+} from "components/common/sort-dialog/sort-dialog-content";
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import { type ReactNode, useRef, useState } from "react";
 import type { DndItem, DndSaveItem } from "types/dnd";
@@ -13,8 +16,7 @@ type Props<E extends DndItem> = {
 };
 
 export const SortDialog = <E extends DndItem>(props: Props<E>) => {
-
-    const [ open, setOpen ] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const contentRef = useRef<SortDialogContentRef>(null);
 

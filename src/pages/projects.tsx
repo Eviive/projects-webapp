@@ -3,7 +3,10 @@ import { ProjectService } from "api/services/project";
 import { Page } from "components/common/page";
 import { ProjectCard } from "components/projects/project-card";
 import { ProjectFormDialog } from "components/projects/project-form-dialog";
-import { ProjectSortDialog, sortProjectsMutationKey } from "components/projects/project-sort-dialog";
+import {
+    ProjectSortDialog,
+    sortProjectsMutationKey
+} from "components/projects/project-sort-dialog";
 import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
 import { Button } from "components/ui/button";
 import { Loader } from "components/ui/loader";
@@ -19,9 +22,8 @@ import { MdDragHandle } from "react-icons/md";
 import type { DndSaveItem } from "types/dnd";
 
 export const Projects: FC = () => {
-
     const query = useQuery({
-        queryKey: [ "projects" ],
+        queryKey: ["projects"],
         queryFn: ProjectService.findAll
     });
 
@@ -43,12 +45,12 @@ export const Projects: FC = () => {
         }
 
         return items;
-    }, [ optimisticProjectSorts ]);
+    }, [optimisticProjectSorts]);
 
     const optimisticProjects = useMemo(() => {
         if (!query.isSuccess) return [];
 
-        const optProjects = [ ...query.data ];
+        const optProjects = [...query.data];
 
         for (const project of optProjects) {
             if (optimisticProjectSortItems[project.id] !== undefined) {
@@ -59,20 +61,21 @@ export const Projects: FC = () => {
         optProjects.sort((a, b) => a.sort - b.sort);
 
         return optProjects;
-    }, [ query.data, query.isSuccess, optimisticProjectSortItems ]);
+    }, [query.data, query.isSuccess, optimisticProjectSortItems]);
 
-    const [ searchBarValue, setSearchBarValue ] = useState("");
-    const [ searchQuery, setSearchQuery ] = useState(searchBarValue);
+    const [searchBarValue, setSearchBarValue] = useState("");
+    const [searchQuery, setSearchQuery] = useState(searchBarValue);
 
     const optimisticFilteredProjects = useMemo(() => {
-        return optimisticProjects
-            .filter(project => project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
-    }, [ optimisticProjects, searchQuery ]);
+        return optimisticProjects.filter(project =>
+            project.title.toLowerCase().includes(searchQuery.trim().toLowerCase())
+        );
+    }, [optimisticProjects, searchQuery]);
 
     return (
         <Page title="Projects">
-            <div className="grow w-full h-full px-[5%] py-12 flex flex-col gap-12">
-                <div className="self-center max-w-md w-full flex items-center gap-2">
+            <div className="flex h-full w-full grow flex-col gap-12 px-[5%] py-12">
+                <div className="flex w-full max-w-md items-center gap-2 self-center">
                     <SearchBar
                         value={searchBarValue}
                         handleChange={setSearchBarValue}
@@ -97,9 +100,7 @@ export const Projects: FC = () => {
                                     </TooltipTrigger>
                                 }
                             />
-                            <TooltipContent>
-                                Sort projects
-                            </TooltipContent>
+                            <TooltipContent>Sort projects</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                     <TooltipProvider>
@@ -117,19 +118,12 @@ export const Projects: FC = () => {
                                     </TooltipTrigger>
                                 }
                             />
-                            <TooltipContent>
-                                Add a new project
-                            </TooltipContent>
+                            <TooltipContent>Add a new project</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                 </div>
                 {query.isSuccess && (
-                    <Grid
-                        minWidth="350px"
-                        gap="2.5em"
-                        columnCount={3}
-                        centerHorizontally
-                    >
+                    <Grid minWidth="350px" gap="2.5em" columnCount={3} centerHorizontally>
                         {optimisticFilteredProjects.map(project => (
                             <ProjectCard
                                 key={project.id}
@@ -139,9 +133,7 @@ export const Projects: FC = () => {
                         ))}
                     </Grid>
                 )}
-                {query.isLoading && (
-                    <Loader />
-                )}
+                {query.isLoading && <Loader />}
                 {query.isError && error !== null && (
                     <Alert variant="destructive">
                         <LuAlertCircle className="h-4 w-4" />

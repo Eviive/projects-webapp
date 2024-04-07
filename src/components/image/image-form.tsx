@@ -13,7 +13,6 @@ type Props = {
 };
 
 export const ImageForm: FC<Props> = ({ classNames }) => {
-
     const form = useFormContext<{ image: ImageCreationWithFile }>();
 
     return (

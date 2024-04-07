@@ -30,7 +30,7 @@ export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
             listeners,
             setActivatorNodeRef
         }),
-        [ attributes, listeners, setActivatorNodeRef ]
+        [attributes, listeners, setActivatorNodeRef]
     );
 
     const style: CSSProperties = {
@@ -45,7 +45,7 @@ export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
                 ref={setNodeRef}
                 style={style}
                 className={cn(
-                    "p-3 flex justify-between items-center gap-3 text-ms bg-background",
+                    "text-ms flex items-center justify-between gap-3 bg-background p-3",
                     props.isOverlay && "shadow-md"
                 )}
             >

@@ -1,5 +1,19 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "components/ui/dialog";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "components/ui/drawer";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import {
+    Drawer,
+    DrawerContent,
+    DrawerDescription,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger
+} from "components/ui/drawer";
 import { useMediaQuery } from "hooks/use-media-query";
 import type { FC, ReactNode } from "react";
 
@@ -20,15 +34,12 @@ type Props = {
 };
 
 export const ResponsiveDrawerDialog: FC<Props> = props => {
-
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
     if (isDesktop) {
         return (
             <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-                <DialogTrigger asChild>
-                    {props.trigger}
-                </DialogTrigger>
+                <DialogTrigger asChild>{props.trigger}</DialogTrigger>
                 <DialogContent className={props.classNames?.dialog?.content}>
                     <DialogHeader>
                         <DialogTitle>{props.header.title}</DialogTitle>

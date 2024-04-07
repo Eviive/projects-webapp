@@ -1,7 +1,13 @@
 "use client";
 
 import type { ColumnDef, SortingState, TableOptions } from "@tanstack/react-table";
-import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import {
+    flexRender,
+    getCoreRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable
+} from "@tanstack/react-table";
 import { DataTableViewOptions } from "components/ui/data-table-view-options";
 import { Pagination } from "components/ui/pagination";
 import { Skeleton } from "components/ui/skeleton";
@@ -23,9 +29,8 @@ type DataTableProps<TData> = Pick<TableOptions<TData>, "columns" | "data"> & {
     isLoading?: boolean;
 } & (SuccessProps | ErrorProps);
 
-export const DataTable = <TData, >(props: DataTableProps<TData>) => {
-
-    const [ sorting, setSorting ] = useState<SortingState>([]);
+export const DataTable = <TData,>(props: DataTableProps<TData>) => {
+    const [sorting, setSorting] = useState<SortingState>([]);
 
     const data = useMemo<TData[]>(() => {
         if (!props.isLoading) {
@@ -33,7 +38,7 @@ export const DataTable = <TData, >(props: DataTableProps<TData>) => {
         }
 
         return Array.from({ length: 10 });
-    }, [ props.data, props.isLoading ]);
+    }, [props.data, props.isLoading]);
 
     const columns = useMemo<ColumnDef<TData>[]>(() => {
         if (!props.isLoading) {
@@ -45,7 +50,7 @@ export const DataTable = <TData, >(props: DataTableProps<TData>) => {
             cell: () => <Skeleton className="h-6" />,
             enableSorting: false
         }));
-    }, [ props.columns, props.isLoading ]);
+    }, [props.columns, props.isLoading]);
 
     const table = useReactTable({
         data,
@@ -72,42 +77,40 @@ export const DataTable = <TData, >(props: DataTableProps<TData>) => {
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )
-                                        }
+                                                  header.column.columnDef.header,
+                                                  header.getContext()
+                                              )}
                                     </TableHead>
                                 ))}
                             </TableRow>
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length
-                            ? (
-                                table.getRowModel().rows.map(row => (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={row.getIsSelected() && "selected"}
-                                    >
-                                        {row.getVisibleCells().map(cell => (
-                                            <TableCell key={cell.id}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            )
-                            : (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                                        {props.isError
-                                            ? props.errorMessage
-                                            : props.noRowsMessage ?? "No results."
-                                        }
-                                    </TableCell>
+                        {table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map(row => (
+                                <TableRow
+                                    key={row.id}
+                                    data-state={row.getIsSelected() && "selected"}
+                                >
+                                    {row.getVisibleCells().map(cell => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </TableCell>
+                                    ))}
                                 </TableRow>
-                            )
-                        }
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                    {props.isError
+                                        ? props.errorMessage
+                                        : props.noRowsMessage ?? "No results."}
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </div>

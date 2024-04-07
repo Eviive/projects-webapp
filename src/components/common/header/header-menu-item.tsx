@@ -10,7 +10,6 @@ type Props = {
 };
 
 export const HeaderMenuItem: FC<Props> = ({ item }) => {
-
     const location = useLocation();
 
     const className = cn(
@@ -22,16 +21,10 @@ export const HeaderMenuItem: FC<Props> = ({ item }) => {
         const isItemActive = isHeaderRouteItemActive(item, location);
 
         return (
-            <NavigationMenuLink
-                asChild
-                active={isItemActive}
-            >
+            <NavigationMenuLink asChild active={isItemActive}>
                 <NavLink
                     to={item.path}
-                    className={cn(
-                        className,
-                        isItemActive && "bg-accent text-accent-foreground"
-                    )}
+                    className={cn(className, isItemActive && "bg-accent text-accent-foreground")}
                 >
                     <span className="text-sm font-medium leading-none">{item.name}</span>
                     <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
@@ -43,10 +36,7 @@ export const HeaderMenuItem: FC<Props> = ({ item }) => {
     }
 
     return (
-        <NavigationMenuLink
-            className={className}
-            onClick={item.handleAction}
-        >
+        <NavigationMenuLink className={className} onClick={item.handleAction}>
             <span className="text-sm font-medium leading-none">{item.name}</span>
             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                 {item.description}

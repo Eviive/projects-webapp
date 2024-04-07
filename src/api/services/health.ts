@@ -18,15 +18,17 @@ const httpExchanges = async (): Promise<HttpExchange[]> => {
 
 const info = () => request<Info>(`/${URL}/info`);
 
-const logFile = () => request<string>(`/${URL}/logfile`, {
-    headers: {
-        "Accept": "text/plain;charset=UTF-8"
-    }
-});
+const logFile = () =>
+    request<string>(`/${URL}/logfile`, {
+        headers: {
+            Accept: "text/plain;charset=UTF-8"
+        }
+    });
 
-const shutdown = () => request<{ message: string }>(`/${URL}/shutdown`, {
-    method: "POST"
-});
+const shutdown = () =>
+    request<{ message: string }>(`/${URL}/shutdown`, {
+        method: "POST"
+    });
 
 export const HealthService = {
     auditEvents,

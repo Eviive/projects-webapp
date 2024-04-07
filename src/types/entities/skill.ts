@@ -1,4 +1,8 @@
-import { imageCreationSchema, imageCreationWithFileSchema, imageSchema } from "types/entities/image";
+import {
+    imageCreationSchema,
+    imageCreationWithFileSchema,
+    imageSchema
+} from "types/entities/image";
 import { z } from "zod";
 
 // Skill creation
@@ -25,11 +29,10 @@ export type SkillCreationWithFile = z.infer<typeof skillCreationWithFileSchema>;
 // Skill
 export const skillSchema = skillCreationSchema.extend({
     id: z.number(),
-    sort: z
-        .number({
-            required_error: "Sort is required",
-            invalid_type_error: "Sort must be a number"
-        }),
+    sort: z.number({
+        required_error: "Sort is required",
+        invalid_type_error: "Sort must be a number"
+    }),
     image: imageSchema
 });
 

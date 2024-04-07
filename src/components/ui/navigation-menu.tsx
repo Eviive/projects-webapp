@@ -1,26 +1,34 @@
-import { Content, Indicator, Item, Link, List, Root, Trigger, Viewport } from "@radix-ui/react-navigation-menu";
+import {
+    Content,
+    Indicator,
+    Item,
+    Link,
+    List,
+    Root,
+    Trigger,
+    Viewport
+} from "@radix-ui/react-navigation-menu";
 import { cva } from "class-variance-authority";
 import { cn } from "lib/utils/style";
 import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
 
-const NavigationMenu = forwardRef<
-    ElementRef<typeof Root>,
-    ComponentPropsWithoutRef<typeof Root>
->(({ className, children, ...props }, ref) => (
-    <Root
-        ref={ref}
-        className={cn(
-            "relative z-10 flex max-w-max flex-1 items-center justify-center",
-            className
-        )}
-        {...props}
-    >
-        {children}
-        <NavigationMenuViewport />
-    </Root>
-));
+const NavigationMenu = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
+    ({ className, children, ...props }, ref) => (
+        <Root
+            ref={ref}
+            className={cn(
+                "relative z-10 flex max-w-max flex-1 items-center justify-center",
+                className
+            )}
+            {...props}
+        >
+            {children}
+            <NavigationMenuViewport />
+        </Root>
+    )
+);
 
 NavigationMenu.displayName = Root.displayName;
 
@@ -50,11 +58,7 @@ const NavigationMenuTrigger = forwardRef<
     ElementRef<typeof Trigger>,
     ComponentPropsWithoutRef<typeof Trigger>
 >(({ className, children, ...props }, ref) => (
-    <Trigger
-        ref={ref}
-        className={cn(navigationMenuTriggerStyle(), "group", className)}
-        {...props}
-    >
+    <Trigger ref={ref} className={cn(navigationMenuTriggerStyle(), "group", className)} {...props}>
         {children}{" "}
         <ChevronDown
             className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
@@ -87,7 +91,7 @@ const NavigationMenuViewport = forwardRef<
     ElementRef<typeof Viewport>,
     ComponentPropsWithoutRef<typeof Viewport>
 >(({ className, ...props }, ref) => (
-    <div className={cn("absolute left-1/2 -translate-x-1/2 top-full flex justify-center")}>
+    <div className={cn("absolute left-1/2 top-full flex -translate-x-1/2 justify-center")}>
         <Viewport
             className={cn(
                 "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",

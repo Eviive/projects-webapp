@@ -10,18 +10,17 @@ type Props = {
 };
 
 export const Loader: FC<Props> = ({ size, color, absolute }) => {
-
     const loaderStyle = {
-        ...size && { "--loader-size": `${size}px` },
-        ...color && { "--loader-color": color }
+        ...(size && { "--loader-size": `${size}px` }),
+        ...(color && { "--loader-color": color })
     } as CSSProperties;
 
     return (
-        <div className="grow grid place-items-center">
+        <div className="grid grow place-items-center">
             <span
                 className={cn(
                     styles.loader,
-                    "loader rounded-full animate-spin",
+                    "loader animate-spin rounded-full",
                     absolute && "absolute"
                 )}
                 style={loaderStyle}

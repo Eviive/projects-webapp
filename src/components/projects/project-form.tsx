@@ -10,7 +10,13 @@ import { Checkbox } from "components/ui/checkbox";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "components/ui/select";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "components/ui/select";
 import { Textarea } from "components/ui/textarea";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { format } from "date-fns";
@@ -22,7 +28,13 @@ import { CalendarIcon } from "lucide-react";
 import { type FC, useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import type { ProjectCreation } from "types/entities/project";
-import { type Project, projectCreationSchema, type ProjectCreationWithFile, type ProjectEditionWithFile, projectEditionWithFileSchema } from "types/entities/project";
+import {
+    type Project,
+    projectCreationSchema,
+    type ProjectCreationWithFile,
+    type ProjectEditionWithFile,
+    projectEditionWithFileSchema
+} from "types/entities/project";
 
 type ProjectForm = ProjectCreationWithFile | ProjectEditionWithFile;
 
@@ -32,23 +44,20 @@ type Props = {
 };
 
 export const ProjectForm: FC<Props> = props => {
-
     const confirm = useConfirmDialogContext();
 
     const queryClient = useQueryClient();
 
     const querySkills = useQuery({
-        queryKey: [ "skills" ],
+        queryKey: ["skills"],
         queryFn: SkillService.findAll
     });
 
-    const [ submissionState, dispatchSubmissionState ] = useFormSubmissionState();
+    const [submissionState, dispatchSubmissionState] = useFormSubmissionState();
 
     const form = useForm<ProjectForm>({
         resolver: zodResolver(
-            props.project === null
-                ? projectCreationSchema
-                : projectEditionWithFileSchema
+            props.project === null ? projectCreationSchema : projectEditionWithFileSchema
         ),
         defaultValues: props.project ?? {
             title: "",
@@ -66,16 +75,14 @@ export const ProjectForm: FC<Props> = props => {
         }
     });
     const {
-        formState: {
-            isDirty
-        },
+        formState: { isDirty },
         control,
         getValues,
         setValue,
         handleSubmit
     } = form;
 
-    const [ oldTitle, setOldTitle ] = useState(getValues("title"));
+    const [oldTitle, setOldTitle] = useState(getValues("title"));
 
     const submitHandler: SubmitHandler<ProjectForm> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
@@ -112,12 +119,15 @@ export const ProjectForm: FC<Props> = props => {
             }
 
             await queryClient.invalidateQueries({
-                queryKey: [ "projects" ]
+                queryKey: ["projects"]
             });
 
             props.closeDialog();
         } catch (e) {
-            console.error(editing ? "Project update failed" : "Project creation failed", getFormattedTitleAndMessage(e));
+            console.error(
+                editing ? "Project update failed" : "Project creation failed",
+                getFormattedTitleAndMessage(e)
+            );
         } finally {
             dispatchSubmissionState("editionFinished");
         }
@@ -142,7 +152,7 @@ export const ProjectForm: FC<Props> = props => {
             await ProjectService.delete(props.project.id);
 
             await queryClient.invalidateQueries({
-                queryKey: [ "projects" ]
+                queryKey: ["projects"]
             });
 
             props.closeDialog();
@@ -156,7 +166,7 @@ export const ProjectForm: FC<Props> = props => {
     return (
         <FormProvider {...form}>
             <form
-                className="mb-2 grid gap-x-4 gap-y-3 grid-cols-[1fr_1fr]"
+                className="mb-2 grid grid-cols-[1fr_1fr] gap-x-4 gap-y-3"
                 onSubmit={handleSubmit(submitHandler)}
             >
                 <FormField
@@ -164,15 +174,27 @@ export const ProjectForm: FC<Props> = props => {
                     name="title"
                     rules={{
                         onChange: () => {
-                            const [ title, altEn, altFr ] = getValues([ "title", "image.altEn", "image.altFr" ]),
-                                  isTitleEmpty = !title.trim(),
-                                  isAltEnEmpty = !altEn.trim(),
-                                  isAltFrEmpty = !altFr.trim(),
-                                  isAltEnFormatted = altEn === `${oldTitle.trim()}'s logo`,
-                                  isAltFrFormatted = altFr === `Logo de ${oldTitle.trim()}`;
+                            const [title, altEn, altFr] = getValues([
+                                    "title",
+                                    "image.altEn",
+                                    "image.altFr"
+                                ]),
+                                isTitleEmpty = !title.trim(),
+                                isAltEnEmpty = !altEn.trim(),
+                                isAltFrEmpty = !altFr.trim(),
+                                isAltEnFormatted = altEn === `${oldTitle.trim()}'s logo`,
+                                isAltFrFormatted = altFr === `Logo de ${oldTitle.trim()}`;
 
-                            (isAltEnEmpty || isAltEnFormatted) && setValue("image.altEn", isTitleEmpty ? "" : `${title.trim()}'s logo`);
-                            (isAltFrEmpty || isAltFrFormatted) && setValue("image.altFr", isTitleEmpty ? "" : `Logo de ${title.trim()}`);
+                            (isAltEnEmpty || isAltEnFormatted) &&
+                                setValue(
+                                    "image.altEn",
+                                    isTitleEmpty ? "" : `${title.trim()}'s logo`
+                                );
+                            (isAltFrEmpty || isAltFrFormatted) &&
+                                setValue(
+                                    "image.altFr",
+                                    isTitleEmpty ? "" : `Logo de ${title.trim()}`
+                                );
 
                             setOldTitle(title);
                         }
@@ -205,12 +227,11 @@ export const ProjectForm: FC<Props> = props => {
                                                     !field.value && "text-muted-foreground"
                                                 )}
                                             >
-                                                {field.value
-                                                    ? format(field.value, "PPP")
-                                                    : (
-                                                        <span>Pick a date</span>
-                                                    )
-                                                }
+                                                {field.value ? (
+                                                    format(field.value, "PPP")
+                                                ) : (
+                                                    <span>Pick a date</span>
+                                                )}
                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
                                         </FormControl>
@@ -292,27 +313,36 @@ export const ProjectForm: FC<Props> = props => {
                     render={({ field }) => (
                         <FormItem className="col-span-2">
                             <FormLabel>Skills</FormLabel>
-                            <Select value={field.value?.id.toString()} onValueChange={field.onChange}>
+                            <Select
+                                value={field.value?.id.toString()}
+                                onValueChange={field.onChange}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {querySkills.isSuccess && querySkills.data.map(skill => (
-                                        <SelectItem key={skill.id} value={skill.id.toString()}>
-                                            <div className="flex items-center gap-2">
-                                                <img
-                                                    className="object-cover aspect-square drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                                                    src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
-                                                    alt={skill.image.altEn}
-                                                    width={22}
-                                                    loading="lazy"
-                                                />
-                                                {skill.name}
-                                            </div>
-                                        </SelectItem>
-                                    ))}
+                                    {querySkills.isSuccess &&
+                                        querySkills.data.map(skill => (
+                                            <SelectItem key={skill.id} value={skill.id.toString()}>
+                                                <div className="flex items-center gap-2">
+                                                    <img
+                                                        className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                                                        src={
+                                                            ImageService.getImageUrl(
+                                                                skill.image,
+                                                                "skills"
+                                                            ) ?? SKILL_PLACEHOLDER
+                                                        }
+                                                        alt={skill.image.altEn}
+                                                        width={22}
+                                                        loading="lazy"
+                                                    />
+                                                    {skill.name}
+                                                </div>
+                                            </SelectItem>
+                                        ))}
                                 </SelectContent>
                             </Select>
                             <FormMessage />
@@ -326,7 +356,7 @@ export const ProjectForm: FC<Props> = props => {
                     control={control}
                     name="featured"
                     render={({ field }) => (
-                        <FormItem className="col-span-2 space-y-0 flex items-center gap-2">
+                        <FormItem className="col-span-2 flex items-center gap-2 space-y-0">
                             <FormLabel>Featured</FormLabel>
                             <FormControl>
                                 <Checkbox checked={field.value} onCheckedChange={field.onChange} />
@@ -336,12 +366,15 @@ export const ProjectForm: FC<Props> = props => {
                     )}
                 />
 
-                <div className="col-span-2 w-full mt-3 flex justify-center gap-4">
+                <div className="col-span-2 mt-3 flex w-full justify-center gap-4">
                     {!!props.project && (
                         <Button
                             className="w-full max-w-[50%]"
                             variant="destructive"
-                            disabled={submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion}
+                            disabled={
+                                submissionState.isSubmittingEdition ||
+                                submissionState.isSubmittingDeletion
+                            }
                             onClick={handleDelete}
                         >
                             Delete
@@ -350,7 +383,10 @@ export const ProjectForm: FC<Props> = props => {
                     <Button
                         className="w-full max-w-[50%]"
                         type="submit"
-                        disabled={submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion}
+                        disabled={
+                            submissionState.isSubmittingEdition ||
+                            submissionState.isSubmittingDeletion
+                        }
                     >
                         Submit
                     </Button>

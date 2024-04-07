@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 
-export const getTitleAndMessage = (e: unknown): { title: string, message: string } => {
+export const getTitleAndMessage = (e: unknown): { title: string; message: string } => {
     import.meta.env.PROD || console.error(e);
 
-    let titleAndMessage: { title: string, message: string | string[] };
+    let titleAndMessage: { title: string; message: string | string[] };
 
     if (e instanceof AxiosError) {
         titleAndMessage = {
@@ -24,7 +24,9 @@ export const getTitleAndMessage = (e: unknown): { title: string, message: string
 
     return {
         title: titleAndMessage.title,
-        message: Array.isArray(titleAndMessage.message) ? titleAndMessage.message.join(" ") : titleAndMessage.message
+        message: Array.isArray(titleAndMessage.message)
+            ? titleAndMessage.message.join(" ")
+            : titleAndMessage.message
     };
 };
 

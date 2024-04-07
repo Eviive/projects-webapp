@@ -21,18 +21,20 @@ type Props = {
 } & (DebounceProps | NoDebounceProps);
 
 export const SearchBar: FC<Props> = props => {
-
     const ref = useRef<DebounceProps["handleDebounce"]>();
 
     useEffect(() => {
         if (props.debounce) {
             ref.current = debounce(props.handleDebounce, props.debounce);
         }
-    }, [ props.debounce, props.handleDebounce ]);
+    }, [props.debounce, props.handleDebounce]);
 
     return (
         <div className="relative grow">
-            <HiMagnifyingGlass size={20} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <HiMagnifyingGlass
+                size={20}
+                className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
             <Input
                 className="pl-8"
                 placeholder="Type to search..."

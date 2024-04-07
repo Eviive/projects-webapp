@@ -1,7 +1,10 @@
 import type { useSortable } from "@dnd-kit/sortable";
 import { createContext, useContext } from "react";
 
-type ISortDialogContext = Pick<ReturnType<typeof useSortable>, "attributes" | "listeners" | "setActivatorNodeRef">;
+type ISortDialogContext = Pick<
+    ReturnType<typeof useSortable>,
+    "attributes" | "listeners" | "setActivatorNodeRef"
+>;
 
 const SortDialogContext = createContext<ISortDialogContext | null>(null);
 

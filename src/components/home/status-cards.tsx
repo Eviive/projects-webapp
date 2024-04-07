@@ -11,11 +11,7 @@ type Props = {
 export const StatusCards: FC<Props> = ({ data }) => {
     return (
         <Grid columnCount={4}>
-            <StatusCard
-                title="API"
-                icon={<FaServer size={35} />}
-                status={data.status}
-            />
+            <StatusCard title="API" icon={<FaServer size={35} />} status={data.status} />
             <StatusCard
                 title={"DB " + data.components.db.details.database}
                 icon={<FaDatabase size={35} />}
