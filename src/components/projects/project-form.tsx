@@ -7,13 +7,7 @@ import { ImageForm } from "components/image/image-form";
 import { Button } from "components/ui/button";
 import { Calendar } from "components/ui/calendar";
 import { Checkbox } from "components/ui/checkbox";
-import {
-    Command,
-    CommandEmpty,
-    CommandInput,
-    CommandItem,
-    CommandList
-} from "components/ui/command";
+import { Combobox } from "components/ui/combobox";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
@@ -27,7 +21,7 @@ import { cn } from "lib/utils/style";
 import type { FC } from "react";
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import { LuCalendar, LuCheck, LuChevronsUpDown } from "react-icons/lu";
+import { LuCalendar, LuChevronsUpDown } from "react-icons/lu";
 import type {
     Project,
     ProjectCreation,
@@ -85,8 +79,6 @@ export const ProjectForm: FC<Props> = props => {
     } = form;
 
     const [oldTitle, setOldTitle] = useState(getValues("title"));
-
-    const selectedSkillIds = new Set(getValues("skills").map(s => s.id));
 
     const submitHandler: SubmitHandler<ProjectForm> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
@@ -343,84 +335,38 @@ export const ProjectForm: FC<Props> = props => {
                                     className="w-[200px] p-0"
                                     portal={false}
                                 >
-                                    <Command>
-                                        <CommandInput placeholder="Search skill..." />
-                                        <CommandList className="max-h-[204px]">
-                                            <CommandEmpty>
-                                                {querySkills.isSuccess && "No skills found."}
-                                                {querySkills.isLoading && "Loading skills..."}
-                                                {querySkills.isError &&
-                                                    "An error occurred while loading skills."}
-                                            </CommandEmpty>
-                                            {querySkills.isSuccess &&
-                                                querySkills.data.map(skill => {
-                                                    const isSelected = selectedSkillIds.has(
-                                                        skill.id
-                                                    );
-                                                    return (
-                                                        <CommandItem
-                                                            key={skill.id}
-                                                            value={skill.name}
-                                                            onSelect={() => {
-                                                                if (isSelected) {
-                                                                    selectedSkillIds.delete(
-                                                                        skill.id
-                                                                    );
-                                                                    field.onChange(
-                                                                        field.value.filter(
-                                                                            s => s.id !== skill.id
-                                                                        )
-                                                                    );
-                                                                } else {
-                                                                    selectedSkillIds.add(skill.id);
-                                                                    const nextIndex =
-                                                                        field.value.findIndex(
-                                                                            s => s.sort > skill.sort
-                                                                        );
-
-                                                                    field.onChange([
-                                                                        ...field.value.slice(
-                                                                            0,
-                                                                            nextIndex
-                                                                        ),
-                                                                        skill,
-                                                                        ...field.value.slice(
-                                                                            nextIndex
-                                                                        )
-                                                                    ]);
-                                                                }
-                                                            }}
-                                                        >
-                                                            <LuCheck
-                                                                className={cn(
-                                                                    "mr-2 h-4 w-4",
-                                                                    field.value.find(
-                                                                        s => s.id === skill.id
-                                                                    ) !== undefined
-                                                                        ? "opacity-100"
-                                                                        : "opacity-0"
-                                                                )}
-                                                            />
-                                                            <div className="flex items-center gap-2">
-                                                                <img
-                                                                    className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                                                                    src={
-                                                                        ImageService.getImageUrl(
-                                                                            skill.image,
-                                                                            "skills"
-                                                                        ) ?? SKILL_PLACEHOLDER
-                                                                    }
-                                                                    alt={skill.image.altEn}
-                                                                    width={22}
-                                                                    loading="lazy"
-                                                                />
-                                                                {skill.name}
-                                                            </div>
-                                                        </CommandItem>
-                                                    );
-                                                })}
-                                        </CommandList>
-                                    </Command>
+                                    <Combobox
+                                        options={querySkills.data ?? []}
+                                        value={field.value.at(0)}
+                                        onChange={skill => {
+                                            console.log(skill);
+                                        }}
+                                        renderItem={skill => (
+                                            <div className="flex items-center gap-2">
+                                                <img
+                                                    className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                                                    src={
+                                                        ImageService.getImageUrl(
+                                                            skill.image,
+                                                            "skills"
+                                                        ) ?? SKILL_PLACEHOLDER
+                                                    }
+                                                    alt={skill.image.altEn}
+                                                    width={22}
+                                                    loading="lazy"
+                                                />
+                                                {skill.name}
+                                            </div>
+                                        )}
+                                        getKey={skill => skill.id}
+                                        getValue={skill => skill.name}
+                                        placeholder="Search skill..."
+                                        noOptionsText="No skills found."
+                                        loading={querySkills.isLoading}
+                                        loadingText="Loading skills..."
+                                        error={querySkills.isError}
+                                        errorText="An error occurred while loading skills."
+                                    />
                                 </PopoverContent>
                             </Popover>
                             <FormMessage />
