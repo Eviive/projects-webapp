@@ -29,6 +29,7 @@ import type {
     ProjectEditionWithFile
 } from "types/entities/project";
 import { projectCreationSchema, projectEditionWithFileSchema } from "types/entities/project";
+import type { Skill } from "types/entities/skill";
 
 const listFormatter = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" });
 
@@ -336,10 +337,29 @@ export const ProjectForm: FC<Props> = props => {
                                     portal={false}
                                 >
                                     <Combobox
+                                        selection="multiple"
                                         options={querySkills.data ?? []}
-                                        value={field.value.at(0)}
-                                        onChange={skill => {
-                                            console.log(skill);
+                                        value={field.value}
+                                        onChange={(skill, isSelected) => {
+                                            let newSkills: Skill[];
+
+                                            if (isSelected) {
+                                                const nextIndex = field.value.findIndex(
+                                                    s => s.sort > skill.sort
+                                                );
+
+                                                newSkills = [
+                                                    ...field.value.slice(0, nextIndex),
+                                                    skill,
+                                                    ...field.value.slice(nextIndex)
+                                                ];
+                                            } else {
+                                                newSkills = field.value.filter(
+                                                    s => s.id !== skill.id
+                                                );
+                                            }
+
+                                            field.onChange(newSkills);
                                         }}
                                         renderItem={skill => (
                                             <div className="flex items-center gap-2">

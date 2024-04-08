@@ -9,10 +9,11 @@ import { cn } from "lib/utils/style";
 import type { Key, ReactNode } from "react";
 import { LuCheck } from "react-icons/lu";
 
-type Props<V> = {
+type Props<V> = CommonProps<V> & (SingleProps<V> | MultipleProps<V>);
+
+type CommonProps<V> = {
     options: V[];
-    value?: V;
-    onChange: (value: V) => void;
+    onChange: (value: V, isSelected: boolean) => void;
     renderItem: (item: V) => ReactNode;
     getKey: (item: V) => Key;
     getValue: (item: V) => string;
@@ -20,6 +21,16 @@ type Props<V> = {
     noOptionsText: string;
 } & LoadingProps &
     ErrorProps;
+
+type SingleProps<V> = {
+    selection?: "single";
+    value?: V;
+};
+
+type MultipleProps<V> = {
+    selection: "multiple";
+    value: V[];
+};
 
 type LoadingProps =
     | {
@@ -49,24 +60,29 @@ export const Combobox = <V,>(props: Props<V>) => {
                     {props.loading && props.loadingText}
                     {props.error && props.errorText}
                 </CommandEmpty>
-                {props.options.map(item => (
-                    <CommandItem
-                        key={props.getKey(item)}
-                        value={props.getValue(item)}
-                        onSelect={() => props.onChange(item)}
-                    >
-                        <LuCheck
-                            className={cn(
-                                "mr-2 h-4 w-4",
-                                props.value !== undefined &&
-                                    props.getKey(props.value) === props.getKey(item)
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                            )}
-                        />
-                        {props.renderItem(item)}
-                    </CommandItem>
-                ))}
+                {props.options.map(item => {
+                    const isSelected =
+                        props.selection === "multiple"
+                            ? props.value.some(value => props.getKey(value) === props.getKey(item))
+                            : props.value !== undefined &&
+                              props.getKey(props.value) === props.getKey(item);
+
+                    return (
+                        <CommandItem
+                            key={props.getKey(item)}
+                            value={props.getValue(item)}
+                            onSelect={() => props.onChange(item, !isSelected)}
+                        >
+                            <LuCheck
+                                className={cn(
+                                    "mr-2 h-4 w-4",
+                                    isSelected ? "opacity-100" : "opacity-0"
+                                )}
+                            />
+                            {props.renderItem(item)}
+                        </CommandItem>
+                    );
+                })}
             </CommandList>
         </Command>
     );
