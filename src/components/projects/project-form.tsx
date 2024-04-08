@@ -51,20 +51,30 @@ export const ProjectForm: FC<Props> = props => {
         resolver: zodResolver(
             props.project === null ? projectCreationSchema : projectEditionWithFileSchema
         ),
-        defaultValues: props.project ?? {
-            title: "",
-            descriptionEn: "",
-            descriptionFr: "",
-            creationDate: undefined,
-            repoUrl: "",
-            demoUrl: "",
-            featured: false,
-            skills: [],
-            image: {
-                altEn: "",
-                altFr: ""
-            }
-        }
+        defaultValues: props.project
+            ? {
+                  ...props.project,
+                  image: {
+                      ...props.project.image,
+                      file: undefined
+                  }
+              }
+            : {
+                  title: "",
+                  descriptionEn: "",
+                  descriptionFr: "",
+                  creationDate: undefined,
+                  repoUrl: "",
+                  demoUrl: "",
+                  featured: false,
+                  skills: [],
+                  image: {
+                      uuid: null,
+                      altEn: "",
+                      altFr: "",
+                      file: undefined
+                  }
+              }
     });
     const {
         formState: { isDirty },
