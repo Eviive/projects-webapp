@@ -50,7 +50,7 @@
         "react/no-unknown-property": [
             "error",
             {
-                "ignore": ["vaul-drawer-wrapper" ,"cmdk-input-wrapper"]
+                "ignore": ["vaul-drawer-wrapper", "cmdk-input-wrapper"]
             }
         ]
     }
