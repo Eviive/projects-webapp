@@ -1,3 +1,4 @@
+import { isNotNullOrUndefined } from "lib/utils/assertion";
 import {
     imageCreationSchema,
     imageCreationWithFileSchema,
@@ -29,10 +30,29 @@ export const projectCreationSchema = z.object({
         })
         .min(1, "Description (French) is required")
         .max(510, "Description (French) must be at most 500 characters"),
-    creationDate: z.coerce.date({
-        required_error: "Creation date is required",
-        invalid_type_error: "Creation date must be a date"
-    }),
+    creationDate: z
+        .string({
+            required_error: "Creation date is required"
+        })
+        .nullish()
+        .refine(isNotNullOrUndefined, {
+            message: "Creation date is required"
+        })
+        .refine(value => !isNaN(Date.parse(value)), {
+            message: "Creation date must be a date"
+        })
+        .pipe(
+            z.coerce.date({
+                required_error: "Creation date is required",
+                invalid_type_error: "Creation date must be a date"
+            })
+        )
+        .or(
+            z.date({
+                required_error: "Creation date is required",
+                invalid_type_error: "Creation date must be a date"
+            })
+        ),
     repoUrl: z
         .string({
             required_error: "Repository URL is required",

@@ -15,6 +15,7 @@ import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { format } from "date-fns";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { SKILL_PLACEHOLDER } from "lib/constants";
+import { isNotNullOrUndefined } from "lib/utils/assertion";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
 import { useState } from "react";
@@ -227,8 +228,21 @@ export const ProjectForm: FC<Props> = props => {
                             <FormControl>
                                 <CalendarInput
                                     mode="single"
-                                    selected={field.value}
-                                    onSelect={field.onChange}
+                                    selected={
+                                        isNotNullOrUndefined(field.value)
+                                            ? new Date(field.value)
+                                            : undefined
+                                    }
+                                    onSelect={date => {
+                                        field.onChange(
+                                            date !== undefined
+                                                ? new Date(
+                                                      date.getTime() -
+                                                          date.getTimezoneOffset() * 60000
+                                                  )
+                                                : null
+                                        );
+                                    }}
                                     initialFocus
                                     buttonText={
                                         field.value ? format(field.value, "PPP") : "Pick a date"
