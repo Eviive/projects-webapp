@@ -5,23 +5,20 @@ import { ProjectService } from "api/services/project";
 import { SkillService } from "api/services/skill";
 import { ImageForm } from "components/image/image-form";
 import { Button } from "components/ui/button";
-import { Calendar } from "components/ui/calendar";
+import { CalendarInput } from "components/ui/calendar-input";
 import { Checkbox } from "components/ui/checkbox";
 import { Combobox } from "components/ui/combobox";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
 import { Textarea } from "components/ui/textarea";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { format } from "date-fns";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { SKILL_PLACEHOLDER } from "lib/constants";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
-import { cn } from "lib/utils/style";
 import type { FC } from "react";
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import { LuCalendar } from "react-icons/lu";
 import type {
     Project,
     ProjectCreation,
@@ -58,7 +55,7 @@ export const ProjectForm: FC<Props> = props => {
             title: "",
             descriptionEn: "",
             descriptionFr: "",
-            creationDate: new Date(),
+            creationDate: undefined,
             repoUrl: "",
             demoUrl: "",
             featured: false,
@@ -212,34 +209,15 @@ export const ProjectForm: FC<Props> = props => {
                         <FormItem>
                             <FormLabel>Creation date</FormLabel>
                             <FormControl>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                className={cn(
-                                                    "flex w-full pl-3 text-left font-normal",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                                {field.value ? (
-                                                    format(field.value, "PPP")
-                                                ) : (
-                                                    <span>Pick a date</span>
-                                                )}
-                                                <LuCalendar className="ml-auto h-4 w-4 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
+                                <CalendarInput
+                                    mode="single"
+                                    selected={field.value}
+                                    onSelect={field.onChange}
+                                    initialFocus
+                                    buttonText={
+                                        field.value ? format(field.value, "PPP") : "Pick a date"
+                                    }
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
