@@ -190,12 +190,18 @@ export const ProjectForm: FC<Props> = props => {
                             (isAltEnEmpty || isAltEnFormatted) &&
                                 setValue(
                                     "image.altEn",
-                                    isTitleEmpty ? "" : `${title.trim()}'s logo`
+                                    isTitleEmpty ? "" : `${title.trim()}'s logo`,
+                                    {
+                                        shouldValidate: form.formState.isSubmitted
+                                    }
                                 );
                             (isAltFrEmpty || isAltFrFormatted) &&
                                 setValue(
                                     "image.altFr",
-                                    isTitleEmpty ? "" : `Logo de ${title.trim()}`
+                                    isTitleEmpty ? "" : `Logo de ${title.trim()}`,
+                                    {
+                                        shouldValidate: form.formState.isSubmitted
+                                    }
                                 );
 
                             setOldTitle(title);
