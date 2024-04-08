@@ -18,9 +18,9 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { Group } from "@radix-ui/react-select";
 import { cn } from "lib/utils/style";
-import { Check, ChevronRight, Circle } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
 import { forwardRef } from "react";
+import { LuCheck, LuChevronRight, LuCircle } from "react-icons/lu";
 
 const DropdownMenu = Root;
 
@@ -50,7 +50,7 @@ const DropdownMenuSubTrigger = forwardRef<
         {...props}
     >
         {children}
-        <ChevronRight className="ml-auto h-4 w-4" />
+        <LuChevronRight className="ml-auto h-4 w-4" />
     </SubTrigger>
 ));
 
@@ -123,7 +123,7 @@ const DropdownMenuCheckboxItem = forwardRef<
     >
         <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
             <ItemIndicator>
-                <Check className="h-4 w-4" />
+                <LuCheck className="h-4 w-4" />
             </ItemIndicator>
         </span>
         {children}
@@ -146,7 +146,7 @@ const DropdownMenuRadioItem = forwardRef<
     >
         <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
             <ItemIndicator>
-                <Circle className="h-2 w-2 fill-current" />
+                <LuCircle className="h-2 w-2 fill-current" />
             </ItemIndicator>
         </span>
         {children}

@@ -10,9 +10,9 @@ import {
 } from "@radix-ui/react-navigation-menu";
 import { cva } from "class-variance-authority";
 import { cn } from "lib/utils/style";
-import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
+import { LuChevronDown } from "react-icons/lu";
 
 const NavigationMenu = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
     ({ className, children, ...props }, ref) => (
@@ -60,7 +60,7 @@ const NavigationMenuTrigger = forwardRef<
 >(({ className, children, ...props }, ref) => (
     <Trigger ref={ref} className={cn(navigationMenuTriggerStyle(), "group", className)} {...props}>
         {children}{" "}
-        <ChevronDown
+        <LuChevronDown
             className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
             aria-hidden="true"
         />

@@ -2,9 +2,9 @@
 
 import { Indicator, Root } from "@radix-ui/react-checkbox";
 import { cn } from "lib/utils/style";
-import { Check } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
+import { LuCheck } from "react-icons/lu";
 
 const Checkbox = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
     ({ className, ...props }, ref) => (
@@ -17,7 +17,7 @@ const Checkbox = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef<ty
             {...props}
         >
             <Indicator className={cn("flex items-center justify-center text-current")}>
-                <Check className="h-4 w-4" />
+                <LuCheck className="h-4 w-4" />
             </Indicator>
         </Root>
     )

@@ -18,9 +18,9 @@ import {
     Viewport
 } from "@radix-ui/react-select";
 import { cn } from "lib/utils/style";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
+import { LuCheck, LuChevronDown, LuChevronUp } from "react-icons/lu";
 
 const Select = Root;
 
@@ -42,7 +42,7 @@ const SelectTrigger = forwardRef<
     >
         {children}
         <Icon asChild>
-            <ChevronDown className="h-4 w-4 opacity-50" />
+            <LuChevronDown className="h-4 w-4 opacity-50" />
         </Icon>
     </Trigger>
 ));
@@ -58,7 +58,7 @@ const SelectScrollUpButton = forwardRef<
         className={cn("flex cursor-default items-center justify-center py-1", className)}
         {...props}
     >
-        <ChevronUp className="h-4 w-4" />
+        <LuChevronUp className="h-4 w-4" />
     </ScrollUpButton>
 ));
 
@@ -73,7 +73,7 @@ const SelectScrollDownButton = forwardRef<
         className={cn("flex cursor-default items-center justify-center py-1", className)}
         {...props}
     >
-        <ChevronDown className="h-4 w-4" />
+        <LuChevronDown className="h-4 w-4" />
     </ScrollDownButton>
 ));
 
@@ -136,7 +136,7 @@ const SelectItem = forwardRef<ElementRef<typeof Item>, ComponentPropsWithoutRef<
         >
             <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
                 <ItemIndicator>
-                    <Check className="h-4 w-4" />
+                    <LuCheck className="h-4 w-4" />
                 </ItemIndicator>
             </span>
 

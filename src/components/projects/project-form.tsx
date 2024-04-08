@@ -24,10 +24,10 @@ import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { SKILL_PLACEHOLDER } from "lib/constants";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import { cn } from "lib/utils/style";
-import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import type { FC } from "react";
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { LuCalendar, LuCheck, LuChevronsUpDown } from "react-icons/lu";
 import type {
     Project,
     ProjectCreation,
@@ -236,7 +236,7 @@ export const ProjectForm: FC<Props> = props => {
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
-                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                <LuCalendar className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
                                         </FormControl>
                                     </PopoverTrigger>
@@ -334,7 +334,7 @@ export const ProjectForm: FC<Props> = props => {
                                                       )
                                                     : "Select skills"}
                                             </span>
-                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
                                     </FormControl>
                                 </PopoverTrigger>
@@ -391,7 +391,7 @@ export const ProjectForm: FC<Props> = props => {
                                                                 }
                                                             }}
                                                         >
-                                                            <Check
+                                                            <LuCheck
                                                                 className={cn(
                                                                     "mr-2 h-4 w-4",
                                                                     field.value.find(
