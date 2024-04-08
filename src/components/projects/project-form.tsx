@@ -323,7 +323,7 @@ export const ProjectForm: FC<Props> = props => {
                                         <Button
                                             variant="outline"
                                             className={cn(
-                                                "flex w-full justify-between",
+                                                "flex w-full justify-between font-normal",
                                                 !field.value && "text-muted-foreground"
                                             )}
                                         >
@@ -345,7 +345,7 @@ export const ProjectForm: FC<Props> = props => {
                                 >
                                     <Command>
                                         <CommandInput placeholder="Search skill..." />
-                                        <CommandList>
+                                        <CommandList className="max-h-[204px]">
                                             <CommandEmpty>
                                                 {querySkills.isSuccess && "No skills found."}
                                                 {querySkills.isLoading && "Loading skills..."}

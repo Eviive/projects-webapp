@@ -29,7 +29,7 @@ export const ImageForm: FC<Props> = ({ classNames }) => {
                                 type="file"
                                 value={undefined}
                                 onChange={e => field.onChange(e.target.files)}
-                                className="cursor-pointer file:cursor-pointer"
+                                className="cursor-pointer file:cursor-pointer file:text-foreground"
                             />
                         </FormControl>
                         <FormMessage />
