@@ -21,7 +21,7 @@ import { cn } from "lib/utils/style";
 import type { FC } from "react";
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import { LuCalendar, LuChevronsUpDown } from "react-icons/lu";
+import { LuCalendar } from "react-icons/lu";
 import type {
     Project,
     ProjectCreation,
@@ -30,8 +30,6 @@ import type {
 } from "types/entities/project";
 import { projectCreationSchema, projectEditionWithFileSchema } from "types/entities/project";
 import type { Skill } from "types/entities/skill";
-
-const listFormatter = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" });
 
 type ProjectForm = ProjectCreationWithFile | ProjectEditionWithFile;
 
@@ -310,85 +308,55 @@ export const ProjectForm: FC<Props> = props => {
                     render={({ field }) => (
                         <FormItem className="col-span-2">
                             <FormLabel>Skills</FormLabel>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <FormControl>
-                                        <Button
-                                            variant="outline"
-                                            className={cn(
-                                                "flex w-full justify-between font-normal",
-                                                !field.value && "text-muted-foreground"
-                                            )}
-                                        >
-                                            <span className="truncate">
-                                                {field.value
-                                                    ? listFormatter.format(
-                                                          field.value.map(s => s.name)
-                                                      )
-                                                    : "Select skills"}
-                                            </span>
-                                            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                        </Button>
-                                    </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    align="start"
-                                    className="w-[200px] p-0"
-                                    portal={false}
-                                >
-                                    <Combobox
-                                        selection="multiple"
-                                        options={querySkills.data ?? []}
-                                        value={field.value}
-                                        onChange={(skill, isSelected) => {
-                                            let newSkills: Skill[];
+                            <Combobox
+                                selection="multiple"
+                                options={querySkills.data ?? []}
+                                value={field.value}
+                                onChange={(skill, isSelected) => {
+                                    let newSkills: Skill[];
 
-                                            if (isSelected) {
-                                                const nextIndex = field.value.findIndex(
-                                                    s => s.sort > skill.sort
-                                                );
+                                    if (isSelected) {
+                                        const nextIndex = field.value.findIndex(
+                                            s => s.sort > skill.sort
+                                        );
 
-                                                newSkills = [
-                                                    ...field.value.slice(0, nextIndex),
-                                                    skill,
-                                                    ...field.value.slice(nextIndex)
-                                                ];
-                                            } else {
-                                                newSkills = field.value.filter(
-                                                    s => s.id !== skill.id
-                                                );
+                                        newSkills = [
+                                            ...field.value.slice(0, nextIndex),
+                                            skill,
+                                            ...field.value.slice(nextIndex)
+                                        ];
+                                    } else {
+                                        newSkills = field.value.filter(s => s.id !== skill.id);
+                                    }
+
+                                    field.onChange(newSkills);
+                                }}
+                                renderItem={skill => (
+                                    <div className="flex items-center gap-2">
+                                        <img
+                                            className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                                            src={
+                                                ImageService.getImageUrl(skill.image, "skills") ??
+                                                SKILL_PLACEHOLDER
                                             }
+                                            alt={skill.image.altEn}
+                                            width={22}
+                                            loading="lazy"
+                                        />
+                                        {skill.name}
+                                    </div>
+                                )}
+                                getKey={skill => skill.id}
+                                getValue={skill => skill.name}
+                                placeholder="Select skills"
+                                searchPlaceholder="Search skill..."
+                                noOptionsText="No skills found."
+                                loading={querySkills.isLoading}
+                                loadingText="Loading skills..."
+                                error={querySkills.isError}
+                                errorText="An error occurred while loading skills."
+                            />
 
-                                            field.onChange(newSkills);
-                                        }}
-                                        renderItem={skill => (
-                                            <div className="flex items-center gap-2">
-                                                <img
-                                                    className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                                                    src={
-                                                        ImageService.getImageUrl(
-                                                            skill.image,
-                                                            "skills"
-                                                        ) ?? SKILL_PLACEHOLDER
-                                                    }
-                                                    alt={skill.image.altEn}
-                                                    width={22}
-                                                    loading="lazy"
-                                                />
-                                                {skill.name}
-                                            </div>
-                                        )}
-                                        getKey={skill => skill.id}
-                                        getValue={skill => skill.name}
-                                        placeholder="Search skill..."
-                                        noOptionsText="No skills found."
-                                        loading={querySkills.isLoading}
-                                        loadingText="Loading skills..."
-                                        error={querySkills.isError}
-                                        errorText="An error occurred while loading skills."
-                                    />
-                                </PopoverContent>
-                            </Popover>
                             <FormMessage />
                         </FormItem>
                     )}
