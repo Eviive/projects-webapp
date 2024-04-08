@@ -1,6 +1,6 @@
 import { ImageService } from "api/services/image";
+import { ProjectFeaturedBadge } from "components/projects/project-featured-badge";
 import { ProjectFormDialog } from "components/projects/project-form-dialog";
-import { Badge } from "components/ui/badge";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
@@ -8,7 +8,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "compon
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "lib/constants";
 import type { FC } from "react";
 import { useMemo } from "react";
-import { FaHeart } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
 
 import type { Project } from "types/entities/project";
@@ -42,11 +41,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                 <div>
                     <CardTitle className="leading-inherit flex items-center gap-1.5 truncate">
                         {project.title}
-                        {project.featured && (
-                            <Badge className="bg-danger/25 p-1.5 text-danger hover:bg-danger/25 focus:ring-0 focus:ring-offset-0">
-                                <FaHeart size={14} />
-                            </Badge>
-                        )}
+                        {project.featured && <ProjectFeaturedBadge />}
                     </CardTitle>
                     <CardDescription>
                         {dateFormatter.format(new Date(project.creationDate))}

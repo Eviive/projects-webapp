@@ -1,6 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { HttpExchangeDetails } from "components/health/http-exchange-details";
-import { HttpStatusChip } from "components/health/http-status-chip";
+import { HttpStatusBadge } from "components/health/http-status-badge";
 import { Button } from "components/ui/button";
 import { DataTableColumnHeader } from "components/ui/data-table-column-header";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
@@ -34,7 +34,7 @@ export const columns = [
     columnHelper.accessor("response.status", {
         id: "Status",
         header: ctx => <DataTableColumnHeader column={ctx.column} title="Status" />,
-        cell: code => <HttpStatusChip code={code.getValue()} />
+        cell: code => <HttpStatusBadge code={code.getValue()} />
     }),
     columnHelper.accessor(row => new URL(row.request.uri).pathname, {
         id: "Path",

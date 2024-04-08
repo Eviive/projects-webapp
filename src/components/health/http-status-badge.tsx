@@ -15,7 +15,7 @@ const statusColors: Record<number, string> = {
     500: "danger"
 };
 
-export const HttpStatusChip: FC<Props> = props => {
+export const HttpStatusBadge: FC<Props> = props => {
     const colorCode = [401, 403].includes(props.code)
         ? props.code
         : Math.floor(props.code / 100) * 100;

@@ -1,6 +1,7 @@
 import { type MutationKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
 import { SortDialog } from "components/common/sort-dialog";
+import { ProjectFeaturedBadge } from "components/projects/project-featured-badge";
 import type { FC, ReactNode } from "react";
 import type { Project } from "types/entities/project";
 
@@ -26,7 +27,12 @@ export const ProjectSortDialog: FC<Props> = props => {
             trigger={props.trigger}
             initialItems={props.initialProjects}
             mutation={sortProjectsMutation}
-            render={project => project.title}
+            render={project => (
+                <div className="flex grow items-center gap-3">
+                    {project.title}
+                    {project.featured && <ProjectFeaturedBadge />}
+                </div>
+            )}
         />
     );
 };

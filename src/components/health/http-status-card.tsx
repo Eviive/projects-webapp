@@ -1,4 +1,4 @@
-import { HttpStatusChip } from "components/health/http-status-chip";
+import { HttpStatusBadge } from "components/health/http-status-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import { useCountUp } from "hooks/use-count-up";
@@ -38,7 +38,7 @@ export const HttpStatusCard: FC<Props> = props => {
                 <CardHeader className="space-y-0 p-3">
                     <CardTitle className="flex flex-row items-center gap-2 text-lg">
                         {props.name}
-                        <HttpStatusChip code={props.code} />
+                        <HttpStatusBadge code={props.code} />
                     </CardTitle>
                 </CardHeader>
                 <Separator />
