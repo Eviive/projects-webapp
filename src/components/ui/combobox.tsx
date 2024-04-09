@@ -29,7 +29,7 @@ type CommonProps<V> = {
     ErrorProps;
 
 type SingleProps<V> = {
-    selection?: "single";
+    selection: "single";
     value?: V;
 };
 
@@ -110,13 +110,28 @@ export const Combobox = <V,>(props: Props<V>) => {
                                     key={props.getKey(item)}
                                     value={props.getValue(item)}
                                     onSelect={() => props.onChange(item, !isSelected)}
+                                    className="gap-3"
                                 >
-                                    <LuCheck
-                                        className={cn(
-                                            "mr-2 h-4 w-4",
-                                            isSelected ? "opacity-100" : "opacity-0"
-                                        )}
-                                    />
+                                    {props.selection === "single" && (
+                                        <LuCheck
+                                            className={cn(
+                                                "h-4 w-4",
+                                                isSelected ? "opacity-100" : "opacity-0"
+                                            )}
+                                        />
+                                    )}
+                                    {props.selection === "multiple" && (
+                                        <div
+                                            className={cn(
+                                                "flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                                isSelected
+                                                    ? "bg-primary text-primary-foreground"
+                                                    : "opacity-50 [&_svg]:invisible"
+                                            )}
+                                        >
+                                            <LuCheck className="h-4 w-4" />
+                                        </div>
+                                    )}
                                     {props.renderItem(item)}
                                 </CommandItem>
                             );
