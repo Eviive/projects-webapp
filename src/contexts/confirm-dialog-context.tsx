@@ -43,6 +43,7 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
             title: params?.title ?? "Are you sure?",
             body: params?.body ?? null,
             confirmButton: params?.confirmButton ?? "OK",
+            confirmDanger: params?.confirmDanger ?? false,
             cancelButton: params?.cancelButton ?? "Cancel"
         });
 

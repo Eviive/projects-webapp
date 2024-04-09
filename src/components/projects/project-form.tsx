@@ -125,7 +125,8 @@ export const ProjectForm: FC<Props> = props => {
         const confirmed = await confirm({
             title: "Delete project",
             body: "Are you sure you want to delete this project?",
-            confirmButton: "Delete"
+            confirmButton: "Delete",
+            confirmDanger: true
         });
 
         if (!confirmed) return dispatchSubmissionState("deletionFinished");

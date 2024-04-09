@@ -45,7 +45,8 @@ export const ProjectFormDialog: FC<Props> = props => {
                     const confirmed = await confirm({
                         title: "Discard changes",
                         body: "Are you sure you want to discard all changes to this project?",
-                        confirmButton: "Discard changes"
+                        confirmButton: "Discard changes",
+                        confirmDanger: true
                     });
 
                     if (!confirmed) return;
