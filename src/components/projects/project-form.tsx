@@ -7,7 +7,7 @@ import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, type FormState, type SubmitHandler, useForm } from "react-hook-form";
 import type {
     Project,
     ProjectCreation,
@@ -20,6 +20,7 @@ export type ProjectFormType = ProjectCreationWithFile | ProjectEditionWithFile;
 
 type Props = {
     project: Project | null;
+    state: Pick<FormState<ProjectFormType>, "isDirty">;
     closeDialog: () => void;
 };
 
@@ -63,6 +64,7 @@ export const ProjectForm: FC<Props> = props => {
         formState: { isDirty },
         handleSubmit
     } = form;
+    props.state.isDirty = isDirty;
 
     const submitHandler: SubmitHandler<ProjectFormType> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;

@@ -1,6 +1,8 @@
-import { ProjectForm } from "components/projects/project-form";
+import { ProjectForm, type ProjectFormType } from "components/projects/project-form";
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
+import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { type FC, type ReactNode, useState } from "react";
+import type { FormState } from "react-hook-form";
 import type { Project } from "types/entities/project";
 
 type EditionProps = {
@@ -18,6 +20,12 @@ type Props = {
 export const ProjectFormDialog: FC<Props> = props => {
     const [open, setOpen] = useState(false);
 
+    const formState: Pick<FormState<ProjectFormType>, "isDirty"> = {
+        isDirty: false
+    };
+
+    const confirm = useConfirmDialogContext();
+
     return (
         <ResponsiveDrawerDialog
             trigger={props.trigger}
@@ -25,10 +33,26 @@ export const ProjectFormDialog: FC<Props> = props => {
                 title: props.project ? `Editing ${props.project.title}` : "Creating project"
             }}
             content={
-                <ProjectForm project={props.project ?? null} closeDialog={() => setOpen(false)} />
+                <ProjectForm
+                    project={props.project ?? null}
+                    state={formState}
+                    closeDialog={() => setOpen(false)}
+                />
             }
             open={open}
-            onOpenChange={setOpen}
+            onOpenChange={async open => {
+                if (!open && formState.isDirty) {
+                    const confirmed = await confirm({
+                        title: "Discard changes",
+                        body: "Are you sure you want to discard all changes to this project?",
+                        confirmButton: "Discard changes"
+                    });
+
+                    if (!confirmed) return;
+                }
+
+                setOpen(open);
+            }}
             classNames={{
                 dialog: {
                     content: "max-w-xl"
