@@ -1,24 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ImageService } from "api/services/image";
+import { useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
-import { SkillService } from "api/services/skill";
-import { ImageForm } from "components/image/image-form";
+import { ProjectFormFields } from "components/projects/project-form-fields";
 import { Button } from "components/ui/button";
-import { CalendarInput } from "components/ui/calendar-input";
-import { Checkbox } from "components/ui/checkbox";
-import { Combobox } from "components/ui/combobox";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
-import { format } from "date-fns";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
-import { SKILL_PLACEHOLDER } from "lib/constants";
-import { isNotNullOrUndefined } from "lib/utils/assertion";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
-import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import type {
     Project,
@@ -27,9 +15,8 @@ import type {
     ProjectEditionWithFile
 } from "types/entities/project";
 import { projectCreationSchema, projectEditionWithFileSchema } from "types/entities/project";
-import type { Skill } from "types/entities/skill";
 
-type ProjectForm = ProjectCreationWithFile | ProjectEditionWithFile;
+export type ProjectFormType = ProjectCreationWithFile | ProjectEditionWithFile;
 
 type Props = {
     project: Project | null;
@@ -41,14 +28,9 @@ export const ProjectForm: FC<Props> = props => {
 
     const queryClient = useQueryClient();
 
-    const querySkills = useQuery({
-        queryKey: ["skills"],
-        queryFn: SkillService.findAll
-    });
-
     const [submissionState, dispatchSubmissionState] = useFormSubmissionState();
 
-    const form = useForm<ProjectForm>({
+    const form = useForm<ProjectFormType>({
         resolver: zodResolver(
             props.project === null ? projectCreationSchema : projectEditionWithFileSchema
         ),
@@ -79,15 +61,10 @@ export const ProjectForm: FC<Props> = props => {
     });
     const {
         formState: { isDirty },
-        control,
-        getValues,
-        setValue,
         handleSubmit
     } = form;
 
-    const [oldTitle, setOldTitle] = useState(getValues("title"));
-
-    const submitHandler: SubmitHandler<ProjectForm> = async data => {
+    const submitHandler: SubmitHandler<ProjectFormType> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
 
         if (!isDirty) return props.closeDialog();
@@ -172,219 +149,7 @@ export const ProjectForm: FC<Props> = props => {
                 className="mb-2 grid grid-cols-[1fr_1fr] gap-x-4 gap-y-3"
                 onSubmit={handleSubmit(submitHandler)}
             >
-                <FormField
-                    control={control}
-                    name="title"
-                    rules={{
-                        onChange: () => {
-                            const [title, altEn, altFr] = getValues([
-                                    "title",
-                                    "image.altEn",
-                                    "image.altFr"
-                                ]),
-                                isTitleEmpty = !title.trim(),
-                                isAltEnEmpty = !altEn.trim(),
-                                isAltFrEmpty = !altFr.trim(),
-                                isAltEnFormatted = altEn === `${oldTitle.trim()}'s logo`,
-                                isAltFrFormatted = altFr === `Logo de ${oldTitle.trim()}`;
-
-                            (isAltEnEmpty || isAltEnFormatted) &&
-                                setValue(
-                                    "image.altEn",
-                                    isTitleEmpty ? "" : `${title.trim()}'s logo`,
-                                    {
-                                        shouldValidate: form.formState.isSubmitted
-                                    }
-                                );
-                            (isAltFrEmpty || isAltFrFormatted) &&
-                                setValue(
-                                    "image.altFr",
-                                    isTitleEmpty ? "" : `Logo de ${title.trim()}`,
-                                    {
-                                        shouldValidate: form.formState.isSubmitted
-                                    }
-                                );
-
-                            setOldTitle(title);
-                        }
-                    }}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
-                    name="creationDate"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Creation date</FormLabel>
-                            <FormControl>
-                                <CalendarInput
-                                    mode="single"
-                                    selected={
-                                        isNotNullOrUndefined(field.value)
-                                            ? new Date(field.value)
-                                            : undefined
-                                    }
-                                    onSelect={date => {
-                                        field.onChange(
-                                            date !== undefined
-                                                ? new Date(
-                                                      date.getTime() -
-                                                          date.getTimezoneOffset() * 60000
-                                                  )
-                                                : null
-                                        );
-                                    }}
-                                    initialFocus
-                                    buttonText={
-                                        field.value ? format(field.value, "PPP") : "Pick a date"
-                                    }
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
-                    name="descriptionEn"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description (English)</FormLabel>
-                            <FormControl>
-                                <Textarea {...field} rows={5} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
-                    name="descriptionFr"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description (French)</FormLabel>
-                            <FormControl>
-                                <Textarea {...field} rows={5} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
-                    name="repoUrl"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Repository URL</FormLabel>
-                            <FormControl>
-                                <Input {...field} type="url" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
-                    name="demoUrl"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Demonstration URL</FormLabel>
-                            <FormControl>
-                                <Input {...field} type="url" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
-                    name="skills"
-                    render={({ field }) => (
-                        <FormItem className="col-span-2">
-                            <FormLabel>Skills</FormLabel>
-                            <Combobox
-                                selection="multiple"
-                                options={querySkills.data ?? []}
-                                value={field.value}
-                                onChange={(skill, isSelected) => {
-                                    let newSkills: Skill[];
-
-                                    if (isSelected) {
-                                        const nextIndex = field.value.findIndex(
-                                            s => s.sort > skill.sort
-                                        );
-
-                                        newSkills = [
-                                            ...field.value.slice(0, nextIndex),
-                                            skill,
-                                            ...field.value.slice(nextIndex)
-                                        ];
-                                    } else {
-                                        newSkills = field.value.filter(s => s.id !== skill.id);
-                                    }
-
-                                    field.onChange(newSkills);
-                                }}
-                                renderItem={skill => (
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                                            src={
-                                                ImageService.getImageUrl(skill.image, "skills") ??
-                                                SKILL_PLACEHOLDER
-                                            }
-                                            alt={skill.image.altEn}
-                                            width={22}
-                                            loading="lazy"
-                                        />
-                                        {skill.name}
-                                    </div>
-                                )}
-                                getKey={skill => skill.id}
-                                getValue={skill => skill.name}
-                                placeholder="Select skills"
-                                searchPlaceholder="Search skill..."
-                                noOptionsText="No skills found."
-                                loading={querySkills.isLoading}
-                                loadingText="Loading skills..."
-                                error={querySkills.isError}
-                                errorText="An error occurred while loading skills."
-                            />
-
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <ImageForm classNames={{ imageFile: "col-span-2" }} />
-
-                <FormField
-                    control={control}
-                    name="featured"
-                    render={({ field }) => (
-                        <FormItem className="col-span-2 flex items-center gap-2 space-y-0">
-                            <FormLabel>Featured</FormLabel>
-                            <FormControl>
-                                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <ProjectFormFields />
 
                 <div className="col-span-2 mt-3 flex w-full justify-center gap-4">
                     {!!props.project && (

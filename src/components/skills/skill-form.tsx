@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services/skill";
-import { ImageForm } from "components/image/image-form";
+import { ImageFormFields } from "components/image/image-form-fields";
 import { Button } from "components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
@@ -176,7 +176,7 @@ export const SkillForm: FC<Props> = props => {
                     )}
                 />
 
-                <ImageForm />
+                <ImageFormFields />
 
                 <div className="flex w-full justify-center gap-3">
                     {!!props.skill && (
