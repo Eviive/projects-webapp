@@ -59,6 +59,11 @@ type ErrorProps =
 export const Combobox = <V,>(props: Props<V>) => {
     const getButtonLabel = () => {
         if (props.selection === "multiple" && props.value.length > 0) {
+            console.log(
+                props.value,
+                props.value.map(item => props.getValue(item)),
+                listFormatter.format(props.value.map(item => props.getValue(item)))
+            );
             return listFormatter.format(props.value.map(item => props.getValue(item)));
         }
 
