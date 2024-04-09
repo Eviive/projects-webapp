@@ -33,32 +33,32 @@ export const ProjectForm: FC<Props> = props => {
 
     const form = useForm<ProjectFormType>({
         resolver: zodResolver(
-            props.project === null ? projectCreationSchema : projectEditionWithFileSchema
+            props.project !== null ? projectEditionWithFileSchema : projectCreationSchema
         ),
-        defaultValues: props.project
-            ? {
-                  ...props.project,
-                  image: {
-                      ...props.project.image,
-                      file: undefined
+        defaultValues:
+            props.project !== null
+                ? {
+                      ...props.project,
+                      image: {
+                          ...props.project.image,
+                          file: undefined
+                      }
                   }
-              }
-            : {
-                  title: "",
-                  descriptionEn: "",
-                  descriptionFr: "",
-                  creationDate: undefined,
-                  repoUrl: "",
-                  demoUrl: "",
-                  featured: false,
-                  skills: [],
-                  image: {
-                      uuid: null,
-                      altEn: "",
-                      altFr: "",
-                      file: undefined
+                : {
+                      title: "",
+                      descriptionEn: "",
+                      descriptionFr: "",
+                      creationDate: undefined,
+                      repoUrl: "",
+                      demoUrl: "",
+                      featured: false,
+                      skills: [],
+                      image: {
+                          altEn: "",
+                          altFr: "",
+                          file: undefined
+                      }
                   }
-              }
     });
     const {
         formState: { isDirty },

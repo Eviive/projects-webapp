@@ -1,16 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services/skill";
-import { ImageFormFields } from "components/image/image-form-fields";
+import { SkillFormFields } from "components/skills/skill-form-fields";
 import { Button } from "components/ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
-import { Input } from "components/ui/input";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
-import { useState } from "react";
-import type { SubmitHandler } from "react-hook-form";
+import type { FormState, SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
 import type {
     Skill,
@@ -20,10 +17,11 @@ import type {
 } from "types/entities/skill";
 import { skillCreationSchema, skillEditionWithFileSchema } from "types/entities/skill";
 
-type SkillForm = SkillCreationWithFile | SkillEditionWithFile;
+export type SkillFormType = SkillCreationWithFile | SkillEditionWithFile;
 
 type Props = {
     skill: Skill | null;
+    state: Pick<FormState<SkillFormType>, "isDirty">;
     closeDialog: () => void;
 };
 
@@ -34,29 +32,35 @@ export const SkillForm: FC<Props> = props => {
 
     const [submissionState, dispatchSubmissionState] = useFormSubmissionState();
 
-    const form = useForm<SkillForm>({
+    const form = useForm<SkillFormType>({
         resolver: zodResolver(
-            props.skill === null ? skillCreationSchema : skillEditionWithFileSchema
+            props.skill !== null ? skillEditionWithFileSchema : skillCreationSchema
         ),
-        defaultValues: props.skill ?? {
-            name: "",
-            image: {
-                altEn: "",
-                altFr: ""
-            }
-        }
+        defaultValues:
+            props.skill !== null
+                ? {
+                      ...props.skill,
+                      image: {
+                          ...props.skill.image,
+                          file: undefined
+                      }
+                  }
+                : {
+                      name: "",
+                      image: {
+                          altEn: "",
+                          altFr: "",
+                          file: undefined
+                      }
+                  }
     });
     const {
         formState: { isDirty },
-        control,
-        getValues,
-        setValue,
         handleSubmit
     } = form;
+    props.state.isDirty = isDirty;
 
-    const [oldName, setOldName] = useState(getValues("name"));
-
-    const submitHandler: SubmitHandler<SkillForm> = async data => {
+    const submitHandler: SubmitHandler<SkillFormType> = async data => {
         if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
 
         if (!isDirty) return props.closeDialog();
@@ -115,7 +119,8 @@ export const SkillForm: FC<Props> = props => {
         const confirmed = await confirm({
             title: "Delete skill",
             body: "Are you sure you want to delete this skill?",
-            confirmButton: "Delete"
+            confirmButton: "Delete",
+            confirmDanger: true
         });
 
         if (!confirmed) return dispatchSubmissionState("deletionFinished");
@@ -138,45 +143,7 @@ export const SkillForm: FC<Props> = props => {
     return (
         <FormProvider {...form}>
             <form className="mb-2 flex flex-col gap-4" onSubmit={handleSubmit(submitHandler)}>
-                <FormField
-                    control={control}
-                    name="name"
-                    rules={{
-                        onChange: () => {
-                            const [name, altEn, altFr] = getValues([
-                                    "name",
-                                    "image.altEn",
-                                    "image.altFr"
-                                ]),
-                                isNameEmpty = !name.trim(),
-                                isAltEnEmpty = !altEn.trim(),
-                                isAltFrEmpty = !altFr.trim(),
-                                isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
-                                isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
-
-                            (isAltEnEmpty || isAltEnFormatted) &&
-                                setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
-                            (isAltFrEmpty || isAltFrFormatted) &&
-                                setValue(
-                                    "image.altFr",
-                                    isNameEmpty ? "" : `Logo de ${name.trim()}`
-                                );
-
-                            setOldName(name);
-                        }
-                    }}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <ImageFormFields />
+                <SkillFormFields />
 
                 <div className="flex w-full justify-center gap-3">
                     {!!props.skill && (

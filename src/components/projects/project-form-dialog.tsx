@@ -42,10 +42,13 @@ export const ProjectFormDialog: FC<Props> = props => {
             open={open}
             onOpenChange={async open => {
                 if (!open && formState.isDirty) {
+                    const title = props.project ? "Discard changes" : "Discard new project";
                     const confirmed = await confirm({
-                        title: "Discard changes",
-                        body: "Are you sure you want to discard all changes to this project?",
-                        confirmButton: "Discard changes",
+                        title,
+                        body: props.project
+                            ? "Are you sure you want to discard all changes to this project?"
+                            : "Are you sure you want to discard this new project?",
+                        confirmButton: title,
                         confirmDanger: true
                     });
 
