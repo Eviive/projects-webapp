@@ -4,7 +4,7 @@ import { ProjectService } from "api/services/project";
 import { ProjectFormFields } from "components/projects/project-form-fields";
 import { Button } from "components/ui/button";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
-import { useFormSubmissionState } from "hooks/use-form-submission-state";
+import { useFormState } from "hooks/use-form-state";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
 import type { FC } from "react";
 import { FormProvider, type FormState, type SubmitHandler, useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ export const ProjectForm: FC<Props> = props => {
 
     const queryClient = useQueryClient();
 
-    const [submissionState, dispatchSubmissionState] = useFormSubmissionState();
+    const { isSubmitting, startSubmitting, endSubmitting } = useFormState();
 
     const form = useForm<ProjectFormType>({
         resolver: zodResolver(
@@ -67,11 +67,11 @@ export const ProjectForm: FC<Props> = props => {
     props.state.isDirty = isDirty;
 
     const submitHandler: SubmitHandler<ProjectFormType> = async data => {
-        if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
+        if (isSubmitting) return;
 
         if (!isDirty) return props.closeDialog();
 
-        dispatchSubmissionState("editionStarted");
+        startSubmitting();
 
         const editing = !!props.project;
 
@@ -111,16 +111,16 @@ export const ProjectForm: FC<Props> = props => {
                 getFormattedTitleAndMessage(e)
             );
         } finally {
-            dispatchSubmissionState("editionFinished");
+            endSubmitting();
         }
     };
 
     const handleDelete = async () => {
-        if (submissionState.isSubmittingDeletion || submissionState.isSubmittingEdition) return;
+        if (isSubmitting) return;
 
         if (!props.project) return;
 
-        dispatchSubmissionState("deletionStarted");
+        startSubmitting();
 
         const confirmed = await confirm({
             title: "Delete project",
@@ -129,7 +129,7 @@ export const ProjectForm: FC<Props> = props => {
             confirmDanger: true
         });
 
-        if (!confirmed) return dispatchSubmissionState("deletionFinished");
+        if (!confirmed) return endSubmitting();
 
         try {
             await ProjectService.delete(props.project.id);
@@ -142,7 +142,7 @@ export const ProjectForm: FC<Props> = props => {
         } catch (e) {
             console.error("Project deletion failed", getFormattedTitleAndMessage(e));
         } finally {
-            dispatchSubmissionState("deletionFinished");
+            endSubmitting();
         }
     };
 
@@ -159,23 +159,13 @@ export const ProjectForm: FC<Props> = props => {
                         <Button
                             className="w-full max-w-[50%]"
                             variant="destructive"
-                            disabled={
-                                submissionState.isSubmittingEdition ||
-                                submissionState.isSubmittingDeletion
-                            }
+                            disabled={isSubmitting}
                             onClick={handleDelete}
                         >
                             Delete
                         </Button>
                     )}
-                    <Button
-                        className="w-full max-w-[50%]"
-                        type="submit"
-                        disabled={
-                            submissionState.isSubmittingEdition ||
-                            submissionState.isSubmittingDeletion
-                        }
-                    >
+                    <Button className="w-full max-w-[50%]" type="submit" disabled={isSubmitting}>
                         Submit
                     </Button>
                 </div>

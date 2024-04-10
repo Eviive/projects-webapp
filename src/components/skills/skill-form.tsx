@@ -4,7 +4,7 @@ import { SkillService } from "api/services/skill";
 import { SkillFormFields } from "components/skills/skill-form-fields";
 import { Button } from "components/ui/button";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
-import { useFormSubmissionState } from "hooks/use-form-submission-state";
+import { useFormState } from "hooks/use-form-state";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
 import type { FC } from "react";
 import type { FormState, SubmitHandler } from "react-hook-form";
@@ -30,7 +30,7 @@ export const SkillForm: FC<Props> = props => {
 
     const queryClient = useQueryClient();
 
-    const [submissionState, dispatchSubmissionState] = useFormSubmissionState();
+    const { isSubmitting, startSubmitting, endSubmitting } = useFormState();
 
     const form = useForm<SkillFormType>({
         resolver: zodResolver(
@@ -61,11 +61,11 @@ export const SkillForm: FC<Props> = props => {
     props.state.isDirty = isDirty;
 
     const submitHandler: SubmitHandler<SkillFormType> = async data => {
-        if (submissionState.isSubmittingEdition || submissionState.isSubmittingDeletion) return;
+        if (isSubmitting) return;
 
         if (!isDirty) return props.closeDialog();
 
-        dispatchSubmissionState("editionStarted");
+        startSubmitting();
 
         const editing = !!props.skill;
 
@@ -105,16 +105,16 @@ export const SkillForm: FC<Props> = props => {
                 getFormattedTitleAndMessage(e)
             );
         } finally {
-            dispatchSubmissionState("editionFinished");
+            endSubmitting();
         }
     };
 
     const handleDelete = async () => {
-        if (submissionState.isSubmittingDeletion || submissionState.isSubmittingEdition) return;
+        if (isSubmitting) return;
 
         if (!props.skill) return;
 
-        dispatchSubmissionState("deletionStarted");
+        startSubmitting();
 
         const confirmed = await confirm({
             title: "Delete skill",
@@ -123,7 +123,7 @@ export const SkillForm: FC<Props> = props => {
             confirmDanger: true
         });
 
-        if (!confirmed) return dispatchSubmissionState("deletionFinished");
+        if (!confirmed) return endSubmitting();
 
         try {
             await SkillService.delete(props.skill.id);
@@ -136,7 +136,7 @@ export const SkillForm: FC<Props> = props => {
         } catch (e) {
             console.error("Skill deletion failed", getFormattedTitleAndMessage(e));
         } finally {
-            dispatchSubmissionState("deletionFinished");
+            endSubmitting();
         }
     };
 
@@ -150,23 +150,13 @@ export const SkillForm: FC<Props> = props => {
                         <Button
                             className="w-full max-w-[50%]"
                             variant="destructive"
-                            disabled={
-                                submissionState.isSubmittingEdition ||
-                                submissionState.isSubmittingDeletion
-                            }
+                            disabled={isSubmitting}
                             onClick={handleDelete}
                         >
                             Delete
                         </Button>
                     )}
-                    <Button
-                        className="w-full max-w-[50%]"
-                        type="submit"
-                        disabled={
-                            submissionState.isSubmittingEdition ||
-                            submissionState.isSubmittingDeletion
-                        }
-                    >
+                    <Button className="w-full max-w-[50%]" type="submit" disabled={isSubmitting}>
                         Submit
                     </Button>
                 </div>
