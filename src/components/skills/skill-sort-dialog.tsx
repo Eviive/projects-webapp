@@ -24,30 +24,31 @@ export const SkillSortDialog: FC<Props> = props => {
     });
 
     return (
-        <SortDialog
-            itemsName="skills"
-            trigger={
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>{props.trigger}</TooltipTrigger>
-                        <TooltipContent>Sort skills</TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            }
-            initialItems={props.initialSkills}
-            mutation={sortSkillsMutation}
-            render={skill => (
-                <div className="flex grow items-center gap-3">
-                    <img
-                        className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
-                        src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
-                        alt={skill.image.altEn}
-                        width={36}
-                        loading="lazy"
-                    />
-                    {skill.name}
-                </div>
-            )}
-        />
+        <TooltipProvider>
+            <Tooltip>
+                <SortDialog
+                    itemsName="skills"
+                    trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
+                    initialItems={props.initialSkills}
+                    mutation={sortSkillsMutation}
+                    render={skill => (
+                        <div className="flex grow items-center gap-3">
+                            <img
+                                className="aspect-square object-cover drop-shadow-[0_1px_1px_hsl(0deg,0%,0%,0.5)]"
+                                src={
+                                    ImageService.getImageUrl(skill.image, "skills") ??
+                                    SKILL_PLACEHOLDER
+                                }
+                                alt={skill.image.altEn}
+                                width={36}
+                                loading="lazy"
+                            />
+                            {skill.name}
+                        </div>
+                    )}
+                />
+                <TooltipContent>Sort skills</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };

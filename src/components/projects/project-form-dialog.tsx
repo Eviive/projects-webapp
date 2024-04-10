@@ -28,50 +28,46 @@ export const ProjectFormDialog: FC<Props> = props => {
     const confirm = useConfirmDialogContext();
 
     return (
-        <ResponsiveDrawerDialog
-            trigger={
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>{props.trigger}</TooltipTrigger>
-                        <TooltipContent>
-                            {props.project ? "Edit project" : "Create project"}
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            }
-            header={{
-                title: props.project ? `Editing ${props.project.title}` : "Creating project"
-            }}
-            content={
-                <ProjectForm
-                    project={props.project ?? null}
-                    state={formState}
-                    closeDialog={() => setOpen(false)}
+        <TooltipProvider>
+            <Tooltip>
+                <ResponsiveDrawerDialog
+                    trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
+                    header={{
+                        title: props.project ? `Editing ${props.project.title}` : "Creating project"
+                    }}
+                    content={
+                        <ProjectForm
+                            project={props.project ?? null}
+                            state={formState}
+                            closeDialog={() => setOpen(false)}
+                        />
+                    }
+                    open={open}
+                    onOpenChange={async open => {
+                        if (!open && formState.isDirty) {
+                            const title = props.project ? "Discard changes" : "Discard new project";
+                            const confirmed = await confirm({
+                                title,
+                                body: props.project
+                                    ? "Are you sure you want to discard all changes to this project?"
+                                    : "Are you sure you want to discard this new project?",
+                                confirmButton: title,
+                                confirmDanger: true
+                            });
+
+                            if (!confirmed) return;
+                        }
+
+                        setOpen(open);
+                    }}
+                    classNames={{
+                        dialog: {
+                            content: "max-w-xl"
+                        }
+                    }}
                 />
-            }
-            open={open}
-            onOpenChange={async open => {
-                if (!open && formState.isDirty) {
-                    const title = props.project ? "Discard changes" : "Discard new project";
-                    const confirmed = await confirm({
-                        title,
-                        body: props.project
-                            ? "Are you sure you want to discard all changes to this project?"
-                            : "Are you sure you want to discard this new project?",
-                        confirmButton: title,
-                        confirmDanger: true
-                    });
-
-                    if (!confirmed) return;
-                }
-
-                setOpen(open);
-            }}
-            classNames={{
-                dialog: {
-                    content: "max-w-xl"
-                }
-            }}
-        />
+                <TooltipContent>{props.project ? "Edit project" : "Create project"}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };

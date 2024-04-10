@@ -31,50 +31,46 @@ export const SkillFormDialog: FC<Props> = props => {
     const confirm = useConfirmDialogContext();
 
     return (
-        <ResponsiveDrawerDialog
-            trigger={
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>{props.trigger}</TooltipTrigger>
-                        <TooltipContent>
-                            {props.skill ? "Edit skill" : "Create skill"}
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            }
-            header={{
-                title: props.skill ? `Editing ${props.skill.name}` : "Creating skill"
-            }}
-            content={
-                <SkillForm
-                    skill={props.skill ?? null}
-                    state={formState}
-                    closeDialog={() => setOpen(false)}
+        <TooltipProvider>
+            <Tooltip>
+                <ResponsiveDrawerDialog
+                    trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
+                    header={{
+                        title: props.skill ? `Editing ${props.skill.name}` : "Creating skill"
+                    }}
+                    content={
+                        <SkillForm
+                            skill={props.skill ?? null}
+                            state={formState}
+                            closeDialog={() => setOpen(false)}
+                        />
+                    }
+                    open={open}
+                    onOpenChange={async open => {
+                        if (!open && formState.isDirty) {
+                            const title = props.skill ? "Discard changes" : "Discard new skill";
+                            const confirmed = await confirm({
+                                title,
+                                body: props.skill
+                                    ? "Are you sure you want to discard all changes to this skill?"
+                                    : "Are you sure you want to discard this new skill?",
+                                confirmButton: title,
+                                confirmDanger: true
+                            });
+
+                            if (!confirmed) return;
+                        }
+
+                        setOpen(open);
+                    }}
+                    classNames={{
+                        dialog: {
+                            content: "max-w-md"
+                        }
+                    }}
                 />
-            }
-            open={open}
-            onOpenChange={async open => {
-                if (!open && formState.isDirty) {
-                    const title = props.skill ? "Discard changes" : "Discard new skill";
-                    const confirmed = await confirm({
-                        title,
-                        body: props.skill
-                            ? "Are you sure you want to discard all changes to this skill?"
-                            : "Are you sure you want to discard this new skill?",
-                        confirmButton: title,
-                        confirmDanger: true
-                    });
-
-                    if (!confirmed) return;
-                }
-
-                setOpen(open);
-            }}
-            classNames={{
-                dialog: {
-                    content: "max-w-md"
-                }
-            }}
-        />
+                <TooltipContent>{props.skill ? "Edit skill" : "Create skill"}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };

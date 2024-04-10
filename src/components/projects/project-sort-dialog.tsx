@@ -23,24 +23,22 @@ export const ProjectSortDialog: FC<Props> = props => {
     });
 
     return (
-        <SortDialog
-            itemsName="projects"
-            trigger={
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>{props.trigger}</TooltipTrigger>
-                        <TooltipContent>Sort projects</TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            }
-            initialItems={props.initialProjects}
-            mutation={sortProjectsMutation}
-            render={project => (
-                <div className="flex grow items-center gap-3">
-                    {project.title}
-                    {project.featured && <ProjectFeaturedBadge />}
-                </div>
-            )}
-        />
+        <TooltipProvider>
+            <Tooltip>
+                <SortDialog
+                    itemsName="projects"
+                    trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
+                    initialItems={props.initialProjects}
+                    mutation={sortProjectsMutation}
+                    render={project => (
+                        <div className="flex grow items-center gap-3">
+                            {project.title}
+                            {project.featured && <ProjectFeaturedBadge />}
+                        </div>
+                    )}
+                />
+                <TooltipContent>Sort projects</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };
