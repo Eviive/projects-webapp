@@ -1,10 +1,5 @@
 export type Theme = "light" | "dark" | "system";
 
-export type Route = {
-    name: string;
-    path: string;
-};
-
 export type Page<E> = {
     content: E[];
     pageable: {

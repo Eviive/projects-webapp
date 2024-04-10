@@ -9,9 +9,10 @@ import { Button } from "components/ui/button";
 import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
+import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
 import { getTitleAndMessage } from "lib/utils/error";
-import { type FC, useMemo, useState } from "react";
+import { type FC, useMemo } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { LuAlertCircle } from "react-icons/lu";
 import { MdDragHandle } from "react-icons/md";
@@ -59,8 +60,7 @@ export const Skills: FC = () => {
         return optSkills;
     }, [query.data, query.isSuccess, optimisticSkillSortItems]);
 
-    const [searchBarValue, setSearchBarValue] = useState("");
-    const [searchQuery, setSearchQuery] = useState(searchBarValue);
+    const { searchBarValue, setSearchBarValue, searchQuery, setSearchQuery } = useSearchBar();
 
     const optimisticFilteredSkills = useMemo(() => {
         return optimisticSkills.filter(skill =>
@@ -75,7 +75,6 @@ export const Skills: FC = () => {
                     <SearchBar
                         value={searchBarValue}
                         handleChange={setSearchBarValue}
-                        debounce={300}
                         handleDebounce={setSearchQuery}
                         isDisabled={query.isLoading || query.isError}
                     />

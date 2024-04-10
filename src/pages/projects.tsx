@@ -12,10 +12,11 @@ import { Button } from "components/ui/button";
 import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
+import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
 import { getTitleAndMessage } from "lib/utils/error";
 import type { FC } from "react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { LuAlertCircle } from "react-icons/lu";
 import { MdDragHandle } from "react-icons/md";
@@ -63,8 +64,7 @@ export const Projects: FC = () => {
         return optProjects;
     }, [query.data, query.isSuccess, optimisticProjectSortItems]);
 
-    const [searchBarValue, setSearchBarValue] = useState("");
-    const [searchQuery, setSearchQuery] = useState(searchBarValue);
+    const { searchBarValue, setSearchBarValue, searchQuery, setSearchQuery } = useSearchBar();
 
     const optimisticFilteredProjects = useMemo(() => {
         return optimisticProjects.filter(project =>
@@ -79,7 +79,6 @@ export const Projects: FC = () => {
                     <SearchBar
                         value={searchBarValue}
                         handleChange={setSearchBarValue}
-                        debounce={300}
                         handleDebounce={setSearchQuery}
                         isDisabled={query.isLoading || query.isError}
                     />
