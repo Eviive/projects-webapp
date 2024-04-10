@@ -1,96 +1,101 @@
 import { useMutationState, useQuery } from "@tanstack/react-query";
-import { SkillService } from "api/services/skill";
 import { Page } from "components/common/page";
-import { SkillCard } from "components/skills/skill-card";
-import { SkillFormDialog } from "components/skills/skill-form-dialog";
-import { SkillSortDialog, sortSkillsMutationKey } from "components/skills/skill-sort-dialog";
+import { ProjectCard } from "components/projects/project-card";
+import { ProjectFormDialog } from "components/projects/project-form-dialog";
+import {
+    ProjectSortDialog,
+    sortProjectsMutationKey
+} from "components/projects/project-sort-dialog";
 import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
 import { Button } from "components/ui/button";
-import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
 import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
 import { getTitleAndMessage } from "libs/utils/error";
-import { type FC, useMemo } from "react";
+import type { projectsLoader } from "pages/projects/projects.loader";
+import { projectsQuery } from "pages/projects/projects.loader";
+import type { FC } from "react";
+import { useMemo } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { LuAlertCircle } from "react-icons/lu";
 import { MdDragHandle } from "react-icons/md";
+import { useLoaderData } from "react-router-dom";
 import type { DndItem } from "types/dnd";
+import type { QueryLoaderFunctionData } from "types/loader";
 
-export const Skills: FC = () => {
-    const query = useQuery({
-        queryKey: ["skills"],
-        queryFn: SkillService.findAll
-    });
+export const Projects: FC = () => {
+    const initialProjects = useLoaderData() as QueryLoaderFunctionData<typeof projectsLoader>;
+
+    const query = useQuery({ ...projectsQuery, initialData: initialProjects });
 
     const error = query.isError ? getTitleAndMessage(query.error) : null;
 
-    const optimisticSkillSorts = useMutationState<DndItem[]>({
+    const optimisticProjectSorts = useMutationState<DndItem[]>({
         filters: {
-            mutationKey: sortSkillsMutationKey,
+            mutationKey: sortProjectsMutationKey,
             status: "pending"
         },
         select: mutation => mutation.state.variables as DndItem[]
     });
 
-    const optimisticSkillSortItems = useMemo(() => {
+    const optimisticProjectSortItems = useMemo(() => {
         const items: Record<number, number> = {};
 
-        for (const sortItem of optimisticSkillSorts.flatMap(i => i)) {
+        for (const sortItem of optimisticProjectSorts.flatMap(i => i)) {
             items[sortItem.id] = sortItem.sort;
         }
 
         return items;
-    }, [optimisticSkillSorts]);
+    }, [optimisticProjectSorts]);
 
-    const optimisticSkills = useMemo(() => {
+    const optimisticProjects = useMemo(() => {
         if (!query.isSuccess) return [];
 
-        const optSkills = [...query.data];
+        const optProjects = [...query.data];
 
-        for (const skill of optSkills) {
-            if (optimisticSkillSortItems[skill.id] !== undefined) {
-                skill.sort = optimisticSkillSortItems[skill.id];
+        for (const project of optProjects) {
+            if (optimisticProjectSortItems[project.id] !== undefined) {
+                project.sort = optimisticProjectSortItems[project.id];
             }
         }
 
-        optSkills.sort((a, b) => a.sort - b.sort);
+        optProjects.sort((a, b) => a.sort - b.sort);
 
-        return optSkills;
-    }, [query.data, query.isSuccess, optimisticSkillSortItems]);
+        return optProjects;
+    }, [query.data, query.isSuccess, optimisticProjectSortItems]);
 
     const { searchBarValue, setSearchBarValue, searchQuery, setSearchQuery } = useSearchBar();
 
-    const optimisticFilteredSkills = useMemo(() => {
-        return optimisticSkills.filter(skill =>
-            skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
+    const optimisticFilteredProjects = useMemo(() => {
+        return optimisticProjects.filter(project =>
+            project.title.toLowerCase().includes(searchQuery.trim().toLowerCase())
         );
-    }, [optimisticSkills, searchQuery]);
+    }, [optimisticProjects, searchQuery]);
 
     return (
-        <Page title="Skills">
+        <Page title="Projects">
             <div className="flex h-full w-full grow flex-col gap-9 px-[5%] py-9">
                 <div className="flex w-full max-w-md items-center gap-2 self-center">
                     <SearchBar
                         value={searchBarValue}
                         handleChange={setSearchBarValue}
                         handleDebounce={setSearchQuery}
-                        isDisabled={query.isLoading || query.isError}
+                        isDisabled={query.isError}
                     />
-                    <SkillSortDialog
-                        initialSkills={optimisticSkills}
+                    <ProjectSortDialog
+                        initialProjects={optimisticProjects}
                         trigger={
                             <Button
                                 className="text-foreground-500"
                                 variant="outline"
                                 size="icon"
-                                disabled={query.isLoading || query.isError}
+                                disabled={query.isError}
                             >
                                 <MdDragHandle size={24} />
                             </Button>
                         }
                     />
-                    <SkillFormDialog
+                    <ProjectFormDialog
                         trigger={
                             <Button className="text-foreground-500" variant="outline" size="icon">
                                 <FaPlus size={20} />
@@ -99,17 +104,16 @@ export const Skills: FC = () => {
                     />
                 </div>
                 {query.isSuccess && (
-                    <Grid minWidth="140px" gap="2em" columnCount="infinity" centerHorizontally>
-                        {optimisticFilteredSkills.map(skill => (
-                            <SkillCard
-                                key={skill.id}
-                                skill={skill}
-                                isOptimistic={optimisticSkillSortItems[skill.id] !== undefined}
+                    <Grid minWidth="350px" gap="2.5em" columnCount={3} centerHorizontally>
+                        {optimisticFilteredProjects.map(project => (
+                            <ProjectCard
+                                key={project.id}
+                                project={project}
+                                isOptimistic={optimisticProjectSortItems[project.id] !== undefined}
                             />
                         ))}
                     </Grid>
                 )}
-                {query.isLoading && <Loader />}
                 {query.isError && error !== null && (
                     <Alert variant="destructive">
                         <LuAlertCircle className="h-4 w-4" />

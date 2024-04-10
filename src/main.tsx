@@ -5,6 +5,8 @@ import { AuthContextProvider } from "contexts/auth-context";
 import { ConfirmDialogProvider } from "contexts/confirm-dialog-context";
 import { ThemeContextProvider } from "contexts/theme-context";
 import { ErrorPage } from "pages/error";
+import { projectsLoader } from "pages/projects/projects.loader";
+import { skillsLoader } from "pages/skills/skills.loader";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -40,16 +42,18 @@ const router = createBrowserRouter(
                         {
                             path: "/projects",
                             lazy: async () => {
-                                const { Projects } = await import("pages/projects");
+                                const { Projects } = await import("pages/projects/projects");
                                 return { Component: Projects };
-                            }
+                            },
+                            loader: projectsLoader(queryClient)
                         },
                         {
                             path: "/skills",
                             lazy: async () => {
-                                const { Skills } = await import("pages/skills");
+                                const { Skills } = await import("pages/skills/skills");
                                 return { Component: Skills };
-                            }
+                            },
+                            loader: skillsLoader(queryClient)
                         },
                         {
                             path: "/health",
