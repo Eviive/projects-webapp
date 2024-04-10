@@ -1,6 +1,7 @@
 import type { ProjectFormType } from "components/projects/project-form";
 import { SkillForm } from "components/skills/skill-form";
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
@@ -31,7 +32,16 @@ export const SkillFormDialog: FC<Props> = props => {
 
     return (
         <ResponsiveDrawerDialog
-            trigger={props.trigger}
+            trigger={
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>{props.trigger}</TooltipTrigger>
+                        <TooltipContent>
+                            {props.skill ? "Edit skill" : "Create skill"}
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            }
             header={{
                 title: props.skill ? `Editing ${props.skill.name}` : "Creating skill"
             }}

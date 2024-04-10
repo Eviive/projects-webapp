@@ -2,6 +2,7 @@ import { type MutationKey, useMutation, useQueryClient } from "@tanstack/react-q
 import { ImageService } from "api/services/image";
 import { SkillService } from "api/services/skill";
 import { SortDialog } from "components/common/sort-dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { SKILL_PLACEHOLDER } from "lib/constants";
 import type { FC, ReactNode } from "react";
 import type { Skill } from "types/entities/skill";
@@ -25,7 +26,14 @@ export const SkillSortDialog: FC<Props> = props => {
     return (
         <SortDialog
             itemsName="skills"
-            trigger={props.trigger}
+            trigger={
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>{props.trigger}</TooltipTrigger>
+                        <TooltipContent>Sort skills</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            }
             initialItems={props.initialSkills}
             mutation={sortSkillsMutation}
             render={skill => (

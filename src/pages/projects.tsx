@@ -11,7 +11,6 @@ import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
 import { Button } from "components/ui/button";
 import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
 import { getTitleAndMessage } from "lib/utils/error";
@@ -82,44 +81,26 @@ export const Projects: FC = () => {
                         handleDebounce={setSearchQuery}
                         isDisabled={query.isLoading || query.isError}
                     />
-                    <TooltipProvider>
-                        <Tooltip>
-                            <ProjectSortDialog
-                                initialProjects={optimisticProjects}
-                                trigger={
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            className="text-foreground-500"
-                                            variant="outline"
-                                            size="icon"
-                                            disabled={query.isLoading || query.isError}
-                                        >
-                                            <MdDragHandle size={24} />
-                                        </Button>
-                                    </TooltipTrigger>
-                                }
-                            />
-                            <TooltipContent>Sort projects</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <ProjectFormDialog
-                                trigger={
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            className="text-foreground-500"
-                                            variant="outline"
-                                            size="icon"
-                                        >
-                                            <FaPlus size={20} />
-                                        </Button>
-                                    </TooltipTrigger>
-                                }
-                            />
-                            <TooltipContent>Add a new project</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <ProjectSortDialog
+                        initialProjects={optimisticProjects}
+                        trigger={
+                            <Button
+                                className="text-foreground-500"
+                                variant="outline"
+                                size="icon"
+                                disabled={query.isLoading || query.isError}
+                            >
+                                <MdDragHandle size={24} />
+                            </Button>
+                        }
+                    />
+                    <ProjectFormDialog
+                        trigger={
+                            <Button className="text-foreground-500" variant="outline" size="icon">
+                                <FaPlus size={20} />
+                            </Button>
+                        }
+                    />
                 </div>
                 {query.isSuccess && (
                     <Grid minWidth="350px" gap="2.5em" columnCount={3} centerHorizontally>
