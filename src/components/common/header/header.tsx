@@ -1,122 +1,170 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services/user";
-import { HeaderItem } from "components/common/header/header-item";
-import { HeaderMenu } from "components/common/header/header-menu";
+import { HeaderButton } from "components/common/header/header-button";
+import { HeaderLink } from "components/common/header/header-link";
 import { HeaderThemeSwitcher } from "components/common/header/header-theme-switcher";
-import { NavigationMenu, NavigationMenuList } from "components/ui/navigation-menu";
+import { Button } from "components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { useAuthContext } from "contexts/auth-context";
 import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { cn } from "lib/utils/style";
 import { type FC } from "react";
-import { LuActivity, LuFolderCog, LuSettings2 } from "react-icons/lu";
+import { LuActivity, LuFolder, LuHome, LuLogOut, LuPanelLeft, LuUserCog2 } from "react-icons/lu";
 import { toast } from "sonner";
-import type { HeaderItem as HeaderItemType, HeaderMenu as HeaderMenuType } from "types/header";
+
+export type HeaderType = "sidebar" | "header";
 
 export const Header: FC = () => {
     const { setAccessToken } = useAuthContext();
 
-    const queryClient = useQueryClient();
-
-    const headerItems: (HeaderItemType | HeaderMenuType)[] = [
-        {
-            type: "route",
-            name: "Home",
-            path: "/"
-        },
-        {
-            type: "menu",
-            name: "Data",
-            description:
-                "Manage the Personal-API data, your IT student projects and your technical skills.",
-            icon: <LuFolderCog size={30} />,
-            children: [
-                {
-                    type: "route",
-                    name: "Projects",
-                    description: "View and manage the projects you've worked on.",
-                    path: "/projects"
-                },
-                {
-                    type: "route",
-                    name: "Skills",
-                    description: "Track and manage your technical skills.",
-                    path: "/skills"
-                }
-            ]
-        },
-        {
-            type: "menu",
-            name: "Monitoring",
-            description: "View and analyze the metrics of the Personal-API.",
-            icon: <LuActivity size={30} />,
-            children: [
-                {
-                    type: "route",
-                    name: "Health",
-                    description: "View information about the latest API requests.",
-                    path: "/health"
-                }
-            ]
-        },
-        {
-            type: "menu",
-            name: "Management",
-            description: "Manage the Personal-API dashboard.",
-            icon: <LuSettings2 size={30} />,
-            children: [
-                {
-                    type: "action",
-                    name: "Refresh",
-                    description: "Update all dashboard information with the latest data.",
-                    handleAction: () => queryClient.invalidateQueries()
-                },
-                {
-                    type: "action",
-                    name: "Logout",
-                    description: "Sign out of the dashboard.",
-                    handleAction: async () => {
-                        try {
-                            await UserService.logout();
-                        } catch (e) {
-                            console.error("Logout failed", getFormattedTitleAndMessage(e));
-                        } finally {
-                            setAccessToken("");
-                            toast.success("You have been logged out");
-                        }
-                    },
-                    danger: true
-                }
-            ]
+    const handleLogout = async () => {
+        try {
+            await UserService.logout();
+        } catch (e) {
+            console.error("Logout failed", getFormattedTitleAndMessage(e));
+        } finally {
+            setAccessToken("");
+            toast.success("You have been logged out");
         }
-    ];
+    };
+
+    const sidebarNavClasses = "flex flex-col items-center gap-4 px-2 sm:py-5";
+
+    const sidebarItemClasses =
+        "flex h-9 w-9 items-center justify-center rounded-lg bg-background p-0 text-muted-foreground transition-colors hover:bg-background hover:text-foreground md:h-8 md:w-8 focus-visible:ring-offset-1 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
+    const getSidebarItemClasses = ({ isActive }: { isActive: boolean }): string =>
+        cn(sidebarItemClasses, isActive && "bg-accent text-accent-foreground");
+
+    const headerNavClasses = "grid gap-6 text-lg font-medium";
+
+    const headerItemClasses =
+        "w-full flex justify-start items-center rounded-md gap-4 bg-background px-2.5 py-0 h-auto text-base text-muted-foreground transition-colors hover:text-foreground hover:bg-background focus-visible:ring-offset-1 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
+    const getHeaderItemClasses = ({ isActive }: { isActive: boolean }): string =>
+        cn(headerItemClasses, isActive && "text-foreground");
 
     return (
-        <nav className="border-divider static z-40 flex h-auto w-full items-center justify-center border-b bg-background/70 backdrop-blur-lg backdrop-saturate-150 data-[menu-open=true]:border-none data-[menu-open=true]:backdrop-blur-xl">
-            <header className="relative z-40 flex h-16 w-full max-w-[1024px] flex-row flex-nowrap items-center justify-between gap-4 px-6">
-                <div className="hidden h-full grow basis-0 items-center text-lg font-bold md:flex">
-                    <img
-                        className="h-full object-cover p-3.5"
-                        src="/logo.svg"
-                        alt="The logo of the Personal-API dashboard"
+        <>
+            <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+                <nav className={sidebarNavClasses}>
+                    <div className="flex h-8 w-8 items-center justify-center">
+                        <img
+                            className="w-full object-cover"
+                            src="/logo.svg"
+                            alt="The logo of the Personal-API dashboard"
+                        />
+                        <span className="sr-only">Dashboard</span>
+                    </div>
+
+                    <HeaderLink
+                        type="sidebar"
+                        title="Dashboard"
+                        to="/"
+                        icon={<LuHome className="h-6 w-6" />}
+                        className={getSidebarItemClasses}
                     />
-                    <h1 className="hidden lg:block">Dashboard</h1>
-                </div>
 
-                <NavigationMenu className="grow basis-0">
-                    <NavigationMenuList>
-                        {headerItems.map(item => {
-                            switch (item.type) {
-                                case "route":
-                                case "action":
-                                    return <HeaderItem key={item.name} item={item} />;
-                                case "menu":
-                                    return <HeaderMenu key={item.name} menu={item} />;
-                            }
-                        })}
-                    </NavigationMenuList>
-                </NavigationMenu>
+                    <HeaderLink
+                        type="sidebar"
+                        title="Projects"
+                        to="/projects"
+                        icon={<LuFolder className="h-6 w-6" />}
+                        className={getSidebarItemClasses}
+                    />
 
-                <HeaderThemeSwitcher />
+                    <HeaderLink
+                        type="sidebar"
+                        title="Skills"
+                        to="/skills"
+                        icon={<LuUserCog2 className="h-6 w-6" />}
+                        className={getSidebarItemClasses}
+                    />
+
+                    <HeaderLink
+                        type="sidebar"
+                        title="Health"
+                        to="/health"
+                        icon={<LuActivity className="h-6 w-6" />}
+                        className={getSidebarItemClasses}
+                    />
+                </nav>
+                <nav className={cn(sidebarNavClasses, "mt-auto")}>
+                    <HeaderThemeSwitcher type="sidebar" className={sidebarItemClasses} />
+
+                    <HeaderButton
+                        type="sidebar"
+                        title="Logout"
+                        handleClick={handleLogout}
+                        icon={<LuLogOut className="h-6 w-6" />}
+                        className={sidebarItemClasses}
+                    />
+                </nav>
+            </aside>
+            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:hidden sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button size="icon" variant="outline" className="sm:hidden">
+                            <LuPanelLeft className="h-5 w-5" />
+                            <span className="sr-only">Toggle Menu</span>
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="left" className="flex flex-col sm:max-w-xs">
+                        <nav className={headerNavClasses}>
+                            <div className="flex h-10 w-10 items-center justify-center">
+                                <img
+                                    className="w-full object-cover"
+                                    src="/logo.svg"
+                                    alt="The logo of the Personal-API dashboard"
+                                />
+                                <span className="sr-only">Dashboard</span>
+                            </div>
+
+                            <HeaderLink
+                                type="header"
+                                title="Dashboard"
+                                to="/"
+                                icon={<LuHome className="h-6 w-6" />}
+                                className={getHeaderItemClasses}
+                            />
+
+                            <HeaderLink
+                                type="header"
+                                title="Projects"
+                                to="/projects"
+                                icon={<LuFolder className="h-6 w-6" />}
+                                className={getHeaderItemClasses}
+                            />
+
+                            <HeaderLink
+                                type="header"
+                                title="Skills"
+                                to="/skills"
+                                icon={<LuUserCog2 className="h-6 w-6" />}
+                                className={getHeaderItemClasses}
+                            />
+
+                            <HeaderLink
+                                type="header"
+                                title="Health"
+                                to="/health"
+                                icon={<LuActivity className="h-6 w-6" />}
+                                className={getHeaderItemClasses}
+                            />
+                        </nav>
+                        <nav className={cn(headerNavClasses, "mt-auto")}>
+                            <HeaderThemeSwitcher type="header" className={headerItemClasses} />
+
+                            <HeaderButton
+                                type="header"
+                                title="Logout"
+                                handleClick={handleLogout}
+                                icon={<LuLogOut className="h-6 w-6" />}
+                                className={headerItemClasses}
+                            />
+                        </nav>
+                    </SheetContent>
+                </Sheet>
             </header>
-        </nav>
+        </>
     );
 };

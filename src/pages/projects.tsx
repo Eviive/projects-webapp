@@ -74,7 +74,7 @@ export const Projects: FC = () => {
 
     return (
         <Page title="Projects">
-            <div className="flex h-full w-full grow flex-col gap-12 px-[5%] py-12">
+            <div className="flex h-full w-full grow flex-col gap-9 px-[5%] py-9">
                 <div className="flex w-full max-w-md items-center gap-2 self-center">
                     <SearchBar
                         value={searchBarValue}

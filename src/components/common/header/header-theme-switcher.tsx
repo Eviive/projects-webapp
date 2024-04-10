@@ -1,3 +1,4 @@
+import type { HeaderType } from "components/common/header/header";
 import { Button } from "components/ui/button";
 import {
     DropdownMenu,
@@ -8,25 +9,52 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useThemeContext } from "contexts/theme-context";
+import { cn } from "lib/utils/style";
 import type { FC } from "react";
 import { RxLaptop, RxMoon, RxSun } from "react-icons/rx";
 
-export const HeaderThemeSwitcher: FC = () => {
+type Props = {
+    type: HeaderType;
+    className?: string;
+};
+
+export const HeaderThemeSwitcher: FC<Props> = props => {
     const { theme, systemTheme, setLightTheme, setDarkTheme, setSystemTheme } = useThemeContext();
 
     const currentTheme = theme === "system" ? systemTheme : theme;
 
+    let trigger = (
+        <DropdownMenuTrigger asChild>
+            <Button className={props.className}>
+                {currentTheme === "light" && <RxSun className="h-6 w-6" />}
+                {currentTheme === "dark" && <RxMoon className="h-6 w-6" />}
+                {props.type === "header" && "Theme"}
+            </Button>
+        </DropdownMenuTrigger>
+    );
+
+    if (props.type === "sidebar") {
+        trigger = (
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>{trigger}</TooltipTrigger>
+                    <TooltipContent side="right">Theme</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        );
+    }
+
     return (
-        <div className="flex grow basis-0 items-center justify-end">
+        <div className="flex grow basis-0 items-center">
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
-                        {currentTheme === "light" && <RxSun size={20} />}
-                        {currentTheme === "dark" && <RxMoon size={20} />}
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-36">
+                {trigger}
+                <DropdownMenuContent
+                    side={props.type === "sidebar" ? "right" : "bottom"}
+                    align={props.type === "sidebar" ? "center" : "start"}
+                    className={cn("ml-3 w-36", props.type === "header" && "mb-3")}
+                >
                     <DropdownMenuLabel>Theme</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
