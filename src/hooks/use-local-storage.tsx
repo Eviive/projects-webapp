@@ -1,4 +1,4 @@
-import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 

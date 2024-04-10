@@ -12,7 +12,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { useAuthContext } from "contexts/auth-context";
-import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
 import { type FC, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";

@@ -1,7 +1,7 @@
 import type { Root } from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import { Label } from "components/ui/label";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
 import { createContext, forwardRef, useContext, useId } from "react";
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";

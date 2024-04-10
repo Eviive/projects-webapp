@@ -5,7 +5,7 @@ import { SkillFormFields } from "components/skills/skill-form-fields";
 import { Button } from "components/ui/button";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { useFormSubmissionState } from "hooks/use-form-submission-state";
-import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
 import type { FC } from "react";
 import type { FormState, SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";

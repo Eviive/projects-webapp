@@ -14,17 +14,7 @@ if (!rootElement) throw new Error("Root element not found");
 
 const root = createRoot(rootElement);
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnMount: "always",
-            refetchOnWindowFocus: false,
-            refetchOnReconnect: false,
-            refetchInterval: false,
-            refetchIntervalInBackground: false
-        }
-    }
-});
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter(
     [

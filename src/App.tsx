@@ -3,7 +3,7 @@ import { Loader } from "components/ui/loader";
 import { Toaster } from "components/ui/sonner";
 import { useAuthContext } from "contexts/auth-context";
 import { useAxiosInterceptors } from "hooks/use-axios-interceptors";
-import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";

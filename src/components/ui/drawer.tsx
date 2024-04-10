@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import {
     type ComponentProps,
     type ComponentPropsWithoutRef,

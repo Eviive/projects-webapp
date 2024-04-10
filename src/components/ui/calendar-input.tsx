@@ -2,7 +2,7 @@ import { Button } from "components/ui/button";
 import { Calendar, type CalendarProps } from "components/ui/calendar";
 import { FormControl } from "components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { LuCalendar } from "react-icons/lu";
 

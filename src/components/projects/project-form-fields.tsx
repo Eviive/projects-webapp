@@ -10,8 +10,8 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "compon
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
 import { format } from "date-fns";
-import { SKILL_PLACEHOLDER } from "lib/constants";
-import { isNotNullOrUndefined } from "lib/utils/assertion";
+import { SKILL_PLACEHOLDER } from "libs/constants";
+import { isNotNullOrUndefined } from "libs/utils/assertion";
 import { type FC, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import type { Skill } from "types/entities/skill";

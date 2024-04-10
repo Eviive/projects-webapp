@@ -1,6 +1,6 @@
 import { request } from "api/client";
 import type { Page } from "types/app";
-import type { DndSaveItem } from "types/dnd";
+import type { DndItem } from "types/dnd";
 
 import type { Project, ProjectCreation } from "types/entities/project";
 import type { Skill } from "types/entities/skill";
@@ -55,8 +55,8 @@ const update = (project: Project, file?: File | null) => {
     });
 };
 
-const sort = (sorts: DndSaveItem[]) => {
-    return request<void, DndSaveItem[]>(`/${URL}/sort`, {
+const sort = (sorts: DndItem[]) => {
+    return request<void, DndItem[]>(`/${URL}/sort`, {
         method: "PATCH",
         data: sorts
     });

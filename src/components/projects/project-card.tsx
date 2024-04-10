@@ -5,7 +5,7 @@ import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
-import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "lib/constants";
+import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
 import type { FC } from "react";
 import { useMemo } from "react";
 import { MdEdit } from "react-icons/md";

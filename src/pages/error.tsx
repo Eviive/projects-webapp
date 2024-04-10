@@ -1,4 +1,4 @@
-import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
 import { type FC } from "react";
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 

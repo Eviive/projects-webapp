@@ -5,13 +5,13 @@ import {
 } from "components/common/sort-dialog/sort-dialog-content";
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import { type ReactNode, useRef, useState } from "react";
-import type { DndItem, DndSaveItem } from "types/dnd";
+import type { DndItem } from "types/dnd";
 
 type Props<E extends DndItem> = {
     itemsName: string;
     trigger: ReactNode;
     initialItems: E[] | null;
-    mutation: UseMutationResult<void, Error, DndSaveItem[]>;
+    mutation: UseMutationResult<void, Error, DndItem[]>;
     render: (item: E) => ReactNode;
 };
 

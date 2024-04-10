@@ -13,7 +13,7 @@ import {
 } from "@radix-ui/react-alert-dialog";
 import type { VariantProps } from "class-variance-authority";
 import { buttonVariants } from "components/ui/button";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
 import { forwardRef } from "react";
 

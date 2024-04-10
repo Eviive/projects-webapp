@@ -4,7 +4,7 @@ import { Button } from "components/ui/button";
 import { Calendar } from "components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
 import { format } from "date-fns";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import { useState } from "react";
 import { LuCalendar } from "react-icons/lu";
 

@@ -7,7 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "components/ui/dropdown-menu";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { HTMLAttributes } from "react";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { LuArrowDown, LuArrowUp, LuChevronsUpDown } from "react-icons/lu";

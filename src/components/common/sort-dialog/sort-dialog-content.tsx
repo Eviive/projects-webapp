@@ -32,9 +32,9 @@ import {
     useState
 } from "react";
 import { createPortal } from "react-dom";
-import type { DndItem, DndSaveItem } from "types/dnd";
+import type { DndItem } from "types/dnd";
 
-export type SortDialogContentRef = () => DndSaveItem[] | null;
+export type SortDialogContentRef = () => DndItem[] | null;
 
 type Props<E extends DndItem> = {
     initialItems: E[];

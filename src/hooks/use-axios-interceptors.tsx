@@ -2,7 +2,7 @@ import { httpClient } from "api/client";
 import { UserService } from "api/services/user";
 import { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
-import { getFormattedTitleAndMessage } from "lib/utils/error";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 

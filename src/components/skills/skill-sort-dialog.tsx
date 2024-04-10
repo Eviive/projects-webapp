@@ -3,7 +3,7 @@ import { ImageService } from "api/services/image";
 import { SkillService } from "api/services/skill";
 import { SortDialog } from "components/common/sort-dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
-import { SKILL_PLACEHOLDER } from "lib/constants";
+import { SKILL_PLACEHOLDER } from "libs/constants";
 import type { FC, ReactNode } from "react";
 import type { Skill } from "types/entities/skill";
 

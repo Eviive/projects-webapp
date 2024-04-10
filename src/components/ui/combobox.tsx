@@ -8,7 +8,7 @@ import {
 } from "components/ui/command";
 import { FormControl } from "components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { Key, ReactNode } from "react";
 import { LuCheck, LuChevronsUpDown } from "react-icons/lu";
 

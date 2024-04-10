@@ -1,7 +1,7 @@
 "use client";
 
 import { buttonVariants } from "components/ui/button";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentProps } from "react";
 import { DayPicker } from "react-day-picker";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";

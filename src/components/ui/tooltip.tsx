@@ -1,7 +1,7 @@
 "use client";
 
 import { Content, Provider, Root, Trigger } from "@radix-ui/react-tooltip";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
 

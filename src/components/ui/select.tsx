@@ -17,7 +17,7 @@ import {
     Value,
     Viewport
 } from "@radix-ui/react-select";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
 import { LuCheck, LuChevronDown, LuChevronUp } from "react-icons/lu";

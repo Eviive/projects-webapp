@@ -5,8 +5,8 @@ import { HeaderThemeSwitcher } from "components/common/header/header-theme-switc
 import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { useAuthContext } from "contexts/auth-context";
-import { getFormattedTitleAndMessage } from "lib/utils/error";
-import { cn } from "lib/utils/style";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { cn } from "libs/utils/style";
 import { type FC } from "react";
 import { LuActivity, LuFolder, LuHome, LuLogOut, LuPanelLeft, LuUserCog2 } from "react-icons/lu";
 import { toast } from "sonner";

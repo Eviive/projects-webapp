@@ -1,4 +1,4 @@
-import { isNotNullOrUndefined } from "lib/utils/assertion";
+import { isNotNullOrUndefined } from "libs/utils/assertion";
 import {
     imageCreationSchema,
     imageCreationWithFileSchema,

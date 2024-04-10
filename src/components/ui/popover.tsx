@@ -1,7 +1,7 @@
 "use client";
 
 import { Content, Portal, Root, Trigger } from "@radix-ui/react-popover";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
 

@@ -1,5 +1,5 @@
 import { Input } from "components/ui/input";
-import { debounce } from "lib/utils/debounce";
+import { debounce } from "libs/utils/debounce";
 import { type FC, useEffect, useRef } from "react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 

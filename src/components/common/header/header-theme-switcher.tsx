@@ -11,7 +11,7 @@ import {
 } from "components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useThemeContext } from "contexts/theme-context";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { RxLaptop, RxMoon, RxSun } from "react-icons/rx";
 

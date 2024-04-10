@@ -1,4 +1,4 @@
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from "react";
 import { forwardRef } from "react";
 

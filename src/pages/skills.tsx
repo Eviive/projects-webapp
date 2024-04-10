@@ -10,12 +10,12 @@ import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
 import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
-import { getTitleAndMessage } from "lib/utils/error";
+import { getTitleAndMessage } from "libs/utils/error";
 import { type FC, useMemo } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { LuAlertCircle } from "react-icons/lu";
 import { MdDragHandle } from "react-icons/md";
-import type { DndSaveItem } from "types/dnd";
+import type { DndItem } from "types/dnd";
 
 export const Skills: FC = () => {
     const query = useQuery({
@@ -25,12 +25,12 @@ export const Skills: FC = () => {
 
     const error = query.isError ? getTitleAndMessage(query.error) : null;
 
-    const optimisticSkillSorts = useMutationState<DndSaveItem[]>({
+    const optimisticSkillSorts = useMutationState<DndItem[]>({
         filters: {
             mutationKey: sortSkillsMutationKey,
             status: "pending"
         },
-        select: mutation => mutation.state.variables as DndSaveItem[]
+        select: mutation => mutation.state.variables as DndItem[]
     });
 
     const optimisticSkillSortItems = useMemo(() => {

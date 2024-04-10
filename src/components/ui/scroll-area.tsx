@@ -7,7 +7,7 @@ import {
     ScrollAreaThumb,
     Viewport
 } from "@radix-ui/react-scroll-area";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef } from "react";
 

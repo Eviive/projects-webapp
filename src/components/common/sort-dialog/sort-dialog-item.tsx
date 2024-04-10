@@ -2,7 +2,7 @@ import type { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { SortDialogContextProvider } from "components/common/sort-dialog/sort-dialog-context";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { CSSProperties, PropsWithChildren } from "react";
 import { type FC, useMemo } from "react";
 

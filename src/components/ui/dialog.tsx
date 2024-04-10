@@ -10,7 +10,7 @@ import {
     Title,
     Trigger
 } from "@radix-ui/react-dialog";
-import { cn } from "lib/utils/style";
+import { cn } from "libs/utils/style";
 import type { ComponentPropsWithoutRef, ElementRef, HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import { LuX } from "react-icons/lu";
