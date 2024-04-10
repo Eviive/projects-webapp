@@ -1,4 +1,3 @@
-import { DialogTitle } from "components/ui/dialog";
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import { ScrollArea } from "components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
@@ -31,7 +30,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
         <ResponsiveDrawerDialog
             trigger={trigger}
             header={{
-                title: <DialogTitle>HTTP Exchange Details</DialogTitle>
+                title: "HTTP Exchange Details"
             }}
             content={
                 <Tabs defaultValue="request" className="flex flex-col gap-3">

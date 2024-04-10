@@ -43,7 +43,7 @@ export const Health: FC = () => {
 
     return (
         <Page title="Health">
-            <div className="flex h-full w-full flex-col gap-12 px-[5%] py-16">
+            <div className="flex h-full w-full flex-col gap-12 px-[5%] py-12">
                 <Grid columnCount={4}>
                     {HTTP_STATUS.map(status => (
                         <HttpStatusCard
