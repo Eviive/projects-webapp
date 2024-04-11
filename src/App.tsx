@@ -6,9 +6,9 @@ import "./styles/reset.scss";
 
 export const App: FC = () => {
     return (
-        <div className="min-h-screen-dynamic flex min-h-screen flex-col">
+        <>
             <Outlet />
             <Toaster />
-        </div>
+        </>
     );
 };

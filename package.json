@@ -5,8 +5,10 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build --base=/dashboard/",
-        "preview": "vite preview --base=/dashboard/",
+        "dev:host": "vite --host",
+        "build": "tsc && vite build --base=/dashboard",
+        "preview": "vite preview --base=/dashboard",
+        "preview:host": "vite preview --base=/dashboard --host",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "format": "prettier --check .",

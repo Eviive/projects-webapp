@@ -1,7 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "api/query-client";
-import { initAuthContext } from "contexts/auth-context";
 import { ConfirmDialogProvider } from "contexts/confirm-dialog-context";
 import { ThemeContextProvider } from "contexts/theme-context";
 import { StrictMode } from "react";
@@ -13,8 +12,6 @@ const rootElement = document.querySelector("#root");
 if (!rootElement) throw new Error("Root element not found");
 
 const root = createRoot(rootElement);
-
-await initAuthContext();
 
 root.render(
     <StrictMode>

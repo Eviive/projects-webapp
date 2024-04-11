@@ -1,11 +1,14 @@
 import { queryClient } from "api/query-client";
 import { App } from "App";
+import { initAuthContext } from "contexts/auth-context";
 import { ErrorPage } from "pages/error";
 import { healthLoader } from "pages/health/health.loader";
 import { homeLoader } from "pages/home/home.loader";
 import { projectsLoader } from "pages/projects/projects.loader";
 import { skillsLoader } from "pages/skills/skills.loader";
 import { createBrowserRouter } from "react-router-dom";
+
+await initAuthContext();
 
 export const router = createBrowserRouter(
     [

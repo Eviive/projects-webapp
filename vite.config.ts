@@ -15,6 +15,7 @@ const configFn: UserConfigFn = () => ({
         open: true
     },
     build: {
+        target: "ESNext",
         sourcemap: true
     },
     css: {

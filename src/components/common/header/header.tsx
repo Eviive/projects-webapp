@@ -14,16 +14,7 @@ import { toast } from "sonner";
 export type HeaderType = "sidebar" | "header";
 
 export const Header: FC = () => {
-    const handleLogout = async () => {
-        try {
-            await UserService.logout();
-        } catch (e) {
-            console.error("Logout failed", getFormattedTitleAndMessage(e));
-        } finally {
-            authContext.setAccessToken(null);
-            toast.success("You have been logged out");
-        }
-    };
+    const logoSrc = `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/logo.svg`;
 
     const sidebarNavClasses = "flex flex-col items-center gap-4 px-2 sm:py-5";
 
@@ -41,6 +32,17 @@ export const Header: FC = () => {
     const getHeaderItemClasses = ({ isActive }: { isActive: boolean }): string =>
         cn(headerItemClasses, isActive && "text-foreground");
 
+    const handleLogout = async () => {
+        try {
+            await UserService.logout();
+        } catch (e) {
+            console.error("Logout failed", getFormattedTitleAndMessage(e));
+        } finally {
+            authContext.setAccessToken(null);
+            toast.success("You have been logged out");
+        }
+    };
+
     return (
         <>
             <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -48,7 +50,7 @@ export const Header: FC = () => {
                     <div className="flex h-8 w-8 items-center justify-center">
                         <img
                             className="w-full object-cover"
-                            src="/logo.svg"
+                            src={logoSrc}
                             alt="The logo of the Personal-API dashboard"
                         />
                         <span className="sr-only">Dashboard</span>
@@ -111,7 +113,7 @@ export const Header: FC = () => {
                             <div className="flex h-10 w-10 items-center justify-center">
                                 <img
                                     className="w-full object-cover"
-                                    src="/logo.svg"
+                                    src={logoSrc}
                                     alt="The logo of the Personal-API dashboard"
                                 />
                                 <span className="sr-only">Dashboard</span>
