@@ -5,6 +5,6 @@ export type QueryLoaderFunction<T> = (
     queryClient: QueryClient
 ) => (args: LoaderFunctionArgs) => T | Promise<T>;
 
-export type QueryLoaderFunctionData<F extends QueryLoaderFunction<any>> = Awaited<
+export type QueryLoaderFunctionData<F extends QueryLoaderFunction<unknown>> = Awaited<
     ReturnType<ReturnType<F>>
 >;
