@@ -1,6 +1,8 @@
 import { queryClient } from "api/query-client";
 import { App } from "App";
 import { ErrorPage } from "pages/error";
+import { healthLoader } from "pages/health/health.loader";
+import { homeLoader } from "pages/home/home.loader";
 import { projectsLoader } from "pages/projects/projects.loader";
 import { skillsLoader } from "pages/skills/skills.loader";
 import { createBrowserRouter } from "react-router-dom";
@@ -22,9 +24,10 @@ export const router = createBrowserRouter(
                         {
                             index: true,
                             lazy: async () => {
-                                const { Home } = await import("pages/home");
+                                const { Home } = await import("pages/home/home");
                                 return { Component: Home };
-                            }
+                            },
+                            loader: homeLoader(queryClient)
                         },
                         {
                             path: "/projects",
@@ -45,9 +48,10 @@ export const router = createBrowserRouter(
                         {
                             path: "/health",
                             lazy: async () => {
-                                const { Health } = await import("pages/health");
+                                const { Health } = await import("pages/health/health");
                                 return { Component: Health };
-                            }
+                            },
+                            loader: healthLoader(queryClient)
                         }
                     ]
                 },

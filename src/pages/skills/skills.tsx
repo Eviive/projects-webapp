@@ -10,7 +10,7 @@ import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
 import { getTitleAndMessage } from "libs/utils/error";
 import type { skillsLoader } from "pages/skills/skills.loader";
-import { skillsQuery } from "pages/skills/skills.loader";
+import { skillsQueryOptions } from "pages/skills/skills.loader";
 import { type FC, useMemo } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { LuAlertCircle } from "react-icons/lu";
@@ -22,7 +22,7 @@ import type { QueryLoaderFunctionData } from "types/loader";
 export const Skills: FC = () => {
     const initialSkills = useLoaderData() as QueryLoaderFunctionData<typeof skillsLoader>;
 
-    const query = useQuery({ ...skillsQuery, initialData: initialSkills });
+    const query = useQuery({ ...skillsQueryOptions, initialData: initialSkills });
 
     const error = query.isError ? getTitleAndMessage(query.error) : null;
 

@@ -13,7 +13,7 @@ import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
 import { getTitleAndMessage } from "libs/utils/error";
 import type { projectsLoader } from "pages/projects/projects.loader";
-import { projectsQuery } from "pages/projects/projects.loader";
+import { projectsQueryOptions } from "pages/projects/projects.loader";
 import type { FC } from "react";
 import { useMemo } from "react";
 import { FaPlus } from "react-icons/fa6";
@@ -26,7 +26,7 @@ import type { QueryLoaderFunctionData } from "types/loader";
 export const Projects: FC = () => {
     const initialProjects = useLoaderData() as QueryLoaderFunctionData<typeof projectsLoader>;
 
-    const query = useQuery({ ...projectsQuery, initialData: initialProjects });
+    const query = useQuery({ ...projectsQueryOptions, initialData: initialProjects });
 
     const error = query.isError ? getTitleAndMessage(query.error) : null;
 

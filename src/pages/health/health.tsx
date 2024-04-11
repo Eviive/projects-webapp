@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { HealthService } from "api/services/health";
 import { Page } from "components/common/page";
 import { HttpExchangesTable } from "components/health/http-exchanges-table";
 import { HttpStatusCard } from "components/health/http-status-card";
 import { Grid } from "layouts/grid";
+import type { healthLoader } from "pages/health/health.loader";
+import { httpExchangesQueryOptions } from "pages/health/health.loader";
 import type { FC } from "react";
 import {
     AiOutlineCheckCircle,
@@ -11,6 +12,8 @@ import {
     AiOutlineExclamationCircle,
     AiOutlineQuestionCircle
 } from "react-icons/ai";
+import { useLoaderData } from "react-router-dom";
+import type { QueryLoaderFunctionData } from "types/loader";
 
 const HTTP_STATUS = [
     {
@@ -36,10 +39,9 @@ const HTTP_STATUS = [
 ];
 
 export const Health: FC = () => {
-    const query = useQuery({
-        queryKey: ["httpExchanges"],
-        queryFn: HealthService.httpExchanges
-    });
+    const initialHttpExchanges = useLoaderData() as QueryLoaderFunctionData<typeof healthLoader>;
+
+    const query = useQuery({ ...httpExchangesQueryOptions, initialData: initialHttpExchanges });
 
     return (
         <Page title="Health">
