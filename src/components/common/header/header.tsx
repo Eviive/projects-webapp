@@ -4,7 +4,7 @@ import { HeaderLink } from "components/common/header/header-link";
 import { HeaderThemeSwitcher } from "components/common/header/header-theme-switcher";
 import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
-import { useAuthContext } from "contexts/auth-context";
+import { authContext } from "contexts/auth-context";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import { type FC } from "react";
@@ -14,15 +14,13 @@ import { toast } from "sonner";
 export type HeaderType = "sidebar" | "header";
 
 export const Header: FC = () => {
-    const { setAccessToken } = useAuthContext();
-
     const handleLogout = async () => {
         try {
             await UserService.logout();
         } catch (e) {
             console.error("Logout failed", getFormattedTitleAndMessage(e));
         } finally {
-            setAccessToken("");
+            authContext.setAccessToken(null);
             toast.success("You have been logged out");
         }
     };

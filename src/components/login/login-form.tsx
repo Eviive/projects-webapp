@@ -11,10 +11,11 @@ import {
 } from "components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
-import { useAuthContext } from "contexts/auth-context";
+import { authContext } from "contexts/auth-context";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
 import { type FC, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { type AuthRequest, authRequestSchema } from "types/auth";
 
@@ -29,7 +30,7 @@ export const LoginForm: FC = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { setAccessToken } = useAuthContext();
+    const navigate = useNavigate();
 
     const submitHandler: SubmitHandler<AuthRequest> = async data => {
         if (isSubmitting) return;
@@ -37,7 +38,8 @@ export const LoginForm: FC = () => {
         try {
             const res = await UserService.login(data);
             if (res.roles.includes("ROLE_ADMIN")) {
-                setAccessToken(res.accessToken);
+                authContext.setAccessToken(res.accessToken);
+                navigate("/", { replace: true });
             } else {
                 toast.error("You must be an administrator to access the dashboard.");
             }

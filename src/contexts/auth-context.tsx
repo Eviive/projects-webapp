@@ -1,31 +1,31 @@
-import type { Dispatch, FC, PropsWithChildren, SetStateAction } from "react";
-import { createContext, useContext, useMemo, useState } from "react";
+import { UserService } from "api/services/user";
+import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { router } from "router";
 
 type IAuthContext = {
-    accessToken: string;
-    setAccessToken: Dispatch<SetStateAction<string>>;
+    accessToken: string | null;
+    setAccessToken: (accessToken: string | null) => void;
 };
 
-const AuthContext = createContext<IAuthContext | null>(null);
+export const authContext: IAuthContext = {
+    accessToken: null,
+    setAccessToken: accessToken => {
+        authContext.accessToken = accessToken;
 
-export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
-    const [accessToken, setAccessToken] = useState("");
-
-    const authContextValue = useMemo<IAuthContext>(
-        () => ({
-            accessToken,
-            setAccessToken
-        }),
-        [accessToken]
-    );
-
-    return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
-};
-
-export const useAuthContext = (): IAuthContext => {
-    const authContext = useContext(AuthContext);
-    if (authContext === null) {
-        throw new Error("useAuthContext called without AuthContextProvider");
+        if (accessToken === null) {
+            router.navigate("/login", { replace: true }).catch(console.error);
+        }
     }
-    return authContext;
+};
+
+export const initAuthContext = async () => {
+    try {
+        const res = await UserService.refresh(false);
+
+        if (res.roles.includes("ROLE_ADMIN")) {
+            authContext.setAccessToken(res.accessToken);
+        }
+    } catch (e) {
+        console.error("Persistent login failed", getFormattedTitleAndMessage(e));
+    }
 };

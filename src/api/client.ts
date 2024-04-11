@@ -1,3 +1,4 @@
+import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
@@ -10,6 +11,8 @@ export const httpClient = axios.create({
     },
     withCredentials: true
 });
+
+initInterceptors(httpClient);
 
 type RequestConfig<D> = AxiosRequestConfig<D> & {
     needsAuth?: boolean;

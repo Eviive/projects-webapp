@@ -1,20 +1,17 @@
 import { Page } from "components/common/page";
 import { LoginForm } from "components/login/login-form";
-import { useAuthContext } from "contexts/auth-context";
-import type { FC } from "react";
-import { useLayoutEffect } from "react";
+import { authContext } from "contexts/auth-context";
+import { type FC, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Login: FC = () => {
-    const { accessToken } = useAuthContext();
-
     const navigate = useNavigate();
 
     useLayoutEffect(() => {
-        if (accessToken) {
+        if (authContext.accessToken !== null) {
             navigate("/", { replace: true });
         }
-    }, [accessToken, navigate]);
+    }, [navigate]);
 
     return (
         <Page title="Login">
