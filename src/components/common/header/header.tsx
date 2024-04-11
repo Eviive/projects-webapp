@@ -28,15 +28,15 @@ export const Header: FC = () => {
     const sidebarNavClasses = "flex flex-col items-center gap-4 px-2 sm:py-5";
 
     const sidebarItemClasses =
-        "flex h-9 w-9 items-center justify-center rounded-lg bg-background p-0 text-muted-foreground transition-colors hover:bg-background hover:text-foreground md:h-8 md:w-8 focus-visible:ring-offset-1 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+        "flex h-9 w-9 items-center justify-center rounded-lg bg-background p-0 text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 md:h-8 md:w-8";
 
     const getSidebarItemClasses = ({ isActive }: { isActive: boolean }): string =>
-        cn(sidebarItemClasses, isActive && "bg-accent text-accent-foreground");
+        cn(sidebarItemClasses, isActive && "bg-accent text-accent-foreground hover:bg-accent");
 
     const headerNavClasses = "grid gap-6 text-lg font-medium";
 
     const headerItemClasses =
-        "w-full flex justify-start items-center rounded-md gap-4 bg-background px-2.5 py-0 h-auto text-base text-muted-foreground transition-colors hover:text-foreground hover:bg-background focus-visible:ring-offset-1 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+        "flex h-auto w-full items-center justify-start gap-4 rounded-md bg-background px-2.5 py-0 text-base text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
 
     const getHeaderItemClasses = ({ isActive }: { isActive: boolean }): string =>
         cn(headerItemClasses, isActive && "text-foreground");
