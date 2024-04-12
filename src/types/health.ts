@@ -1,16 +1,3 @@
-export type AuditEvent = {
-    timestamp: string;
-    principal: string;
-    type: string;
-    data: {
-        type: string;
-        message: string;
-        details: {
-            [key: string]: string;
-        };
-    };
-};
-
 export type Status = "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
 
 export type Health = {

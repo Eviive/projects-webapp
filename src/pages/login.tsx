@@ -15,7 +15,7 @@ export const Login: FC = () => {
 
     return (
         <Page title="Login">
-            <div className="grid h-screen-dynamic place-items-center">
+            <div className="grid grow place-items-center">
                 <LoginForm />
             </div>
         </Page>
