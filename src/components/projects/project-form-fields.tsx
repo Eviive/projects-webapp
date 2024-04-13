@@ -12,6 +12,7 @@ import { Textarea } from "components/ui/textarea";
 import { format } from "date-fns";
 import { SKILL_PLACEHOLDER } from "libs/constants";
 import { isNotNullOrUndefined } from "libs/utils/assertion";
+import { toLocalDate } from "libs/utils/date";
 import { type FC, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import type { Skill } from "types/entities/skill";
@@ -84,13 +85,7 @@ export const ProjectFormFields: FC = () => {
                                         : undefined
                                 }
                                 onSelect={date => {
-                                    field.onChange(
-                                        date !== undefined
-                                            ? new Date(
-                                                  date.getTime() - date.getTimezoneOffset() * 60000
-                                              )
-                                            : null
-                                    );
+                                    field.onChange(date !== undefined ? toLocalDate(date) : null);
                                 }}
                                 initialFocus
                                 buttonText={
@@ -194,7 +189,7 @@ export const ProjectFormFields: FC = () => {
                             renderItem={skill => (
                                 <div className="flex items-center gap-2">
                                     <img
-                                        className="drop-shadow-icon aspect-square object-cover"
+                                        className="aspect-square object-cover drop-shadow-icon"
                                         src={
                                             ImageService.getImageUrl(skill.image, "skills") ??
                                             SKILL_PLACEHOLDER
