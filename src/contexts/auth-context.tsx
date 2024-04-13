@@ -1,4 +1,5 @@
 import { UserService } from "api/services/user";
+import { decodeToken } from "libs/token";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
 import { router } from "router";
 
@@ -20,10 +21,12 @@ export const authContext: IAuthContext = {
 
 export const initAuthContext = async () => {
     try {
-        const res = await UserService.refresh(false);
+        const { accessToken } = await UserService.refresh(false);
 
-        if (res.roles.includes("ROLE_ADMIN")) {
-            authContext.setAccessToken(res.accessToken);
+        const tokenPayload = decodeToken(accessToken);
+
+        if (tokenPayload?.authorities.includes("ROLE_ADMIN")) {
+            authContext.setAccessToken(accessToken);
         }
     } catch (e) {
         console.error("Persistent login failed", getFormattedTitleAndMessage(e));

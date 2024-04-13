@@ -12,6 +12,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { authContext } from "contexts/auth-context";
+import { decodeToken } from "libs/token";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
 import { type FC, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
@@ -36,9 +37,12 @@ export const LoginForm: FC = () => {
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
-            const res = await UserService.login(data);
-            if (res.roles.includes("ROLE_ADMIN")) {
-                authContext.setAccessToken(res.accessToken);
+            const { accessToken } = await UserService.login(data);
+
+            const tokenPayload = decodeToken(accessToken);
+
+            if (tokenPayload?.authorities.includes("ROLE_ADMIN")) {
+                authContext.setAccessToken(accessToken);
                 navigate("/", { replace: true });
             } else {
                 toast.error("You must be an administrator to access the dashboard.");
