@@ -8,13 +8,14 @@ import { useFormState } from "hooks/use-form-state";
 import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import { FormProvider, type FormState, type SubmitHandler, useForm } from "react-hook-form";
-import type {
-    Project,
-    ProjectCreation,
-    ProjectCreationWithFile,
-    ProjectEditionWithFile
+import {
+    type Project,
+    type ProjectCreation,
+    type ProjectCreationWithFile,
+    projectCreationWithFileSchema,
+    type ProjectEditionWithFile,
+    projectEditionWithFileSchema
 } from "types/entities/project";
-import { projectCreationSchema, projectEditionWithFileSchema } from "types/entities/project";
 
 export type ProjectFormType = ProjectCreationWithFile | ProjectEditionWithFile;
 
@@ -33,7 +34,7 @@ export const ProjectForm: FC<Props> = props => {
 
     const form = useForm<ProjectFormType>({
         resolver: zodResolver(
-            props.project !== null ? projectEditionWithFileSchema : projectCreationSchema
+            props.project !== null ? projectEditionWithFileSchema : projectCreationWithFileSchema
         ),
         defaultValues:
             props.project !== null

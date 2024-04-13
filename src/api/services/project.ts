@@ -1,9 +1,7 @@
 import { request } from "api/client";
 import { buildFormData } from "libs/utils/form-data";
 import type { DndItem } from "types/dnd";
-
 import type { Project, ProjectCreation } from "types/entities/project";
-import type { Skill } from "types/entities/skill";
 
 const URL = "project";
 
@@ -34,7 +32,7 @@ const update = (project: Project, file?: File | null) => {
         });
     }
 
-    return request<Skill, FormData>(`/${URL}/${project.id}/with-image`, {
+    return request<Project, FormData>(`/${URL}/${project.id}/with-image`, {
         method: "PUT",
         data: buildProjectFormData(project, file),
         headers: {

@@ -15,7 +15,7 @@ import type {
     SkillCreationWithFile,
     SkillEditionWithFile
 } from "types/entities/skill";
-import { skillCreationSchema, skillEditionWithFileSchema } from "types/entities/skill";
+import { skillCreationWithFileSchema, skillEditionWithFileSchema } from "types/entities/skill";
 
 export type SkillFormType = SkillCreationWithFile | SkillEditionWithFile;
 
@@ -34,7 +34,7 @@ export const SkillForm: FC<Props> = props => {
 
     const form = useForm<SkillFormType>({
         resolver: zodResolver(
-            props.skill !== null ? skillEditionWithFileSchema : skillCreationSchema
+            props.skill !== null ? skillEditionWithFileSchema : skillCreationWithFileSchema
         ),
         defaultValues:
             props.skill !== null
