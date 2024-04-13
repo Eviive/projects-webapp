@@ -39,7 +39,7 @@ export const Header: FC = () => {
             console.error("Logout failed", getFormattedTitleAndMessage(e));
         } finally {
             authContext.setAccessToken(null);
-            toast.success("You have been logged out");
+            toast.success("You have been logged out.");
         }
     };
 

@@ -5,11 +5,7 @@ import type { Skill, SkillCreation } from "types/entities/skill";
 
 const URL = "skill";
 
-const findAll = async () => {
-    const skills = await request<Skill[]>(`/${URL}`, { needsAuth: false });
-    skills.sort((a, b) => a.sort - b.sort);
-    return skills;
-};
+const findAll = async () => request<Skill[]>(`/${URL}`);
 
 const save = (skill: SkillCreation, file?: File | null) => {
     if (!file) {

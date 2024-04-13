@@ -6,24 +6,23 @@ import { getFormattedTitleAndMessage } from "libs/utils/error";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
     httpClient.interceptors.request.use(async req => {
-        if (!req.headers?.["Authorization"]) {
+        if (!req.headers.hasAuthorization()) {
             return req;
         }
 
-        const authHeader = req.headers["Authorization"];
-
-        if (authHeader !== "Bearer ") {
+        const authHeaderMatch = req.headers.getAuthorization(/^Bearer (.+)$/);
+        if (authHeaderMatch === null) {
             return req;
         }
 
-        const { accessToken, setAccessToken } = authContext;
-
+        const accessToken = authHeaderMatch[1];
         if (accessToken !== null && !isTokenExpired(accessToken)) {
-            req.headers["Authorization"] = `Bearer ${accessToken}`;
             return req;
         }
 
         console.log("Access token expired, refreshing...");
+
+        const { setAccessToken } = authContext;
         try {
             const { accessToken: newAccessToken } = await UserService.refresh();
 
@@ -31,10 +30,10 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
 
             if (!tokenPayload || !tokenPayload.authorities.includes("ROLE_ADMIN")) {
                 setAccessToken(null);
-                return Promise.reject(new Error("User is not admin"));
+                return Promise.reject(new Error("User is not an admin"));
             }
 
-            req.headers["Authorization"] = `Bearer ${newAccessToken}`;
+            req.headers.setAuthorization(`Bearer ${newAccessToken}`);
             setAccessToken(newAccessToken);
         } catch (e) {
             console.error("Error while refreshing token", getFormattedTitleAndMessage(e));

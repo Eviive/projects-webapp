@@ -7,7 +7,7 @@ import type { Skill } from "types/entities/skill";
 
 const URL = "project";
 
-const findAll = () => request<Project[]>(`/${URL}`, { needsAuth: false });
+const findAll = () => request<Project[]>(`/${URL}`);
 
 const save = (project: ProjectCreation, file?: File | null) => {
     if (!file) {

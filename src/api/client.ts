@@ -1,6 +1,7 @@
 import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
+import { authContext } from "contexts/auth-context";
 import { getFormattedTitleAndMessage } from "libs/utils/error";
 import { toast } from "sonner";
 
@@ -29,6 +30,12 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
         ...restConfig
     } = config ?? {};
 
+    const { accessToken } = authContext;
+    if (needsAuth && accessToken === null) {
+        toast.error("You need to login before accessing this page.");
+        throw new Error("No access token found");
+    }
+
     let res: AxiosResponse<T, D>;
     try {
         res = await httpClient.request<T, AxiosResponse<T, D>, D>({
@@ -38,7 +45,7 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
             headers: {
                 ...(data && { "Content-Type": "application/json" }),
                 ...headers,
-                ...(needsAuth && { Authorization: "Bearer " })
+                ...(needsAuth && { Authorization: `Bearer ${accessToken}` })
             },
             ...restConfig
         });
@@ -46,5 +53,6 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
         showErrorToast && toast.error(getFormattedTitleAndMessage(e));
         throw e;
     }
+
     return res.data;
 };
