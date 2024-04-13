@@ -15,9 +15,7 @@ export const SearchBar: FC<Props> = props => {
     const ref = useRef<Props["handleDebounce"]>();
 
     useEffect(() => {
-        if (props.debounce) {
-            ref.current = debounce(props.handleDebounce, props.debounce);
-        }
+        ref.current = debounce(props.handleDebounce, props.debounce ?? 300);
     }, [props.debounce, props.handleDebounce]);
 
     return (
