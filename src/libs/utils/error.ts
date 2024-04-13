@@ -1,36 +1,28 @@
 import { AxiosError } from "axios";
 
-export const getTitleAndMessage = (e: unknown): { title: string; message: string } => {
+type TitleAndDetail = { title: string; detail: string };
+
+export const getTitleAndDetail = (e: unknown): TitleAndDetail => {
     import.meta.env.PROD || console.error(e);
 
-    let titleAndMessage: { title: string; message: string | string[] };
-
     if (e instanceof AxiosError) {
-        titleAndMessage = {
-            title: e.response?.data?.error ?? e.name,
-            message: e.response?.data?.message ?? e.message
+        return {
+            title: e.response?.data?.title ?? e.name,
+            detail: e.response?.data?.detail ?? e.message
         };
     } else if (e instanceof Error) {
-        titleAndMessage = {
+        return {
             title: e.name,
-            message: e.message
+            detail: e.message
         };
     } else {
         return {
             title: "Unknown error",
-            message: "Please try again later."
+            detail: "Please contact an administrator if this error persists."
         };
     }
-
-    return {
-        title: titleAndMessage.title,
-        message: Array.isArray(titleAndMessage.message)
-            ? titleAndMessage.message.join(" ")
-            : titleAndMessage.message
-    };
 };
 
-export const getFormattedTitleAndMessage = (e: unknown): string => {
-    const { title, message } = getTitleAndMessage(e);
-    return `${title}: ${message}`;
+export const getDetail = (e: unknown): TitleAndDetail["detail"] => {
+    return getTitleAndDetail(e).detail;
 };

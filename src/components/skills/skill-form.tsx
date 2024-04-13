@@ -5,7 +5,7 @@ import { SkillFormFields } from "components/skills/skill-form-fields";
 import { Button } from "components/ui/button";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { useFormState } from "hooks/use-form-state";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import type { FormState, SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -101,8 +101,8 @@ export const SkillForm: FC<Props> = props => {
             props.closeDialog();
         } catch (e) {
             console.error(
-                editing ? "Skill update failed" : "Skill creation failed",
-                getFormattedTitleAndMessage(e)
+                editing ? "Skill update failed:" : "Skill creation failed:",
+                getDetail(e)
             );
         } finally {
             endSubmitting();
@@ -134,7 +134,7 @@ export const SkillForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error("Skill deletion failed", getFormattedTitleAndMessage(e));
+            console.error("Skill deletion failed:", getDetail(e));
         } finally {
             endSubmitting();
         }

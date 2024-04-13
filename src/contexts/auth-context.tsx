@@ -1,6 +1,6 @@
 import { UserService } from "api/services/user";
 import { decodeToken } from "libs/token";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 import { router } from "router";
 
 type IAuthContext = {
@@ -14,7 +14,9 @@ export const authContext: IAuthContext = {
         authContext.accessToken = accessToken;
 
         if (accessToken === null) {
-            router.navigate("/login", { replace: true }).catch(console.error);
+            router
+                .navigate("/login", { replace: true })
+                .catch(e => console.error("Failed to navigate to /login:", getDetail(e)));
         }
     }
 };
@@ -29,6 +31,6 @@ export const initAuthContext = async () => {
             authContext.setAccessToken(accessToken);
         }
     } catch (e) {
-        console.error("Persistent login failed", getFormattedTitleAndMessage(e));
+        console.error("Persistent login failed:", getDetail(e));
     }
 };

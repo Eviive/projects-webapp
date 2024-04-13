@@ -2,7 +2,7 @@ import { UserService } from "api/services/user";
 import { AxiosError, type AxiosInstance } from "axios";
 import { authContext } from "contexts/auth-context";
 import { decodeToken, isTokenExpired } from "libs/token";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
     httpClient.interceptors.request.use(async req => {
@@ -36,7 +36,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
             req.headers.setAuthorization(`Bearer ${newAccessToken}`);
             setAccessToken(newAccessToken);
         } catch (e) {
-            console.error("Error while refreshing token", getFormattedTitleAndMessage(e));
+            console.error("Error while refreshing token:", getDetail(e));
             setAccessToken(null);
             return Promise.reject(e);
         }

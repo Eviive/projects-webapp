@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "components/ui/input";
 import { authContext } from "contexts/auth-context";
 import { decodeToken } from "libs/token";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 import { type FC, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -48,7 +48,7 @@ export const LoginForm: FC = () => {
                 toast.error("You must be an administrator to access the dashboard.");
             }
         } catch (e) {
-            console.error("Login failed", getFormattedTitleAndMessage(e));
+            console.error("Login failed:", getDetail(e));
         } finally {
             setIsSubmitting(false);
         }

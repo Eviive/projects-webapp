@@ -5,7 +5,7 @@ import { ProjectFormFields } from "components/projects/project-form-fields";
 import { Button } from "components/ui/button";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { useFormState } from "hooks/use-form-state";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import { FormProvider, type FormState, type SubmitHandler, useForm } from "react-hook-form";
 import type {
@@ -107,8 +107,8 @@ export const ProjectForm: FC<Props> = props => {
             props.closeDialog();
         } catch (e) {
             console.error(
-                editing ? "Project update failed" : "Project creation failed",
-                getFormattedTitleAndMessage(e)
+                editing ? "Project update failed:" : "Project creation failed:",
+                getDetail(e)
             );
         } finally {
             endSubmitting();
@@ -140,7 +140,7 @@ export const ProjectForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error("Project deletion failed", getFormattedTitleAndMessage(e));
+            console.error("Project deletion failed:", getDetail(e));
         } finally {
             endSubmitting();
         }

@@ -8,7 +8,7 @@ import { Button } from "components/ui/button";
 import { SearchBar } from "components/ui/search-bar";
 import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
-import { getTitleAndMessage } from "libs/utils/error";
+import { getTitleAndDetail } from "libs/utils/error";
 import type { skillsLoader } from "pages/skills/skills.loader";
 import { skillsQueryOptions } from "pages/skills/skills.loader";
 import { type FC, useMemo } from "react";
@@ -24,7 +24,7 @@ export const Skills: FC = () => {
 
     const query = useQuery({ ...skillsQueryOptions, initialData: initialSkills });
 
-    const error = query.isError ? getTitleAndMessage(query.error) : null;
+    const error = query.isError ? getTitleAndDetail(query.error) : null;
 
     const optimisticSkillSorts = useMutationState<DndItem[]>({
         filters: {
@@ -114,7 +114,7 @@ export const Skills: FC = () => {
                     <Alert variant="destructive">
                         <LuAlertCircle className="h-4 w-4" />
                         <AlertTitle>{error.title}</AlertTitle>
-                        <AlertDescription>{error.message}</AlertDescription>
+                        <AlertDescription>{error.detail}</AlertDescription>
                     </Alert>
                 )}
             </div>

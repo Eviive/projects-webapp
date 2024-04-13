@@ -11,7 +11,7 @@ import { Button } from "components/ui/button";
 import { SearchBar } from "components/ui/search-bar";
 import { useSearchBar } from "hooks/use-search-bar";
 import { Grid } from "layouts/grid";
-import { getTitleAndMessage } from "libs/utils/error";
+import { getTitleAndDetail } from "libs/utils/error";
 import type { projectsLoader } from "pages/projects/projects.loader";
 import { projectsQueryOptions } from "pages/projects/projects.loader";
 import type { FC } from "react";
@@ -28,7 +28,7 @@ export const Projects: FC = () => {
 
     const query = useQuery({ ...projectsQueryOptions, initialData: initialProjects });
 
-    const error = query.isError ? getTitleAndMessage(query.error) : null;
+    const error = query.isError ? getTitleAndDetail(query.error) : null;
 
     const optimisticProjectSorts = useMutationState<DndItem[]>({
         filters: {
@@ -118,7 +118,7 @@ export const Projects: FC = () => {
                     <Alert variant="destructive">
                         <LuAlertCircle className="h-4 w-4" />
                         <AlertTitle>{error.title}</AlertTitle>
-                        <AlertDescription>{error.message}</AlertDescription>
+                        <AlertDescription>{error.detail}</AlertDescription>
                     </Alert>
                 )}
             </div>

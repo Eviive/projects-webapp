@@ -1,12 +1,12 @@
 import { jwtDecode } from "jwt-decode";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 import type { TokenPayload } from "types/auth";
 
 export const decodeToken = (token: string): TokenPayload | null => {
     try {
         return jwtDecode<TokenPayload>(token);
     } catch (e) {
-        console.error("Error while decoding token", getFormattedTitleAndMessage(e));
+        console.error("Error while decoding token:", getDetail(e));
         return null;
     }
 };

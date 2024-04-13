@@ -5,7 +5,7 @@ import { HeaderThemeSwitcher } from "components/common/header/header-theme-switc
 import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { authContext } from "contexts/auth-context";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import { type FC } from "react";
 import { LuActivity, LuFolder, LuHome, LuLogOut, LuPanelLeft, LuUserCog2 } from "react-icons/lu";
@@ -36,7 +36,7 @@ export const Header: FC = () => {
         try {
             await UserService.logout();
         } catch (e) {
-            console.error("Logout failed", getFormattedTitleAndMessage(e));
+            console.error("Logout failed:", getDetail(e));
         } finally {
             authContext.setAccessToken(null);
             toast.success("You have been logged out.");

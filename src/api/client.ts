@@ -2,7 +2,7 @@ import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
 import { authContext } from "contexts/auth-context";
-import { getFormattedTitleAndMessage } from "libs/utils/error";
+import { getDetail } from "libs/utils/error";
 import { toast } from "sonner";
 
 export const httpClient = axios.create({
@@ -50,7 +50,7 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
             ...restConfig
         });
     } catch (e) {
-        showErrorToast && toast.error(getFormattedTitleAndMessage(e));
+        showErrorToast && toast.error(getDetail(e));
         throw e;
     }
 
