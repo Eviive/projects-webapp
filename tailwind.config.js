@@ -85,6 +85,9 @@ export default {
             },
             minHeight: {
                 "screen-dynamic": ["100vh", "100dvh"]
+            },
+            dropShadow: {
+                icon: "0 1px 1px hsl(0deg, 0%, 0%, 0.5)"
             }
         }
     },
