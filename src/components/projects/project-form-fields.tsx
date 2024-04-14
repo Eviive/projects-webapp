@@ -205,11 +205,9 @@ export const ProjectFormFields: FC = () => {
                             getValue={skill => skill.name}
                             placeholder="Select skills"
                             searchPlaceholder="Search skill..."
-                            noOptionsText="No skills found."
-                            loading={querySkills.isLoading}
-                            loadingText="Loading skills..."
-                            error={querySkills.isError}
-                            errorText="An error occurred while loading skills."
+                            emptyOptionsText="No skills found."
+                            loading={querySkills.isLoading && "Loading skills..."}
+                            error={querySkills.isError && "An error occurred while loading skills."}
                         />
 
                         <FormMessage />

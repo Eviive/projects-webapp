@@ -1,11 +1,6 @@
 import { Button } from "components/ui/button";
-import {
-    Command,
-    CommandEmpty,
-    CommandInput,
-    CommandItem,
-    CommandList
-} from "components/ui/command";
+import { ComboboxEmpty } from "components/ui/combobox-empty";
+import { Command, CommandInput, CommandItem, CommandList } from "components/ui/command";
 import { FormControl } from "components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
 import { cn } from "libs/utils/style";
@@ -24,9 +19,10 @@ type CommonProps<V> = {
     getValue: (item: V) => string;
     placeholder: string;
     searchPlaceholder: string;
-    noOptionsText: string;
-} & LoadingProps &
-    ErrorProps;
+    emptyOptionsText: string;
+    loading: false | string;
+    error: false | string;
+};
 
 type SingleProps<V> = {
     selection: "single";
@@ -37,24 +33,6 @@ type MultipleProps<V> = {
     selection: "multiple";
     value: V[];
 };
-
-type LoadingProps =
-    | {
-          loading?: false;
-      }
-    | {
-          loading: true;
-          loadingText: string;
-      };
-
-type ErrorProps =
-    | {
-          error?: false;
-      }
-    | {
-          error: true;
-          errorText: string;
-      };
 
 export const Combobox = <V,>(props: Props<V>) => {
     const getButtonLabel = () => {
@@ -88,14 +66,14 @@ export const Combobox = <V,>(props: Props<V>) => {
                 </FormControl>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-[200px] p-0" portal={false}>
-                <Command>
+                <Command loop>
                     <CommandInput placeholder={props.searchPlaceholder} />
                     <CommandList className="max-h-[204px]">
-                        <CommandEmpty>
-                            {props.options.length <= 0 && props.noOptionsText}
-                            {props.loading && props.loadingText}
-                            {props.error && props.errorText}
-                        </CommandEmpty>
+                        <ComboboxEmpty
+                            emptyOptions={props.options.length <= 0 && props.emptyOptionsText}
+                            loading={props.loading}
+                            error={props.error}
+                        />
                         {props.options.map(item => {
                             const isSelected =
                                 props.selection === "multiple"
