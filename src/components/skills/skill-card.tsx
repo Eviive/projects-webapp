@@ -46,7 +46,7 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
             <Separator />
             <CardContent className="flex items-center justify-center p-4">
                 <img
-                    className="drop-shadow-icon aspect-square object-cover"
+                    className="aspect-square object-cover drop-shadow-icon"
                     src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                     alt={skill.image.altEn}
                     width={100}

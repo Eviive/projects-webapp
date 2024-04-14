@@ -34,7 +34,7 @@ export const SkillSortDialog: FC<Props> = props => {
                     render={skill => (
                         <div className="flex grow items-center gap-3">
                             <img
-                                className="drop-shadow-icon aspect-square object-cover"
+                                className="aspect-square object-cover drop-shadow-icon"
                                 src={
                                     ImageService.getImageUrl(skill.image, "skills") ??
                                     SKILL_PLACEHOLDER

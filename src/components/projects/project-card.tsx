@@ -26,7 +26,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
         return project.skills.map(s => (
             <img
                 key={s.id}
-                className="drop-shadow-icon aspect-square object-cover"
+                className="aspect-square object-cover drop-shadow-icon"
                 src={ImageService.getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
                 alt={s.image.altEn}
                 width={35}
