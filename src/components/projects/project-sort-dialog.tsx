@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
 import { SortDialogContent } from "components/common/sort-dialog/sort-dialog-content";
 import { useSortDialogContext } from "components/common/sort-dialog/sort-dialog-context";
+import { sortProjectsMutationKey } from "components/projects/project-sort-button";
 import { Loader } from "components/ui/loader";
+import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import type { FC } from "react";
 import { ProjectFeaturedBadge } from "./project-featured-badge";
 
@@ -16,10 +18,15 @@ export const ProjectSortDialog: FC = () => {
         refetchOnReconnect: false
     });
 
+    const [optimisticLightProjects] = useOptimisticSort(
+        sortProjectsMutationKey,
+        lightProjectsQuery
+    );
+
     return (
         <SortDialogContent
             ref={contentRef}
-            initialItems={lightProjectsQuery.data}
+            initialItems={optimisticLightProjects}
             render={lightProject => (
                 <div className="flex grow items-center gap-3">
                     {lightProject.title}
@@ -27,7 +34,11 @@ export const ProjectSortDialog: FC = () => {
                 </div>
             )}
             closeDialog={resetSort => handleClose(false, resetSort)}
-            empty={lightProjectsQuery.data?.length === 0 && "No projects found."}
+            empty={
+                lightProjectsQuery.isSuccess &&
+                optimisticLightProjects.length === 0 &&
+                "No projects found."
+            }
             loading={
                 lightProjectsQuery.isLoading && (
                     <div className="flex flex-col gap-3">

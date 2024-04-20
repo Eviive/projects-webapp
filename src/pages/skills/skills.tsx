@@ -29,7 +29,7 @@ export const Skills: FC = () => {
         initialData: initialSkills ?? undefined
     });
 
-    const [optimisticSkillSorts, optimisticSkills] = useOptimisticSort(
+    const [optimisticSkills, optimisticSkillSorts] = useOptimisticSort(
         sortSkillsMutationKey,
         skillsQuery
     );

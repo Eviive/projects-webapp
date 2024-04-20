@@ -37,7 +37,7 @@ export const Projects: FC = () => {
         initialData: initialProjects ?? undefined
     });
 
-    const [optimisticProjectSorts, optimisticProjects] = useOptimisticSort(
+    const [optimisticProjects, optimisticProjectSorts] = useOptimisticSort(
         sortProjectsMutationKey,
         projectsQuery
     );

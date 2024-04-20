@@ -14,7 +14,7 @@ export const useOptimisticSort = <I extends DndItem>(
     itemsQuery:
         | UseQueryResult<I[] | Slice<I> | Page<I>>
         | UseInfiniteQueryResult<InfiniteData<Slice<I> | Page<I>>>
-): [Record<number, number>, I[]] => {
+): [I[], Record<number, number>] => {
     const optimisticSorts = useMutationState<DndItem[]>({
         filters: {
             mutationKey: sortMutationKey,
@@ -56,5 +56,5 @@ export const useOptimisticSort = <I extends DndItem>(
         return tempOptimisticItems;
     }, [itemsQuery.data, itemsQuery.isSuccess, optimisticSortItems]);
 
-    return [optimisticSortItems, optimisticItems] as const;
+    return [optimisticItems, optimisticSortItems] as const;
 };

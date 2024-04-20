@@ -3,24 +3,28 @@ import { ImageService } from "api/services/image";
 import { SkillService } from "api/services/skill";
 import { SortDialogContent } from "components/common/sort-dialog/sort-dialog-content";
 import { useSortDialogContext } from "components/common/sort-dialog/sort-dialog-context";
+import { sortSkillsMutationKey } from "components/skills/skill-sort-button";
 import { Loader } from "components/ui/loader";
+import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { SKILL_PLACEHOLDER } from "libs/constants";
 import type { FC } from "react";
 
 export const SkillSortDialog: FC = () => {
     const { contentRef, handleClose } = useSortDialogContext();
 
-    const lightProjectsQuery = useQuery({
+    const skillsQuery = useQuery({
         queryKey: ["skills"],
         queryFn: SkillService.findAll,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false
     });
 
+    const [optimisticSkills] = useOptimisticSort(sortSkillsMutationKey, skillsQuery);
+
     return (
         <SortDialogContent
             ref={contentRef}
-            initialItems={lightProjectsQuery.data}
+            initialItems={optimisticSkills}
             render={skill => (
                 <div className="flex grow items-center gap-3">
                     <img
@@ -34,16 +38,16 @@ export const SkillSortDialog: FC = () => {
                 </div>
             )}
             closeDialog={resetSort => handleClose(false, resetSort)}
-            empty={lightProjectsQuery.data?.length === 0 && "No skills found."}
+            empty={skillsQuery.isSuccess && optimisticSkills.length === 0 && "No skills found."}
             loading={
-                lightProjectsQuery.isLoading && (
+                skillsQuery.isLoading && (
                     <div className="flex flex-col gap-3">
                         <Loader />
                         Loading skills...
                     </div>
                 )
             }
-            error={lightProjectsQuery.isError && "Failed to load skills."}
+            error={skillsQuery.isError && "Failed to load skills."}
         />
     );
 };
