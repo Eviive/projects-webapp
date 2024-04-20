@@ -1,7 +1,8 @@
 import { useLocalStorage } from "hooks/use-local-storage";
 import { useMediaQuery } from "hooks/use-media-query";
 import { useLayoutEffect } from "react";
-import type { Theme } from "types/app";
+
+type Theme = "light" | "dark" | "system";
 
 type UseThemeOutput = {
     theme: Theme;

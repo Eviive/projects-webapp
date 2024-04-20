@@ -2,12 +2,30 @@ import { request } from "api/client";
 import { buildFormData } from "libs/utils/form-data";
 import type { DndItem } from "types/dnd";
 import type { Project, ProjectCreation } from "types/entities/project";
+import type { ProjectLight } from "types/entities/project-light";
+import type { Page } from "types/pagination";
 
 const URL = "project";
 
-const findAll = () => request<Project[]>(`/${URL}`);
+export const PROJECTS_PAGE_SIZE_OPTIONS = [6, 12, 18, 24, 30] as const;
+export const PROJECTS_DEFAULT_PAGE_SIZE = PROJECTS_PAGE_SIZE_OPTIONS[0];
 
-const save = (project: ProjectCreation, file?: File | null) => {
+const findPage = (page?: number, size: number = PROJECTS_DEFAULT_PAGE_SIZE, search?: string) =>
+    request<Page<Project>>(`/${URL}/page`, {
+        params: {
+            page,
+            size,
+            search
+        }
+    });
+
+const findAllLight = async () => {
+    const lightProjects = await request<ProjectLight[]>(`/${URL}/light`);
+    lightProjects.sort((a, b) => a.sort - b.sort);
+    return lightProjects;
+};
+
+const create = (project: ProjectCreation, file?: File | null) => {
     if (!file) {
         return request<Project, ProjectCreation>(`/${URL}`, {
             method: "POST",
@@ -69,8 +87,9 @@ const buildProjectFormData = (project: Project | ProjectCreation, file: File) =>
 };
 
 export const ProjectService = {
-    findAll,
-    save,
+    findPage,
+    findAllLight,
+    create,
     update,
     sort,
     delete: deleteProject

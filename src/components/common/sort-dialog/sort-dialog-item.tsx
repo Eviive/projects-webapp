@@ -1,7 +1,7 @@
 import type { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { SortDialogContextProvider } from "components/common/sort-dialog/sort-dialog-context";
+import { SortDialogItemContextProvider } from "components/common/sort-dialog/sort-dialog-item-context";
 import { cn } from "libs/utils/style";
 import type { CSSProperties, PropsWithChildren } from "react";
 import { type FC, useMemo } from "react";
@@ -40,7 +40,7 @@ export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
     };
 
     return (
-        <SortDialogContextProvider value={context}>
+        <SortDialogItemContextProvider value={context}>
             <li
                 ref={setNodeRef}
                 style={style}
@@ -51,6 +51,6 @@ export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
             >
                 {props.children}
             </li>
-        </SortDialogContextProvider>
+        </SortDialogItemContextProvider>
     );
 };

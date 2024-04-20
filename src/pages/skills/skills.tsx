@@ -1,72 +1,48 @@
-import { useMutationState, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
 import { SkillCard } from "components/skills/skill-card";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
-import { SkillSortDialog, sortSkillsMutationKey } from "components/skills/skill-sort-dialog";
-import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
+import { SkillSortButton, sortSkillsMutationKey } from "components/skills/skill-sort-button";
 import { Button } from "components/ui/button";
+import { ErrorAlert } from "components/ui/error-alert";
+import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
-import { useSearchBar } from "hooks/use-search-bar";
+import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
-import { getTitleAndDetail } from "libs/utils/error";
+import { updateSearchParams } from "libs/utils/search-params";
 import type { skillsLoader } from "pages/skills/skills.loader";
-import { skillsQueryOptions } from "pages/skills/skills.loader";
-import { type FC, useMemo } from "react";
+import { skillsQueryOptionsFn } from "pages/skills/skills.loader";
+import { type FC, useCallback, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { LuAlertCircle } from "react-icons/lu";
-import { MdDragHandle } from "react-icons/md";
-import { useLoaderData } from "react-router-dom";
-import type { DndItem } from "types/dnd";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import type { QueryLoaderFunctionData } from "types/loader";
 
 export const Skills: FC = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const search = searchParams.get("search") ?? undefined;
+
     const initialSkills = useLoaderData() as QueryLoaderFunctionData<typeof skillsLoader>;
 
-    const query = useQuery({ ...skillsQueryOptions, initialData: initialSkills });
-
-    const error = query.isError ? getTitleAndDetail(query.error) : null;
-
-    const optimisticSkillSorts = useMutationState<DndItem[]>({
-        filters: {
-            mutationKey: sortSkillsMutationKey,
-            status: "pending"
-        },
-        select: mutation => mutation.state.variables as DndItem[]
+    const skillsQuery = useInfiniteQuery({
+        ...skillsQueryOptionsFn(search),
+        initialData: initialSkills ?? undefined
     });
 
-    const optimisticSkillSortItems = useMemo(() => {
-        const items: Record<number, number> = {};
+    const [optimisticSkillSorts, optimisticSkills] = useOptimisticSort(
+        sortSkillsMutationKey,
+        skillsQuery
+    );
 
-        for (const sortItem of optimisticSkillSorts.flatMap(i => i)) {
-            items[sortItem.id] = sortItem.sort;
-        }
-
-        return items;
-    }, [optimisticSkillSorts]);
-
-    const optimisticSkills = useMemo(() => {
-        if (!query.isSuccess) return [];
-
-        const optSkills = [...query.data];
-
-        for (const skill of optSkills) {
-            if (optimisticSkillSortItems[skill.id] !== undefined) {
-                skill.sort = optimisticSkillSortItems[skill.id];
-            }
-        }
-
-        optSkills.sort((a, b) => a.sort - b.sort);
-
-        return optSkills;
-    }, [query.data, query.isSuccess, optimisticSkillSortItems]);
-
-    const { searchBarValue, setSearchBarValue, searchQuery, setSearchQuery } = useSearchBar();
-
-    const optimisticFilteredSkills = useMemo(() => {
-        return optimisticSkills.filter(skill =>
-            skill.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
-        );
-    }, [optimisticSkills, searchQuery]);
+    const [searchBarValue, setSearchBarValue] = useState(search ?? "");
+    const setSearchQueryParam = useCallback(
+        (search: string) =>
+            updateSearchParams(setSearchParams, {
+                key: "search",
+                value: search
+            }),
+        [setSearchParams]
+    );
 
     return (
         <Page title="Skills">
@@ -75,22 +51,10 @@ export const Skills: FC = () => {
                     <SearchBar
                         value={searchBarValue}
                         handleChange={setSearchBarValue}
-                        handleDebounce={setSearchQuery}
-                        isDisabled={query.isError}
+                        handleDebounce={setSearchQueryParam}
+                        isDisabled={skillsQuery.isError}
                     />
-                    <SkillSortDialog
-                        initialSkills={optimisticSkills}
-                        trigger={
-                            <Button
-                                className="text-foreground-500"
-                                variant="outline"
-                                size="icon"
-                                disabled={query.isError}
-                            >
-                                <MdDragHandle size={24} />
-                            </Button>
-                        }
-                    />
+                    <SkillSortButton />
                     <SkillFormDialog
                         trigger={
                             <Button className="text-foreground-500" variant="outline" size="icon">
@@ -99,24 +63,30 @@ export const Skills: FC = () => {
                         }
                     />
                 </div>
-                {query.isSuccess && (
-                    <Grid minWidth="140px" gap="2em" columnCount="infinity" centerHorizontally>
-                        {optimisticFilteredSkills.map(skill => (
-                            <SkillCard
-                                key={skill.id}
-                                skill={skill}
-                                isOptimistic={optimisticSkillSortItems[skill.id] !== undefined}
-                            />
-                        ))}
-                    </Grid>
+                {skillsQuery.isSuccess && (
+                    <>
+                        <Grid minWidth="175px" gap="2em" columnCount="infinity" centerHorizontally>
+                            {optimisticSkills.map(skill => (
+                                <SkillCard
+                                    key={skill.id}
+                                    skill={skill}
+                                    isOptimistic={optimisticSkillSorts[skill.id] !== undefined}
+                                />
+                            ))}
+                        </Grid>
+                        {skillsQuery.hasNextPage && (
+                            <Button
+                                className="self-center"
+                                onClick={() => skillsQuery.fetchNextPage()}
+                                disabled={skillsQuery.isFetchingNextPage}
+                            >
+                                {skillsQuery.isFetchingNextPage ? "Loading more..." : "Load More"}
+                            </Button>
+                        )}
+                    </>
                 )}
-                {query.isError && error !== null && (
-                    <Alert variant="destructive">
-                        <LuAlertCircle className="h-4 w-4" />
-                        <AlertTitle>{error.title}</AlertTitle>
-                        <AlertDescription>{error.detail}</AlertDescription>
-                    </Alert>
-                )}
+                {skillsQuery.isLoading && <Loader deferred />}
+                {skillsQuery.isError && <ErrorAlert error={skillsQuery.error} />}
             </div>
         </Page>
     );

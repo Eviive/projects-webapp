@@ -1,10 +1,11 @@
-import type { useSortable } from "@dnd-kit/sortable";
+import type { SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
+import type { RefObject } from "react";
 import { createContext, useContext } from "react";
 
-type ISortDialogContext = Pick<
-    ReturnType<typeof useSortable>,
-    "attributes" | "listeners" | "setActivatorNodeRef"
->;
+type ISortDialogContext = {
+    contentRef: RefObject<SortDialogContentRef>;
+    handleClose: (open: boolean, resetSort?: boolean) => void;
+};
 
 const SortDialogContext = createContext<ISortDialogContext | null>(null);
 

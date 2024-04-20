@@ -1,76 +1,74 @@
-import { useMutationState, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { PROJECTS_DEFAULT_PAGE_SIZE, PROJECTS_PAGE_SIZE_OPTIONS } from "api/services/project";
 import { Page } from "components/common/page";
 import { ProjectCard } from "components/projects/project-card";
 import { ProjectFormDialog } from "components/projects/project-form-dialog";
 import {
-    ProjectSortDialog,
+    ProjectSortButton,
     sortProjectsMutationKey
-} from "components/projects/project-sort-dialog";
-import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
+} from "components/projects/project-sort-button";
 import { Button } from "components/ui/button";
+import { ErrorAlert } from "components/ui/error-alert";
+import { Loader } from "components/ui/loader";
+import { Pagination } from "components/ui/pagination";
 import { SearchBar } from "components/ui/search-bar";
-import { useSearchBar } from "hooks/use-search-bar";
+import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
-import { getTitleAndDetail } from "libs/utils/error";
+import { clamp } from "libs/utils/math";
+import { getNumberSearchParam, updateSearchParams } from "libs/utils/search-params";
 import type { projectsLoader } from "pages/projects/projects.loader";
-import { projectsQueryOptions } from "pages/projects/projects.loader";
-import type { FC } from "react";
-import { useMemo } from "react";
+import { projectsQueryOptionsFn } from "pages/projects/projects.loader";
+import { type FC, useCallback, useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { LuAlertCircle } from "react-icons/lu";
-import { MdDragHandle } from "react-icons/md";
-import { useLoaderData } from "react-router-dom";
-import type { DndItem } from "types/dnd";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import type { QueryLoaderFunctionData } from "types/loader";
 
 export const Projects: FC = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = getNumberSearchParam(searchParams, "page") ?? 0;
+    const size = getNumberSearchParam(searchParams, "size") ?? PROJECTS_DEFAULT_PAGE_SIZE;
+    const search = searchParams.get("search") ?? undefined;
+
     const initialProjects = useLoaderData() as QueryLoaderFunctionData<typeof projectsLoader>;
 
-    const query = useQuery({ ...projectsQueryOptions, initialData: initialProjects });
-
-    const error = query.isError ? getTitleAndDetail(query.error) : null;
-
-    const optimisticProjectSorts = useMutationState<DndItem[]>({
-        filters: {
-            mutationKey: sortProjectsMutationKey,
-            status: "pending"
-        },
-        select: mutation => mutation.state.variables as DndItem[]
+    const projectsQuery = useQuery({
+        ...projectsQueryOptionsFn(page, size, search),
+        initialData: initialProjects ?? undefined
     });
 
-    const optimisticProjectSortItems = useMemo(() => {
-        const items: Record<number, number> = {};
+    const [optimisticProjectSorts, optimisticProjects] = useOptimisticSort(
+        sortProjectsMutationKey,
+        projectsQuery
+    );
 
-        for (const sortItem of optimisticProjectSorts.flatMap(i => i)) {
-            items[sortItem.id] = sortItem.sort;
+    const [searchBarValue, setSearchBarValue] = useState(search ?? "");
+    const setSearchQueryParam = useCallback(
+        (search: string) =>
+            updateSearchParams(
+                setSearchParams,
+                {
+                    key: "search",
+                    value: search
+                },
+                {
+                    key: "page",
+                    value: null
+                }
+            ),
+        [setSearchParams]
+    );
+
+    useLayoutEffect(() => {
+        if (!projectsQuery.isSuccess) return;
+
+        if (page < 0 || page >= projectsQuery.data.totalPages) {
+            updateSearchParams(setSearchParams, {
+                key: "page",
+                value: clamp(page, 0, projectsQuery.data.totalPages - 1)
+            });
         }
-
-        return items;
-    }, [optimisticProjectSorts]);
-
-    const optimisticProjects = useMemo(() => {
-        if (!query.isSuccess) return [];
-
-        const optProjects = [...query.data];
-
-        for (const project of optProjects) {
-            if (optimisticProjectSortItems[project.id] !== undefined) {
-                project.sort = optimisticProjectSortItems[project.id];
-            }
-        }
-
-        optProjects.sort((a, b) => a.sort - b.sort);
-
-        return optProjects;
-    }, [query.data, query.isSuccess, optimisticProjectSortItems]);
-
-    const { searchBarValue, setSearchBarValue, searchQuery, setSearchQuery } = useSearchBar();
-
-    const optimisticFilteredProjects = useMemo(() => {
-        return optimisticProjects.filter(project =>
-            project.title.toLowerCase().includes(searchQuery.trim().toLowerCase())
-        );
-    }, [optimisticProjects, searchQuery]);
+    }, [page, projectsQuery.data?.totalPages, projectsQuery.isSuccess, setSearchParams]);
 
     return (
         <Page title="Projects">
@@ -79,22 +77,10 @@ export const Projects: FC = () => {
                     <SearchBar
                         value={searchBarValue}
                         handleChange={setSearchBarValue}
-                        handleDebounce={setSearchQuery}
-                        isDisabled={query.isError}
+                        handleDebounce={setSearchQueryParam}
+                        isDisabled={projectsQuery.isError}
                     />
-                    <ProjectSortDialog
-                        initialProjects={optimisticProjects}
-                        trigger={
-                            <Button
-                                className="text-foreground-500"
-                                variant="outline"
-                                size="icon"
-                                disabled={query.isError}
-                            >
-                                <MdDragHandle size={24} />
-                            </Button>
-                        }
-                    />
+                    <ProjectSortButton />
                     <ProjectFormDialog
                         trigger={
                             <Button className="text-foreground-500" variant="outline" size="icon">
@@ -103,24 +89,54 @@ export const Projects: FC = () => {
                         }
                     />
                 </div>
-                {query.isSuccess && (
-                    <Grid minWidth="350px" gap="2.5em" columnCount={3} centerHorizontally>
-                        {optimisticFilteredProjects.map(project => (
-                            <ProjectCard
-                                key={project.id}
-                                project={project}
-                                isOptimistic={optimisticProjectSortItems[project.id] !== undefined}
-                            />
-                        ))}
-                    </Grid>
+                {projectsQuery.isSuccess && (
+                    <>
+                        <Grid minWidth="350px" gap="2.5em" columnCount={3} centerHorizontally>
+                            {optimisticProjects.map(project => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                    isOptimistic={optimisticProjectSorts[project.id] !== undefined}
+                                />
+                            ))}
+                        </Grid>
+                        <Pagination
+                            itemName="project"
+                            pageSize={size}
+                            pageSizeOptions={PROJECTS_PAGE_SIZE_OPTIONS}
+                            setPageSize={pageSize =>
+                                updateSearchParams(setSearchParams, {
+                                    key: "size",
+                                    value: pageSize
+                                })
+                            }
+                            pageIndex={page}
+                            setPageIndex={pageIndex =>
+                                updateSearchParams(setSearchParams, {
+                                    key: "page",
+                                    value: pageIndex
+                                })
+                            }
+                            getPageCount={() => projectsQuery.data.totalPages}
+                            getCanPreviousPage={() => !projectsQuery.data.first}
+                            getCanNextPage={() => !projectsQuery.data.last}
+                            previousPage={() =>
+                                updateSearchParams(setSearchParams, {
+                                    key: "page",
+                                    value: page - 1
+                                })
+                            }
+                            nextPage={() =>
+                                updateSearchParams(setSearchParams, {
+                                    key: "page",
+                                    value: page + 1
+                                })
+                            }
+                        />
+                    </>
                 )}
-                {query.isError && error !== null && (
-                    <Alert variant="destructive">
-                        <LuAlertCircle className="h-4 w-4" />
-                        <AlertTitle>{error.title}</AlertTitle>
-                        <AlertDescription>{error.detail}</AlertDescription>
-                    </Alert>
-                )}
+                {projectsQuery.isLoading && <Loader deferred />}
+                {projectsQuery.isError && <ErrorAlert error={projectsQuery.error} />}
             </div>
         </Page>
     );

@@ -2,12 +2,28 @@ import { request } from "api/client";
 import { buildFormData } from "libs/utils/form-data";
 import type { DndItem } from "types/dnd";
 import type { Skill, SkillCreation } from "types/entities/skill";
+import type { Slice } from "types/pagination";
 
 const URL = "skill";
 
-const findAll = async () => request<Skill[]>(`/${URL}`);
+const findAll = async () => {
+    const skills = await request<Skill[]>(`/${URL}`);
+    skills.sort((a, b) => a.sort - b.sort);
+    return skills;
+};
 
-const save = (skill: SkillCreation, file?: File | null) => {
+export const SKILLS_DEFAULT_PAGE_SIZE = 24;
+
+const findSlice = async (page?: number, size = SKILLS_DEFAULT_PAGE_SIZE, search?: string) =>
+    request<Slice<Skill>>(`/${URL}/slice`, {
+        params: {
+            page,
+            size,
+            search
+        }
+    });
+
+const create = (skill: SkillCreation, file?: File | null) => {
     if (!file) {
         return request<Skill, SkillCreation>(`/${URL}`, {
             method: "POST",
@@ -70,7 +86,8 @@ const buildSkillFormData = (skill: Skill | SkillCreation, file: File) => {
 
 export const SkillService = {
     findAll,
-    save,
+    findSlice,
+    create,
     update,
     sort,
     delete: deleteSkill

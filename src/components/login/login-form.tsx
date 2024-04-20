@@ -16,7 +16,7 @@ import { decodeToken } from "libs/token";
 import { getDetail } from "libs/utils/error";
 import { type FC, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { type AuthRequest, authRequestSchema } from "types/auth";
 
@@ -31,6 +31,7 @@ export const LoginForm: FC = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
     const submitHandler: SubmitHandler<AuthRequest> = async data => {
@@ -43,7 +44,10 @@ export const LoginForm: FC = () => {
 
             if (tokenPayload?.authorities.includes("ROLE_ADMIN")) {
                 authContext.setAccessToken(accessToken);
-                navigate("/", { replace: true });
+
+                const redirectPath = searchParams.get("redirect") ?? "/";
+
+                navigate(redirectPath, { replace: true });
             } else {
                 toast.error("You must be an administrator to access the dashboard.");
             }

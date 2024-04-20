@@ -1,21 +1,18 @@
 import type { UseMutationResult } from "@tanstack/react-query";
-import {
-    SortDialogContent,
-    type SortDialogContentRef
-} from "components/common/sort-dialog/sort-dialog-content";
+import { type SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
+import { SortDialogContextProvider } from "components/common/sort-dialog/sort-dialog-context";
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
-import { type ReactNode, useRef, useState } from "react";
+import { type FC, type ReactNode, useRef, useState } from "react";
 import type { DndItem } from "types/dnd";
 
-type Props<E extends DndItem> = {
+type Props = {
     itemsName: string;
     trigger: ReactNode;
-    initialItems: E[] | null;
+    content: ReactNode;
     mutation: UseMutationResult<void, Error, DndItem[]>;
-    render: (item: E) => ReactNode;
 };
 
-export const SortDialog = <E extends DndItem>(props: Props<E>) => {
+export const SortDialog: FC<Props> = props => {
     const [open, setOpen] = useState(false);
 
     const contentRef = useRef<SortDialogContentRef>(null);
@@ -39,14 +36,14 @@ export const SortDialog = <E extends DndItem>(props: Props<E>) => {
                 title: `Sorting ${props.itemsName}`
             }}
             content={
-                !!props.initialItems && (
-                    <SortDialogContent
-                        ref={contentRef}
-                        initialItems={props.initialItems}
-                        render={props.render}
-                        closeDialog={resetSort => handleClose(false, resetSort)}
-                    />
-                )
+                <SortDialogContextProvider
+                    value={{
+                        contentRef,
+                        handleClose
+                    }}
+                >
+                    {props.content}
+                </SortDialogContextProvider>
             }
             open={open}
             onOpenChange={handleClose}

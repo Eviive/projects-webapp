@@ -1,6 +1,4 @@
-export type Theme = "light" | "dark" | "system";
-
-export type Page<E> = {
+export type Slice<E> = {
     content: E[];
     pageable: {
         sort: {
@@ -14,17 +12,20 @@ export type Page<E> = {
         paged: boolean;
         unpaged: boolean;
     };
-    last: boolean;
-    totalElements: number;
-    totalPages: number;
-    number: number;
     size: number;
+    number: number;
     sort: {
         empty: boolean;
         sorted: boolean;
         unsorted: boolean;
     };
     first: boolean;
+    last: boolean;
     numberOfElements: number;
     empty: boolean;
+};
+
+export type Page<E> = Slice<E> & {
+    totalElements: number;
+    totalPages: number;
 };

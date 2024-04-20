@@ -1,11 +1,8 @@
 import { queryClient } from "api/query-client";
 import { App } from "App";
 import { initAuthContext } from "contexts/auth-context";
+import { protectedLoader } from "libs/utils/loader";
 import { ErrorPage } from "pages/error";
-import { healthLoader } from "pages/health/health.loader";
-import { homeLoader } from "pages/home/home.loader";
-import { projectsLoader } from "pages/projects/projects.loader";
-import { skillsLoader } from "pages/skills/skills.loader";
 import { createBrowserRouter } from "react-router-dom";
 
 await initAuthContext();
@@ -19,51 +16,60 @@ export const router = createBrowserRouter(
             children: [
                 {
                     path: "/",
-                    lazy: async () => {
-                        const { Main } = await import("layouts/main");
-                        return { Component: Main };
-                    },
+                    lazy: async () => ({
+                        Component: (await import("layouts/main")).Main
+                    }),
                     children: [
                         {
                             index: true,
-                            lazy: async () => {
-                                const { Home } = await import("pages/home/home");
-                                return { Component: Home };
-                            },
-                            loader: homeLoader(queryClient)
+                            lazy: async () => ({
+                                Component: (await import("pages/home/home")).Home,
+                                loader: protectedLoader(
+                                    (await import("pages/home/home.loader")).homeLoader(queryClient)
+                                )
+                            })
                         },
                         {
                             path: "/projects",
-                            lazy: async () => {
-                                const { Projects } = await import("pages/projects/projects");
-                                return { Component: Projects };
-                            },
-                            loader: projectsLoader(queryClient)
+                            lazy: async () => ({
+                                Component: (await import("pages/projects/projects")).Projects,
+                                loader: protectedLoader(
+                                    (await import("pages/projects/projects.loader")).projectsLoader(
+                                        queryClient
+                                    )
+                                )
+                            })
                         },
                         {
                             path: "/skills",
-                            lazy: async () => {
-                                const { Skills } = await import("pages/skills/skills");
-                                return { Component: Skills };
-                            },
-                            loader: skillsLoader(queryClient)
+                            lazy: async () => ({
+                                Component: (await import("pages/skills/skills")).Skills,
+                                loader: protectedLoader(
+                                    (await import("pages/skills/skills.loader")).skillsLoader(
+                                        queryClient
+                                    )
+                                )
+                            })
                         },
                         {
                             path: "/health",
-                            lazy: async () => {
-                                const { Health } = await import("pages/health/health");
-                                return { Component: Health };
-                            },
-                            loader: healthLoader(queryClient)
+                            lazy: async () => ({
+                                Component: (await import("pages/health/health")).Health,
+                                loader: protectedLoader(
+                                    (await import("pages/health/health.loader")).healthLoader(
+                                        queryClient
+                                    )
+                                )
+                            })
                         }
                     ]
                 },
                 {
                     path: "/login",
-                    lazy: async () => {
-                        const { Login } = await import("pages/login");
-                        return { Component: Login };
-                    }
+                    lazy: async () => ({
+                        Component: (await import("pages/login/login")).Login,
+                        loader: (await import("pages/login/login.loader")).loginLoader
+                    })
                 }
             ]
         }

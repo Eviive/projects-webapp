@@ -98,7 +98,7 @@ export const ProjectForm: FC<Props> = props => {
                         altFr: data.image.altFr
                     }
                 };
-                await ProjectService.save(project, imageFile);
+                await ProjectService.create(project, imageFile);
             }
 
             await queryClient.invalidateQueries({

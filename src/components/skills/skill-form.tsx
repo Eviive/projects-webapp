@@ -91,7 +91,7 @@ export const SkillForm: FC<Props> = props => {
                         altFr: data.image.altFr
                     }
                 };
-                await SkillService.save(skill, imageFile);
+                await SkillService.create(skill, imageFile);
             }
 
             await queryClient.invalidateQueries({

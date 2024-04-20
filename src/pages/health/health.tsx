@@ -41,7 +41,10 @@ const HTTP_STATUS = [
 export const Health: FC = () => {
     const initialHttpExchanges = useLoaderData() as QueryLoaderFunctionData<typeof healthLoader>;
 
-    const query = useQuery({ ...httpExchangesQueryOptions, initialData: initialHttpExchanges });
+    const httpExchangesQuery = useQuery({
+        ...httpExchangesQueryOptions,
+        initialData: initialHttpExchanges ?? undefined
+    });
 
     return (
         <Page title="Health">
@@ -52,19 +55,19 @@ export const Health: FC = () => {
                             key={status.code}
                             {...status}
                             value={
-                                query.isSuccess
-                                    ? query.data.filter(
+                                httpExchangesQuery.isSuccess
+                                    ? httpExchangesQuery.data.filter(
                                           httpExchange =>
                                               httpExchange.response.status === status.code
                                       ).length
                                     : 0
                             }
-                            isLoading={query.isLoading}
-                            isError={query.isError}
+                            isLoading={httpExchangesQuery.isLoading}
+                            isError={httpExchangesQuery.isError}
                         />
                     ))}
                 </Grid>
-                <HttpExchangesTable queryHttpExchanges={query} />
+                <HttpExchangesTable queryHttpExchanges={httpExchangesQuery} />
             </div>
         </Page>
     );

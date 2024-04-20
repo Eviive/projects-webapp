@@ -1,12 +1,27 @@
-import { queryOptions } from "@tanstack/react-query";
-import { SkillService } from "api/services/skill";
+import { type InfiniteData, infiniteQueryOptions } from "@tanstack/react-query";
+import { SKILLS_DEFAULT_PAGE_SIZE, SkillService } from "api/services/skill";
+import { infiniteQueryLoader } from "libs/utils/loader";
 import type { Skill } from "types/entities/skill";
 import type { QueryLoaderFunction } from "types/loader";
+import type { Slice } from "types/pagination";
 
-export const skillsQueryOptions = queryOptions({
-    queryKey: ["skills"],
-    queryFn: SkillService.findAll
-});
+export const skillsQueryOptionsFn = (search?: string) =>
+    infiniteQueryOptions({
+        queryKey: ["skills", search],
+        queryFn: page => SkillService.findSlice(page.pageParam, SKILLS_DEFAULT_PAGE_SIZE, search),
+        initialPageParam: 0,
+        getNextPageParam: lastPage => (!lastPage.last ? lastPage.number + 1 : null),
+        select: data => data
+    });
 
-export const skillsLoader: QueryLoaderFunction<Skill[]> = qC => async () =>
-    qC.getQueryData(skillsQueryOptions.queryKey) ?? (await qC.fetchQuery(skillsQueryOptions));
+export const skillsLoader: QueryLoaderFunction<InfiniteData<Slice<Skill>, number> | null> =
+    qC =>
+    async ({ request }) => {
+        const searchParams = new URL(request.url).searchParams;
+
+        const search = searchParams.get("search") ?? undefined;
+
+        const skillsQueryOptions = skillsQueryOptionsFn(search);
+
+        return infiniteQueryLoader(qC, skillsQueryOptions);
+    };

@@ -9,6 +9,8 @@ import {
 import type { FC } from "react";
 import { LuChevronLeft, LuChevronRight, LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 
+const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50] as const;
+
 type SelectionProps = {
     isSelectable: true;
     selectedRows: number;
@@ -20,6 +22,8 @@ type NoSelectionProps = {
 };
 
 type Props = {
+    itemName?: string;
+    pageSizeOptions?: readonly number[];
     pageSize: number;
     setPageSize: (pageSize: number) => void;
     pageIndex: number;
@@ -32,16 +36,26 @@ type Props = {
 } & (SelectionProps | NoSelectionProps);
 
 export const Pagination: FC<Props> = props => {
+    const pageSizeOptions = new Set(props.pageSizeOptions ?? DEFAULT_PAGE_SIZE_OPTIONS);
+
+    if (!pageSizeOptions.has(props.pageSize)) {
+        pageSizeOptions.add(props.pageSize);
+    }
+
+    const itemName = props.itemName ?? "row";
+
     return (
         <div className="flex items-center justify-between px-2">
             {props.isSelectable && (
                 <div className="hidden flex-1 text-sm text-muted-foreground md:block">
-                    {props.selectedRows} of {props.totalRows} row(s) selected.
+                    {props.selectedRows} of {props.totalRows} {itemName}(s) selected.
                 </div>
             )}
             <div className="ms-auto flex flex-wrap items-center justify-end gap-y-2 space-x-6 lg:space-x-8">
                 <div className="flex items-center space-x-2">
-                    <p className="text-sm font-medium">Rows per page</p>
+                    <p className="text-sm font-medium first-letter:capitalize">
+                        {itemName}s per page
+                    </p>
                     <Select
                         value={`${props.pageSize}`}
                         onValueChange={value => {
@@ -52,11 +66,13 @@ export const Pagination: FC<Props> = props => {
                             <SelectValue placeholder={props.pageSize} />
                         </SelectTrigger>
                         <SelectContent side="top">
-                            {[10, 20, 30, 40, 50].map(pageSize => (
-                                <SelectItem key={pageSize} value={`${pageSize}`}>
-                                    {pageSize}
-                                </SelectItem>
-                            ))}
+                            {Array.from(pageSizeOptions)
+                                .sort((a, b) => a - b)
+                                .map(pageSize => (
+                                    <SelectItem key={pageSize} value={`${pageSize}`}>
+                                        {pageSize}
+                                    </SelectItem>
+                                ))}
                         </SelectContent>
                     </Select>
                 </div>

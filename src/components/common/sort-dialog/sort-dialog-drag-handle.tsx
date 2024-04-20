@@ -1,10 +1,10 @@
-import { useSortDialogContext } from "components/common/sort-dialog/sort-dialog-context";
+import { useSortDialogItemContext } from "components/common/sort-dialog/sort-dialog-item-context";
 import { Button } from "components/ui/button";
 import type { FC } from "react";
 import { MdDragHandle } from "react-icons/md";
 
 export const SortDialogDragHandle: FC = () => {
-    const { attributes, listeners, setActivatorNodeRef } = useSortDialogContext();
+    const { attributes, listeners, setActivatorNodeRef } = useSortDialogItemContext();
 
     return (
         <Button

@@ -18,7 +18,7 @@ import { useFormContext } from "react-hook-form";
 import type { Skill } from "types/entities/skill";
 
 export const ProjectFormFields: FC = () => {
-    const querySkills = useQuery({
+    const skillsQuery = useQuery({
         queryKey: ["skills"],
         queryFn: SkillService.findAll
     });
@@ -162,7 +162,7 @@ export const ProjectFormFields: FC = () => {
                         <FormLabel>Skills</FormLabel>
                         <Combobox
                             selection="multiple"
-                            options={querySkills.data ?? []}
+                            options={skillsQuery.data ?? []}
                             value={field.value}
                             onChange={(skill, isSelected) => {
                                 let newSkills: Skill[];
@@ -206,8 +206,8 @@ export const ProjectFormFields: FC = () => {
                             placeholder="Select skills"
                             searchPlaceholder="Search skill..."
                             emptyOptionsText="No skills found."
-                            loading={querySkills.isLoading && "Loading skills..."}
-                            error={querySkills.isError && "An error occurred while loading skills."}
+                            loading={skillsQuery.isLoading && "Loading skills..."}
+                            error={skillsQuery.isError && "Failed to load skills."}
                         />
 
                         <FormMessage />

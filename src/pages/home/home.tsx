@@ -12,9 +12,15 @@ export const Home: FC = () => {
         typeof homeLoader
     >;
 
-    const queryInfo = useQuery({ ...infoQueryOptions, initialData: initialInfo });
+    const infoQuery = useQuery({
+        ...infoQueryOptions,
+        initialData: initialInfo ?? undefined
+    });
 
-    const queryHealth = useQuery({ ...healthQueryOptions, initialData: initialHealth });
+    const healthQuery = useQuery({
+        ...healthQueryOptions,
+        initialData: initialHealth ?? undefined
+    });
 
     return (
         <Page title="Home">
@@ -28,11 +34,11 @@ export const Home: FC = () => {
                             </strong>{" "}
                             dashboard !
                         </h1>
-                        {queryInfo.isLoading && <Skeleton className="h-unit-lg mt-1.5 w-48" />}
-                        {queryInfo.isSuccess && (
+                        {infoQuery.isLoading && <Skeleton className="h-unit-lg mt-1.5 w-48" />}
+                        {infoQuery.isSuccess && (
                             <h2 className="text-lg">
-                                {queryInfo.data.app.stage.toUpperCase()} v
-                                {queryInfo.data.app.version}
+                                {infoQuery.data.app.stage.toUpperCase()} v
+                                {infoQuery.data.app.version}
                             </h2>
                         )}
                         <p className="mt-4">
@@ -40,7 +46,7 @@ export const Home: FC = () => {
                             dashboard allows me to manage all this data as well as its health.
                         </p>
                     </div>
-                    {queryHealth.isSuccess && <StatusCards data={queryHealth.data} />}
+                    {healthQuery.isSuccess && <StatusCards data={healthQuery.data} />}
                 </div>
             </div>
         </Page>

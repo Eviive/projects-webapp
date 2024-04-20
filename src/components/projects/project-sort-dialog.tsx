@@ -1,44 +1,42 @@
-import { type MutationKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
-import { SortDialog } from "components/common/sort-dialog";
-import { ProjectFeaturedBadge } from "components/projects/project-featured-badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
-import type { FC, ReactNode } from "react";
-import type { Project } from "types/entities/project";
+import { SortDialogContent } from "components/common/sort-dialog/sort-dialog-content";
+import { useSortDialogContext } from "components/common/sort-dialog/sort-dialog-context";
+import { Loader } from "components/ui/loader";
+import type { FC } from "react";
+import { ProjectFeaturedBadge } from "./project-featured-badge";
 
-export const sortProjectsMutationKey = ["sortProjects"] as const satisfies MutationKey;
+export const ProjectSortDialog: FC = () => {
+    const { contentRef, handleClose } = useSortDialogContext();
 
-type Props = {
-    initialProjects: Project[] | null;
-    trigger: ReactNode;
-};
-
-export const ProjectSortDialog: FC<Props> = props => {
-    const queryClient = useQueryClient();
-
-    const sortProjectsMutation = useMutation({
-        mutationFn: ProjectService.sort,
-        onSettled: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
-        mutationKey: sortProjectsMutationKey
+    const lightProjectsQuery = useQuery({
+        queryKey: ["projects", "light"],
+        queryFn: ProjectService.findAllLight,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false
     });
 
     return (
-        <TooltipProvider>
-            <Tooltip>
-                <SortDialog
-                    itemsName="projects"
-                    trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
-                    initialItems={props.initialProjects}
-                    mutation={sortProjectsMutation}
-                    render={project => (
-                        <div className="flex grow items-center gap-3">
-                            {project.title}
-                            {project.featured && <ProjectFeaturedBadge />}
-                        </div>
-                    )}
-                />
-                <TooltipContent>Sort projects</TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        <SortDialogContent
+            ref={contentRef}
+            initialItems={lightProjectsQuery.data}
+            render={lightProject => (
+                <div className="flex grow items-center gap-3">
+                    {lightProject.title}
+                    {lightProject.featured && <ProjectFeaturedBadge />}
+                </div>
+            )}
+            closeDialog={resetSort => handleClose(false, resetSort)}
+            empty={lightProjectsQuery.data?.length === 0 && "No projects found."}
+            loading={
+                lightProjectsQuery.isLoading && (
+                    <div className="flex flex-col gap-3">
+                        <Loader />
+                        Loading projects...
+                    </div>
+                )
+            }
+            error={lightProjectsQuery.isError && "Failed to load projects."}
+        />
     );
 };
