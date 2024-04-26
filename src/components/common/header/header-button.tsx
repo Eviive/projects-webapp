@@ -16,7 +16,7 @@ export const HeaderButton: FC<Props> = props => {
         return (
             <Button className={props.className} onClick={props.handleClick}>
                 {props.icon}
-                {props.title}
+                <span>{props.title}</span>
             </Button>
         );
     }

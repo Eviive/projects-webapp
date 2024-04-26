@@ -1,3 +1,4 @@
+import { PortfolioService } from "api/services/portfolio";
 import { UserService } from "api/services/user";
 import { HeaderButton } from "components/common/header/header-button";
 import { HeaderLink } from "components/common/header/header-link";
@@ -8,7 +9,15 @@ import { authContext } from "contexts/auth-context";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import { type FC } from "react";
-import { LuActivity, LuFolder, LuHome, LuLogOut, LuPanelLeft, LuUserCog2 } from "react-icons/lu";
+import {
+    LuActivity,
+    LuFolder,
+    LuHome,
+    LuLogOut,
+    LuPanelLeft,
+    LuRefreshCw,
+    LuUserCog2
+} from "react-icons/lu";
 import { toast } from "sonner";
 
 export type HeaderType = "sidebar" | "header";
@@ -19,18 +28,32 @@ export const Header: FC = () => {
     const sidebarNavClasses = "flex flex-col items-center gap-4 px-2 sm:py-5";
 
     const sidebarItemClasses =
-        "flex h-9 w-9 items-center justify-center rounded-lg bg-background p-0 text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 md:h-8 md:w-8";
+        "flex h-9 w-9 items-center justify-center rounded-lg bg-background p-0 " +
+        "text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground " +
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
 
     const getSidebarItemClasses = ({ isActive }: { isActive: boolean }): string =>
         cn(sidebarItemClasses, isActive && "bg-accent text-accent-foreground hover:bg-accent");
 
-    const headerNavClasses = "grid gap-6 text-lg font-medium";
+    const headerNavClasses = "flex flex-col gap-6 text-lg font-medium";
 
     const headerItemClasses =
-        "flex h-auto w-full items-center justify-start gap-4 rounded-md bg-background px-2.5 py-0 text-base text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
+        "flex h-auto w-full items-center justify-start gap-4 rounded-md bg-background px-2.5 py-0 " +
+        "text-base text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground " +
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 " +
+        "[&>svg]:shrink-0 [&>span]:truncate";
 
     const getHeaderItemClasses = ({ isActive }: { isActive: boolean }): string =>
         cn(headerItemClasses, isActive && "text-foreground");
+
+    const handleRevalidate = async () => {
+        try {
+            await PortfolioService.revalidate();
+            toast.success("Portfolio revalidated successfully.");
+        } catch (e) {
+            console.error("Revalidation failed:", getDetail(e));
+        }
+    };
 
     const handleLogout = async () => {
         try {
@@ -86,6 +109,14 @@ export const Header: FC = () => {
                         to="/health"
                         icon={<LuActivity className="h-6 w-6" />}
                         className={getSidebarItemClasses}
+                    />
+
+                    <HeaderButton
+                        type="sidebar"
+                        title="Revalidate portfolio"
+                        handleClick={handleRevalidate}
+                        icon={<LuRefreshCw className="h-6 w-6" />}
+                        className={sidebarItemClasses}
                     />
                 </nav>
                 <nav className={cn(sidebarNavClasses, "mt-auto")}>
@@ -149,6 +180,14 @@ export const Header: FC = () => {
                                 to="/health"
                                 icon={<LuActivity className="h-6 w-6" />}
                                 className={getHeaderItemClasses}
+                            />
+
+                            <HeaderButton
+                                type="header"
+                                title="Revalidate portfolio"
+                                handleClick={handleRevalidate}
+                                icon={<LuRefreshCw className="h-6 w-6" />}
+                                className={headerItemClasses}
                             />
                         </nav>
                         <nav className={cn(headerNavClasses, "mt-auto")}>

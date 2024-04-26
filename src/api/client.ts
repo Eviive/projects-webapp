@@ -20,7 +20,7 @@ type RequestConfig<D> = AxiosRequestConfig<D> & {
     showErrorToast?: boolean;
 };
 
-export const request = async <T, D = undefined>(url: string, config?: RequestConfig<D>) => {
+export const request = async <T = void, D = undefined>(url: string, config?: RequestConfig<D>) => {
     const {
         method = "GET",
         data,

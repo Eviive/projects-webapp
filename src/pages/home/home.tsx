@@ -32,7 +32,7 @@ export const Home: FC = () => {
                             <strong className="bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-transparent">
                                 Personal-API
                             </strong>{" "}
-                            dashboard !
+                            dashboard&nbsp;!
                         </h1>
                         {infoQuery.isLoading && <Skeleton className="h-unit-lg mt-1.5 w-48" />}
                         {infoQuery.isSuccess && (

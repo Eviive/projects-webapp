@@ -30,7 +30,7 @@ export const HeaderThemeSwitcher: FC<Props> = props => {
             <Button className={props.className}>
                 {currentTheme === "light" && <RxSun className="h-6 w-6" />}
                 {currentTheme === "dark" && <RxMoon className="h-6 w-6" />}
-                {props.type === "header" && "Theme"}
+                {props.type === "header" && <span>Theme</span>}
             </Button>
         </DropdownMenuTrigger>
     );
