@@ -1,14 +1,11 @@
 import react from "@vitejs/plugin-react-swc";
+import type { UserConfigFn } from "vite";
 import { defineConfig } from "vite";
 import eslint from "vite-plugin-eslint";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig(() => ({
-    plugins: [
-        react(),
-        viteTsconfigPaths(),
-        eslint()
-    ],
+const configFn: UserConfigFn = () => ({
+    plugins: [react(), viteTsconfigPaths(), eslint()],
     server: {
         port: 3001,
         open: true
@@ -17,10 +14,16 @@ export default defineConfig(() => ({
         port: 3000,
         open: true
     },
+    build: {
+        target: "ESNext",
+        sourcemap: true
+    },
     css: {
         modules: {
             generateScopedName: "[local]_[hash:base64:5]",
             localsConvention: "camelCaseOnly"
         }
     }
-}));
+});
+
+export default defineConfig(configFn);

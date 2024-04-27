@@ -1,15 +1,31 @@
 import { request } from "api/client";
-import type { Skill } from "types/entities";
+import { buildFormData } from "libs/utils/form-data";
+import type { DndItem } from "types/dnd";
+import type { Skill, SkillCreation } from "types/entities/skill";
+import type { Slice } from "types/pagination";
 
 const URL = "skill";
 
-const findById = (id: number) => request<Skill>(`/${URL}/${id}`, { needsAuth: false });
+const findAll = async () => {
+    const skills = await request<Skill[]>(`/${URL}`);
+    skills.sort((a, b) => a.sort - b.sort);
+    return skills;
+};
 
-const findAll = () => request<Skill[]>(`/${URL}`, { needsAuth: false });
+export const SKILLS_DEFAULT_PAGE_SIZE = 24;
 
-const save = (skill: Skill, file?: File | null) => {
+const findSlice = async (page?: number, size = SKILLS_DEFAULT_PAGE_SIZE, search?: string) =>
+    request<Slice<Skill>>(`/${URL}/slice`, {
+        params: {
+            page,
+            size,
+            search
+        }
+    });
+
+const create = (skill: SkillCreation, file?: File | null) => {
     if (!file) {
-        return request<Skill, Skill>(`/${URL}`, {
+        return request<Skill, SkillCreation>(`/${URL}`, {
             method: "POST",
             data: skill
         });
@@ -17,17 +33,10 @@ const save = (skill: Skill, file?: File | null) => {
 
     return request<Skill, FormData>(`/${URL}/with-image`, {
         method: "POST",
-        data: buildFormData(skill, file),
+        data: buildSkillFormData(skill, file),
         headers: {
             "Content-Type": "multipart/form-data"
         }
-    });
-};
-
-const sort = (sortedIds: number[]) => {
-    return request<void, number[]>(`/${URL}/sort`, {
-        method: "POST",
-        data: sortedIds
     });
 };
 
@@ -41,29 +50,45 @@ const update = (skill: Skill, file?: File | null) => {
 
     return request<Skill, FormData>(`/${URL}/${skill.id}/with-image`, {
         method: "PUT",
-        data: buildFormData(skill, file),
+        data: buildSkillFormData(skill, file),
         headers: {
             "Content-Type": "multipart/form-data"
         }
     });
 };
 
-const deleteSkill = (id: number) => request<void>(`/${URL}/${id}`, {
-    method: "DELETE"
-});
+const sort = (sorts: DndItem[]) => {
+    return request<void, DndItem[]>(`/${URL}/sort`, {
+        method: "PATCH",
+        data: sorts
+    });
+};
 
-const buildFormData = (skill: Skill, file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("skill", new Blob([ JSON.stringify(skill) ], { type: "application/json" }));
-    return formData;
+const deleteSkill = (id: number) =>
+    request<void>(`/${URL}/${id}`, {
+        method: "DELETE"
+    });
+
+const buildSkillFormData = (skill: Skill | SkillCreation, file: File) => {
+    return buildFormData(
+        {
+            type: "json",
+            name: "skill",
+            value: skill
+        },
+        {
+            type: "blob",
+            name: "file",
+            value: file
+        }
+    );
 };
 
 export const SkillService = {
-    findById,
     findAll,
-    save,
-    sort,
+    findSlice,
+    create,
     update,
+    sort,
     delete: deleteSkill
 };

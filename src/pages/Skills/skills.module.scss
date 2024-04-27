@@ -1,9 +1,0 @@
-@use "src/styles/mixins";
-
-.skills-wrapper {
-    padding: 4em 5%;
-    @include mixins.size();
-    display: flex;
-    flex-direction: column;
-    gap: 4em;
-}

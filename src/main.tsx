@@ -1,76 +1,27 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { App } from "App";
-import { ErrorPage } from "components/common";
-import { AuthContextProvider } from "contexts/AuthContext";
-import { MainLayout } from "layouts";
-import { Health, Home, Login, Projects, Skills } from "pages";
+import { queryClient } from "api/query-client";
+import { ConfirmDialogProvider } from "contexts/confirm-dialog-context";
+import { ThemeContextProvider } from "contexts/theme-context";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
+import { router } from "router";
 
 const rootElement = document.querySelector("#root");
 if (!rootElement) throw new Error("Root element not found");
 
 const root = createRoot(rootElement);
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnMount: "always",
-            refetchOnWindowFocus: false,
-            refetchOnReconnect: false,
-            refetchInterval: false,
-            refetchIntervalInBackground: false
-        }
-    }
-});
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: "/",
-                element: <MainLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <Home />
-                    },
-                    {
-                        path: "/projects",
-                        element: <Projects />
-                    },
-                    {
-                        path: "/skills",
-                        element: <Skills />
-                    },
-                    {
-                        path: "/health",
-                        element: <Health />
-                    }
-                ]
-            },
-            {
-                path: "/login",
-                element: <Login />
-            }
-        ]
-    }
-], {
-    basename: import.meta.env.VITE_ROUTER_BASE_URL
-});
-
 root.render(
     <StrictMode>
-        <AuthContextProvider>
+        <ThemeContextProvider>
             <QueryClientProvider client={queryClient}>
-                <RouterProvider router={router} />
-                <ReactQueryDevtools></ReactQueryDevtools>
+                <ConfirmDialogProvider>
+                    <RouterProvider router={router} />
+                </ConfirmDialogProvider>
+                <ReactQueryDevtools />
             </QueryClientProvider>
-        </AuthContextProvider>
+        </ThemeContextProvider>
     </StrictMode>
 );
