@@ -1,22 +1,26 @@
+import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
-import { getTitleAndMessage } from "libs/utils";
-import toast from "react-hot-toast";
+import { authContext } from "contexts/auth-context";
+import { getDetail } from "libs/utils/error";
+import { toast } from "sonner";
 
 export const httpClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
-        "Accept": "application/json"
+        Accept: "application/json"
     },
     withCredentials: true
 });
+
+initInterceptors(httpClient);
 
 type RequestConfig<D> = AxiosRequestConfig<D> & {
     needsAuth?: boolean;
     showErrorToast?: boolean;
 };
 
-export const request = async <T, D = undefined>(url: string, config?: RequestConfig<D>) => {
+export const request = async <T = void, D = undefined>(url: string, config?: RequestConfig<D>) => {
     const {
         method = "GET",
         data,
@@ -26,6 +30,12 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
         ...restConfig
     } = config ?? {};
 
+    const { accessToken } = authContext;
+    if (needsAuth && accessToken === null) {
+        toast.error("You need to login before accessing this page.");
+        throw new Error("No access token found");
+    }
+
     let res: AxiosResponse<T, D>;
     try {
         res = await httpClient.request<T, AxiosResponse<T, D>, D>({
@@ -33,15 +43,16 @@ export const request = async <T, D = undefined>(url: string, config?: RequestCon
             method,
             data,
             headers: {
-                ...data && { "Content-Type": "application/json" },
+                ...(data && { "Content-Type": "application/json" }),
                 ...headers,
-                ...needsAuth && { "Authorization": "Bearer " }
+                ...(needsAuth && { Authorization: `Bearer ${accessToken}` })
             },
             ...restConfig
         });
     } catch (e) {
-        showErrorToast && toast.error(getTitleAndMessage(e));
+        showErrorToast && toast.error(getDetail(e));
         throw e;
     }
+
     return res.data;
 };

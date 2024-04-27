@@ -1,0 +1,16 @@
+.loader {
+    --size: var(--loader-size, 40px);
+    --color: var(--loader-color, hsl(var(--foreground)));
+    --line-size: calc(var(--size) / 6.25);
+    --mask-size: calc(100% - var(--line-size));
+
+    width: var(--size);
+    height: var(--size);
+
+    background:
+        radial-gradient(farthest-side, var(--color) 94%, transparent) top / var(--line-size)
+            var(--line-size) no-repeat,
+        conic-gradient(transparent 30%, var(--color));
+
+    -webkit-mask: radial-gradient(farthest-side, transparent var(--mask-size), black 0);
+}
