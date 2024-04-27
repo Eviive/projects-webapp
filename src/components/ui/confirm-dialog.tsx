@@ -21,8 +21,9 @@ export const ConfirmDialog: FC<Props> = ({ state, handleClose }) => {
         <AlertDialog
             open={state.open}
             onOpenChange={open => {
-                if (!open) handleClose(false);
-                return;
+                if (!open) {
+                    handleClose(false);
+                }
             }}
         >
             <AlertDialogContent>

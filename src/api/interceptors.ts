@@ -1,5 +1,6 @@
 import { UserService } from "api/services/user";
-import { AxiosError, type AxiosInstance } from "axios";
+import type { AxiosInstance } from "axios";
+import { AxiosError } from "axios";
 import { authContext } from "contexts/auth-context";
 import { decodeToken, isTokenExpired } from "libs/token";
 import { getDetail } from "libs/utils/error";

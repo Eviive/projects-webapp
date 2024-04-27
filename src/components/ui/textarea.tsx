@@ -1,5 +1,6 @@
 import { cn } from "libs/utils/style";
-import { forwardRef, type TextareaHTMLAttributes } from "react";
+import type { TextareaHTMLAttributes } from "react";
+import { forwardRef } from "react";
 
 export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 

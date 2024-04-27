@@ -3,8 +3,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { SortDialogItemContextProvider } from "components/common/sort-dialog/sort-dialog-item-context";
 import { cn } from "libs/utils/style";
-import type { CSSProperties, PropsWithChildren } from "react";
-import { type FC, useMemo } from "react";
+import type { CSSProperties, PropsWithChildren, FC } from "react";
+import { useMemo } from "react";
 
 type Props = {
     id: UniqueIdentifier;

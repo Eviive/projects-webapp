@@ -14,11 +14,14 @@ import { Input } from "components/ui/input";
 import { authContext } from "contexts/auth-context";
 import { decodeToken } from "libs/token";
 import { getDetail } from "libs/utils/error";
-import { type FC, useState } from "react";
-import { type SubmitHandler, useForm } from "react-hook-form";
+import type { FC } from "react";
+import { useState } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { type AuthRequest, authRequestSchema } from "types/auth";
+import type { AuthRequest } from "types/auth";
+import { authRequestSchema } from "types/auth";
 
 export const LoginForm: FC = () => {
     const form = useForm<AuthRequest>({

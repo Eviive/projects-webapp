@@ -1,4 +1,5 @@
-import { type MutationKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { MutationKey } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
 import { SortDialog } from "components/common/sort-dialog";
 import { ProjectSortDialog } from "components/projects/project-sort-dialog";

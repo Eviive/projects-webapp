@@ -1,4 +1,5 @@
-import { type MutationKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { MutationKey } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SkillService } from "api/services/skill";
 import { SortDialog } from "components/common/sort-dialog";
 import { SkillSortDialog } from "components/skills/skill-sort-dialog";

@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { authContext } from "contexts/auth-context";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
-import { type FC } from "react";
+import type { FC } from "react";
 import {
     LuActivity,
     LuFolder,

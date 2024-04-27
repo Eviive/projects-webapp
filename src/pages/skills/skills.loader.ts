@@ -1,4 +1,5 @@
-import { type InfiniteData, infiniteQueryOptions } from "@tanstack/react-query";
+import type { InfiniteData } from "@tanstack/react-query";
+import { infiniteQueryOptions } from "@tanstack/react-query";
 import { SKILLS_DEFAULT_PAGE_SIZE, SkillService } from "api/services/skill";
 import { infiniteQueryLoader } from "libs/utils/loader";
 import type { Skill } from "types/entities/skill";

@@ -13,7 +13,8 @@ import { format } from "date-fns";
 import { SKILL_PLACEHOLDER } from "libs/constants";
 import { isNotNullOrUndefined } from "libs/utils/assertion";
 import { toLocalDate } from "libs/utils/date";
-import { type FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import type { Skill } from "types/entities/skill";
 

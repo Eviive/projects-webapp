@@ -1,6 +1,6 @@
 import { Page } from "components/common/page";
 import { LoginForm } from "components/login/login-form";
-import { type FC } from "react";
+import type { FC } from "react";
 
 export const Login: FC = () => {
     return (

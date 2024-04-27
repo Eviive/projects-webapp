@@ -12,7 +12,7 @@ import { Grid } from "layouts/grid";
 import { updateSearchParams } from "libs/utils/search-params";
 import type { skillsLoader } from "pages/skills/skills.loader";
 import { skillsQueryOptionsFn } from "pages/skills/skills.loader";
-import { type FC, useCallback, useState } from "react";
+import { FC, useCallback, useState  from "react";
 import { FaPlus } from "react-icons/fa6";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import type { QueryLoaderFunctionData } from "types/loader";

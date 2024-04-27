@@ -7,13 +7,16 @@ import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import { useFormState } from "hooks/use-form-state";
 import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
-import { FormProvider, type FormState, type SubmitHandler, useForm } from "react-hook-form";
+import type { FormState, SubmitHandler } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import type {
+    Project,
+    ProjectCreation,
+    ProjectCreationWithFile,
+    ProjectEditionWithFile
+} from "types/entities/project";
 import {
-    type Project,
-    type ProjectCreation,
-    type ProjectCreationWithFile,
     projectCreationWithFileSchema,
-    type ProjectEditionWithFile,
     projectEditionWithFileSchema
 } from "types/entities/project";
 
