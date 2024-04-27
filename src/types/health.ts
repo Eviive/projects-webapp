@@ -1,16 +1,3 @@
-export type AuditEvent = {
-    timestamp: string;
-    principal: string;
-    type: string;
-    data: {
-        type: string;
-        message: string;
-        details: {
-            [key: string]: string;
-        };
-    };
-};
-
 export type Status = "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
 
 export type Health = {
@@ -21,7 +8,7 @@ export type Health = {
             details: {
                 database: string;
             };
-        },
+        };
         diskSpace: {
             status: Status;
             details: {
@@ -31,10 +18,10 @@ export type Health = {
                 threshold: number;
                 exists: boolean;
             };
-        },
+        };
         ping: {
             status: Status;
-        }
+        };
     };
 };
 
@@ -64,7 +51,6 @@ export type HttpExchange = {
 export type Info = {
     app: {
         name: string;
-        description: string;
         version: string;
         stage: string;
     };

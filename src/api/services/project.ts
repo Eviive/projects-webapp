@@ -1,21 +1,33 @@
 import { request } from "api/client";
-import type { Page, Project, Skill } from "types/entities";
+import { buildFormData } from "libs/utils/form-data";
+import type { DndItem } from "types/dnd";
+import type { Project, ProjectCreation } from "types/entities/project";
+import type { ProjectLight } from "types/entities/project-light";
+import type { Page } from "types/pagination";
 
 const URL = "project";
 
-const findById = (id: number) => request<Project>(`/${URL}/${id}`, { needsAuth: false });
+export const PROJECTS_PAGE_SIZE_OPTIONS = [6, 12, 18, 24, 30] as const;
+export const PROJECTS_DEFAULT_PAGE_SIZE = PROJECTS_PAGE_SIZE_OPTIONS[0];
 
-const findAll = () => request<Project[]>(`/${URL}`, { needsAuth: false });
+const findPage = (page?: number, size: number = PROJECTS_DEFAULT_PAGE_SIZE, search?: string) =>
+    request<Page<Project>>(`/${URL}/page`, {
+        params: {
+            page,
+            size,
+            search
+        }
+    });
 
-const findAllFeatured = () => request<Project[]>(`/${URL}/featured`, { needsAuth: false });
+const findAllLight = async () => {
+    const lightProjects = await request<ProjectLight[]>(`/${URL}/light`);
+    lightProjects.sort((a, b) => a.sort - b.sort);
+    return lightProjects;
+};
 
-const findAllNotFeatured = () => request<Project[]>(`/${URL}/not-featured`, { needsAuth: false });
-
-const findAllNotFeaturedPaginated = (page?: number, size?: number) => request<Page<Project>>(`/${URL}/not-featured/paginated`, { params: { page, size }, needsAuth: false });
-
-const save = (project: Project, file?: File | null) => {
+const create = (project: ProjectCreation, file?: File | null) => {
     if (!file) {
-        return request<Project, Project>(`/${URL}`, {
+        return request<Project, ProjectCreation>(`/${URL}`, {
             method: "POST",
             data: project
         });
@@ -23,17 +35,10 @@ const save = (project: Project, file?: File | null) => {
 
     return request<Project, FormData>(`/${URL}/with-image`, {
         method: "POST",
-        data: buildFormData(project, file),
+        data: buildProjectFormData(project, file),
         headers: {
             "Content-Type": "multipart/form-data"
         }
-    });
-};
-
-const sort = (sortedIds: number[]) => {
-    return request<void, number[]>(`/${URL}/sort`, {
-        method: "POST",
-        data: sortedIds
     });
 };
 
@@ -45,34 +50,47 @@ const update = (project: Project, file?: File | null) => {
         });
     }
 
-    return request<Skill, FormData>(`/${URL}/${project.id}/with-image`, {
+    return request<Project, FormData>(`/${URL}/${project.id}/with-image`, {
         method: "PUT",
-        data: buildFormData(project, file),
+        data: buildProjectFormData(project, file),
         headers: {
             "Content-Type": "multipart/form-data"
         }
     });
 };
 
-const deleteProject = (id: number) => request<void>(`/${URL}/${id}`, {
-    method: "DELETE"
-});
+const sort = (sorts: DndItem[]) => {
+    return request<void, DndItem[]>(`/${URL}/sort`, {
+        method: "PATCH",
+        data: sorts
+    });
+};
 
-const buildFormData = (project: Project, file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("project", new Blob([ JSON.stringify(project) ], { type: "application/json" }));
-    return formData;
+const deleteProject = (id: number) =>
+    request<void>(`/${URL}/${id}`, {
+        method: "DELETE"
+    });
+
+const buildProjectFormData = (project: Project | ProjectCreation, file: File) => {
+    return buildFormData(
+        {
+            type: "json",
+            name: "project",
+            value: project
+        },
+        {
+            type: "blob",
+            name: "file",
+            value: file
+        }
+    );
 };
 
 export const ProjectService = {
-    findById,
-    findAll,
-    findAllFeatured,
-    findAllNotFeatured,
-    findAllNotFeaturedPaginated,
-    save,
-    sort,
+    findPage,
+    findAllLight,
+    create,
     update,
+    sort,
     delete: deleteProject
 };
