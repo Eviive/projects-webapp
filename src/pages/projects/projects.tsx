@@ -19,7 +19,7 @@ import { getNumberSearchParam, updateSearchParams } from "libs/utils/search-para
 import type { projectsLoader } from "pages/projects/projects.loader";
 import { projectsQueryOptionsFn } from "pages/projects/projects.loader";
 import type { FC } from "react";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import type { QueryLoaderFunctionData } from "types/loader";
@@ -70,6 +70,10 @@ export const Projects: FC = () => {
             });
         }
     }, [page, projectsQuery.data?.totalPages, projectsQuery.isSuccess, setSearchParams]);
+
+    useEffect(() => {
+        document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
+    }, [page]);
 
     return (
         <Page title="Projects">
