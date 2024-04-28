@@ -66,7 +66,7 @@ export const Skills: FC = () => {
                 </div>
                 {skillsQuery.isSuccess && (
                     <>
-                        <Grid minWidth="175px" gap="2em" columnCount="infinity" centerHorizontally>
+                        <Grid minWidth="175px" gap="2em" centerHorizontally>
                             {optimisticSkills.map(skill => (
                                 <SkillCard
                                     key={skill.id}

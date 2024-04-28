@@ -1,11 +1,10 @@
 .layout {
     --item-min-width: 250px;
     --gap: 1em;
-    --column-count: 3;
 
-    --gap-count: calc(var(--column-count) - 1);
+    --gap-count: calc(var(--column-count, infinity) - 1);
     --total-gap-width: calc(var(--gap-count) * var(--gap));
-    --item-max-width: calc((100% - var(--total-gap-width)) / var(--column-count));
+    --item-max-width: calc((100% - var(--total-gap-width)) / var(--column-count, 1));
 
     --item-width: max(var(--item-min-width), var(--item-max-width));
 

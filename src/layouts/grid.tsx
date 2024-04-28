@@ -7,7 +7,7 @@ type Props = {
     className?: string;
     minWidth?: string;
     gap?: string;
-    columnCount?: number | "infinity";
+    columnCount?: number;
     centerVertically?: boolean;
     centerHorizontally?: boolean;
 };
