@@ -16,7 +16,7 @@ export const HeaderLink: FC<Props> = props => {
         return (
             <NavLink to={props.to} className={props.className}>
                 {props.icon}
-                <span>{props.title}</span>
+                <span className="truncate">{props.title}</span>
             </NavLink>
         );
     }

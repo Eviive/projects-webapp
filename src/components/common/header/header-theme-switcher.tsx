@@ -17,7 +17,10 @@ import { RxLaptop, RxMoon, RxSun } from "react-icons/rx";
 
 type Props = {
     type: HeaderType;
-    className?: string;
+    classNames?: {
+        item?: string;
+        icon?: string;
+    };
 };
 
 export const HeaderThemeSwitcher: FC<Props> = props => {
@@ -27,10 +30,10 @@ export const HeaderThemeSwitcher: FC<Props> = props => {
 
     let trigger = (
         <DropdownMenuTrigger asChild>
-            <Button className={props.className}>
-                {currentTheme === "light" && <RxSun className="h-6 w-6" />}
-                {currentTheme === "dark" && <RxMoon className="h-6 w-6" />}
-                {props.type === "header" && <span>Theme</span>}
+            <Button className={props.classNames?.item}>
+                {currentTheme === "light" && <RxSun className={props.classNames?.icon} />}
+                {currentTheme === "dark" && <RxMoon className={props.classNames?.icon} />}
+                {props.type === "header" && <span className="truncate">Theme</span>}
             </Button>
         </DropdownMenuTrigger>
     );

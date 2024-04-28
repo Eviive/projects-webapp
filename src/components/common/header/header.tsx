@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { authContext } from "contexts/auth-context";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
-import type { FC } from "react";
+import { type FC, useEffect, useState } from "react";
 import {
     LuActivity,
     LuFolder,
@@ -18,11 +18,20 @@ import {
     LuRefreshCw,
     LuUserCog2
 } from "react-icons/lu";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
 export type HeaderType = "sidebar" | "header";
 
 export const Header: FC = () => {
+    const [open, setOpen] = useState(false);
+
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname]);
+
     const logoSrc = `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/logo.svg`;
 
     const sidebarNavClasses = "flex flex-col items-center gap-4 px-2 sm:py-5";
@@ -40,11 +49,12 @@ export const Header: FC = () => {
     const headerItemClasses =
         "flex h-auto w-full items-center justify-start gap-4 rounded-md bg-background px-2.5 py-0 " +
         "text-base text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground " +
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 " +
-        "[&>svg]:shrink-0 [&>span]:truncate";
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
 
     const getHeaderItemClasses = ({ isActive }: { isActive: boolean }): string =>
         cn(headerItemClasses, isActive && "text-foreground");
+
+    const iconClasses = "h-6 w-6 shrink-0";
 
     const handleRevalidate = async () => {
         try {
@@ -83,7 +93,7 @@ export const Header: FC = () => {
                         type="sidebar"
                         title="Dashboard"
                         to="/"
-                        icon={<LuHome className="h-6 w-6" />}
+                        icon={<LuHome className={iconClasses} />}
                         className={getSidebarItemClasses}
                     />
 
@@ -91,7 +101,7 @@ export const Header: FC = () => {
                         type="sidebar"
                         title="Projects"
                         to="/projects"
-                        icon={<LuFolder className="h-6 w-6" />}
+                        icon={<LuFolder className={iconClasses} />}
                         className={getSidebarItemClasses}
                     />
 
@@ -99,7 +109,7 @@ export const Header: FC = () => {
                         type="sidebar"
                         title="Skills"
                         to="/skills"
-                        icon={<LuUserCog2 className="h-6 w-6" />}
+                        icon={<LuUserCog2 className={iconClasses} />}
                         className={getSidebarItemClasses}
                     />
 
@@ -107,7 +117,7 @@ export const Header: FC = () => {
                         type="sidebar"
                         title="Health"
                         to="/health"
-                        icon={<LuActivity className="h-6 w-6" />}
+                        icon={<LuActivity className={iconClasses} />}
                         className={getSidebarItemClasses}
                     />
 
@@ -115,24 +125,27 @@ export const Header: FC = () => {
                         type="sidebar"
                         title="Revalidate portfolio"
                         handleClick={handleRevalidate}
-                        icon={<LuRefreshCw className="h-6 w-6" />}
+                        icon={<LuRefreshCw className={iconClasses} />}
                         className={sidebarItemClasses}
                     />
                 </nav>
                 <nav className={cn(sidebarNavClasses, "mt-auto")}>
-                    <HeaderThemeSwitcher type="sidebar" className={sidebarItemClasses} />
+                    <HeaderThemeSwitcher
+                        type="sidebar"
+                        classNames={{ item: sidebarItemClasses, icon: iconClasses }}
+                    />
 
                     <HeaderButton
                         type="sidebar"
                         title="Logout"
                         handleClick={handleLogout}
-                        icon={<LuLogOut className="h-6 w-6" />}
+                        icon={<LuLogOut className={iconClasses} />}
                         className={sidebarItemClasses}
                     />
                 </nav>
             </aside>
             <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:hidden sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-                <Sheet>
+                <Sheet open={open} onOpenChange={setOpen}>
                     <SheetTrigger asChild>
                         <Button size="icon" variant="outline" className="sm:hidden">
                             <LuPanelLeft className="h-5 w-5" />
@@ -154,7 +167,7 @@ export const Header: FC = () => {
                                 type="header"
                                 title="Dashboard"
                                 to="/"
-                                icon={<LuHome className="h-6 w-6" />}
+                                icon={<LuHome className={iconClasses} />}
                                 className={getHeaderItemClasses}
                             />
 
@@ -162,7 +175,7 @@ export const Header: FC = () => {
                                 type="header"
                                 title="Projects"
                                 to="/projects"
-                                icon={<LuFolder className="h-6 w-6" />}
+                                icon={<LuFolder className={iconClasses} />}
                                 className={getHeaderItemClasses}
                             />
 
@@ -170,7 +183,7 @@ export const Header: FC = () => {
                                 type="header"
                                 title="Skills"
                                 to="/skills"
-                                icon={<LuUserCog2 className="h-6 w-6" />}
+                                icon={<LuUserCog2 className={iconClasses} />}
                                 className={getHeaderItemClasses}
                             />
 
@@ -178,7 +191,7 @@ export const Header: FC = () => {
                                 type="header"
                                 title="Health"
                                 to="/health"
-                                icon={<LuActivity className="h-6 w-6" />}
+                                icon={<LuActivity className={iconClasses} />}
                                 className={getHeaderItemClasses}
                             />
 
@@ -186,18 +199,21 @@ export const Header: FC = () => {
                                 type="header"
                                 title="Revalidate portfolio"
                                 handleClick={handleRevalidate}
-                                icon={<LuRefreshCw className="h-6 w-6" />}
+                                icon={<LuRefreshCw className={iconClasses} />}
                                 className={headerItemClasses}
                             />
                         </nav>
                         <nav className={cn(headerNavClasses, "mt-auto")}>
-                            <HeaderThemeSwitcher type="header" className={headerItemClasses} />
+                            <HeaderThemeSwitcher
+                                type="header"
+                                classNames={{ item: headerItemClasses, icon: iconClasses }}
+                            />
 
                             <HeaderButton
                                 type="header"
                                 title="Logout"
                                 handleClick={handleLogout}
-                                icon={<LuLogOut className="h-6 w-6" />}
+                                icon={<LuLogOut className={iconClasses} />}
                                 className={headerItemClasses}
                             />
                         </nav>
