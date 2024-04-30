@@ -27,5 +27,22 @@ export type CurrentUser = {
     username: string;
     firstName: string | null;
     lastName: string | null;
-    authorities: string[];
+    authorities: Authority[];
 };
+
+export type Authority = Role | Scope;
+
+type Role = `ROLE_${RoleWithoutPrefix}`;
+type RoleWithoutPrefix = "ANONYMOUS" | "ADMIN";
+
+type Scope =
+    | "read:projects"
+    | "create:projects"
+    | "update:projects"
+    | "delete:projects"
+    | "read:skills"
+    | "create:skills"
+    | "update:skills"
+    | "delete:skills"
+    | "revalidate:portfolio"
+    | "read:actuator";

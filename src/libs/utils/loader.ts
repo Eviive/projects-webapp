@@ -5,17 +5,19 @@ import type {
     UndefinedInitialDataInfiniteOptions
 } from "@tanstack/react-query";
 import type { UndefinedInitialDataOptions } from "@tanstack/react-query/src/queryOptions";
-import { authContext } from "contexts/auth-context";
+import { hasEveryAuthority } from "libs/utils/auth";
 import { redirect } from "react-router-dom";
+import type { Authority } from "types/auth";
 import type { LoaderFunction } from "types/loader";
 
-export const protectedLoader = <V>(loader: LoaderFunction<V>): LoaderFunction<V | Response> => {
+export const protectedLoader = <V>(
+    authorities: Authority[],
+    loader: LoaderFunction<V>
+): LoaderFunction<V | Response> => {
     return async args => {
-        if (authContext.accessToken !== null) {
+        if (hasEveryAuthority(authorities)) {
             return loader(args);
         }
-
-        const searchParams = new URLSearchParams();
 
         let redirectPath = new URL(args.request.url).pathname;
 
@@ -23,6 +25,12 @@ export const protectedLoader = <V>(loader: LoaderFunction<V>): LoaderFunction<V 
         if (routerBaseUrl && redirectPath?.startsWith(routerBaseUrl)) {
             redirectPath = redirectPath.substring(routerBaseUrl.length);
         }
+
+        if (redirectPath.trim() === "") {
+            return redirect("/login");
+        }
+
+        const searchParams = new URLSearchParams();
 
         searchParams.set("redirect", redirectPath);
 

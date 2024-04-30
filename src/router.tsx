@@ -24,8 +24,8 @@ export const router = createBrowserRouter(
                             index: true,
                             lazy: async () => ({
                                 Component: (await import("pages/home/home")).Home,
-                                loader: protectedLoader(
-                                    (await import("pages/home/home.loader")).homeLoader(queryClient)
+                                loader: (await import("pages/home/home.loader")).homeLoader(
+                                    queryClient
                                 )
                             })
                         },
@@ -34,6 +34,7 @@ export const router = createBrowserRouter(
                             lazy: async () => ({
                                 Component: (await import("pages/projects/projects")).Projects,
                                 loader: protectedLoader(
+                                    ["read:projects"],
                                     (await import("pages/projects/projects.loader")).projectsLoader(
                                         queryClient
                                     )
@@ -45,6 +46,7 @@ export const router = createBrowserRouter(
                             lazy: async () => ({
                                 Component: (await import("pages/skills/skills")).Skills,
                                 loader: protectedLoader(
+                                    ["read:skills"],
                                     (await import("pages/skills/skills.loader")).skillsLoader(
                                         queryClient
                                     )
@@ -56,6 +58,7 @@ export const router = createBrowserRouter(
                             lazy: async () => ({
                                 Component: (await import("pages/health/health")).Health,
                                 loader: protectedLoader(
+                                    ["read:actuator"],
                                     (await import("pages/health/health.loader")).healthLoader(
                                         queryClient
                                     )
