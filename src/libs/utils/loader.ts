@@ -5,7 +5,7 @@ import type {
     UndefinedInitialDataInfiniteOptions
 } from "@tanstack/react-query";
 import type { UndefinedInitialDataOptions } from "@tanstack/react-query/src/queryOptions";
-import { hasEveryAuthority } from "libs/utils/auth";
+import { hasEveryAuthority } from "libs/auth";
 import { redirect } from "react-router-dom";
 import type { Authority } from "types/auth";
 import type { LoaderFunction } from "types/loader";

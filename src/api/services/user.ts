@@ -3,7 +3,8 @@ import type { AuthRequest, AuthResponse, CurrentUser } from "types/auth";
 
 const URL = "user";
 
-const current = () => request<CurrentUser>(`/${URL}/current`);
+const current = (needsAccessToken = true) =>
+    request<CurrentUser>(`/${URL}/current`, { needsAccessToken });
 
 const login = (authRequest: AuthRequest) =>
     request<AuthResponse, AuthRequest>(`/${URL}/login`, {
@@ -19,7 +20,8 @@ const logout = () =>
 const refresh = (showErrorToast = true) =>
     request<AuthResponse>(`/${URL}/refresh`, {
         method: "POST",
-        showErrorToast
+        showErrorToast,
+        needsAccessToken: false
     });
 
 export const UserService = {

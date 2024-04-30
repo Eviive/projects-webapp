@@ -2,7 +2,7 @@ import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
 import { getAuthContext } from "contexts/auth-context";
-import { hasEveryAuthority } from "libs/utils/auth";
+import { hasEveryAuthority } from "libs/auth";
 import { getDetail } from "libs/utils/error";
 import { toast } from "sonner";
 import type { Authority } from "types/auth";
@@ -19,6 +19,7 @@ initInterceptors(httpClient);
 
 type RequestConfig<D> = AxiosRequestConfig<D> & {
     requiredAuthorities?: Authority[];
+    needsAccessToken?: boolean;
     showErrorToast?: boolean;
 };
 
@@ -28,6 +29,7 @@ export const request = async <T = void, D = undefined>(url: string, config?: Req
         data,
         headers,
         requiredAuthorities,
+        needsAccessToken = true,
         showErrorToast = true,
         ...restConfig
     } = config ?? {};
@@ -38,7 +40,7 @@ export const request = async <T = void, D = undefined>(url: string, config?: Req
         throw new Error(message);
     }
 
-    const accessToken = requiredAuthorities !== undefined ? getAuthContext().accessToken : null;
+    const accessToken = needsAccessToken ? getAuthContext().accessToken : null;
 
     let res: AxiosResponse<T, D>;
     try {

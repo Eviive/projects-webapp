@@ -29,14 +29,13 @@ export const setAuthContext = (newAuthContext: IAuthContext) => {
     authContext = newAuthContext;
 };
 
-export const clearAuthContext = async (navigate = true) => {
+export const clearAuthContext = async (redirect = true) => {
     setAuthContext({
-        currentUser: await UserService.current(),
+        currentUser: await UserService.current(false),
         accessToken: null
     });
 
-    if (!navigate) {
-        window.history.replaceState(null, "", "/login");
+    if (!redirect) {
         return;
     }
 

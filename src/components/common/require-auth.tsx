@@ -1,26 +1,15 @@
-import { getAuthContext } from "contexts/auth-context";
-import type { FC } from "react";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { hasAuthority } from "libs/auth";
+import type { FC, PropsWithChildren } from "react";
+import type { Authority } from "types/auth";
 
-export const RequireAuth = (WrappedComponent: FC) => {
-    const EnhancedComponent: FC = () => {
-        const navigate = useNavigate();
+type Props = {
+    authority: Authority;
+};
 
-        const [isAuthenticated, setIsAuthenticated] = useState(false);
+export const RequireAuthority: FC<PropsWithChildren<Props>> = props => {
+    if (!hasAuthority(props.authority)) {
+        return null;
+    }
 
-        useEffect(() => {
-            if (getAuthContext().accessToken !== null) {
-                setIsAuthenticated(true);
-            } else {
-                navigate("/login", { replace: true });
-            }
-        }, [navigate]);
-
-        return <>{isAuthenticated && <WrappedComponent />}</>;
-    };
-
-    EnhancedComponent.displayName = `RequireAuth(${WrappedComponent.displayName})`;
-
-    return EnhancedComponent;
+    return props.children;
 };
