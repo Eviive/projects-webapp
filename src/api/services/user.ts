@@ -1,7 +1,12 @@
 import { request } from "api/client";
-import type { AuthRequest, AuthResponse } from "types/auth";
+import type { AuthRequest, AuthResponse, CurrentUser } from "types/auth";
 
 const URL = "user";
+
+const current = () =>
+    request<CurrentUser>(`/${URL}/current`, {
+        needsAuth: false
+    });
 
 const login = (authRequest: AuthRequest) =>
     request<AuthResponse, AuthRequest>(`/${URL}/login`, {
@@ -24,6 +29,7 @@ const refresh = (showErrorToast = true) =>
     });
 
 export const UserService = {
+    current,
     login,
     logout,
     refresh

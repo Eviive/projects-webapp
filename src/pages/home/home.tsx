@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
 import { StatusCards } from "components/home/status-cards";
 import { Skeleton } from "components/ui/skeleton";
+import { authContext } from "contexts/auth-context";
 import type { homeLoader } from "pages/home/home.loader";
 import { healthQueryOptions, infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
@@ -28,6 +29,9 @@ export const Home: FC = () => {
             <div className="h-full w-full px-[5%] py-16">
                 <div className="flex flex-col gap-20">
                     <div>
+                        <h1 className="text-9xl font-bold text-pink-500">
+                            {authContext.currentUser?.username}
+                        </h1>
                         <h1 className="text-3xl font-medium">
                             Welcome to the{" "}
                             <strong className="bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-transparent">

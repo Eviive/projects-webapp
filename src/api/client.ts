@@ -45,7 +45,7 @@ export const request = async <T = void, D = undefined>(url: string, config?: Req
             headers: {
                 ...(data && { "Content-Type": "application/json" }),
                 ...headers,
-                ...(needsAuth && { Authorization: `Bearer ${accessToken}` })
+                ...(accessToken !== null && { Authorization: `Bearer ${accessToken}` })
             },
             ...restConfig
         });

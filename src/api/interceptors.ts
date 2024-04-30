@@ -1,8 +1,8 @@
 import { UserService } from "api/services/user";
 import type { AxiosInstance } from "axios";
 import { AxiosError } from "axios";
-import { authContext } from "contexts/auth-context";
-import { decodeToken, isTokenExpired } from "libs/token";
+import { clearAuthContext, setAuthContext } from "contexts/auth-context";
+import { isTokenExpired } from "libs/token";
 import { getDetail } from "libs/utils/error";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
@@ -23,22 +23,15 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
 
         console.log("Access token expired, refreshing...");
 
-        const { setAccessToken } = authContext;
         try {
-            const { accessToken: newAccessToken } = await UserService.refresh();
+            const refreshRes = await UserService.refresh();
 
-            const tokenPayload = decodeToken(newAccessToken);
+            req.headers.setAuthorization(`Bearer ${refreshRes.accessToken}`);
 
-            if (!tokenPayload || !tokenPayload.authorities.includes("ROLE_ADMIN")) {
-                setAccessToken(null);
-                return Promise.reject(new Error("User is not an admin"));
-            }
-
-            req.headers.setAuthorization(`Bearer ${newAccessToken}`);
-            setAccessToken(newAccessToken);
+            setAuthContext(refreshRes);
         } catch (e) {
             console.error("Error while refreshing token:", getDetail(e));
-            setAccessToken(null);
+            clearAuthContext();
             return Promise.reject(e);
         }
 
@@ -49,7 +42,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
         res => res,
         async err => {
             if (err instanceof AxiosError && err.response?.status === 401) {
-                authContext.setAccessToken(null);
+                clearAuthContext();
             }
             return Promise.reject(err);
         }

@@ -1,35 +1,52 @@
 import { UserService } from "api/services/user";
-import { decodeToken } from "libs/token";
 import { getDetail } from "libs/utils/error";
 import { router } from "router";
+import type { CurrentUser } from "types/auth";
 
-type IAuthContext = {
-    accessToken: string | null;
-    setAccessToken: (accessToken: string | null) => void;
+type LoggedInAuthContext = {
+    currentUser: CurrentUser;
+    accessToken: string;
 };
 
-export const authContext: IAuthContext = {
-    accessToken: null,
-    setAccessToken: accessToken => {
-        authContext.accessToken = accessToken;
+type AnonymousAuthContext = {
+    currentUser: CurrentUser;
+    accessToken: null;
+};
 
-        if (accessToken === null) {
-            router
-                .navigate("/login", { replace: true })
-                .catch(e => console.error("Failed to navigate to /login:", getDetail(e)));
-        }
+type LoggedOutAuthContext = {
+    currentUser: null;
+    accessToken: null;
+};
+
+type IAuthContext = LoggedInAuthContext | AnonymousAuthContext | LoggedOutAuthContext;
+
+export const authContext: IAuthContext = {
+    currentUser: null,
+    accessToken: null
+};
+
+export const setAuthContext = (newAuthContext: IAuthContext) => {
+    Object.assign(authContext, newAuthContext);
+
+    if (authContext.accessToken === null) {
+        router
+            .navigate("/login", { replace: true })
+            .catch(e => console.error("Failed to navigate to /login:", getDetail(e)));
     }
+};
+
+export const clearAuthContext = () => {
+    setAuthContext({
+        currentUser: null,
+        accessToken: null
+    });
 };
 
 export const initAuthContext = async () => {
     try {
-        const { accessToken } = await UserService.refresh(false);
+        const refreshRes = await UserService.refresh(false);
 
-        const tokenPayload = decodeToken(accessToken);
-
-        if (tokenPayload?.authorities.includes("ROLE_ADMIN")) {
-            authContext.setAccessToken(accessToken);
-        }
+        setAuthContext(refreshRes);
     } catch (e) {
         console.error("Persistent login failed:", getDetail(e));
     }

@@ -1,4 +1,3 @@
-import { ImageService } from "api/services/image";
 import { ProjectFeaturedBadge } from "components/projects/project-featured-badge";
 import { ProjectFormDialog } from "components/projects/project-form-dialog";
 import { Button } from "components/ui/button";
@@ -6,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "compo
 import { Separator } from "components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
+import { getImageUrl } from "libs/image";
 import type { FC } from "react";
 import { useMemo } from "react";
 import { MdEdit } from "react-icons/md";
@@ -27,7 +27,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
             <img
                 key={s.id}
                 className="aspect-square object-cover drop-shadow-icon"
-                src={ImageService.getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
+                src={getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
                 alt={s.image.altEn}
                 width={35}
                 loading="lazy"
@@ -75,10 +75,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                     <div>
                         <img
                             className="mx-auto aspect-[16/10] rounded-sm object-cover drop-shadow-lg"
-                            src={
-                                ImageService.getImageUrl(project.image, "projects") ??
-                                PROJECT_PLACEHOLDER
-                            }
+                            src={getImageUrl(project.image, "projects") ?? PROJECT_PLACEHOLDER}
                             alt={project.image.altEn}
                             width={512}
                             loading="lazy"

@@ -11,15 +11,13 @@ import {
 } from "components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
-import { authContext } from "contexts/auth-context";
-import { decodeToken } from "libs/token";
+import { setAuthContext } from "contexts/auth-context";
 import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { toast } from "sonner";
 import type { AuthRequest } from "types/auth";
 import { authRequestSchema } from "types/auth";
 
@@ -41,19 +39,13 @@ export const LoginForm: FC = () => {
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
-            const { accessToken } = await UserService.login(data);
+            const loginRes = await UserService.login(data);
 
-            const tokenPayload = decodeToken(accessToken);
+            setAuthContext(loginRes);
 
-            if (tokenPayload?.authorities.includes("ROLE_ADMIN")) {
-                authContext.setAccessToken(accessToken);
+            const redirectPath = searchParams.get("redirect") || "/";
 
-                const redirectPath = searchParams.get("redirect") ?? "/";
-
-                navigate(redirectPath, { replace: true });
-            } else {
-                toast.error("You must be an administrator to access the dashboard.");
-            }
+            navigate(redirectPath, { replace: true });
         } catch (e) {
             console.error("Login failed:", getDetail(e));
         } finally {

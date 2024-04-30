@@ -5,7 +5,7 @@ import { HeaderLink } from "components/common/header/header-link";
 import { HeaderThemeSwitcher } from "components/common/header/header-theme-switcher";
 import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
-import { authContext } from "contexts/auth-context";
+import { clearAuthContext } from "contexts/auth-context";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import { type FC, useEffect, useState } from "react";
@@ -71,7 +71,7 @@ export const Header: FC = () => {
         } catch (e) {
             console.error("Logout failed:", getDetail(e));
         } finally {
-            authContext.setAccessToken(null);
+            clearAuthContext();
             toast.success("You have been logged out.");
         }
     };

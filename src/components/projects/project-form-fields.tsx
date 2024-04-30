@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { ImageService } from "api/services/image";
 import { SkillService } from "api/services/skill";
 import { ImageFormFields } from "components/image/image-form-fields";
 import type { ProjectFormType } from "components/projects/project-form";
@@ -11,6 +10,7 @@ import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
 import { format } from "date-fns";
 import { SKILL_PLACEHOLDER } from "libs/constants";
+import { getImageUrl } from "libs/image";
 import { isNotNullOrUndefined } from "libs/utils/assertion";
 import { toLocalDate } from "libs/utils/date";
 import type { FC } from "react";
@@ -192,8 +192,7 @@ export const ProjectFormFields: FC = () => {
                                     <img
                                         className="aspect-square object-cover drop-shadow-icon"
                                         src={
-                                            ImageService.getImageUrl(skill.image, "skills") ??
-                                            SKILL_PLACEHOLDER
+                                            getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER
                                         }
                                         alt={skill.image.altEn}
                                         width={22}

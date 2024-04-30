@@ -10,23 +10,23 @@ import { redirect } from "react-router-dom";
 import type { LoaderFunction } from "types/loader";
 
 export const protectedLoader = <V>(loader: LoaderFunction<V>): LoaderFunction<V | Response> => {
-    return args => {
-        if (authContext.accessToken === null) {
-            const searchParams = new URLSearchParams();
-
-            let redirectPath = new URL(args.request.url).pathname;
-
-            const routerBaseUrl = import.meta.env.VITE_ROUTER_BASE_URL;
-            if (routerBaseUrl && redirectPath?.startsWith(routerBaseUrl)) {
-                redirectPath = redirectPath.substring(routerBaseUrl.length);
-            }
-
-            searchParams.set("redirect", redirectPath);
-
-            return redirect(`/login?${searchParams.toString()}`);
+    return async args => {
+        if (authContext.accessToken !== null) {
+            return loader(args);
         }
 
-        return loader(args);
+        const searchParams = new URLSearchParams();
+
+        let redirectPath = new URL(args.request.url).pathname;
+
+        const routerBaseUrl = import.meta.env.VITE_ROUTER_BASE_URL;
+        if (routerBaseUrl && redirectPath?.startsWith(routerBaseUrl)) {
+            redirectPath = redirectPath.substring(routerBaseUrl.length);
+        }
+
+        searchParams.set("redirect", redirectPath);
+
+        return redirect(`/login?${searchParams.toString()}`);
     };
 };
 

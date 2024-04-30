@@ -1,4 +1,3 @@
-import type { JwtPayload } from "jwt-decode";
 import { z } from "zod";
 
 export const authRequestSchema = z.object({
@@ -19,9 +18,14 @@ export const authRequestSchema = z.object({
 export type AuthRequest = z.infer<typeof authRequestSchema>;
 
 export type AuthResponse = {
+    currentUser: CurrentUser;
     accessToken: string;
 };
 
-export type TokenPayload = JwtPayload & {
+export type CurrentUser = {
+    id: number | null;
+    username: string;
+    firstName: string | null;
+    lastName: string | null;
     authorities: string[];
 };

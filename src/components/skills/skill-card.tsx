@@ -1,10 +1,10 @@
-import { ImageService } from "api/services/image";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { SKILL_PLACEHOLDER } from "libs/constants";
+import { getImageUrl } from "libs/image";
 import type { FC } from "react";
 import { MdEdit } from "react-icons/md";
 
@@ -48,7 +48,7 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
                 <CardContent className="flex items-center justify-center p-4">
                     <img
                         className="aspect-square object-cover drop-shadow-icon"
-                        src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
+                        src={getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                         alt={skill.image.altEn}
                         width={100}
                         loading="lazy"

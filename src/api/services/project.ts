@@ -16,11 +16,14 @@ const findPage = (page?: number, size: number = PROJECTS_DEFAULT_PAGE_SIZE, sear
             page,
             size,
             search
-        }
+        },
+        needsAuth: false
     });
 
 const findAllLight = async () => {
-    const lightProjects = await request<ProjectLight[]>(`/${URL}/light`);
+    const lightProjects = await request<ProjectLight[]>(`/${URL}/light`, {
+        needsAuth: false
+    });
     lightProjects.sort((a, b) => a.sort - b.sort);
     return lightProjects;
 };

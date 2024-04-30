@@ -7,7 +7,9 @@ import type { Slice } from "types/pagination";
 const URL = "skill";
 
 const findAll = async () => {
-    const skills = await request<Skill[]>(`/${URL}`);
+    const skills = await request<Skill[]>(`/${URL}`, {
+        needsAuth: false
+    });
     skills.sort((a, b) => a.sort - b.sort);
     return skills;
 };
@@ -20,7 +22,8 @@ const findSlice = async (page?: number, size = SKILLS_DEFAULT_PAGE_SIZE, search?
             page,
             size,
             search
-        }
+        },
+        needsAuth: false
     });
 
 const create = (skill: SkillCreation, file?: File | null) => {
