@@ -21,8 +21,6 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
             return req;
         }
 
-        console.log("Access token expired, refreshing...");
-
         try {
             const refreshRes = await UserService.refresh();
 
@@ -31,7 +29,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
             setAuthContext(refreshRes);
         } catch (e) {
             console.error("Error while refreshing token:", getDetail(e));
-            clearAuthContext();
+            await clearAuthContext();
             return Promise.reject(e);
         }
 
@@ -42,7 +40,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
         res => res,
         async err => {
             if (err instanceof AxiosError && err.response?.status === 401) {
-                clearAuthContext();
+                await clearAuthContext();
             }
             return Promise.reject(err);
         }

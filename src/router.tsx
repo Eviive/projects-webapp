@@ -34,7 +34,7 @@ export const router = createBrowserRouter(
                             lazy: async () => ({
                                 Component: (await import("pages/projects/projects")).Projects,
                                 loader: protectedLoader(
-                                    ["read:projects"],
+                                    ["read:project"],
                                     (await import("pages/projects/projects.loader")).projectsLoader(
                                         queryClient
                                     )
@@ -46,7 +46,7 @@ export const router = createBrowserRouter(
                             lazy: async () => ({
                                 Component: (await import("pages/skills/skills")).Skills,
                                 loader: protectedLoader(
-                                    ["read:skills"],
+                                    ["read:skill"],
                                     (await import("pages/skills/skills.loader")).skillsLoader(
                                         queryClient
                                     )

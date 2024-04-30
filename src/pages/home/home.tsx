@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
 import { StatusCards } from "components/home/status-cards";
 import { Skeleton } from "components/ui/skeleton";
-import { authContext } from "contexts/auth-context";
+import { getAuthContext } from "contexts/auth-context";
 import type { homeLoader } from "pages/home/home.loader";
 import { healthQueryOptions, infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
@@ -30,7 +30,7 @@ export const Home: FC = () => {
                 <div className="flex flex-col gap-20">
                     <div>
                         <h1 className="text-9xl font-bold text-pink-500">
-                            {authContext.currentUser?.username}
+                            {getAuthContext().currentUser?.username}
                         </h1>
                         <h1 className="text-3xl font-medium">
                             Welcome to the{" "}

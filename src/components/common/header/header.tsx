@@ -71,8 +71,8 @@ export const Header: FC = () => {
         } catch (e) {
             console.error("Logout failed:", getDetail(e));
         } finally {
-            clearAuthContext();
             toast.success("You have been logged out.");
+            await clearAuthContext();
         }
     };
 

@@ -8,7 +8,7 @@ const URL = "skill";
 
 const findAll = async () => {
     const skills = await request<Skill[]>(`/${URL}`, {
-        needsAuth: false
+        requiredAuthorities: ["read:skill"]
     });
     skills.sort((a, b) => a.sort - b.sort);
     return skills;
@@ -23,14 +23,15 @@ const findSlice = async (page?: number, size = SKILLS_DEFAULT_PAGE_SIZE, search?
             size,
             search
         },
-        needsAuth: false
+        requiredAuthorities: ["read:skill"]
     });
 
 const create = (skill: SkillCreation, file?: File | null) => {
     if (!file) {
         return request<Skill, SkillCreation>(`/${URL}`, {
             method: "POST",
-            data: skill
+            data: skill,
+            requiredAuthorities: ["create:skill"]
         });
     }
 
@@ -39,7 +40,8 @@ const create = (skill: SkillCreation, file?: File | null) => {
         data: buildSkillFormData(skill, file),
         headers: {
             "Content-Type": "multipart/form-data"
-        }
+        },
+        requiredAuthorities: ["create:skill"]
     });
 };
 
@@ -47,7 +49,8 @@ const update = (skill: Skill, file?: File | null) => {
     if (!file) {
         return request<Skill, Skill>(`/${URL}/${skill.id}`, {
             method: "PUT",
-            data: skill
+            data: skill,
+            requiredAuthorities: ["update:skill"]
         });
     }
 
@@ -56,20 +59,23 @@ const update = (skill: Skill, file?: File | null) => {
         data: buildSkillFormData(skill, file),
         headers: {
             "Content-Type": "multipart/form-data"
-        }
+        },
+        requiredAuthorities: ["update:skill"]
     });
 };
 
 const sort = (sorts: DndItem[]) => {
     return request<void, DndItem[]>(`/${URL}/sort`, {
         method: "PATCH",
-        data: sorts
+        data: sorts,
+        requiredAuthorities: ["update:skill"]
     });
 };
 
 const deleteSkill = (id: number) =>
     request<void>(`/${URL}/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        requiredAuthorities: ["delete:skill"]
     });
 
 const buildSkillFormData = (skill: Skill | SkillCreation, file: File) => {

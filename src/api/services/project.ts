@@ -17,12 +17,12 @@ const findPage = (page?: number, size: number = PROJECTS_DEFAULT_PAGE_SIZE, sear
             size,
             search
         },
-        needsAuth: false
+        requiredAuthorities: ["read:project"]
     });
 
 const findAllLight = async () => {
     const lightProjects = await request<ProjectLight[]>(`/${URL}/light`, {
-        needsAuth: false
+        requiredAuthorities: ["read:project"]
     });
     lightProjects.sort((a, b) => a.sort - b.sort);
     return lightProjects;
@@ -32,7 +32,8 @@ const create = (project: ProjectCreation, file?: File | null) => {
     if (!file) {
         return request<Project, ProjectCreation>(`/${URL}`, {
             method: "POST",
-            data: project
+            data: project,
+            requiredAuthorities: ["create:project"]
         });
     }
 
@@ -41,7 +42,8 @@ const create = (project: ProjectCreation, file?: File | null) => {
         data: buildProjectFormData(project, file),
         headers: {
             "Content-Type": "multipart/form-data"
-        }
+        },
+        requiredAuthorities: ["create:project"]
     });
 };
 
@@ -49,7 +51,8 @@ const update = (project: Project, file?: File | null) => {
     if (!file) {
         return request<Project, Project>(`/${URL}/${project.id}`, {
             method: "PUT",
-            data: project
+            data: project,
+            requiredAuthorities: ["update:project"]
         });
     }
 
@@ -58,20 +61,23 @@ const update = (project: Project, file?: File | null) => {
         data: buildProjectFormData(project, file),
         headers: {
             "Content-Type": "multipart/form-data"
-        }
+        },
+        requiredAuthorities: ["update:project"]
     });
 };
 
 const sort = (sorts: DndItem[]) => {
     return request<void, DndItem[]>(`/${URL}/sort`, {
         method: "PATCH",
-        data: sorts
+        data: sorts,
+        requiredAuthorities: ["update:project"]
     });
 };
 
 const deleteProject = (id: number) =>
     request<void>(`/${URL}/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        requiredAuthorities: ["delete:project"]
     });
 
 const buildProjectFormData = (project: Project | ProjectCreation, file: File) => {

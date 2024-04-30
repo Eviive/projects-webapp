@@ -8,38 +8,39 @@ type LoggedInAuthContext = {
     accessToken: string;
 };
 
-type AnonymousAuthContext = {
+type LoggedOutAnonymousAuthContext = {
     currentUser: CurrentUser;
     accessToken: null;
 };
 
-type LoggedOutAuthContext = {
-    currentUser: null;
-    accessToken: null;
-};
+type IAuthContext = LoggedInAuthContext | LoggedOutAnonymousAuthContext;
 
-type IAuthContext = LoggedInAuthContext | AnonymousAuthContext | LoggedOutAuthContext;
+let authContext: IAuthContext | null = null;
 
-export const authContext: IAuthContext = {
-    currentUser: null,
-    accessToken: null
+export const getAuthContext = (): IAuthContext => {
+    if (authContext === null) {
+        throw new Error("The authContext has not been initialized");
+    }
+
+    return authContext;
 };
 
 export const setAuthContext = (newAuthContext: IAuthContext) => {
-    Object.assign(authContext, newAuthContext);
-
-    if (authContext.accessToken === null) {
-        router
-            .navigate("/login", { replace: true })
-            .catch(e => console.error("Failed to navigate to /login:", getDetail(e)));
-    }
+    authContext = newAuthContext;
 };
 
-export const clearAuthContext = () => {
+export const clearAuthContext = async (navigate = true) => {
     setAuthContext({
-        currentUser: null,
+        currentUser: await UserService.current(),
         accessToken: null
     });
+
+    if (!navigate) {
+        window.history.replaceState(null, "", "/login");
+        return;
+    }
+
+    await router.navigate("/login", { replace: true });
 };
 
 export const initAuthContext = async () => {
@@ -49,5 +50,6 @@ export const initAuthContext = async () => {
         setAuthContext(refreshRes);
     } catch (e) {
         console.error("Persistent login failed:", getDetail(e));
+        await clearAuthContext(false);
     }
 };

@@ -36,13 +36,13 @@ type Role = `ROLE_${RoleWithoutPrefix}`;
 type RoleWithoutPrefix = "ANONYMOUS" | "ADMIN";
 
 type Scope =
-    | "read:projects"
-    | "create:projects"
-    | "update:projects"
-    | "delete:projects"
-    | "read:skills"
-    | "create:skills"
-    | "update:skills"
-    | "delete:skills"
+    | "read:project"
+    | "create:project"
+    | "update:project"
+    | "delete:project"
+    | "read:skill"
+    | "create:skill"
+    | "update:skill"
+    | "delete:skill"
     | "revalidate:portfolio"
     | "read:actuator";

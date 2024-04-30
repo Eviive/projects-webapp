@@ -1,9 +1,9 @@
-import { authContext } from "contexts/auth-context";
+import { getAuthContext } from "contexts/auth-context";
 import { redirect } from "react-router-dom";
 import type { LoaderFunction } from "types/loader";
 
 export const loginLoader: LoaderFunction<Response | null> = ({ request }) => {
-    if (authContext.accessToken === null) {
+    if (getAuthContext().accessToken === null) {
         return null;
     }
 
