@@ -205,7 +205,7 @@ export const ProjectFormFields: FC = () => {
                             getValue={skill => skill.name}
                             placeholder="Select skills"
                             searchPlaceholder="Search skill..."
-                            emptyOptionsText="No skills found."
+                            empty={skillsQuery.data?.length === 0 && "No skills found."}
                             loading={skillsQuery.isLoading && "Loading skills..."}
                             error={skillsQuery.isError && "Failed to load skills."}
                         />

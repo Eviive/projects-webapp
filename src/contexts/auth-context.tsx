@@ -1,19 +1,11 @@
-import { UserService } from "api/services/user";
-import { getDetail } from "libs/utils/error";
-import { router } from "router";
+import { queryClient } from "api/query-client";
+import { useSyncExternalStore } from "react";
 import type { CurrentUser } from "types/auth";
 
-type LoggedInAuthContext = {
+type IAuthContext = {
     currentUser: CurrentUser;
-    accessToken: string;
+    accessToken: string | null;
 };
-
-type LoggedOutAnonymousAuthContext = {
-    currentUser: CurrentUser;
-    accessToken: null;
-};
-
-type IAuthContext = LoggedInAuthContext | LoggedOutAnonymousAuthContext;
 
 let authContext: IAuthContext | null = null;
 
@@ -25,30 +17,30 @@ export const getAuthContext = (): IAuthContext => {
     return authContext;
 };
 
-export const setAuthContext = (newAuthContext: IAuthContext) => {
+export const setAuthContext = async (newAuthContext: IAuthContext) => {
     authContext = newAuthContext;
+    await queryClient.invalidateQueries();
+    notify();
 };
 
-export const clearAuthContext = async (redirect = true) => {
-    setAuthContext({
-        currentUser: await UserService.current(false),
-        accessToken: null
-    });
+type Listener = () => void;
 
-    if (!redirect) {
-        return;
+const listeners: Listener[] = [];
+
+const notify = () => {
+    for (const listener of listeners) {
+        listener();
     }
-
-    await router.navigate("/login", { replace: true });
 };
 
-export const initAuthContext = async () => {
-    try {
-        const refreshRes = await UserService.refresh(false);
+const subscribe = (listener: Listener): (() => void) => {
+    listeners.push(listener);
+    return () => {
+        const index = listeners.indexOf(listener);
+        listeners.splice(index, 1);
+    };
+};
 
-        setAuthContext(refreshRes);
-    } catch (e) {
-        console.error("Persistent login failed:", getDetail(e));
-        await clearAuthContext(false);
-    }
+export const useAuthContext = () => {
+    return useSyncExternalStore(subscribe, getAuthContext);
 };

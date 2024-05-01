@@ -41,7 +41,7 @@ export const LoginForm: FC = () => {
         try {
             const loginRes = await UserService.login(data);
 
-            setAuthContext(loginRes);
+            await setAuthContext(loginRes);
 
             const redirectPath = searchParams.get("redirect") || "/";
 

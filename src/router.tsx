@@ -1,6 +1,6 @@
 import { queryClient } from "api/query-client";
 import { App } from "App";
-import { initAuthContext } from "contexts/auth-context";
+import { initAuthContext } from "libs/auth";
 import { protectedLoader } from "libs/utils/loader";
 import { ErrorPage } from "pages/error";
 import { createBrowserRouter } from "react-router-dom";

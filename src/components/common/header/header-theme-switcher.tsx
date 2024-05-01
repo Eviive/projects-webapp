@@ -1,4 +1,3 @@
-import type { HeaderType } from "components/common/header/header";
 import { Button } from "components/ui/button";
 import {
     DropdownMenu,
@@ -14,9 +13,9 @@ import { useThemeContext } from "contexts/theme-context";
 import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { RxLaptop, RxMoon, RxSun } from "react-icons/rx";
+import type { HeaderTypeProps } from "types/header";
 
-type Props = {
-    type: HeaderType;
+type Props = HeaderTypeProps & {
     classNames?: {
         item?: string;
         icon?: string;
@@ -49,6 +48,8 @@ export const HeaderThemeSwitcher: FC<Props> = props => {
         );
     }
 
+    const themeIconClasses = "mr-2 h-4 w-4";
+
     return (
         <div className="flex grow basis-0 items-center">
             <DropdownMenu>
@@ -56,21 +57,21 @@ export const HeaderThemeSwitcher: FC<Props> = props => {
                 <DropdownMenuContent
                     side={props.type === "sidebar" ? "right" : "bottom"}
                     align={props.type === "sidebar" ? "center" : "start"}
-                    className={cn("ml-3 w-36", props.type === "header" && "mb-3")}
+                    className={cn(props.type === "sidebar" && "my-3")}
                 >
                     <DropdownMenuLabel>Theme</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={setLightTheme}>
-                            <RxSun className="mr-2 h-4 w-4" />
+                        <DropdownMenuItem onSelect={setLightTheme}>
+                            <RxSun className={themeIconClasses} />
                             <span>Light</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={setDarkTheme}>
-                            <RxMoon className="mr-2 h-4 w-4" />
+                        <DropdownMenuItem onSelect={setDarkTheme}>
+                            <RxMoon className={themeIconClasses} />
                             <span>Dark</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={setSystemTheme}>
-                            <RxLaptop className="mr-2 h-4 w-4" />
+                        <DropdownMenuItem onSelect={setSystemTheme}>
+                            <RxLaptop className={themeIconClasses} />
                             <span>System</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>

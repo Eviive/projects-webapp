@@ -3,7 +3,7 @@ import { redirect } from "react-router-dom";
 import type { LoaderFunction } from "types/loader";
 
 export const loginLoader: LoaderFunction<Response | null> = ({ request }) => {
-    if (getAuthContext().accessToken === null) {
+    if (getAuthContext().currentUser.id === null) {
         return null;
     }
 

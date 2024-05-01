@@ -1,7 +1,8 @@
 import { UserService } from "api/services/user";
 import type { AxiosInstance } from "axios";
 import { AxiosError } from "axios";
-import { clearAuthContext, setAuthContext } from "contexts/auth-context";
+import { setAuthContext } from "contexts/auth-context";
+import { clearAuthContext } from "libs/auth";
 import { isTokenExpired } from "libs/token";
 import { getDetail } from "libs/utils/error";
 
@@ -26,7 +27,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
 
             req.headers.setAuthorization(`Bearer ${refreshRes.accessToken}`);
 
-            setAuthContext(refreshRes);
+            await setAuthContext(refreshRes);
         } catch (e) {
             console.error("Error while refreshing token:", getDetail(e));
             await clearAuthContext();

@@ -12,7 +12,10 @@ import { MdEdit } from "react-icons/md";
 
 import type { Project } from "types/entities/project";
 
-const dateFormatter = Intl.DateTimeFormat("en-GB", { dateStyle: "short" });
+const dateFormatter = Intl.DateTimeFormat("en-GB", {
+    month: "long",
+    year: "numeric"
+});
 
 type Props = {
     project: Project;
