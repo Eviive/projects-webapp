@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { UserService } from "api/services/user";
 import { Button } from "components/ui/button";
 import {
@@ -35,6 +36,8 @@ export const LoginForm: FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const queryClient = useQueryClient();
+
     const submitHandler: SubmitHandler<AuthRequest> = async data => {
         if (isSubmitting) return;
         setIsSubmitting(true);
@@ -42,6 +45,7 @@ export const LoginForm: FC = () => {
             const loginRes = await UserService.login(data);
 
             await setAuthContext(loginRes);
+            await queryClient.invalidateQueries();
 
             const redirectPath = searchParams.get("redirect") || "/";
 

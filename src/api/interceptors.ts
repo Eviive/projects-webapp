@@ -1,3 +1,4 @@
+import { queryClient } from "api/query-client";
 import { UserService } from "api/services/user";
 import type { AxiosInstance } from "axios";
 import { AxiosError } from "axios";
@@ -32,6 +33,8 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
             console.error("Error while refreshing token:", getDetail(e));
             await clearAuthContext();
             return Promise.reject(e);
+        } finally {
+            await queryClient.invalidateQueries();
         }
 
         return req;
@@ -42,6 +45,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
         async err => {
             if (err instanceof AxiosError && err.response?.status === 401) {
                 await clearAuthContext();
+                await queryClient.invalidateQueries();
             }
             return Promise.reject(err);
         }

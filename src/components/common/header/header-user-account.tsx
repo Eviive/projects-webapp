@@ -1,3 +1,4 @@
+import { queryClient } from "api/query-client";
 import { UserService } from "api/services/user";
 import { Button } from "components/ui/button";
 import {
@@ -15,7 +16,7 @@ import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { LuUser2 } from "react-icons/lu";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import type { HeaderTypeProps } from "types/header";
 
@@ -31,6 +32,10 @@ export const HeaderUserAccount: FC<Props> = props => {
 
     const isLoggedIn = currentUser.id !== null;
 
+    const location = useLocation();
+
+    const navigate = useNavigate();
+
     const handleLogout = async () => {
         try {
             await UserService.logout();
@@ -39,8 +44,19 @@ export const HeaderUserAccount: FC<Props> = props => {
         } finally {
             toast.success("You have been logged out.");
             await clearAuthContext(false);
+            navigate("/");
+            await queryClient.invalidateQueries({
+                refetchType: location.pathname === "/" ? "active" : "none"
+            });
         }
     };
+
+    const currentUrl = location.pathname + location.search;
+
+    let loginHref = "/login";
+    if (currentUrl !== `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/`) {
+        loginHref += `?redirect=${encodeURIComponent(currentUrl)}`;
+    }
 
     const buttonClasses = cn(
         props.classNames?.item,
@@ -80,15 +96,6 @@ export const HeaderUserAccount: FC<Props> = props => {
                 </Tooltip>
             </TooltipProvider>
         );
-    }
-
-    const location = useLocation();
-
-    const currentUrl = location.pathname + location.search;
-
-    let loginHref = "/login";
-    if (currentUrl !== `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/`) {
-        loginHref += `?redirect=${encodeURIComponent(currentUrl)}`;
     }
 
     return (

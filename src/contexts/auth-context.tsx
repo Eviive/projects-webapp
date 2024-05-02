@@ -1,4 +1,3 @@
-import { queryClient } from "api/query-client";
 import { useSyncExternalStore } from "react";
 import type { CurrentUser } from "types/auth";
 
@@ -19,7 +18,6 @@ export const getAuthContext = (): IAuthContext => {
 
 export const setAuthContext = async (newAuthContext: IAuthContext) => {
     authContext = newAuthContext;
-    await queryClient.invalidateQueries();
     notify();
 };
 
