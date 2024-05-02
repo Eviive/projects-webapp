@@ -22,7 +22,7 @@ export const Header: FC = () => {
         setOpen(false);
     }, [pathname]);
 
-    const logoSrc = `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/logo.svg`;
+    const logoSrc = `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}logo.svg`;
 
     const sidebarNavClasses = "flex flex-col items-center gap-4 px-2 sm:py-5";
 

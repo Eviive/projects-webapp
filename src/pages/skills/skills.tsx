@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
+import { RequireAuthority } from "components/common/require-authority";
 import { SkillCard } from "components/skills/skill-card";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
 import { SkillSortButton, sortSkillsMutationKey } from "components/skills/skill-sort-button";
@@ -55,14 +56,20 @@ export const Skills: FC = () => {
                         handleDebounce={setSearchQueryParam}
                         isDisabled={skillsQuery.isError}
                     />
-                    <SkillSortButton />
-                    <SkillFormDialog
-                        trigger={
-                            <Button className="text-foreground-500" variant="outline" size="icon">
-                                <FaPlus size={20} />
-                            </Button>
-                        }
-                    />
+                    <RequireAuthority authority={["create:skill", "update:skill", "delete:skill"]}>
+                        <SkillSortButton />
+                        <SkillFormDialog
+                            trigger={
+                                <Button
+                                    className="text-foreground-500"
+                                    variant="outline"
+                                    size="icon"
+                                >
+                                    <FaPlus size={20} />
+                                </Button>
+                            }
+                        />
+                    </RequireAuthority>
                 </div>
                 {skillsQuery.isSuccess && (
                     <>

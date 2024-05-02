@@ -15,7 +15,7 @@ import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { LuUser2 } from "react-icons/lu";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import type { HeaderTypeProps } from "types/header";
 
@@ -82,6 +82,15 @@ export const HeaderUserAccount: FC<Props> = props => {
         );
     }
 
+    const location = useLocation();
+
+    const currentUrl = location.pathname + location.search;
+
+    let loginHref = "/login";
+    if (currentUrl !== import.meta.env.VITE_ROUTER_BASE_URL) {
+        loginHref += `?redirect=${encodeURIComponent(currentUrl)}`;
+    }
+
     return (
         <DropdownMenu>
             {trigger}
@@ -101,7 +110,7 @@ export const HeaderUserAccount: FC<Props> = props => {
                     </DropdownMenuItem>
                 ) : (
                     <DropdownMenuItem asChild>
-                        <NavLink to="/login">Login</NavLink>
+                        <NavLink to={loginHref}>Login</NavLink>
                     </DropdownMenuItem>
                 )}
             </DropdownMenuContent>

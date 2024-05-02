@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PROJECTS_DEFAULT_PAGE_SIZE, PROJECTS_PAGE_SIZE_OPTIONS } from "api/services/project";
 import { Page } from "components/common/page";
+import { RequireAuthority } from "components/common/require-authority";
 import { ProjectCard } from "components/projects/project-card";
 import { ProjectFormDialog } from "components/projects/project-form-dialog";
 import {
@@ -63,7 +64,10 @@ export const Projects: FC = () => {
     useLayoutEffect(() => {
         if (!projectsQuery.isSuccess) return;
 
-        if (page < 0 || page >= projectsQuery.data.totalPages) {
+        if (
+            projectsQuery.data.totalPages !== 0 &&
+            (page < 0 || page >= projectsQuery.data.totalPages)
+        ) {
             updateSearchParams(setSearchParams, {
                 key: "page",
                 value: clamp(page, 0, projectsQuery.data.totalPages - 1)
@@ -85,14 +89,22 @@ export const Projects: FC = () => {
                         handleDebounce={setSearchQueryParam}
                         isDisabled={projectsQuery.isError}
                     />
-                    <ProjectSortButton />
-                    <ProjectFormDialog
-                        trigger={
-                            <Button className="text-foreground-500" variant="outline" size="icon">
-                                <FaPlus size={20} />
-                            </Button>
-                        }
-                    />
+                    <RequireAuthority
+                        authority={["create:project", "update:project", "delete:project"]}
+                    >
+                        <ProjectSortButton />
+                        <ProjectFormDialog
+                            trigger={
+                                <Button
+                                    className="text-foreground-500"
+                                    variant="outline"
+                                    size="icon"
+                                >
+                                    <FaPlus size={20} />
+                                </Button>
+                            }
+                        />
+                    </RequireAuthority>
                 </div>
                 {projectsQuery.isSuccess && (
                     <>

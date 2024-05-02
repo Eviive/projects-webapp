@@ -1,3 +1,4 @@
+import { RequireAuthority } from "components/common/require-authority";
 import { ProjectFeaturedBadge } from "components/projects/project-featured-badge";
 import { ProjectFormDialog } from "components/projects/project-form-dialog";
 import { Button } from "components/ui/button";
@@ -51,26 +52,28 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                             {dateFormatter.format(new Date(project.creationDate))}
                         </CardDescription>
                     </div>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <ProjectFormDialog
-                                project={project}
-                                trigger={
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            className="text-foreground-500 h-7 w-7"
-                                            variant="outline"
-                                            size="icon"
-                                            disabled={isOptimistic}
-                                        >
-                                            <MdEdit size={18} />
-                                        </Button>
-                                    </TooltipTrigger>
-                                }
-                            />
-                            <TooltipContent>Edit</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <RequireAuthority authority={["update:project", "delete:project"]}>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <ProjectFormDialog
+                                    project={project}
+                                    trigger={
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                className="text-foreground-500 h-7 w-7"
+                                                variant="outline"
+                                                size="icon"
+                                                disabled={isOptimistic}
+                                            >
+                                                <MdEdit size={18} />
+                                            </Button>
+                                        </TooltipTrigger>
+                                    }
+                                />
+                                <TooltipContent>Edit</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </RequireAuthority>
                 </CardHeader>
                 <Separator />
                 <CardContent className="flex grow flex-col justify-between gap-3 p-4">

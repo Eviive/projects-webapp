@@ -1,3 +1,4 @@
+import { RequireAuthority } from "components/common/require-authority";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
@@ -23,26 +24,28 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
                     <CardTitle className="max-w-[calc(100% - 36px)] truncate text-sm">
                         {skill.name}
                     </CardTitle>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <SkillFormDialog
-                                skill={skill}
-                                trigger={
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            className="text-foreground-500 h-7 w-7"
-                                            variant="outline"
-                                            size="icon"
-                                            disabled={isOptimistic}
-                                        >
-                                            <MdEdit size={18} />
-                                        </Button>
-                                    </TooltipTrigger>
-                                }
-                            />
-                            <TooltipContent>Edit</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <RequireAuthority authority={["update:skill", "delete:skill"]}>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <SkillFormDialog
+                                    skill={skill}
+                                    trigger={
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                className="text-foreground-500 h-7 w-7"
+                                                variant="outline"
+                                                size="icon"
+                                                disabled={isOptimistic}
+                                            >
+                                                <MdEdit size={18} />
+                                            </Button>
+                                        </TooltipTrigger>
+                                    }
+                                />
+                                <TooltipContent>Edit</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </RequireAuthority>
                 </CardHeader>
                 <Separator />
                 <CardContent className="flex items-center justify-center p-4">
