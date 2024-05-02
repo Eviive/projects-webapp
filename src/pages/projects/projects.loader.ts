@@ -1,6 +1,6 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
-import { queryLoader } from "libs/utils/loader";
+import { protectedQueryLoader, queryLoader } from "libs/utils/loader";
 import { getNumberSearchParam } from "libs/utils/search-params";
 import type { Project } from "types/entities/project";
 import type { QueryLoaderFunction } from "types/loader";
@@ -13,7 +13,7 @@ export const projectsQueryOptionsFn = (page?: number, size?: number, search?: st
         placeholderData: keepPreviousData
     });
 
-export const projectsLoader: QueryLoaderFunction<Page<Project> | null> =
+const projectsQueryLoader: QueryLoaderFunction<Page<Project> | null> =
     qC =>
     async ({ request }) => {
         const searchParams = new URL(request.url).searchParams;
@@ -26,3 +26,5 @@ export const projectsLoader: QueryLoaderFunction<Page<Project> | null> =
 
         return queryLoader(qC, projectsQueryOptions);
     };
+
+export const projectsLoader = protectedQueryLoader(["read:project"], projectsQueryLoader);

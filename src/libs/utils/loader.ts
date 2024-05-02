@@ -8,12 +8,17 @@ import type { UndefinedInitialDataOptions } from "@tanstack/react-query/src/quer
 import { hasEveryAuthority } from "libs/auth";
 import { redirect } from "react-router-dom";
 import type { Authority } from "types/auth";
-import type { LoaderFunction } from "types/loader";
+import type {
+    LoaderFunction,
+    ProtectedLoaderFunction,
+    ProtectedQueryLoaderFunction,
+    QueryLoaderFunction
+} from "types/loader";
 
-export const protectedLoader = <V>(
+export const protectedLoader = <D>(
     authorities: Authority[],
-    loader: LoaderFunction<V>
-): LoaderFunction<V | Response> => {
+    loader: LoaderFunction<D>
+): ProtectedLoaderFunction<D> => {
     return async args => {
         if (hasEveryAuthority(authorities)) {
             return loader(args);
@@ -36,6 +41,13 @@ export const protectedLoader = <V>(
 
         return redirect(`/login?${searchParams.toString()}`);
     };
+};
+
+export const protectedQueryLoader = <D>(
+    authorities: Authority[],
+    queryLoader: QueryLoaderFunction<D>
+): ProtectedQueryLoaderFunction<D> => {
+    return queryClient => protectedLoader(authorities, queryLoader(queryClient));
 };
 
 export const queryLoader = async <D, E, K extends QueryKey>(

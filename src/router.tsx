@@ -1,7 +1,6 @@
 import { queryClient } from "api/query-client";
 import { App } from "App";
 import { initAuthContext } from "libs/auth";
-import { protectedLoader } from "libs/utils/loader";
 import { ErrorPage } from "pages/error";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -33,23 +32,17 @@ export const router = createBrowserRouter(
                             path: "/projects",
                             lazy: async () => ({
                                 Component: (await import("pages/projects/projects")).Projects,
-                                loader: protectedLoader(
-                                    ["read:project"],
-                                    (await import("pages/projects/projects.loader")).projectsLoader(
-                                        queryClient
-                                    )
-                                )
+                                loader: (
+                                    await import("pages/projects/projects.loader")
+                                ).projectsLoader(queryClient)
                             })
                         },
                         {
                             path: "/skills",
                             lazy: async () => ({
                                 Component: (await import("pages/skills/skills")).Skills,
-                                loader: protectedLoader(
-                                    ["read:skill"],
-                                    (await import("pages/skills/skills.loader")).skillsLoader(
-                                        queryClient
-                                    )
+                                loader: (await import("pages/skills/skills.loader")).skillsLoader(
+                                    queryClient
                                 )
                             })
                         },
@@ -57,11 +50,8 @@ export const router = createBrowserRouter(
                             path: "/health",
                             lazy: async () => ({
                                 Component: (await import("pages/health/health")).Health,
-                                loader: protectedLoader(
-                                    ["read:actuator"],
-                                    (await import("pages/health/health.loader")).healthLoader(
-                                        queryClient
-                                    )
+                                loader: (await import("pages/health/health.loader")).healthLoader(
+                                    queryClient
                                 )
                             })
                         }
