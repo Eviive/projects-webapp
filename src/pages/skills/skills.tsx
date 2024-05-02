@@ -11,7 +11,7 @@ import { SearchBar } from "components/ui/search-bar";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
 import { updateSearchParams } from "libs/utils/search-params";
-import type { skillsLoader } from "pages/skills/skills.loader";
+import type { skillsQueryLoader } from "pages/skills/skills.loader";
 import { skillsQueryOptionsFn } from "pages/skills/skills.loader";
 import type { FC } from "react";
 import { useCallback, useState } from "react";
@@ -24,7 +24,7 @@ export const Skills: FC = () => {
 
     const search = searchParams.get("search") ?? undefined;
 
-    const initialSkills = useLoaderData() as QueryLoaderFunctionData<typeof skillsLoader>;
+    const initialSkills = useLoaderData() as QueryLoaderFunctionData<typeof skillsQueryLoader>;
 
     const skillsQuery = useInfiniteQuery({
         ...skillsQueryOptionsFn(search),

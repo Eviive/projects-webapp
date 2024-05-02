@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { HealthService } from "api/services/health";
-import { protectedQueryLoader, queryLoader } from "libs/utils/loader";
+import { protectedQueryLoader } from "libs/utils/loader/protected-loader";
+import { queryLoader } from "libs/utils/loader/query-loader";
 import type { HttpExchange } from "types/health";
 import type { QueryLoaderFunction } from "types/loader";
 
@@ -9,7 +10,7 @@ export const httpExchangesQueryOptions = queryOptions({
     queryFn: HealthService.httpExchanges
 });
 
-const healthQueryLoader: QueryLoaderFunction<HttpExchange[] | null> = qC => async () => {
+export const healthQueryLoader: QueryLoaderFunction<HttpExchange[] | null> = qC => async () => {
     return queryLoader(qC, httpExchangesQueryOptions);
 };
 

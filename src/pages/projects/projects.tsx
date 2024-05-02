@@ -17,7 +17,7 @@ import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
 import { clamp } from "libs/utils/math";
 import { getNumberSearchParam, updateSearchParams } from "libs/utils/search-params";
-import type { projectsLoader } from "pages/projects/projects.loader";
+import type { projectsQueryLoader } from "pages/projects/projects.loader";
 import { projectsQueryOptionsFn } from "pages/projects/projects.loader";
 import type { FC } from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
@@ -32,7 +32,7 @@ export const Projects: FC = () => {
     const size = getNumberSearchParam(searchParams, "size") ?? PROJECTS_DEFAULT_PAGE_SIZE;
     const search = searchParams.get("search") ?? undefined;
 
-    const initialProjects = useLoaderData() as QueryLoaderFunctionData<typeof projectsLoader>;
+    const initialProjects = useLoaderData() as QueryLoaderFunctionData<typeof projectsQueryLoader>;
 
     const projectsQuery = useQuery({
         ...projectsQueryOptionsFn(page, size, search),

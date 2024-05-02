@@ -87,7 +87,7 @@ export const HeaderUserAccount: FC<Props> = props => {
     const currentUrl = location.pathname + location.search;
 
     let loginHref = "/login";
-    if (currentUrl !== import.meta.env.VITE_ROUTER_BASE_URL) {
+    if (currentUrl !== `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/`) {
         loginHref += `?redirect=${encodeURIComponent(currentUrl)}`;
     }
 
