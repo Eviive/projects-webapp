@@ -1,3 +1,4 @@
+import { useAuthContext } from "contexts/auth-context";
 import { hasAuthority } from "libs/auth";
 import type { FC, PropsWithChildren } from "react";
 import type { Authority } from "types/auth";
@@ -7,7 +8,9 @@ type Props = {
 };
 
 export const RequireAuthority: FC<PropsWithChildren<Props>> = props => {
-    if (!hasAuthority(props.authority)) {
+    const { currentUser } = useAuthContext();
+
+    if (!hasAuthority(props.authority, currentUser.authorities)) {
         return null;
     }
 

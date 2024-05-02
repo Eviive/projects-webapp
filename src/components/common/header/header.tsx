@@ -3,6 +3,7 @@ import { HeaderButton } from "components/common/header/header-button";
 import { HeaderLink } from "components/common/header/header-link";
 import { HeaderThemeSwitcher } from "components/common/header/header-theme-switcher";
 import { HeaderUserAccount } from "components/common/header/header-user-account";
+import { RequireAuthority } from "components/common/require-authority";
 import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { getDetail } from "libs/utils/error";
@@ -80,37 +81,45 @@ export const Header: FC = () => {
                         className={getSidebarItemClasses}
                     />
 
-                    <HeaderLink
-                        type="sidebar"
-                        title="Projects"
-                        to="/projects"
-                        icon={<LuFolder className={iconClasses} />}
-                        className={getSidebarItemClasses}
-                    />
+                    <RequireAuthority authority="read:project">
+                        <HeaderLink
+                            type="sidebar"
+                            title="Projects"
+                            to="/projects"
+                            icon={<LuFolder className={iconClasses} />}
+                            className={getSidebarItemClasses}
+                        />
+                    </RequireAuthority>
 
-                    <HeaderLink
-                        type="sidebar"
-                        title="Skills"
-                        to="/skills"
-                        icon={<LuUserCog2 className={iconClasses} />}
-                        className={getSidebarItemClasses}
-                    />
+                    <RequireAuthority authority="read:skill">
+                        <HeaderLink
+                            type="sidebar"
+                            title="Skills"
+                            to="/skills"
+                            icon={<LuUserCog2 className={iconClasses} />}
+                            className={getSidebarItemClasses}
+                        />
+                    </RequireAuthority>
 
-                    <HeaderLink
-                        type="sidebar"
-                        title="Health"
-                        to="/health"
-                        icon={<LuActivity className={iconClasses} />}
-                        className={getSidebarItemClasses}
-                    />
+                    <RequireAuthority authority="read:actuator">
+                        <HeaderLink
+                            type="sidebar"
+                            title="Health"
+                            to="/health"
+                            icon={<LuActivity className={iconClasses} />}
+                            className={getSidebarItemClasses}
+                        />
+                    </RequireAuthority>
 
-                    <HeaderButton
-                        type="sidebar"
-                        title="Revalidate portfolio"
-                        handleClick={handleRevalidate}
-                        icon={<LuRefreshCw className={iconClasses} />}
-                        className={sidebarItemClasses}
-                    />
+                    <RequireAuthority authority="revalidate:portfolio">
+                        <HeaderButton
+                            type="sidebar"
+                            title="Revalidate portfolio"
+                            handleClick={handleRevalidate}
+                            icon={<LuRefreshCw className={iconClasses} />}
+                            className={sidebarItemClasses}
+                        />
+                    </RequireAuthority>
                 </nav>
                 <nav className={cn(sidebarNavClasses, "mt-auto")}>
                     <HeaderThemeSwitcher
@@ -146,37 +155,45 @@ export const Header: FC = () => {
                                 className={getHeaderItemClasses}
                             />
 
-                            <HeaderLink
-                                type="header"
-                                title="Projects"
-                                to="/projects"
-                                icon={<LuFolder className={iconClasses} />}
-                                className={getHeaderItemClasses}
-                            />
+                            <RequireAuthority authority="read:project">
+                                <HeaderLink
+                                    type="header"
+                                    title="Projects"
+                                    to="/projects"
+                                    icon={<LuFolder className={iconClasses} />}
+                                    className={getHeaderItemClasses}
+                                />
+                            </RequireAuthority>
 
-                            <HeaderLink
-                                type="header"
-                                title="Skills"
-                                to="/skills"
-                                icon={<LuUserCog2 className={iconClasses} />}
-                                className={getHeaderItemClasses}
-                            />
+                            <RequireAuthority authority="read:skill">
+                                <HeaderLink
+                                    type="header"
+                                    title="Skills"
+                                    to="/skills"
+                                    icon={<LuUserCog2 className={iconClasses} />}
+                                    className={getHeaderItemClasses}
+                                />
+                            </RequireAuthority>
 
-                            <HeaderLink
-                                type="header"
-                                title="Health"
-                                to="/health"
-                                icon={<LuActivity className={iconClasses} />}
-                                className={getHeaderItemClasses}
-                            />
+                            <RequireAuthority authority="read:actuator">
+                                <HeaderLink
+                                    type="header"
+                                    title="Health"
+                                    to="/health"
+                                    icon={<LuActivity className={iconClasses} />}
+                                    className={getHeaderItemClasses}
+                                />
+                            </RequireAuthority>
 
-                            <HeaderButton
-                                type="header"
-                                title="Revalidate portfolio"
-                                handleClick={handleRevalidate}
-                                icon={<LuRefreshCw className={iconClasses} />}
-                                className={headerItemClasses}
-                            />
+                            <RequireAuthority authority="revalidate:portfolio">
+                                <HeaderButton
+                                    type="header"
+                                    title="Revalidate portfolio"
+                                    handleClick={handleRevalidate}
+                                    icon={<LuRefreshCw className={iconClasses} />}
+                                    className={headerItemClasses}
+                                />
+                            </RequireAuthority>
                         </nav>
                         <nav className={cn(headerNavClasses, "mt-auto")}>
                             <HeaderThemeSwitcher
