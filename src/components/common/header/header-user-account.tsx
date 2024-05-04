@@ -11,14 +11,16 @@ import {
 } from "components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useAuthContext } from "contexts/auth-context";
-import { clearAuthContext } from "libs/auth";
+import { clearAuthContext, hasEveryAuthority } from "libs/auth";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { LuUser2 } from "react-icons/lu";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useMatches, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { type Authority, authoritySchema } from "types/auth";
 import type { HeaderTypeProps } from "types/header";
+import { z } from "zod";
 
 type Props = HeaderTypeProps & {
     classNames?: {
@@ -27,13 +29,17 @@ type Props = HeaderTypeProps & {
     };
 };
 
+const authoritiesDataSchema = z.object({
+    authorities: z.array(authoritySchema)
+});
+
 export const HeaderUserAccount: FC<Props> = props => {
     const { currentUser } = useAuthContext();
 
     const isLoggedIn = currentUser.id !== null;
 
     const location = useLocation();
-
+    const matches = useMatches();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -43,10 +49,31 @@ export const HeaderUserAccount: FC<Props> = props => {
             console.error("Logout failed:", getDetail(e));
         } finally {
             toast.success("You have been logged out.");
-            await clearAuthContext(false);
-            navigate("/");
+            const { currentUser: newCurrentUser } = await clearAuthContext(false);
+
+            const requiredAuthoritiesToStay = new Set<Authority>();
+
+            for (const match of matches) {
+                const dataParseResult = authoritiesDataSchema.safeParse(match.data);
+
+                if (dataParseResult.success) {
+                    for (const authority of dataParseResult.data.authorities) {
+                        requiredAuthoritiesToStay.add(authority);
+                    }
+                }
+            }
+
+            const canStayOnCurrentMatch = hasEveryAuthority(
+                Array.from(requiredAuthoritiesToStay),
+                newCurrentUser.authorities
+            );
+
+            if (!canStayOnCurrentMatch) {
+                navigate("/");
+            }
+
             await queryClient.invalidateQueries({
-                refetchType: location.pathname === "/" ? "active" : "none"
+                refetchType: canStayOnCurrentMatch ? "active" : "none"
             });
         }
     };

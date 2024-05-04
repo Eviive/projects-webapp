@@ -33,8 +33,8 @@ export const LoginForm: FC = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const queryClient = useQueryClient();
 

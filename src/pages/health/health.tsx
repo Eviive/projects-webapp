@@ -62,7 +62,7 @@ export const Health: FC = () => {
                                           httpExchange =>
                                               httpExchange.response.status === status.code
                                       ).length
-                                    : 0
+                                    : null
                             }
                             isLoading={httpExchangesQuery.isLoading}
                             isError={httpExchangesQuery.isError}

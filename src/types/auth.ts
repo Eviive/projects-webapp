@@ -30,19 +30,25 @@ export type CurrentUser = {
     authorities: Authority[];
 };
 
+const roleWithoutPrefixSchema = z.enum(["ANONYMOUS", "ADMIN"]);
+const roleSchema = roleWithoutPrefixSchema.transform(role => `ROLE_${role}`);
+
+const scopeSchema = z.enum([
+    "read:project",
+    "create:project",
+    "update:project",
+    "delete:project",
+    "read:skill",
+    "create:skill",
+    "update:skill",
+    "delete:skill",
+    "revalidate:portfolio",
+    "read:actuator"
+]);
+
+export const authoritySchema = z.union([roleSchema, scopeSchema]);
+
+type Role = z.infer<typeof roleSchema>;
+type Scope = z.infer<typeof scopeSchema>;
+
 export type Authority = Role | Scope;
-
-type Role = `ROLE_${RoleWithoutPrefix}`;
-type RoleWithoutPrefix = "ANONYMOUS" | "ADMIN";
-
-type Scope =
-    | "read:project"
-    | "create:project"
-    | "update:project"
-    | "delete:project"
-    | "read:skill"
-    | "create:skill"
-    | "update:skill"
-    | "delete:skill"
-    | "revalidate:portfolio"
-    | "read:actuator";

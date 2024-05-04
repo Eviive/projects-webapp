@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from "react";
 import type { CurrentUser } from "types/auth";
 
-type IAuthContext = {
+export type IAuthContext = {
     currentUser: CurrentUser;
     accessToken: string | null;
 };

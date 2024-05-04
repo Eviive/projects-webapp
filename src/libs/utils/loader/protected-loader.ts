@@ -14,7 +14,12 @@ export const protectedLoader = <D>(
 ): ProtectedLoaderFunction<D> => {
     return async args => {
         if (hasEveryAuthority(authorities)) {
-            return loader(args);
+            const loaderResult = await loader(args);
+
+            return {
+                ...loaderResult,
+                authorities
+            };
         }
 
         let redirectPath = new URL(args.request.url).pathname;

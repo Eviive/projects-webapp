@@ -1,20 +1,23 @@
 import { UserService } from "api/services/user";
-import { getAuthContext, setAuthContext } from "contexts/auth-context";
+import { getAuthContext, type IAuthContext, setAuthContext } from "contexts/auth-context";
 import { getDetail } from "libs/utils/error";
 import { router } from "router";
 import type { Authority } from "types/auth";
 
-export const clearAuthContext = async (redirect = true) => {
-    await setAuthContext({
+export const clearAuthContext = async (redirect = true): Promise<IAuthContext> => {
+    const newAuthContext = {
         currentUser: await UserService.current(false),
         accessToken: null
-    });
+    };
+
+    await setAuthContext(newAuthContext);
 
     if (!redirect) {
-        return;
+        return newAuthContext;
     }
 
     await router.navigate("/login", { replace: true });
+    return newAuthContext;
 };
 
 export const initAuthContext = async () => {
