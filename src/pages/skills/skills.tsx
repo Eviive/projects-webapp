@@ -88,12 +88,12 @@ export const Skills: FC = () => {
                                 onClick={() => skillsQuery.fetchNextPage()}
                                 disabled={skillsQuery.isFetchingNextPage}
                             >
-                                {skillsQuery.isFetchingNextPage ? "Loading more..." : "Load More"}
+                                {skillsQuery.isFetchingNextPage ? "Loading more..." : "Load more"}
                             </Button>
                         )}
                     </>
                 )}
-                {skillsQuery.isLoading && <Loader deferred />}
+                {skillsQuery.isLoading && <Loader defer />}
                 {skillsQuery.isError && <ErrorAlert error={skillsQuery.error} />}
             </div>
         </Page>

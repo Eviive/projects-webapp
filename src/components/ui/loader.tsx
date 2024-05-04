@@ -8,10 +8,10 @@ type Props = {
     size?: number;
     color?: string;
     absolute?: boolean;
-    deferred?: boolean | number;
+    defer?: boolean | number;
 };
 
-export const Loader: FC<Props> = ({ size, color, absolute, deferred }) => {
+export const Loader: FC<Props> = ({ size, color, absolute, defer }) => {
     const loaderStyle = {
         ...(size && { "--loader-size": `${size}px` }),
         ...(color && { "--loader-color": color })
@@ -30,8 +30,8 @@ export const Loader: FC<Props> = ({ size, color, absolute, deferred }) => {
         </div>
     );
 
-    return deferred ? (
-        <Defer delay={typeof deferred === "number" ? deferred : undefined}>{loader}</Defer>
+    return defer ? (
+        <Defer delay={typeof defer === "number" ? defer : undefined}>{loader}</Defer>
     ) : (
         loader
     );

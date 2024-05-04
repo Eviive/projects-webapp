@@ -152,7 +152,7 @@ export const Projects: FC = () => {
                         />
                     </>
                 )}
-                {projectsQuery.isLoading && <Loader deferred />}
+                {projectsQuery.isLoading && <Loader defer />}
                 {projectsQuery.isError && <ErrorAlert error={projectsQuery.error} />}
             </div>
         </Page>

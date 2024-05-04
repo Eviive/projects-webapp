@@ -76,7 +76,7 @@ export const Pagination: FC<Props> = props => {
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center space-x-2">
                     <div className="flex items-center justify-center text-sm font-medium">
                         {props.getPageCount() > 0
                             ? `Page ${props.pageIndex + 1} of ${props.getPageCount()}`
