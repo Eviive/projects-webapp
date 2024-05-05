@@ -8,7 +8,7 @@ import { Combobox } from "components/ui/combobox";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
-import { format } from "date-fns";
+import { format, formatISO } from "date-fns";
 import { SKILL_PLACEHOLDER } from "libs/constants";
 import { getImageUrl } from "libs/image";
 import { isNotNullOrUndefined } from "libs/utils/assertion";
@@ -84,7 +84,13 @@ export const ProjectFormFields: FC = () => {
                                         ? new Date(field.value)
                                         : undefined
                                 }
-                                onSelect={field.onChange}
+                                onSelect={date =>
+                                    isNotNullOrUndefined(date)
+                                        ? field.onChange(
+                                              formatISO(date, { representation: "date" })
+                                          )
+                                        : null
+                                }
                                 initialFocus
                                 buttonText={
                                     field.value ? format(field.value, "PPP") : "Pick a date"
