@@ -46,16 +46,16 @@ export const DataTableColumnHeader = <TData, TValue>({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                    <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+                    <DropdownMenuItem onSelect={() => column.toggleSorting(false)}>
                         <LuArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                         Asc
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+                    <DropdownMenuItem onSelect={() => column.toggleSorting(true)}>
                         <LuArrowDown className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                         Desc
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+                    <DropdownMenuItem onSelect={() => column.toggleVisibility(false)}>
                         <AiFillEyeInvisible className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                         Hide
                     </DropdownMenuItem>

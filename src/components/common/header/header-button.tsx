@@ -1,13 +1,10 @@
-import type { HeaderType } from "components/common/header/header";
 import { Button } from "components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
-import type { FC, ReactNode } from "react";
+import type { FC } from "react";
+import type { HeaderItemProps } from "types/header";
 
-type Props = {
-    type: HeaderType;
-    title: string;
+type Props = HeaderItemProps & {
     handleClick: () => void;
-    icon: ReactNode;
     className?: string;
 };
 
@@ -16,7 +13,7 @@ export const HeaderButton: FC<Props> = props => {
         return (
             <Button className={props.className} onClick={props.handleClick}>
                 {props.icon}
-                <span>{props.title}</span>
+                <span className="truncate">{props.title}</span>
             </Button>
         );
     }

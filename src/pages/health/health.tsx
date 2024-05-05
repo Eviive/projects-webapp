@@ -3,7 +3,7 @@ import { Page } from "components/common/page";
 import { HttpExchangesTable } from "components/health/http-exchanges-table";
 import { HttpStatusCard } from "components/health/http-status-card";
 import { Grid } from "layouts/grid";
-import type { healthLoader } from "pages/health/health.loader";
+import type { healthQueryLoader } from "pages/health/health.loader";
 import { httpExchangesQueryOptions } from "pages/health/health.loader";
 import type { FC } from "react";
 import {
@@ -39,7 +39,9 @@ const HTTP_STATUS = [
 ];
 
 export const Health: FC = () => {
-    const initialHttpExchanges = useLoaderData() as QueryLoaderFunctionData<typeof healthLoader>;
+    const initialHttpExchanges = useLoaderData() as QueryLoaderFunctionData<
+        typeof healthQueryLoader
+    >;
 
     const httpExchangesQuery = useQuery({
         ...httpExchangesQueryOptions,
@@ -60,7 +62,7 @@ export const Health: FC = () => {
                                           httpExchange =>
                                               httpExchange.response.status === status.code
                                       ).length
-                                    : 0
+                                    : null
                             }
                             isLoading={httpExchangesQuery.isLoading}
                             isError={httpExchangesQuery.isError}

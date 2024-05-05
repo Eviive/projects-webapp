@@ -1,32 +1,42 @@
-import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 
 const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
 
 type UseCountUpOutput = {
     count: number;
-    setStart: Dispatch<SetStateAction<boolean>>;
+    start: () => void;
 };
 
-export const useCountUp = (endValue: number, duration: number = 1000): UseCountUpOutput => {
+export const useCountUp = (endValue: number | null, duration: number = 1000): UseCountUpOutput => {
     const [count, setCount] = useState(0);
+
+    const [targetValue, setTargetValue] = useState(endValue);
 
     const [start, setStart] = useState(false);
 
-    useEffect(() => {
-        if (!start) return;
+    const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
 
-        let startTimestamp: number;
+    useEffect(() => {
+        if (endValue !== targetValue) {
+            setTargetValue(endValue);
+            setStartTimestamp(null);
+        }
+    }, [endValue, targetValue]);
+
+    useEffect(() => {
+        if (!start || targetValue === null) return;
+
         let animationFrameId: number;
 
         const animate = (timestamp: number) => {
-            if (startTimestamp === undefined) {
-                startTimestamp = timestamp;
+            if (startTimestamp === null) {
+                setStartTimestamp(timestamp);
+                return;
             }
 
             const elapsed = timestamp - startTimestamp;
             const progress = easeOutQuad(Math.min(elapsed / duration, 1));
-            setCount(Math.floor(endValue * progress));
+            setCount(count + Math.floor((targetValue - count) * progress));
 
             if (elapsed < duration) {
                 animationFrameId = requestAnimationFrame(animate);
@@ -36,10 +46,14 @@ export const useCountUp = (endValue: number, duration: number = 1000): UseCountU
         animationFrameId = requestAnimationFrame(animate);
 
         return () => cancelAnimationFrame(animationFrameId);
-    }, [start, endValue, duration]);
+    }, [start, targetValue, duration, startTimestamp, count]);
 
     return {
         count,
-        setStart
+        start: () => {
+            if (!start) {
+                setStart(true);
+            }
+        }
     };
 };

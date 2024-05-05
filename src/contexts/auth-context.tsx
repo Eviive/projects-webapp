@@ -1,36 +1,44 @@
-import { UserService } from "api/services/user";
-import { decodeToken } from "libs/token";
-import { getDetail } from "libs/utils/error";
-import { router } from "router";
+import { useSyncExternalStore } from "react";
+import type { CurrentUser } from "types/auth";
 
-type IAuthContext = {
+export type IAuthContext = {
+    currentUser: CurrentUser;
     accessToken: string | null;
-    setAccessToken: (accessToken: string | null) => void;
 };
 
-export const authContext: IAuthContext = {
-    accessToken: null,
-    setAccessToken: accessToken => {
-        authContext.accessToken = accessToken;
+let authContext: IAuthContext | null = null;
 
-        if (accessToken === null) {
-            router
-                .navigate("/login", { replace: true })
-                .catch(e => console.error("Failed to navigate to /login:", getDetail(e)));
-        }
+export const getAuthContext = (): IAuthContext => {
+    if (authContext === null) {
+        throw new Error("The authContext has not been initialized");
+    }
+
+    return authContext;
+};
+
+export const setAuthContext = async (newAuthContext: IAuthContext) => {
+    authContext = newAuthContext;
+    notify();
+};
+
+type Listener = () => void;
+
+const listeners: Listener[] = [];
+
+const notify = () => {
+    for (const listener of listeners) {
+        listener();
     }
 };
 
-export const initAuthContext = async () => {
-    try {
-        const { accessToken } = await UserService.refresh(false);
+const subscribe = (listener: Listener): (() => void) => {
+    listeners.push(listener);
+    return () => {
+        const index = listeners.indexOf(listener);
+        listeners.splice(index, 1);
+    };
+};
 
-        const tokenPayload = decodeToken(accessToken);
-
-        if (tokenPayload?.authorities.includes("ROLE_ADMIN")) {
-            authContext.setAccessToken(accessToken);
-        }
-    } catch (e) {
-        console.error("Persistent login failed:", getDetail(e));
-    }
+export const useAuthContext = () => {
+    return useSyncExternalStore(subscribe, getAuthContext);
 };

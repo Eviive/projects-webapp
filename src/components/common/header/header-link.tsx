@@ -1,13 +1,10 @@
-import type { HeaderType } from "components/common/header/header";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
-import type { FC, ReactNode } from "react";
+import type { FC } from "react";
 import { NavLink } from "react-router-dom";
+import type { HeaderItemProps } from "types/header";
 
-type Props = {
-    type: HeaderType;
-    title: string;
+type Props = HeaderItemProps & {
     to: string;
-    icon: ReactNode;
     className?: string | (({ isActive }: { isActive: boolean }) => string);
 };
 
@@ -16,7 +13,7 @@ export const HeaderLink: FC<Props> = props => {
         return (
             <NavLink to={props.to} className={props.className}>
                 {props.icon}
-                <span>{props.title}</span>
+                <span className="truncate">{props.title}</span>
             </NavLink>
         );
     }
