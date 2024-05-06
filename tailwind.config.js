@@ -83,9 +83,6 @@ export default {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out"
             },
-            minHeight: {
-                "screen-dynamic": ["100vh", "100dvh"]
-            },
             dropShadow: {
                 icon: "0 1px 1px hsl(0deg, 0%, 0%, 0.5)"
             }

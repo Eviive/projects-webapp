@@ -1,9 +1,11 @@
 import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
-import { authContext } from "contexts/auth-context";
+import { getAuthContext } from "contexts/auth-context";
+import { hasEveryAuthority } from "libs/auth";
 import { getDetail } from "libs/utils/error";
 import { toast } from "sonner";
+import type { Authority } from "types/auth";
 
 export const httpClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -16,7 +18,8 @@ export const httpClient = axios.create({
 initInterceptors(httpClient);
 
 type RequestConfig<D> = AxiosRequestConfig<D> & {
-    needsAuth?: boolean;
+    requiredAuthorities?: Authority[];
+    needsAccessToken?: boolean;
     showErrorToast?: boolean;
 };
 
@@ -25,16 +28,19 @@ export const request = async <T = void, D = undefined>(url: string, config?: Req
         method = "GET",
         data,
         headers,
-        needsAuth = true,
+        requiredAuthorities,
+        needsAccessToken = true,
         showErrorToast = true,
         ...restConfig
     } = config ?? {};
 
-    const { accessToken } = authContext;
-    if (needsAuth && accessToken === null) {
-        toast.error("You need to login before accessing this page.");
-        throw new Error("No access token found");
+    if (requiredAuthorities !== undefined && !hasEveryAuthority(requiredAuthorities)) {
+        const message = "You do not have the required authorities to perform this action.";
+        toast.error(message);
+        throw new Error(message);
     }
+
+    const accessToken = needsAccessToken ? getAuthContext().accessToken : null;
 
     let res: AxiosResponse<T, D>;
     try {
@@ -45,7 +51,9 @@ export const request = async <T = void, D = undefined>(url: string, config?: Req
             headers: {
                 ...(data && { "Content-Type": "application/json" }),
                 ...headers,
-                ...(needsAuth && { Authorization: `Bearer ${accessToken}` })
+                ...(accessToken !== null && {
+                    Authorization: `Bearer ${accessToken}`
+                })
             },
             ...restConfig
         });

@@ -13,7 +13,11 @@ export const StatusCards: FC<Props> = ({ data }) => {
         <Grid columnCount={4}>
             <StatusCard title="API" icon={<FaServer size={35} />} status={data.status} />
             <StatusCard
-                title={"DB " + data.components.db.details.database}
+                title={
+                    data.components.db.details
+                        ? "DB " + data.components.db.details.database
+                        : "Database"
+                }
                 icon={<FaDatabase size={35} />}
                 status={data.components.db.status}
             />
@@ -23,7 +27,11 @@ export const StatusCards: FC<Props> = ({ data }) => {
                 status={data.components.ping.status}
             />
             <StatusCard
-                title={`Disk ${(data.components.diskSpace.details.free / 1_000_000_000).toFixed(1)} GB`}
+                title={
+                    data.components.diskSpace.details
+                        ? `Disk ${(data.components.diskSpace.details.free / 1_000_000_000).toFixed(1)} GB`
+                        : "Disk"
+                }
                 icon={<FaHdd size={35} />}
                 status={data.components.diskSpace.status}
             />

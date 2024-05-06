@@ -5,13 +5,13 @@ export type Health = {
     components: {
         db: {
             status: Status;
-            details: {
+            details?: {
                 database: string;
             };
         };
         diskSpace: {
             status: Status;
-            details: {
+            details?: {
                 path: string;
                 total: number;
                 free: number;

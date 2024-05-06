@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
 import { cn } from "libs/utils/style";
 import type { Key, ReactNode } from "react";
 import { LuCheck, LuChevronsUpDown } from "react-icons/lu";
+import type { PropsWithStatus } from "types/utils/props";
 
 const listFormatter = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" });
 
@@ -19,9 +20,6 @@ type CommonProps<V> = {
     getValue: (item: V) => string;
     placeholder: string;
     searchPlaceholder: string;
-    emptyOptionsText: string;
-    loading: false | string;
-    error: false | string;
 };
 
 type SingleProps<V> = {
@@ -34,7 +32,7 @@ type MultipleProps<V> = {
     value: V[];
 };
 
-export const Combobox = <V,>(props: Props<V>) => {
+export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
     const getButtonLabel = () => {
         if (props.selection === "multiple" && props.value.length > 0) {
             return listFormatter.format(props.value.map(item => props.getValue(item)));
@@ -70,7 +68,7 @@ export const Combobox = <V,>(props: Props<V>) => {
                     <CommandInput placeholder={props.searchPlaceholder} />
                     <CommandList className="max-h-[204px]">
                         <ComboboxEmpty
-                            emptyOptions={props.options.length <= 0 && props.emptyOptionsText}
+                            empty={props.empty}
                             loading={props.loading}
                             error={props.error}
                         />

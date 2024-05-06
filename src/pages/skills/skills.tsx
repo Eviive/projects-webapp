@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
+import { RequireAuthority } from "components/common/require-authority";
 import { SkillCard } from "components/skills/skill-card";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
 import { SkillSortButton, sortSkillsMutationKey } from "components/skills/skill-sort-button";
@@ -10,7 +11,7 @@ import { SearchBar } from "components/ui/search-bar";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
 import { updateSearchParams } from "libs/utils/search-params";
-import type { skillsLoader } from "pages/skills/skills.loader";
+import type { skillsQueryLoader } from "pages/skills/skills.loader";
 import { skillsQueryOptionsFn } from "pages/skills/skills.loader";
 import type { FC } from "react";
 import { useCallback, useState } from "react";
@@ -23,7 +24,7 @@ export const Skills: FC = () => {
 
     const search = searchParams.get("search") ?? undefined;
 
-    const initialSkills = useLoaderData() as QueryLoaderFunctionData<typeof skillsLoader>;
+    const initialSkills = useLoaderData() as QueryLoaderFunctionData<typeof skillsQueryLoader>;
 
     const skillsQuery = useInfiniteQuery({
         ...skillsQueryOptionsFn(search),
@@ -55,14 +56,20 @@ export const Skills: FC = () => {
                         handleDebounce={setSearchQueryParam}
                         isDisabled={skillsQuery.isError}
                     />
-                    <SkillSortButton />
-                    <SkillFormDialog
-                        trigger={
-                            <Button className="text-foreground-500" variant="outline" size="icon">
-                                <FaPlus size={20} />
-                            </Button>
-                        }
-                    />
+                    <RequireAuthority authority={["create:skill", "update:skill", "delete:skill"]}>
+                        <SkillSortButton />
+                        <SkillFormDialog
+                            trigger={
+                                <Button
+                                    className="text-foreground-500"
+                                    variant="outline"
+                                    size="icon"
+                                >
+                                    <FaPlus size={20} />
+                                </Button>
+                            }
+                        />
+                    </RequireAuthority>
                 </div>
                 {skillsQuery.isSuccess && (
                     <>
@@ -81,12 +88,12 @@ export const Skills: FC = () => {
                                 onClick={() => skillsQuery.fetchNextPage()}
                                 disabled={skillsQuery.isFetchingNextPage}
                             >
-                                {skillsQuery.isFetchingNextPage ? "Loading more..." : "Load More"}
+                                {skillsQuery.isFetchingNextPage ? "Loading more..." : "Load more"}
                             </Button>
                         )}
                     </>
                 )}
-                {skillsQuery.isLoading && <Loader deferred />}
+                {skillsQuery.isLoading && <Loader defer />}
                 {skillsQuery.isError && <ErrorAlert error={skillsQuery.error} />}
             </div>
         </Page>

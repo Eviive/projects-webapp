@@ -1,8 +1,10 @@
+import { queryClient } from "api/query-client";
 import { UserService } from "api/services/user";
 import type { AxiosInstance } from "axios";
 import { AxiosError } from "axios";
-import { authContext } from "contexts/auth-context";
-import { decodeToken, isTokenExpired } from "libs/token";
+import { setAuthContext } from "contexts/auth-context";
+import { clearAuthContext } from "libs/auth";
+import { isTokenExpired } from "libs/token";
 import { getDetail } from "libs/utils/error";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
@@ -21,25 +23,18 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
             return req;
         }
 
-        console.log("Access token expired, refreshing...");
-
-        const { setAccessToken } = authContext;
         try {
-            const { accessToken: newAccessToken } = await UserService.refresh();
+            const refreshRes = await UserService.refresh();
 
-            const tokenPayload = decodeToken(newAccessToken);
+            req.headers.setAuthorization(`Bearer ${refreshRes.accessToken}`);
 
-            if (!tokenPayload || !tokenPayload.authorities.includes("ROLE_ADMIN")) {
-                setAccessToken(null);
-                return Promise.reject(new Error("User is not an admin"));
-            }
-
-            req.headers.setAuthorization(`Bearer ${newAccessToken}`);
-            setAccessToken(newAccessToken);
+            await setAuthContext(refreshRes);
         } catch (e) {
             console.error("Error while refreshing token:", getDetail(e));
-            setAccessToken(null);
+            await clearAuthContext();
             return Promise.reject(e);
+        } finally {
+            await queryClient.invalidateQueries();
         }
 
         return req;
@@ -49,7 +44,8 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
         res => res,
         async err => {
             if (err instanceof AxiosError && err.response?.status === 401) {
-                authContext.setAccessToken(null);
+                await clearAuthContext();
+                await queryClient.invalidateQueries();
             }
             return Promise.reject(err);
         }

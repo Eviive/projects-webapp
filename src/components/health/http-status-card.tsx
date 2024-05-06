@@ -9,19 +9,19 @@ type Props = {
     name: string;
     code: number;
     icon: ReactNode;
-    value: number;
+    value: number | null;
     isLoading?: boolean;
     isError?: boolean;
 };
 
 export const HttpStatusCard: FC<Props> = props => {
-    const { count, setStart } = useCountUp(props.value, 1000);
+    const { count, start } = useCountUp(props.value, 1000);
 
     useEffect(() => {
         if (!props.isLoading && !props.isError) {
-            setStart(true);
+            start();
         }
-    }, [props.isLoading, props.isError, setStart]);
+    }, [props.isLoading, props.isError, start]);
 
     let value: number | string;
     if (props.isError) {

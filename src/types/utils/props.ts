@@ -1,15 +1,17 @@
 import type { RenderableReactNode } from "types/utils/react";
 
+type FalseOrNode = false | RenderableReactNode;
+
 export type EmptyProps = {
-    empty: false | RenderableReactNode;
+    empty: FalseOrNode;
 };
 
 export type LoadingProps = {
-    loading: false | RenderableReactNode;
+    loading: FalseOrNode;
 };
 
 export type ErrorProps = {
-    error: false | RenderableReactNode;
+    error: FalseOrNode;
 };
 
 export type PropsWithStatus<P = unknown> = P & EmptyProps & LoadingProps & ErrorProps;

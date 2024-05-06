@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { ImageService } from "api/services/image";
 import { SkillService } from "api/services/skill";
 import { SortDialogContent } from "components/common/sort-dialog/sort-dialog-content";
 import { useSortDialogContext } from "components/common/sort-dialog/sort-dialog-context";
@@ -7,6 +6,7 @@ import { sortSkillsMutationKey } from "components/skills/skill-sort-button";
 import { Loader } from "components/ui/loader";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { SKILL_PLACEHOLDER } from "libs/constants";
+import { getImageUrl } from "libs/image";
 import type { FC } from "react";
 
 export const SkillSortDialog: FC = () => {
@@ -29,7 +29,7 @@ export const SkillSortDialog: FC = () => {
                 <div className="flex grow items-center gap-3">
                     <img
                         className="aspect-square object-cover drop-shadow-icon"
-                        src={ImageService.getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
+                        src={getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                         alt={skill.image.altEn}
                         width={36}
                         loading="lazy"
