@@ -3,6 +3,7 @@ import { App } from "App";
 import { initAuthContext } from "libs/auth";
 import { ErrorPage } from "pages/error";
 import { createBrowserRouter } from "react-router-dom";
+import type { Authority } from "types/auth";
 
 await initAuthContext();
 
@@ -30,30 +31,48 @@ export const router = createBrowserRouter(
                         },
                         {
                             path: "/projects",
-                            lazy: async () => ({
-                                Component: (await import("pages/projects/projects")).Projects,
-                                loader: (
-                                    await import("pages/projects/projects.loader")
-                                ).projectsLoader(queryClient)
-                            })
+                            lazy: async () => {
+                                const authorities: Authority[] = ["read:project"];
+                                return {
+                                    Component: (await import("pages/projects/projects")).Projects,
+                                    loader: (
+                                        await import("pages/projects/projects.loader")
+                                    ).projectsLoader(queryClient, authorities),
+                                    handle: {
+                                        authorities
+                                    }
+                                };
+                            }
                         },
                         {
                             path: "/skills",
-                            lazy: async () => ({
-                                Component: (await import("pages/skills/skills")).Skills,
-                                loader: (await import("pages/skills/skills.loader")).skillsLoader(
-                                    queryClient
-                                )
-                            })
+                            lazy: async () => {
+                                const authorities: Authority[] = ["read:skill"];
+                                return {
+                                    Component: (await import("pages/skills/skills")).Skills,
+                                    loader: (
+                                        await import("pages/skills/skills.loader")
+                                    ).skillsLoader(queryClient, authorities),
+                                    handle: {
+                                        authorities
+                                    }
+                                };
+                            }
                         },
                         {
                             path: "/health",
-                            lazy: async () => ({
-                                Component: (await import("pages/health/health")).Health,
-                                loader: (await import("pages/health/health.loader")).healthLoader(
-                                    queryClient
-                                )
-                            })
+                            lazy: async () => {
+                                const authorities: Authority[] = ["read:actuator"];
+                                return {
+                                    Component: (await import("pages/health/health")).Health,
+                                    loader: (
+                                        await import("pages/health/health.loader")
+                                    ).healthLoader(queryClient, authorities),
+                                    handle: {
+                                        authorities
+                                    }
+                                };
+                            }
                         }
                     ]
                 },

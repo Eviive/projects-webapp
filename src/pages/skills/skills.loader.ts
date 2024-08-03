@@ -28,4 +28,4 @@ export const skillsQueryLoader: QueryLoaderFunction<InfiniteData<Slice<Skill>, n
         return infiniteQueryLoader(qC, skillsQueryOptions);
     };
 
-export const skillsLoader = protectedQueryLoader(["read:skill"], skillsQueryLoader);
+export const skillsLoader = protectedQueryLoader(skillsQueryLoader);

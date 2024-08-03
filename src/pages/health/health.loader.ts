@@ -14,4 +14,4 @@ export const healthQueryLoader: QueryLoaderFunction<HttpExchange[] | null> = qC 
     return queryLoader(qC, httpExchangesQueryOptions);
 };
 
-export const healthLoader = protectedQueryLoader(["read:actuator"], healthQueryLoader);
+export const healthLoader = protectedQueryLoader(healthQueryLoader);

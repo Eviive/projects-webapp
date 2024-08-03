@@ -28,4 +28,4 @@ export const projectsQueryLoader: QueryLoaderFunction<Page<Project> | null> =
         return queryLoader(qC, projectsQueryOptions);
     };
 
-export const projectsLoader = protectedQueryLoader(["read:project"], projectsQueryLoader);
+export const projectsLoader = protectedQueryLoader(projectsQueryLoader);

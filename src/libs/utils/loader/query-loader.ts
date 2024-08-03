@@ -2,9 +2,9 @@ import type {
     InfiniteData,
     QueryClient,
     QueryKey,
-    UndefinedInitialDataInfiniteOptions
+    UndefinedInitialDataInfiniteOptions,
+    UndefinedInitialDataOptions
 } from "@tanstack/react-query";
-import type { UndefinedInitialDataOptions } from "@tanstack/react-query/src/queryOptions";
 
 export const queryLoader = async <D, E, K extends QueryKey>(
     queryClient: QueryClient,
