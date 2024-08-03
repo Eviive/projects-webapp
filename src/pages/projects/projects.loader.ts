@@ -1,7 +1,7 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 import { ProjectService } from "api/services/project";
-import { protectedQueryLoader } from "libs/utils/loader/protected-loader";
-import { queryLoader } from "libs/utils/loader/query-loader";
+import { protectedQueryLoader } from "libs/loader/protected-loader";
+import { queryLoader } from "libs/loader/query-loader";
 import { getNumberSearchParam } from "libs/utils/search-params";
 import type { Project } from "types/entities/project";
 import type { QueryLoaderFunction } from "types/loader";

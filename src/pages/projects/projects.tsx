@@ -17,13 +17,11 @@ import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
 import { clamp } from "libs/utils/math";
 import { getNumberSearchParam, updateSearchParams } from "libs/utils/search-params";
-import type { projectsQueryLoader } from "pages/projects/projects.loader";
 import { projectsQueryOptionsFn } from "pages/projects/projects.loader";
 import type { FC } from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { useLoaderData, useSearchParams } from "react-router-dom";
-import type { QueryLoaderFunctionData } from "types/loader";
+import { useSearchParams } from "react-router-dom";
 
 export const Projects: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -32,12 +30,7 @@ export const Projects: FC = () => {
     const size = getNumberSearchParam(searchParams, "size") ?? PROJECTS_DEFAULT_PAGE_SIZE;
     const search = searchParams.get("search") ?? undefined;
 
-    const initialProjects = useLoaderData() as QueryLoaderFunctionData<typeof projectsQueryLoader>;
-
-    const projectsQuery = useQuery({
-        ...projectsQueryOptionsFn(page, size, search),
-        initialData: initialProjects ?? undefined
-    });
+    const projectsQuery = useQuery(projectsQueryOptionsFn(page, size, search));
 
     const [optimisticProjects, optimisticProjectSorts] = useOptimisticSort(
         sortProjectsMutationKey,

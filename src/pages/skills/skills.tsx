@@ -11,25 +11,18 @@ import { SearchBar } from "components/ui/search-bar";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
 import { updateSearchParams } from "libs/utils/search-params";
-import type { skillsQueryLoader } from "pages/skills/skills.loader";
 import { skillsQueryOptionsFn } from "pages/skills/skills.loader";
 import type { FC } from "react";
 import { useCallback, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { useLoaderData, useSearchParams } from "react-router-dom";
-import type { QueryLoaderFunctionData } from "types/loader";
+import { useSearchParams } from "react-router-dom";
 
 export const Skills: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const search = searchParams.get("search") ?? undefined;
 
-    const initialSkills = useLoaderData() as QueryLoaderFunctionData<typeof skillsQueryLoader>;
-
-    const skillsQuery = useInfiniteQuery({
-        ...skillsQueryOptionsFn(search),
-        initialData: initialSkills ?? undefined
-    });
+    const skillsQuery = useInfiniteQuery(skillsQueryOptionsFn(search));
 
     const [optimisticSkills, optimisticSkillSorts] = useOptimisticSort(
         sortSkillsMutationKey,
