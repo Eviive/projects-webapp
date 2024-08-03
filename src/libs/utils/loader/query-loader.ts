@@ -13,7 +13,7 @@ export const queryLoader = async <D, E, K extends QueryKey>(
     try {
         return (
             queryClient.getQueryData(queryOpts.queryKey) ??
-            (await queryClient.fetchQuery(queryOpts))
+            (await queryClient.fetchQuery<D, E, D, K>(queryOpts))
         );
     } catch (error) {
         return null;
@@ -27,7 +27,7 @@ export const infiniteQueryLoader = async <D, E, K extends QueryKey, P>(
     try {
         return (
             queryClient.getQueryData(queryOpts.queryKey) ??
-            (await queryClient.fetchInfiniteQuery(queryOpts))
+            (await queryClient.fetchInfiniteQuery<D, E, D, K, P>(queryOpts))
         );
     } catch (error) {
         return null;
