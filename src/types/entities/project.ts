@@ -33,12 +33,7 @@ export const projectCreationSchema = z.object({
         .string({
             required_error: "Creation date is required"
         })
-        .regex(/^\d{4}-\d{2}-\d{2}$/, {
-            message: "Creation date must be in the format YYYY-MM-DD"
-        })
-        .refine(value => !isNaN(Date.parse(value)), {
-            message: "Creation date must be a date"
-        }),
+        .date("Creation date must be a valid date"),
     repoUrl: z
         .string({
             required_error: "Repository URL is required",
