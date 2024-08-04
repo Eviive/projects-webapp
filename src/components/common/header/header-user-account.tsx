@@ -18,9 +18,8 @@ import type { FC } from "react";
 import { LuUser2 } from "react-icons/lu";
 import { NavLink, useLocation, useMatches, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { type Authority, authoritySchema } from "types/auth";
+import { authoritiesHandleSchema, type Authority } from "types/auth";
 import type { HeaderTypeProps } from "types/header";
-import { z } from "zod";
 
 type Props = HeaderTypeProps & {
     classNames?: {
@@ -28,10 +27,6 @@ type Props = HeaderTypeProps & {
         icon?: string;
     };
 };
-
-const authoritiesDataSchema = z.object({
-    authorities: z.array(authoritySchema)
-});
 
 export const HeaderUserAccount: FC<Props> = props => {
     const { currentUser } = useAuthContext();
@@ -54,7 +49,7 @@ export const HeaderUserAccount: FC<Props> = props => {
             const requiredAuthoritiesToStay = new Set<Authority>();
 
             for (const match of matches) {
-                const dataParseResult = authoritiesDataSchema.safeParse(match.data);
+                const dataParseResult = authoritiesHandleSchema.safeParse(match.handle);
 
                 if (dataParseResult.success) {
                     for (const authority of dataParseResult.data.authorities) {

@@ -12,11 +12,10 @@ export const clearAuthContext = async (redirect = true): Promise<IAuthContext> =
 
     await setAuthContext(newAuthContext);
 
-    if (!redirect) {
-        return newAuthContext;
+    if (redirect) {
+        await router.navigate("/login", { replace: true });
     }
 
-    await router.navigate("/login", { replace: true });
     return newAuthContext;
 };
 

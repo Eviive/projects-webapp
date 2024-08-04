@@ -37,32 +37,28 @@ const SortDialogDragContent = <E extends DndItem>(
 ) => {
     const [initialSort] = useState(props.items.map(item => item.sort));
 
-    useImperativeHandle(
-        ref,
-        () => {
-            return () => {
-                const firstMovedIndex = props.items.findIndex(
-                    (item, i) => item.sort !== initialSort[i]
-                );
-                const lastMovedItem =
-                    firstMovedIndex !== -1
-                        ? props.items.findLastIndex((item, i) => item.sort !== initialSort[i])
-                        : -1;
+    useImperativeHandle(ref, () => {
+        return () => {
+            const firstMovedIndex = props.items.findIndex(
+                (item, i) => item.sort !== initialSort[i]
+            );
+            const lastMovedItem =
+                firstMovedIndex !== -1
+                    ? props.items.findLastIndex((item, i) => item.sort !== initialSort[i])
+                    : -1;
 
-                if (firstMovedIndex === -1 || lastMovedItem === -1) return null;
+            if (firstMovedIndex === -1 || lastMovedItem === -1) return null;
 
-                const movedItems = props.items.slice(firstMovedIndex, lastMovedItem + 1);
+            const movedItems = props.items.slice(firstMovedIndex, lastMovedItem + 1);
 
-                const sorts = movedItems.map(item => item.sort).sort((a, b) => a - b);
+            const sorts = movedItems.map(item => item.sort).sort((a, b) => a - b);
 
-                return movedItems.map((item, i) => ({
-                    id: item.id,
-                    sort: sorts[i]
-                }));
-            };
-        },
-        [props.items, initialSort]
-    );
+            return movedItems.map((item, i) => ({
+                id: item.id,
+                sort: sorts[i]
+            }));
+        };
+    }, [props.items, initialSort]);
 
     const [active, setActive] = useState<Active | null>(null);
 

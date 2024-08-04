@@ -2,19 +2,16 @@ import type {
     InfiniteData,
     QueryClient,
     QueryKey,
-    UndefinedInitialDataInfiniteOptions
+    UndefinedInitialDataInfiniteOptions,
+    UndefinedInitialDataOptions
 } from "@tanstack/react-query";
-import type { UndefinedInitialDataOptions } from "@tanstack/react-query/src/queryOptions";
 
 export const queryLoader = async <D, E, K extends QueryKey>(
     queryClient: QueryClient,
     queryOpts: UndefinedInitialDataOptions<D, E, D, K>
 ): Promise<D | null> => {
     try {
-        return (
-            queryClient.getQueryData(queryOpts.queryKey) ??
-            (await queryClient.fetchQuery(queryOpts))
-        );
+        return queryClient.fetchQuery<D, E, D, K>(queryOpts);
     } catch (error) {
         return null;
     }
@@ -25,10 +22,7 @@ export const infiniteQueryLoader = async <D, E, K extends QueryKey, P>(
     queryOpts: UndefinedInitialDataInfiniteOptions<D, E, InfiniteData<D, P>, K, P>
 ): Promise<InfiniteData<D, P> | null> => {
     try {
-        return (
-            queryClient.getQueryData(queryOpts.queryKey) ??
-            (await queryClient.fetchInfiniteQuery(queryOpts))
-        );
+        return queryClient.fetchInfiniteQuery<D, E, D, K, P>(queryOpts);
     } catch (error) {
         return null;
     }

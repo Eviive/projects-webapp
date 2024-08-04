@@ -3,7 +3,6 @@ import { Page } from "components/common/page";
 import { HttpExchangesTable } from "components/health/http-exchanges-table";
 import { HttpStatusCard } from "components/health/http-status-card";
 import { Grid } from "layouts/grid";
-import type { healthQueryLoader } from "pages/health/health.loader";
 import { httpExchangesQueryOptions } from "pages/health/health.loader";
 import type { FC } from "react";
 import {
@@ -12,8 +11,6 @@ import {
     AiOutlineExclamationCircle,
     AiOutlineQuestionCircle
 } from "react-icons/ai";
-import { useLoaderData } from "react-router-dom";
-import type { QueryLoaderFunctionData } from "types/loader";
 
 const HTTP_STATUS = [
     {
@@ -39,14 +36,7 @@ const HTTP_STATUS = [
 ];
 
 export const Health: FC = () => {
-    const initialHttpExchanges = useLoaderData() as QueryLoaderFunctionData<
-        typeof healthQueryLoader
-    >;
-
-    const httpExchangesQuery = useQuery({
-        ...httpExchangesQueryOptions,
-        initialData: initialHttpExchanges ?? undefined
-    });
+    const httpExchangesQuery = useQuery(httpExchangesQueryOptions);
 
     return (
         <Page title="Health">

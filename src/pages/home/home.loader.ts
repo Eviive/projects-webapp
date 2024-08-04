@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { HealthService } from "api/services/health";
-import { queryLoader } from "libs/utils/loader/query-loader";
+import { queryLoader } from "libs/loader/query-loader";
 import type { Health, Info } from "types/health";
 import type { QueryLoaderFunction } from "types/loader";
 
