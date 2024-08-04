@@ -2,11 +2,10 @@
 
 import { buttonVariants } from "components/ui/button";
 import { cn } from "libs/utils/style";
-import type { ComponentProps } from "react";
-import { DayPicker } from "react-day-picker";
+import { Chevron, DayPicker, type DayPickerProps } from "react-day-picker";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
-export type CalendarProps = ComponentProps<typeof DayPicker>;
+export type CalendarProps = DayPickerProps;
 
 const Calendar = ({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) => {
     return (
@@ -46,8 +45,15 @@ const Calendar = ({ className, classNames, showOutsideDays = true, ...props }: C
                 ...classNames
             }}
             components={{
-                IconLeft: () => <LuChevronLeft className="h-4 w-4" />,
-                IconRight: () => <LuChevronRight className="h-4 w-4" />
+                Chevron: chevronProps => {
+                    if (chevronProps.orientation === "left") {
+                        return <LuChevronLeft className="h-4 w-4" />;
+                    }
+                    if (chevronProps.orientation === "right") {
+                        return <LuChevronRight className="h-4 w-4" />;
+                    }
+                    return <Chevron {...chevronProps} />;
+                }
             }}
             {...props}
         />
