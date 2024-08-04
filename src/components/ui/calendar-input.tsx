@@ -20,7 +20,7 @@ export const CalendarInput: FC<Props> = props => {
                         variant="outline"
                         className={cn(
                             "flex w-full pl-3 text-left font-normal",
-                            !props.selected && "text-muted-foreground"
+                            props.mode && !props.selected && "text-muted-foreground"
                         )}
                     >
                         {props.buttonText}
