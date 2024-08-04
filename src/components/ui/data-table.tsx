@@ -107,7 +107,7 @@ export const DataTable = <TData,>(props: DataTableProps<TData>) => {
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
                                     {props.isError
                                         ? props.errorMessage
-                                        : props.noRowsMessage ?? "No results."}
+                                        : (props.noRowsMessage ?? "No results.")}
                                 </TableCell>
                             </TableRow>
                         )}
