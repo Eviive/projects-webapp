@@ -2,26 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
 import { StatusCards } from "components/home/status-cards";
 import { Skeleton } from "components/ui/skeleton";
-import type { homeLoader } from "pages/home/home.loader";
 import { healthQueryOptions, infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
-import { useLoaderData } from "react-router-dom";
-import type { QueryLoaderFunctionData } from "types/loader";
 
 export const Home: FC = () => {
-    const { info: initialInfo, health: initialHealth } = useLoaderData() as QueryLoaderFunctionData<
-        typeof homeLoader
-    >;
+    const infoQuery = useQuery(infoQueryOptions);
 
-    const infoQuery = useQuery({
-        ...infoQueryOptions,
-        initialData: initialInfo ?? undefined
-    });
-
-    const healthQuery = useQuery({
-        ...healthQueryOptions,
-        initialData: initialHealth ?? undefined
-    });
+    const healthQuery = useQuery(healthQueryOptions);
 
     return (
         <Page title="Home">

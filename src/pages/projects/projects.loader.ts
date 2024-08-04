@@ -1,11 +1,23 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
-import { ProjectService } from "api/services/project";
-import { protectedQueryLoader } from "libs/utils/loader/protected-loader";
-import { queryLoader } from "libs/utils/loader/query-loader";
+import { PROJECTS_DEFAULT_PAGE_SIZE, ProjectService } from "api/services/project";
+import { protectedQueryLoader } from "libs/loader/protected-loader";
+import { queryLoader } from "libs/loader/query-loader";
 import { getNumberSearchParam } from "libs/utils/search-params";
 import type { Project } from "types/entities/project";
 import type { QueryLoaderFunction } from "types/loader";
 import type { Page } from "types/pagination";
+
+export const getProjectsQueryParams = (searchParams: URLSearchParams) => {
+    const page = getNumberSearchParam(searchParams, "page") ?? 0;
+    const size = getNumberSearchParam(searchParams, "size") ?? PROJECTS_DEFAULT_PAGE_SIZE;
+    const search = searchParams.get("search") ?? undefined;
+
+    return {
+        page,
+        size,
+        search
+    };
+};
 
 export const projectsQueryOptionsFn = (page?: number, size?: number, search?: string) =>
     queryOptions({
@@ -19,13 +31,11 @@ export const projectsQueryLoader: QueryLoaderFunction<Page<Project> | null> =
     async ({ request }) => {
         const searchParams = new URL(request.url).searchParams;
 
-        const page = getNumberSearchParam(searchParams, "page");
-        const size = getNumberSearchParam(searchParams, "size");
-        const search = searchParams.get("search") ?? undefined;
+        const { page, size, search } = getProjectsQueryParams(searchParams);
 
         const projectsQueryOptions = projectsQueryOptionsFn(page, size, search);
 
         return queryLoader(qC, projectsQueryOptions);
     };
 
-export const projectsLoader = protectedQueryLoader(["read:project"], projectsQueryLoader);
+export const projectsLoader = protectedQueryLoader(projectsQueryLoader);

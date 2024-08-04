@@ -52,3 +52,7 @@ type Role = z.infer<typeof roleSchema>;
 type Scope = z.infer<typeof scopeSchema>;
 
 export type Authority = Role | Scope;
+
+export const authoritiesHandleSchema = z.object({
+    authorities: z.array(authoritySchema)
+});

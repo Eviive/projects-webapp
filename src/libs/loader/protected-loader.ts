@@ -14,12 +14,7 @@ export const protectedLoader = <D>(
 ): ProtectedLoaderFunction<D> => {
     return async args => {
         if (hasEveryAuthority(authorities)) {
-            const loaderResult = await loader(args);
-
-            return {
-                ...loaderResult,
-                authorities
-            };
+            return loader(args);
         }
 
         let redirectPath = new URL(args.request.url).pathname;
@@ -42,8 +37,7 @@ export const protectedLoader = <D>(
 };
 
 export const protectedQueryLoader = <D>(
-    authorities: Authority[],
     queryLoader: QueryLoaderFunction<D>
 ): ProtectedQueryLoaderFunction<D> => {
-    return queryClient => protectedLoader(authorities, queryLoader(queryClient));
+    return (queryClient, authorities) => protectedLoader(authorities, queryLoader(queryClient));
 };

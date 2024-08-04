@@ -91,7 +91,6 @@ export const ProjectFormFields: FC = () => {
                                           )
                                         : null
                                 }
-                                initialFocus
                                 buttonText={
                                     field.value ? format(field.value, "PPP") : "Pick a date"
                                 }
