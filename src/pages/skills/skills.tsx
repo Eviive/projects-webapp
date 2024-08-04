@@ -11,7 +11,7 @@ import { SearchBar } from "components/ui/search-bar";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
 import { updateSearchParams } from "libs/utils/search-params";
-import { skillsQueryOptionsFn } from "pages/skills/skills.loader";
+import { getSkillsQueryParams, skillsQueryOptionsFn } from "pages/skills/skills.loader";
 import type { FC } from "react";
 import { useCallback, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
@@ -20,7 +20,7 @@ import { useSearchParams } from "react-router-dom";
 export const Skills: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const search = searchParams.get("search") ?? undefined;
+    const { search } = getSkillsQueryParams(searchParams);
 
     const skillsQuery = useInfiniteQuery(skillsQueryOptionsFn(search));
 

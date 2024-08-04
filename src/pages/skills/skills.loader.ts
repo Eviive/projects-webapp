@@ -7,6 +7,12 @@ import type { Skill } from "types/entities/skill";
 import type { QueryLoaderFunction } from "types/loader";
 import type { Slice } from "types/pagination";
 
+export const getSkillsQueryParams = (searchParams: URLSearchParams) => {
+    const search = searchParams.get("search") ?? undefined;
+
+    return { search };
+};
+
 export const skillsQueryOptionsFn = (search?: string) =>
     infiniteQueryOptions({
         queryKey: ["skills", search],
@@ -21,7 +27,7 @@ export const skillsQueryLoader: QueryLoaderFunction<InfiniteData<Slice<Skill>, n
     async ({ request }) => {
         const searchParams = new URL(request.url).searchParams;
 
-        const search = searchParams.get("search") ?? undefined;
+        const { search } = getSkillsQueryParams(searchParams);
 
         const skillsQueryOptions = skillsQueryOptionsFn(search);
 

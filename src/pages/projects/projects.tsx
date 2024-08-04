@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { PROJECTS_DEFAULT_PAGE_SIZE, PROJECTS_PAGE_SIZE_OPTIONS } from "api/services/project";
+import { PROJECTS_PAGE_SIZE_OPTIONS } from "api/services/project";
 import { Page } from "components/common/page";
 import { RequireAuthority } from "components/common/require-authority";
 import { ProjectCard } from "components/projects/project-card";
@@ -16,8 +16,8 @@ import { SearchBar } from "components/ui/search-bar";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
 import { Grid } from "layouts/grid";
 import { clamp } from "libs/utils/math";
-import { getNumberSearchParam, updateSearchParams } from "libs/utils/search-params";
-import { projectsQueryOptionsFn } from "pages/projects/projects.loader";
+import { updateSearchParams } from "libs/utils/search-params";
+import { getProjectsQueryParams, projectsQueryOptionsFn } from "pages/projects/projects.loader";
 import type { FC } from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
@@ -26,9 +26,7 @@ import { useSearchParams } from "react-router-dom";
 export const Projects: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const page = getNumberSearchParam(searchParams, "page") ?? 0;
-    const size = getNumberSearchParam(searchParams, "size") ?? PROJECTS_DEFAULT_PAGE_SIZE;
-    const search = searchParams.get("search") ?? undefined;
+    const { page, size, search } = getProjectsQueryParams(searchParams);
 
     const projectsQuery = useQuery(projectsQueryOptionsFn(page, size, search));
 
