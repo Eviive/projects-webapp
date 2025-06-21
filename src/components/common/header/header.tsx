@@ -17,7 +17,7 @@ import {
     LuRefreshCw,
     LuUserRoundCog
 } from "react-icons/lu";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { toast } from "sonner";
 
 export const Header: FC = () => {

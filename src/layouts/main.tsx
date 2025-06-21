@@ -1,6 +1,6 @@
 import { Header } from "components/common/header";
 import type { FC } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 
 export const Main: FC = () => {
     return (

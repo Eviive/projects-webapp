@@ -1,5 +1,5 @@
 import { hasEveryAuthority } from "libs/auth";
-import { redirect } from "react-router-dom";
+import { redirect } from "react-router";
 import type { Authority } from "types/auth";
 import type {
     LoaderFunction,

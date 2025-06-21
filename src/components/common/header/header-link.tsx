@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import type { FC } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import type { HeaderItemProps } from "types/header";
 
 type Props = HeaderItemProps & {

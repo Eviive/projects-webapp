@@ -1,6 +1,6 @@
 import { Toaster } from "components/ui/sonner";
 import type { FC } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 
 import "styles.css";
 

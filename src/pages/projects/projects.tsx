@@ -21,7 +21,7 @@ import { getProjectsQueryParams, projectsQueryOptionsFn } from "pages/projects/p
 import type { FC } from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 export const Projects: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();

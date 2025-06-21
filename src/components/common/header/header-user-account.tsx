@@ -16,7 +16,7 @@ import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { LuUserRound } from "react-icons/lu";
-import { NavLink, useLocation, useMatches, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useMatches, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { authoritiesHandleSchema, type Authority } from "types/auth";
 import type { HeaderTypeProps } from "types/header";
@@ -64,7 +64,7 @@ export const HeaderUserAccount: FC<Props> = props => {
             );
 
             if (!canStayOnCurrentMatch) {
-                navigate("/");
+                await navigate("/");
             }
 
             await queryClient.invalidateQueries({

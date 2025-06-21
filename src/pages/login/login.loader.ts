@@ -1,5 +1,5 @@
 import { getAuthContext } from "contexts/auth-context";
-import { redirect } from "react-router-dom";
+import { redirect } from "react-router";
 import type { LoaderFunction } from "types/loader";
 
 export const loginLoader: LoaderFunction<Response | null> = ({ request }) => {

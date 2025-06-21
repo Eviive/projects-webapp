@@ -2,7 +2,7 @@ import { queryClient } from "api/query-client";
 import { App } from "App";
 import { initAuthContext } from "libs/auth";
 import { ErrorPage } from "pages/error";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from "react-router";
 import type { Authority } from "types/auth";
 
 await initAuthContext();
@@ -19,6 +19,7 @@ export const router = createBrowserRouter(
                     lazy: async () => ({
                         Component: (await import("layouts/main")).Main
                     }),
+                    HydrateFallback: () => null,
                     children: [
                         {
                             index: true,
@@ -27,7 +28,8 @@ export const router = createBrowserRouter(
                                 loader: (await import("pages/home/home.loader")).homeLoader(
                                     queryClient
                                 )
-                            })
+                            }),
+                            HydrateFallback: () => null
                         },
                         {
                             path: "/projects",
@@ -42,7 +44,8 @@ export const router = createBrowserRouter(
                                         authorities
                                     }
                                 };
-                            }
+                            },
+                            HydrateFallback: () => null
                         },
                         {
                             path: "/skills",
@@ -57,7 +60,8 @@ export const router = createBrowserRouter(
                                         authorities
                                     }
                                 };
-                            }
+                            },
+                            HydrateFallback: () => null
                         },
                         {
                             path: "/health",
@@ -72,7 +76,8 @@ export const router = createBrowserRouter(
                                         authorities
                                     }
                                 };
-                            }
+                            },
+                            HydrateFallback: () => null
                         }
                     ]
                 },
@@ -81,7 +86,8 @@ export const router = createBrowserRouter(
                     lazy: async () => ({
                         Component: (await import("pages/login/login")).Login,
                         loader: (await import("pages/login/login.loader")).loginLoader
-                    })
+                    }),
+                    HydrateFallback: () => null
                 }
             ]
         }
