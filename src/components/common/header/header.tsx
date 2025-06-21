@@ -57,7 +57,7 @@ export const Header: FC = () => {
 
     return (
         <>
-            <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+            <aside className="bg-background fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r sm:flex">
                 <nav className={sidebarNavClasses}>
                     <div className="flex h-10 w-10 items-center justify-center">
                         <img
@@ -128,7 +128,7 @@ export const Header: FC = () => {
                     />
                 </nav>
             </aside>
-            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:hidden sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+            <header className="bg-background sticky top-0 z-30 flex h-14 items-center gap-4 border-b px-4 sm:static sm:hidden sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
                 <Sheet open={open} onOpenChange={setOpen}>
                     <SheetTrigger asChild>
                         <Button size="icon" variant="outline" className="shrink-0 sm:hidden">

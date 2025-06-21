@@ -1,9 +1,9 @@
 import type { FC, PropsWithChildren } from "react";
 import { useEffect } from "react";
 
-type Props = {
+interface Props {
     title: string;
-};
+}
 
 const WINDOW_TITLE = "Dashboard";
 

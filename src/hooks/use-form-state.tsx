@@ -5,7 +5,11 @@ export const useFormState = () => {
 
     return {
         isSubmitting,
-        startSubmitting: () => setIsSubmitting(true),
-        endSubmitting: () => setIsSubmitting(false)
+        startSubmitting: () => {
+            setIsSubmitting(true);
+        },
+        endSubmitting: () => {
+            setIsSubmitting(false);
+        }
     };
 };

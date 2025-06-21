@@ -33,7 +33,7 @@ export const DataTableColumnHeader = <TData, TValue>({
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="-ml-3 h-8 data-[state=open]:bg-accent"
+                        className="data-[state=open]:bg-accent -ml-3 h-8"
                     >
                         <span>{title}</span>
                         {column.getIsSorted() === "desc" && (
@@ -46,17 +46,29 @@ export const DataTableColumnHeader = <TData, TValue>({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                    <DropdownMenuItem onSelect={() => column.toggleSorting(false)}>
-                        <LuArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            column.toggleSorting(false);
+                        }}
+                    >
+                        <LuArrowUp className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
                         Asc
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => column.toggleSorting(true)}>
-                        <LuArrowDown className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            column.toggleSorting(true);
+                        }}
+                    >
+                        <LuArrowDown className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
                         Desc
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={() => column.toggleVisibility(false)}>
-                        <AiFillEyeInvisible className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            column.toggleVisibility(false);
+                        }}
+                    >
+                        <AiFillEyeInvisible className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
                         Hide
                     </DropdownMenuItem>
                 </DropdownMenuContent>

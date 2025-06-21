@@ -17,12 +17,12 @@ import { Controller, FormProvider, useFormContext } from "react-hook-form";
 
 const Form = FormProvider;
 
-type FormFieldContextValue<
+interface FormFieldContextValue<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> = {
+> {
     name: TName;
-};
+}
 
 const FormFieldContext = createContext<FormFieldContextValue>({} as FormFieldContextValue);
 
@@ -64,9 +64,9 @@ const useFormField = () => {
     };
 };
 
-type FormItemContextValue = {
+interface FormItemContextValue {
     id: string;
-};
+}
 
 const FormItemContext = createContext<FormItemContextValue>({} as FormItemContextValue);
 
@@ -112,7 +112,7 @@ const FormControl = forwardRef<ElementRef<typeof Slot>, ComponentPropsWithoutRef
                 ref={ref}
                 id={formItemId}
                 aria-describedby={
-                    !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`
+                    !error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`
                 }
                 aria-invalid={!!error}
                 {...props}
@@ -131,7 +131,7 @@ const FormDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLPara
             <p
                 ref={ref}
                 id={formDescriptionId}
-                className={cn("text-sm text-muted-foreground", className)}
+                className={cn("text-muted-foreground text-sm", className)}
                 {...props}
             />
         );
@@ -153,7 +153,7 @@ const FormMessage = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagrap
             <p
                 ref={ref}
                 id={formMessageId}
-                className={cn("text-xs font-medium text-destructive", className)}
+                className={cn("text-destructive text-xs font-medium", className)}
                 {...props}
             >
                 {body}

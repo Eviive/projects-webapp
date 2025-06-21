@@ -75,7 +75,7 @@ const sort = (sorts: DndItem[]) => {
 };
 
 const deleteProject = (id: number) =>
-    request<void>(`/${URL}/${id}`, {
+    request(`/${URL}/${id}`, {
         method: "DELETE",
         requiredAuthorities: ["delete:project"]
     });

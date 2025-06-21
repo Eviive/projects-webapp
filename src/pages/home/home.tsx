@@ -22,7 +22,7 @@ export const Home: FC = () => {
                             {infoQuery.isSuccess && (
                                 <>
                                     Welcome to the{" "}
-                                    <strong className="text-nowrap bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-transparent">
+                                    <strong className="bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-nowrap text-transparent">
                                         {infoQuery.data.app.name}
                                     </strong>{" "}
                                     dashboard&nbsp;!

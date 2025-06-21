@@ -6,10 +6,10 @@ import { cn } from "libs/utils/style";
 import type { CSSProperties, PropsWithChildren, FC } from "react";
 import { useMemo } from "react";
 
-type Props = {
+interface Props {
     id: UniqueIdentifier;
     isOverlay?: boolean;
-};
+}
 
 export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
     const {
@@ -45,7 +45,7 @@ export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
                 ref={setNodeRef}
                 style={style}
                 className={cn(
-                    "text-ms flex items-center justify-between gap-3 bg-background p-3",
+                    "text-ms bg-background flex items-center justify-between gap-3 p-3",
                     props.isOverlay && "shadow-md"
                 )}
             >

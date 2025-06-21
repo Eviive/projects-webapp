@@ -4,9 +4,9 @@ import type { FC } from "react";
 import { FaDatabase, FaHdd, FaServer, FaWifi } from "react-icons/fa";
 import type { Health } from "types/health";
 
-type Props = {
+interface Props {
     data: Health;
-};
+}
 
 export const StatusCards: FC<Props> = ({ data }) => {
     return (

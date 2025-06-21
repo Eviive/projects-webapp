@@ -4,9 +4,9 @@ import type { FC } from "react";
 import type { HttpExchange } from "types/health";
 import { columns } from "./columns";
 
-type Props = {
-    queryHttpExchanges: UseQueryResult<HttpExchange[], Error>;
-};
+interface Props {
+    queryHttpExchanges: UseQueryResult<HttpExchange[]>;
+}
 
 export const HttpExchangesTable: FC<Props> = ({ queryHttpExchanges: query }) => {
     return (

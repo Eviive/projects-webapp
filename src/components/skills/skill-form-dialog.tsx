@@ -9,13 +9,13 @@ import type { FormState } from "react-hook-form";
 
 import type { Skill } from "types/entities/skill";
 
-type EditionProps = {
+interface EditionProps {
     skill: Skill;
-};
+}
 
-type CreationProps = {
+interface CreationProps {
     skill?: never;
-};
+}
 
 type Props = {
     trigger: ReactNode;
@@ -42,7 +42,9 @@ export const SkillFormDialog: FC<Props> = props => {
                         <SkillForm
                             skill={props.skill ?? null}
                             state={formState}
-                            closeDialog={() => setOpen(false)}
+                            closeDialog={() => {
+                                setOpen(false);
+                            }}
                         />
                     }
                     open={open}

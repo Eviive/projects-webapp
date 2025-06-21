@@ -98,7 +98,7 @@ export const HeaderUserAccount: FC<Props> = props => {
                         className={cn(iconClasses, "h-full w-auto")}
                     />
                 ) : (
-                    <div className="grid aspect-square h-full place-items-center rounded-full bg-input">
+                    <div className="bg-input grid aspect-square h-full place-items-center rounded-full">
                         <LuUser2 className={iconClasses} />
                     </div>
                 )}

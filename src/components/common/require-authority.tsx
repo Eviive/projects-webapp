@@ -3,9 +3,9 @@ import { hasAuthority, hasEveryAuthority } from "libs/auth";
 import type { FC, PropsWithChildren } from "react";
 import type { Authority } from "types/auth";
 
-type Props = {
+interface Props {
     authority: Authority | Authority[];
-};
+}
 
 export const RequireAuthority: FC<PropsWithChildren<Props>> = props => {
     const { currentUser } = useAuthContext();

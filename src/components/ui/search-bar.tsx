@@ -4,13 +4,13 @@ import type { FC } from "react";
 import { useEffect, useRef } from "react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
-type Props = {
+interface Props {
     value: string;
     handleChange: (value: string) => void;
     debounce?: number;
     handleDebounce: (value: string) => void;
     isDisabled?: boolean;
-};
+}
 
 export const SearchBar: FC<Props> = props => {
     const ref = useRef<Props["handleDebounce"]>();
@@ -23,7 +23,7 @@ export const SearchBar: FC<Props> = props => {
         <div className="relative grow">
             <HiMagnifyingGlass
                 size={20}
-                className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                className="text-muted-foreground absolute top-1/2 left-2 -translate-y-1/2"
             />
             <Input
                 className="pl-8"

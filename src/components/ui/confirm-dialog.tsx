@@ -11,10 +11,10 @@ import {
 import type { ConfirmDialogState } from "contexts/confirm-dialog-context";
 import type { FC } from "react";
 
-type Props = {
+interface Props {
     state: ConfirmDialogState;
     handleClose: (confirm: boolean) => void;
-};
+}
 
 export const ConfirmDialog: FC<Props> = ({ state, handleClose }) => {
     return (
@@ -39,7 +39,9 @@ export const ConfirmDialog: FC<Props> = ({ state, handleClose }) => {
                             <AlertDialogCancel>{state.cancelButton}</AlertDialogCancel>
                             <AlertDialogAction
                                 variant={state.confirmDanger ? "destructive" : undefined}
-                                onClick={() => handleClose(true)}
+                                onClick={() => {
+                                    handleClose(true);
+                                }}
                             >
                                 {state.confirmButton}
                             </AlertDialogAction>

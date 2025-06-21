@@ -3,9 +3,9 @@ import { getTitleAndDetail } from "libs/utils/error";
 import type { FC } from "react";
 import { LuAlertCircle } from "react-icons/lu";
 
-type Props = {
+interface Props {
     error: Error;
-};
+}
 
 export const ErrorAlert: FC<Props> = ({ error }) => {
     const { title, detail } = getTitleAndDetail(error);

@@ -11,15 +11,15 @@ import { LuChevronLeft, LuChevronRight, LuChevronsLeft, LuChevronsRight } from "
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50] as const;
 
-type SelectionProps = {
+interface SelectionProps {
     isSelectable: true;
     selectedRows: number;
     totalRows: number;
-};
+}
 
-type NoSelectionProps = {
+interface NoSelectionProps {
     isSelectable?: false;
-};
+}
 
 type Props = {
     itemName?: string;
@@ -47,11 +47,11 @@ export const Pagination: FC<Props> = props => {
     return (
         <div className="flex items-center justify-between px-2">
             {props.isSelectable && (
-                <div className="hidden flex-1 text-sm text-muted-foreground md:block">
+                <div className="text-muted-foreground hidden flex-1 text-sm md:block">
                     {props.selectedRows} of {props.totalRows} {itemName}(s) selected.
                 </div>
             )}
-            <div className="ms-auto flex flex-wrap items-center justify-end gap-y-2 space-x-6 lg:space-x-8">
+            <div className="ms-auto flex flex-wrap items-center justify-end space-x-6 gap-y-2 lg:space-x-8">
                 <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium first-letter:capitalize">
                         {itemName}s per page
@@ -86,7 +86,9 @@ export const Pagination: FC<Props> = props => {
                         <Button
                             variant="outline"
                             className="hidden h-8 w-8 p-0 lg:flex"
-                            onClick={() => props.setPageIndex(0)}
+                            onClick={() => {
+                                props.setPageIndex(0);
+                            }}
                             disabled={!props.getCanPreviousPage()}
                         >
                             <span className="sr-only">Go to first page</span>
@@ -95,7 +97,9 @@ export const Pagination: FC<Props> = props => {
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => props.previousPage()}
+                            onClick={() => {
+                                props.previousPage();
+                            }}
                             disabled={!props.getCanPreviousPage()}
                         >
                             <span className="sr-only">Go to previous page</span>
@@ -104,7 +108,9 @@ export const Pagination: FC<Props> = props => {
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => props.nextPage()}
+                            onClick={() => {
+                                props.nextPage();
+                            }}
                             disabled={!props.getCanNextPage()}
                         >
                             <span className="sr-only">Go to next page</span>
@@ -113,7 +119,9 @@ export const Pagination: FC<Props> = props => {
                         <Button
                             variant="outline"
                             className="hidden h-8 w-8 p-0 lg:flex"
-                            onClick={() => props.setPageIndex(props.getPageCount() - 1)}
+                            onClick={() => {
+                                props.setPageIndex(props.getPageCount() - 1);
+                            }}
                             disabled={!props.getCanNextPage()}
                         >
                             <span className="sr-only">Go to last page</span>

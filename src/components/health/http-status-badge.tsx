@@ -1,9 +1,9 @@
 import { Badge } from "components/ui/badge";
 import type { FC } from "react";
 
-type Props = {
+interface Props {
     code: number;
-};
+}
 
 const statusColors: Record<number, string> = {
     100: "gray-600",

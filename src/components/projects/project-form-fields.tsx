@@ -192,7 +192,7 @@ export const ProjectFormFields: FC = () => {
                             renderItem={skill => (
                                 <div className="flex items-center gap-2">
                                     <img
-                                        className="aspect-square object-cover drop-shadow-icon"
+                                        className="drop-shadow-icon aspect-square object-cover"
                                         src={
                                             getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER
                                         }

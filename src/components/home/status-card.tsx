@@ -3,11 +3,11 @@ import { Separator } from "components/ui/separator";
 import type { FC, ReactNode } from "react";
 import type { Status } from "types/health";
 
-type Props = {
+interface Props {
     title: string;
     icon: ReactNode;
     status: Status;
-};
+}
 
 const STATUS_COLORS: Record<Status, string> = {
     UP: "hsl(121deg 34% 51%)",

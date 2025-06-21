@@ -22,11 +22,11 @@ import {
 
 export type ProjectFormType = ProjectCreationWithFile | ProjectEditionWithFile;
 
-type Props = {
+interface Props {
     project: Project | null;
     state: Pick<FormState<ProjectFormType>, "isDirty">;
     closeDialog: () => void;
-};
+}
 
 export const ProjectForm: FC<Props> = props => {
     const confirm = useConfirmDialogContext();
@@ -73,7 +73,10 @@ export const ProjectForm: FC<Props> = props => {
     const submitHandler: SubmitHandler<ProjectFormType> = async data => {
         if (isSubmitting) return;
 
-        if (!isDirty) return props.closeDialog();
+        if (!isDirty) {
+            props.closeDialog();
+            return;
+        }
 
         startSubmitting();
 
@@ -133,7 +136,10 @@ export const ProjectForm: FC<Props> = props => {
             confirmDanger: true
         });
 
-        if (!confirmed) return endSubmitting();
+        if (!confirmed) {
+            endSubmitting();
+            return;
+        }
 
         try {
             await ProjectService.delete(props.project.id);

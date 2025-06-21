@@ -37,7 +37,7 @@ export const Projects: FC = () => {
 
     const [searchBarValue, setSearchBarValue] = useState(search ?? "");
     const setSearchQueryParam = useCallback(
-        (search: string) =>
+        (search: string) => {
             updateSearchParams(
                 setSearchParams,
                 {
@@ -48,7 +48,8 @@ export const Projects: FC = () => {
                     key: "page",
                     value: null
                 }
-            ),
+            );
+        },
         [setSearchParams]
     );
 
@@ -112,34 +113,34 @@ export const Projects: FC = () => {
                             itemName="project"
                             pageSize={size}
                             pageSizeOptions={PROJECTS_PAGE_SIZE_OPTIONS}
-                            setPageSize={pageSize =>
+                            setPageSize={pageSize => {
                                 updateSearchParams(setSearchParams, {
                                     key: "size",
                                     value: pageSize
-                                })
-                            }
+                                });
+                            }}
                             pageIndex={page}
-                            setPageIndex={pageIndex =>
+                            setPageIndex={pageIndex => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",
                                     value: pageIndex
-                                })
-                            }
+                                });
+                            }}
                             getPageCount={() => projectsQuery.data.totalPages}
                             getCanPreviousPage={() => !projectsQuery.data.first}
                             getCanNextPage={() => !projectsQuery.data.last}
-                            previousPage={() =>
+                            previousPage={() => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",
                                     value: page - 1
-                                })
-                            }
-                            nextPage={() =>
+                                });
+                            }}
+                            nextPage={() => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",
                                     value: page + 1
-                                })
-                            }
+                                });
+                            }}
                         />
                     </>
                 )}

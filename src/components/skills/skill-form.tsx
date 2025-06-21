@@ -19,11 +19,11 @@ import { skillCreationWithFileSchema, skillEditionWithFileSchema } from "types/e
 
 export type SkillFormType = SkillCreationWithFile | SkillEditionWithFile;
 
-type Props = {
+interface Props {
     skill: Skill | null;
     state: Pick<FormState<SkillFormType>, "isDirty">;
     closeDialog: () => void;
-};
+}
 
 export const SkillForm: FC<Props> = props => {
     const confirm = useConfirmDialogContext();
@@ -63,7 +63,10 @@ export const SkillForm: FC<Props> = props => {
     const submitHandler: SubmitHandler<SkillFormType> = async data => {
         if (isSubmitting) return;
 
-        if (!isDirty) return props.closeDialog();
+        if (!isDirty) {
+            props.closeDialog();
+            return;
+        }
 
         startSubmitting();
 
@@ -123,7 +126,10 @@ export const SkillForm: FC<Props> = props => {
             confirmDanger: true
         });
 
-        if (!confirmed) return endSubmitting();
+        if (!confirmed) {
+            endSubmitting();
+            return;
+        }
 
         try {
             await SkillService.delete(props.skill.id);

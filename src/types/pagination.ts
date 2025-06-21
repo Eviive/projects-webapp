@@ -1,4 +1,4 @@
-export type Slice<E> = {
+export interface Slice<E> {
     content: E[];
     pageable: {
         sort: {
@@ -23,7 +23,7 @@ export type Slice<E> = {
     last: boolean;
     numberOfElements: number;
     empty: boolean;
-};
+}
 
 export type Page<E> = Slice<E> & {
     totalElements: number;

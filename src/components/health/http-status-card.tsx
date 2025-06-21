@@ -5,14 +5,14 @@ import { useCountUp } from "hooks/use-count-up";
 import type { FC, ReactNode } from "react";
 import { useEffect } from "react";
 
-type Props = {
+interface Props {
     name: string;
     code: number;
     icon: ReactNode;
     value: number | null;
     isLoading?: boolean;
     isError?: boolean;
-};
+}
 
 export const HttpStatusCard: FC<Props> = props => {
     const { count, start } = useCountUp(props.value, 1000);

@@ -8,11 +8,11 @@ import type { PropsWithStatus } from "types/utils/props";
 
 export type SortDialogContentRef = () => DndItem[] | null;
 
-type Props<E extends DndItem> = {
+interface Props<E extends DndItem> {
     initialItems?: E[];
     render: (item: E) => ReactNode;
     closeDialog: (resetSort: boolean) => void;
-};
+}
 
 const SortDialogContent = <E extends DndItem>(
     props: PropsWithStatus<Props<E>>,
@@ -58,10 +58,21 @@ const SortDialogContent = <E extends DndItem>(
                 {props.error}
             </div>
             <div className="flex justify-between">
-                <Button variant="outline" onClick={() => props.closeDialog(true)}>
+                <Button
+                    variant="outline"
+                    onClick={() => {
+                        props.closeDialog(true);
+                    }}
+                >
                     Cancel
                 </Button>
-                <Button onClick={() => props.closeDialog(false)}>Save</Button>
+                <Button
+                    onClick={() => {
+                        props.closeDialog(false);
+                    }}
+                >
+                    Save
+                </Button>
             </div>
         </>
     );

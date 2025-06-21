@@ -18,10 +18,10 @@ const dateFormatter = Intl.DateTimeFormat("en-GB", {
     year: "numeric"
 });
 
-type Props = {
+interface Props {
     project: Project;
     isOptimistic: boolean;
-};
+}
 
 export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
     const skills = useMemo(() => {
@@ -30,7 +30,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
         return project.skills.map(s => (
             <img
                 key={s.id}
-                className="aspect-square object-cover drop-shadow-icon"
+                className="drop-shadow-icon aspect-square object-cover"
                 src={getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
                 alt={s.image.altEn}
                 width={35}

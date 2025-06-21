@@ -8,13 +8,13 @@ import { useState } from "react";
 import type { FormState } from "react-hook-form";
 import type { Project } from "types/entities/project";
 
-type EditionProps = {
+interface EditionProps {
     project: Project;
-};
+}
 
-type CreationProps = {
+interface CreationProps {
     project?: never;
-};
+}
 
 type Props = {
     trigger: ReactNode;
@@ -41,7 +41,9 @@ export const ProjectFormDialog: FC<Props> = props => {
                         <ProjectForm
                             project={props.project ?? null}
                             state={formState}
-                            closeDialog={() => setOpen(false)}
+                            closeDialog={() => {
+                                setOpen(false);
+                            }}
                         />
                     }
                     open={open}

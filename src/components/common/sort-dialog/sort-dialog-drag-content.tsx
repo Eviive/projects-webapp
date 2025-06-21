@@ -25,11 +25,11 @@ import { forwardRef, Fragment, useImperativeHandle, useMemo, useState } from "re
 import { createPortal } from "react-dom";
 import type { DndItem } from "types/dnd";
 
-type Props<E extends DndItem> = {
+interface Props<E extends DndItem> {
     items: E[];
     setItems: Dispatch<SetStateAction<E[]>>;
     render: (item: E) => ReactNode;
-};
+}
 
 const SortDialogDragContent = <E extends DndItem>(
     props: Props<E>,
@@ -93,8 +93,12 @@ const SortDialogDragContent = <E extends DndItem>(
         <DndContext
             sensors={sensors}
             modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}
-            onDragStart={({ active }) => setActive(active)}
-            onDragCancel={() => setActive(null)}
+            onDragStart={({ active }) => {
+                setActive(active);
+            }}
+            onDragCancel={() => {
+                setActive(null);
+            }}
             onDragEnd={handleDragEnd}
         >
             <SortableContext items={props.items} strategy={verticalListSortingStrategy}>

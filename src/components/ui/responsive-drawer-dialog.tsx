@@ -17,7 +17,7 @@ import {
 import { useMediaQuery } from "hooks/use-media-query";
 import type { FC, ReactNode } from "react";
 
-type Props = {
+interface Props {
     trigger: ReactNode;
     header: {
         title: ReactNode;
@@ -31,7 +31,7 @@ type Props = {
             content?: string;
         };
     };
-};
+}
 
 export const ResponsiveDrawerDialog: FC<Props> = props => {
     const isDesktop = useMediaQuery("(min-width: 768px)");

@@ -31,11 +31,12 @@ export const Skills: FC = () => {
 
     const [searchBarValue, setSearchBarValue] = useState(search ?? "");
     const setSearchQueryParam = useCallback(
-        (search: string) =>
+        (search: string) => {
             updateSearchParams(setSearchParams, {
                 key: "search",
                 value: search
-            }),
+            });
+        },
         [setSearchParams]
     );
 

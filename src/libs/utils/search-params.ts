@@ -16,10 +16,10 @@ export const getNumberSearchParam = (
     return number;
 };
 
-type UpdateSearchParams = {
+interface UpdateSearchParams {
     key: string;
     value: string | number | null | undefined;
-};
+}
 
 export const updateSearchParams = (
     setSearchParams: Dispatch<SetStateAction<URLSearchParams>>,

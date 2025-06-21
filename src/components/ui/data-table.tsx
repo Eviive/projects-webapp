@@ -14,14 +14,14 @@ import { Skeleton } from "components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
 import { useMemo, useState } from "react";
 
-type SuccessProps = {
+interface SuccessProps {
     isError?: false;
-};
+}
 
-type ErrorProps = {
+interface ErrorProps {
     isError: true;
     errorMessage: string;
-};
+}
 
 type DataTableProps<TData> = Pick<TableOptions<TData>, "columns" | "data"> & {
     noRowsMessage?: string;

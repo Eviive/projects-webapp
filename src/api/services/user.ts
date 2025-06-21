@@ -13,7 +13,7 @@ const login = (authRequest: AuthRequest) =>
     });
 
 const logout = () =>
-    request<void>(`/${URL}/logout`, {
+    request(`/${URL}/logout`, {
         method: "POST"
     });
 

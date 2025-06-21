@@ -1,6 +1,9 @@
 import { AxiosError } from "axios";
 
-type TitleAndDetail = { title: string; detail: string };
+interface TitleAndDetail {
+    title: string;
+    detail: string;
+}
 
 export const getTitleAndDetail = (e: unknown): TitleAndDetail => {
     import.meta.env.PROD || console.error(e);

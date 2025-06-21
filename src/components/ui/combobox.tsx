@@ -12,7 +12,7 @@ const listFormatter = new Intl.ListFormat("en-GB", { style: "long", type: "conju
 
 type Props<V> = CommonProps<V> & (SingleProps<V> | MultipleProps<V>);
 
-type CommonProps<V> = {
+interface CommonProps<V> {
     options: V[];
     onChange: (value: V, isSelected: boolean) => void;
     renderItem: (item: V) => ReactNode;
@@ -20,17 +20,17 @@ type CommonProps<V> = {
     getValue: (item: V) => string;
     placeholder: string;
     searchPlaceholder: string;
-};
+}
 
-type SingleProps<V> = {
+interface SingleProps<V> {
     selection: "single";
     value?: V;
-};
+}
 
-type MultipleProps<V> = {
+interface MultipleProps<V> {
     selection: "multiple";
     value: V[];
-};
+}
 
 export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
     const getButtonLabel = () => {
@@ -85,7 +85,9 @@ export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
                                 <CommandItem
                                     key={props.getKey(item)}
                                     value={props.getValue(item)}
-                                    onSelect={() => props.onChange(item, !isSelected)}
+                                    onSelect={() => {
+                                        props.onChange(item, !isSelected);
+                                    }}
                                     className="gap-3"
                                 >
                                     {props.selection === "single" && (
@@ -99,7 +101,7 @@ export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
                                     {props.selection === "multiple" && (
                                         <div
                                             className={cn(
-                                                "flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                                "border-primary flex h-4 w-4 items-center justify-center rounded-sm border",
                                                 isSelected
                                                     ? "bg-primary text-primary-foreground"
                                                     : "opacity-50 [&_svg]:invisible"

@@ -9,18 +9,18 @@ import {
     useState
 } from "react";
 
-type ConfirmDialogOpenState = {
+interface ConfirmDialogOpenState {
     open: true;
     title: string;
     body: string | null;
     confirmButton: string;
     confirmDanger?: boolean;
     cancelButton: string;
-};
+}
 
-type ConfirmDialogCloseState = {
+interface ConfirmDialogCloseState {
     open: false;
-};
+}
 
 export type ConfirmDialogState = ConfirmDialogOpenState | ConfirmDialogCloseState;
 

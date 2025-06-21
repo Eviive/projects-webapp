@@ -2,10 +2,10 @@ import type { SortDialogContentRef } from "components/common/sort-dialog/sort-di
 import type { RefObject } from "react";
 import { createContext, useContext } from "react";
 
-type ISortDialogContext = {
+interface ISortDialogContext {
     contentRef: RefObject<SortDialogContentRef>;
     handleClose: (open: boolean, resetSort?: boolean) => void;
-};
+}
 
 const SortDialogContext = createContext<ISortDialogContext | null>(null);
 

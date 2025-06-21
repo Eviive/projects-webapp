@@ -17,18 +17,18 @@ export const authRequestSchema = z.object({
 
 export type AuthRequest = z.infer<typeof authRequestSchema>;
 
-export type AuthResponse = {
+export interface AuthResponse {
     currentUser: CurrentUser;
     accessToken: string;
-};
+}
 
-export type CurrentUser = {
+export interface CurrentUser {
     id: number | null;
     username: string;
     firstName: string | null;
     lastName: string | null;
     authorities: Authority[];
-};
+}
 
 const roleWithoutPrefixSchema = z.enum(["ANONYMOUS", "ADMIN"]);
 const roleSchema = roleWithoutPrefixSchema.transform(role => `ROLE_${role}`);

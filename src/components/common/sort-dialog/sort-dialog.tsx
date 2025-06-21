@@ -6,12 +6,12 @@ import type { FC, ReactNode } from "react";
 import { useRef, useState } from "react";
 import type { DndItem } from "types/dnd";
 
-type Props = {
+interface Props {
     itemsName: string;
     trigger: ReactNode;
     content: ReactNode;
     mutation: UseMutationResult<void, Error, DndItem[]>;
-};
+}
 
 export const SortDialog: FC<Props> = props => {
     const [open, setOpen] = useState(false);

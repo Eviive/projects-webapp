@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 
 const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
 
-type UseCountUpOutput = {
+interface UseCountUpOutput {
     count: number;
     start: () => void;
-};
+}
 
-export const useCountUp = (endValue: number | null, duration: number = 1000): UseCountUpOutput => {
+export const useCountUp = (endValue: number | null, duration = 1000): UseCountUpOutput => {
     const [count, setCount] = useState(0);
 
     const [targetValue, setTargetValue] = useState(endValue);
@@ -45,7 +45,9 @@ export const useCountUp = (endValue: number | null, duration: number = 1000): Us
 
         animationFrameId = requestAnimationFrame(animate);
 
-        return () => cancelAnimationFrame(animationFrameId);
+        return () => {
+            cancelAnimationFrame(animationFrameId);
+        };
     }, [start, targetValue, duration, startTimestamp, count]);
 
     return {

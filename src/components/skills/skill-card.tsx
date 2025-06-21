@@ -11,10 +11,10 @@ import { MdEdit } from "react-icons/md";
 
 import type { Skill } from "types/entities/skill";
 
-type Props = {
+interface Props {
     skill: Skill;
     isOptimistic?: boolean;
-};
+}
 
 export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
     return (
@@ -50,7 +50,7 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
                 <Separator />
                 <CardContent className="flex items-center justify-center p-4">
                     <img
-                        className="aspect-square object-cover drop-shadow-icon"
+                        className="drop-shadow-icon aspect-square object-cover"
                         src={getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                         alt={skill.image.altEn}
                         width={100}

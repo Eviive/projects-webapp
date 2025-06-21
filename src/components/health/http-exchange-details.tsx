@@ -6,10 +6,10 @@ import type { HttpExchange } from "types/health";
 
 const dateFormatter = new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "short" });
 
-type Props = {
+interface Props {
     httpExchange: HttpExchange;
     trigger: ReactNode;
-};
+}
 
 export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
     const parseObject = (obj: object): ReactNode => {

@@ -3,14 +3,14 @@ import type { CSSProperties, FC, PropsWithChildren } from "react";
 
 import styles from "./grid.module.scss";
 
-type Props = {
+interface Props {
     className?: string;
     minWidth?: string;
     gap?: string;
     columnCount?: number;
     centerVertically?: boolean;
     centerHorizontally?: boolean;
-};
+}
 
 export const Grid: FC<PropsWithChildren<Props>> = props => {
     return (

@@ -4,12 +4,12 @@ import type { CSSProperties, FC } from "react";
 
 import styles from "./loader.module.scss";
 
-type Props = {
+interface Props {
     size?: number;
     color?: string;
     absolute?: boolean;
     defer?: boolean | number;
-};
+}
 
 export const Loader: FC<Props> = ({ size, color, absolute, defer }) => {
     const loaderStyle = {
