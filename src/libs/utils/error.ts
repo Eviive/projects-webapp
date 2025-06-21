@@ -6,8 +6,11 @@ interface TitleAndDetail {
 }
 
 export const getTitleAndDetail = (e: unknown): TitleAndDetail => {
-    import.meta.env.PROD || console.error(e);
+    if (!import.meta.env.PROD) {
+        console.error(e);
+    }
 
+    // TODO: zod parse problemdetail
     if (e instanceof AxiosError) {
         return {
             title: e.response?.data?.title ?? e.name,

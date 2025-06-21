@@ -46,7 +46,7 @@ export const useOptimisticSort = <I extends DndItem>(
         }
 
         for (const optimisticItem of tempOptimisticItems) {
-            if (optimisticSortItems[optimisticItem.id] !== undefined) {
+            if (optimisticItem.id in optimisticSortItems) {
                 optimisticItem.sort = optimisticSortItems[optimisticItem.id];
             }
         }

@@ -16,7 +16,7 @@ export const getAuthContext = (): IAuthContext => {
     return authContext;
 };
 
-export const setAuthContext = async (newAuthContext: IAuthContext) => {
+export const setAuthContext = (newAuthContext: IAuthContext) => {
     authContext = newAuthContext;
     notify();
 };

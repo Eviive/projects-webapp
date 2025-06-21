@@ -31,10 +31,12 @@ export const SkillFormFields: FC = () => {
                             isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
                             isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
 
-                        (isAltEnEmpty || isAltEnFormatted) &&
+                        if (isAltEnEmpty || isAltEnFormatted) {
                             setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
-                        (isAltFrEmpty || isAltFrFormatted) &&
+                        }
+                        if (isAltFrEmpty || isAltFrFormatted) {
                             setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
+                        }
 
                         setOldName(name);
                     }

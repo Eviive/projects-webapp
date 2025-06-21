@@ -8,13 +8,11 @@ const imageFileSchema = z.object({
         z
             .custom<FileList>()
             .refine(files => {
-                return [...(files ?? [])].every(
-                    file => file.size / (1024 * 1024) <= MAX_IMAGE_SIZE_MB
-                );
-            }, `The maximum image size is ${MAX_IMAGE_SIZE_MB}MB`)
-            .refine(files => {
-                return [...(files ?? [])].every(file => file.type.startsWith("image/"));
+                return [...files].every(file => file.type.startsWith("image/"));
             }, "File type is not supported")
+            .refine(files => {
+                return [...files].every(file => file.size / (1024 * 1024) <= MAX_IMAGE_SIZE_MB);
+            }, `The maximum image size is ${MAX_IMAGE_SIZE_MB.toString()}MB`)
     )
 });
 

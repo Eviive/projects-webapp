@@ -72,7 +72,7 @@ export const Skills: FC = () => {
                                 <SkillCard
                                     key={skill.id}
                                     skill={skill}
-                                    isOptimistic={optimisticSkillSorts[skill.id] !== undefined}
+                                    isOptimistic={skill.id in optimisticSkillSorts}
                                 />
                             ))}
                         </Grid>

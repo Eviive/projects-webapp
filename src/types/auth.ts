@@ -31,7 +31,7 @@ export interface CurrentUser {
 }
 
 const roleWithoutPrefixSchema = z.enum(["ANONYMOUS", "ADMIN"]);
-const roleSchema = roleWithoutPrefixSchema.transform(role => `ROLE_${role}`);
+const roleSchema = roleWithoutPrefixSchema.transform(role => `ROLE_${role}` as const);
 
 const scopeSchema = z.enum([
     "read:project",

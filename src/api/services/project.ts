@@ -49,14 +49,14 @@ const create = (project: ProjectCreation, file?: File | null) => {
 
 const update = (project: Project, file?: File | null) => {
     if (!file) {
-        return request<Project, Project>(`/${URL}/${project.id}`, {
+        return request<Project, Project>(`/${URL}/${project.id.toString()}`, {
             method: "PUT",
             data: project,
             requiredAuthorities: ["update:project"]
         });
     }
 
-    return request<Project, FormData>(`/${URL}/${project.id}/with-image`, {
+    return request<Project, FormData>(`/${URL}/${project.id.toString()}/with-image`, {
         method: "PUT",
         data: buildProjectFormData(project, file),
         headers: {
@@ -75,7 +75,7 @@ const sort = (sorts: DndItem[]) => {
 };
 
 const deleteProject = (id: number) =>
-    request(`/${URL}/${id}`, {
+    request(`/${URL}/${id.toString()}`, {
         method: "DELETE",
         requiredAuthorities: ["delete:project"]
     });

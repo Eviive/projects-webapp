@@ -105,7 +105,7 @@ export const Projects: FC = () => {
                                 <ProjectCard
                                     key={project.id}
                                     project={project}
-                                    isOptimistic={optimisticProjectSorts[project.id] !== undefined}
+                                    isOptimistic={project.id in optimisticProjectSorts}
                                 />
                             ))}
                         </Grid>

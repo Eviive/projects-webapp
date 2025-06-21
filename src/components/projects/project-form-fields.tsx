@@ -47,14 +47,16 @@ export const ProjectFormFields: FC = () => {
                             isAltEnFormatted = altEn === `${oldTitle.trim()}'s logo`,
                             isAltFrFormatted = altFr === `Logo de ${oldTitle.trim()}`;
 
-                        (isAltEnEmpty || isAltEnFormatted) &&
+                        if (isAltEnEmpty || isAltEnFormatted) {
                             setValue("image.altEn", isTitleEmpty ? "" : `${title.trim()}'s logo`, {
                                 shouldValidate: form.formState.isSubmitted
                             });
-                        (isAltFrEmpty || isAltFrFormatted) &&
+                        }
+                        if (isAltFrEmpty || isAltFrFormatted) {
                             setValue("image.altFr", isTitleEmpty ? "" : `Logo de ${title.trim()}`, {
                                 shouldValidate: form.formState.isSubmitted
                             });
+                        }
 
                         setOldTitle(title);
                     }
@@ -84,13 +86,11 @@ export const ProjectFormFields: FC = () => {
                                         ? new Date(field.value)
                                         : undefined
                                 }
-                                onSelect={date =>
-                                    isNotNullOrUndefined(date)
-                                        ? field.onChange(
-                                              formatISO(date, { representation: "date" })
-                                          )
-                                        : null
-                                }
+                                onSelect={date => {
+                                    if (isNotNullOrUndefined(date)) {
+                                        field.onChange(formatISO(date, { representation: "date" }));
+                                    }
+                                }}
                                 buttonText={
                                     field.value ? format(field.value, "PPP") : "Pick a date"
                                 }

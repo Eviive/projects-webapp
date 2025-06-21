@@ -44,10 +44,10 @@ export const LoginForm: FC = () => {
         try {
             const loginRes = await UserService.login(data);
 
-            await setAuthContext(loginRes);
+            setAuthContext(loginRes);
             await queryClient.invalidateQueries();
 
-            const redirectPath = searchParams.get("redirect") || "/";
+            const redirectPath = searchParams.get("redirect") ?? "/";
 
             navigate(redirectPath, { replace: true });
         } catch (e) {

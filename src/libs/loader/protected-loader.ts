@@ -17,10 +17,10 @@ export const protectedLoader = <D>(
             return loader(args);
         }
 
+        const routerBaseUrl = import.meta.env.VITE_ROUTER_BASE_URL;
         let redirectPath = new URL(args.request.url).pathname;
 
-        const routerBaseUrl = import.meta.env.VITE_ROUTER_BASE_URL;
-        if (routerBaseUrl && redirectPath?.startsWith(routerBaseUrl)) {
+        if (routerBaseUrl && redirectPath.startsWith(routerBaseUrl)) {
             redirectPath = redirectPath.substring(routerBaseUrl.length);
         }
 

@@ -7,11 +7,11 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import ts from "typescript-eslint";
 
-/** @type {import('eslint').Linter.FlatConfig[]} */
 export default defineConfig([
     globalIgnores([
         "**/node_modules/",
         "**/dist/",
+        "src/components/ui/",
         "vite.config.js",
         "eslint.config.js",
         "tailwind.config.js",

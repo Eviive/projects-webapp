@@ -10,7 +10,7 @@ export const clearAuthContext = async (redirect = true): Promise<IAuthContext> =
         accessToken: null
     };
 
-    await setAuthContext(newAuthContext);
+    setAuthContext(newAuthContext);
 
     if (redirect) {
         await router.navigate("/login", { replace: true });
@@ -23,7 +23,7 @@ export const initAuthContext = async () => {
     try {
         const refreshRes = await UserService.refresh(false);
 
-        await setAuthContext(refreshRes);
+        setAuthContext(refreshRes);
     } catch (e) {
         console.error("Persistent login failed:", getDetail(e));
         await clearAuthContext(false);

@@ -47,14 +47,14 @@ const create = (skill: SkillCreation, file?: File | null) => {
 
 const update = (skill: Skill, file?: File | null) => {
     if (!file) {
-        return request<Skill, Skill>(`/${URL}/${skill.id}`, {
+        return request<Skill, Skill>(`/${URL}/${skill.id.toString()}`, {
             method: "PUT",
             data: skill,
             requiredAuthorities: ["update:skill"]
         });
     }
 
-    return request<Skill, FormData>(`/${URL}/${skill.id}/with-image`, {
+    return request<Skill, FormData>(`/${URL}/${skill.id.toString()}/with-image`, {
         method: "PUT",
         data: buildSkillFormData(skill, file),
         headers: {
@@ -73,7 +73,7 @@ const sort = (sorts: DndItem[]) => {
 };
 
 const deleteSkill = (id: number) =>
-    request(`/${URL}/${id}`, {
+    request(`/${URL}/${id.toString()}`, {
         method: "DELETE",
         requiredAuthorities: ["delete:skill"]
     });

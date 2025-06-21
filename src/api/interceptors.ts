@@ -19,7 +19,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
         }
 
         const accessToken = authHeaderMatch[1];
-        if (accessToken !== null && !isTokenExpired(accessToken)) {
+        if (!isTokenExpired(accessToken)) {
             return req;
         }
 
@@ -28,7 +28,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
 
             req.headers.setAuthorization(`Bearer ${refreshRes.accessToken}`);
 
-            await setAuthContext(refreshRes);
+            setAuthContext(refreshRes);
         } catch (e) {
             console.error("Error while refreshing token:", getDetail(e));
             await clearAuthContext();

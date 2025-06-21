@@ -1,6 +1,6 @@
 import { initInterceptors } from "api/interceptors";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
-import axios from "axios";
+import type { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from "axios";
+import axios, { AxiosHeaders } from "axios";
 import { getAuthContext } from "contexts/auth-context";
 import { hasEveryAuthority } from "libs/auth";
 import { getDetail } from "libs/utils/error";
@@ -25,13 +25,11 @@ type RequestConfig<D> = AxiosRequestConfig<D> & {
 
 export const request = async <T = void, D = undefined>(url: string, config?: RequestConfig<D>) => {
     const {
-        method = "GET",
-        data,
         headers,
         requiredAuthorities,
         needsAccessToken = true,
         showErrorToast = true,
-        ...restConfig
+        ...requestConfig
     } = config ?? {};
 
     if (requiredAuthorities !== undefined && !hasEveryAuthority(requiredAuthorities)) {
@@ -42,23 +40,32 @@ export const request = async <T = void, D = undefined>(url: string, config?: Req
 
     const accessToken = needsAccessToken ? getAuthContext().accessToken : null;
 
+    let axiosHeaders: RawAxiosRequestHeaders;
+    if (headers instanceof AxiosHeaders) {
+        axiosHeaders = headers.toJSON();
+    } else {
+        axiosHeaders = headers ?? {};
+    }
+
+    if (config?.data !== undefined) {
+        axiosHeaders["Content-Type"] = "application/json";
+    }
+
+    if (accessToken !== null) {
+        axiosHeaders.Authorization = `Bearer ${accessToken}`;
+    }
+
     let res: AxiosResponse<T, D>;
     try {
         res = await httpClient.request<T, AxiosResponse<T, D>, D>({
             url,
-            method,
-            data,
-            headers: {
-                ...(data && { "Content-Type": "application/json" }),
-                ...headers,
-                ...(accessToken !== null && {
-                    Authorization: `Bearer ${accessToken}`
-                })
-            },
-            ...restConfig
+            headers: axiosHeaders,
+            ...requestConfig
         });
     } catch (e) {
-        showErrorToast && toast.error(getDetail(e));
+        if (showErrorToast) {
+            toast.error(getDetail(e));
+        }
         throw e;
     }
 
