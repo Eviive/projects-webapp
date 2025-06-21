@@ -1,11 +1,11 @@
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
-import type { UserConfigFn } from "vite";
-import { defineConfig } from "vite";
 import eslint from "vite-plugin-eslint";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 
-const configFn: UserConfigFn = () => ({
-    plugins: [react(), viteTsconfigPaths(), eslint()],
+/** @type {import('vite').UserConfig} */
+export default {
+    plugins: [react(), viteTsconfigPaths(), tailwindcss(), eslint()],
     server: {
         port: 3001,
         open: true
@@ -23,6 +23,4 @@ const configFn: UserConfigFn = () => ({
             localsConvention: "camelCaseOnly"
         }
     }
-});
-
-export default defineConfig(configFn);
+};
