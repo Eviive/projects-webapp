@@ -2,14 +2,7 @@
 
 import type { Table } from "@tanstack/react-table";
 import { Button } from "components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "components/ui/dropdown-menu";
 import { RxMixerHorizontal } from "react-icons/rx";
 
 interface DataTableViewOptionsProps<TData> {

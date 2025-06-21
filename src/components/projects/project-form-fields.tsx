@@ -8,7 +8,7 @@ import { Combobox } from "components/ui/combobox";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
-import { format, formatISO } from "date-fns";
+import { formatISO } from "date-fns";
 import { SKILL_PLACEHOLDER } from "libs/constants";
 import { getImageUrl } from "libs/image";
 import { isNotNullOrUndefined } from "libs/utils/assertion";
@@ -91,9 +91,6 @@ export const ProjectFormFields: FC = () => {
                                         field.onChange(formatISO(date, { representation: "date" }));
                                     }
                                 }}
-                                buttonText={
-                                    field.value ? format(field.value, "PPP") : "Pick a date"
-                                }
                             />
                         </FormControl>
                         <FormMessage />

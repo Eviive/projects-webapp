@@ -104,6 +104,8 @@ const SortDialogDragContent = <E extends DndItem>(
             <SortableContext items={props.items} strategy={verticalListSortingStrategy}>
                 <ScrollArea className="h-full w-full">
                     <ul className="mr-[calc(var(--scrollbar-size)*1.5)]">
+                        {" "}
+                        {/* TODO: scrollbar size ? */}
                         {props.items.map((item, i) => (
                             <Fragment key={item.id}>
                                 <Separator />

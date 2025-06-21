@@ -32,6 +32,7 @@ interface MultipleProps<V> {
     value: V[];
 }
 
+// TODO: update
 export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
     const getButtonLabel = () => {
         if (props.selection === "multiple" && props.value.length > 0) {
@@ -63,7 +64,7 @@ export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
                     </Button>
                 </FormControl>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-[200px] p-0" portal={false}>
+            <PopoverContent align="start" className="w-[200px] p-0">
                 <Command loop>
                     <CommandInput placeholder={props.searchPlaceholder} />
                     <CommandList className="max-h-[204px]">

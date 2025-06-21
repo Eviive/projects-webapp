@@ -1,135 +1,123 @@
-import { Button } from "components/ui/button";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "components/ui/select";
-import type { FC } from "react";
-import { LuChevronLeft, LuChevronRight, LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
+import { Button, buttonVariants } from "components/ui/button";
 
-const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50] as const;
+import { cn } from "libs/utils/style";
+import * as React from "react";
+import { LuChevronLeft, LuChevronRight, LuMoreHorizontal } from "react-icons/lu";
 
-interface SelectionProps {
-    isSelectable: true;
-    selectedRows: number;
-    totalRows: number;
+function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+  return (
+    <nav
+      role="navigation"
+      aria-label="pagination"
+      data-slot="pagination"
+      className={cn("mx-auto flex w-full justify-center", className)}
+      {...props}
+    />
+  )
 }
 
-interface NoSelectionProps {
-    isSelectable?: false;
+function PaginationContent({
+  className,
+  ...props
+}: React.ComponentProps<"ul">) {
+  return (
+    <ul
+      data-slot="pagination-content"
+      className={cn("flex flex-row items-center gap-1", className)}
+      {...props}
+    />
+  )
 }
 
-type Props = {
-    itemName?: string;
-    pageSizeOptions?: readonly number[];
-    pageSize: number;
-    setPageSize: (pageSize: number) => void;
-    pageIndex: number;
-    setPageIndex: (pageIndex: number) => void;
-    getPageCount: () => number;
-    getCanPreviousPage: () => boolean;
-    getCanNextPage: () => boolean;
-    previousPage: () => void;
-    nextPage: () => void;
-} & (SelectionProps | NoSelectionProps);
+function PaginationItem({ ...props }: React.ComponentProps<"li">) {
+  return <li data-slot="pagination-item" {...props} />
+}
 
-export const Pagination: FC<Props> = props => {
-    const pageSizeOptions = new Set(props.pageSizeOptions ?? DEFAULT_PAGE_SIZE_OPTIONS);
+type PaginationLinkProps = {
+  isActive?: boolean
+} & Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<"a">
 
-    if (!pageSizeOptions.has(props.pageSize)) {
-        pageSizeOptions.add(props.pageSize);
-    }
+function PaginationLink({
+  className,
+  isActive,
+  size = "icon",
+  ...props
+}: PaginationLinkProps) {
+  return (
+    <a
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        buttonVariants({
+          variant: isActive ? "outline" : "ghost",
+          size,
+        }),
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-    const itemName = props.itemName ?? "row";
+function PaginationPrevious({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to previous page"
+      size="default"
+      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      {...props}
+    >
+      <LuChevronLeft />
+      <span className="hidden sm:block">Previous</span>
+    </PaginationLink>
+  )
+}
 
-    return (
-        <div className="flex items-center justify-between px-2">
-            {props.isSelectable && (
-                <div className="text-muted-foreground hidden flex-1 text-sm md:block">
-                    {props.selectedRows} of {props.totalRows} {itemName}(s) selected.
-                </div>
-            )}
-            <div className="ms-auto flex flex-wrap items-center justify-end space-x-6 gap-y-2 lg:space-x-8">
-                <div className="flex items-center space-x-2">
-                    <p className="text-sm font-medium first-letter:capitalize">
-                        {itemName}s per page
-                    </p>
-                    <Select
-                        value={`${props.pageSize}`}
-                        onValueChange={value => {
-                            props.setPageSize(Number(value));
-                        }}
-                    >
-                        <SelectTrigger className="h-8 w-[70px]">
-                            <SelectValue placeholder={props.pageSize} />
-                        </SelectTrigger>
-                        <SelectContent side="top">
-                            {Array.from(pageSizeOptions)
-                                .sort((a, b) => a - b)
-                                .map(pageSize => (
-                                    <SelectItem key={pageSize} value={`${pageSize}`}>
-                                        {pageSize}
-                                    </SelectItem>
-                                ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div className="flex items-center space-x-2">
-                    <div className="flex items-center justify-center text-sm font-medium">
-                        {props.getPageCount() > 0
-                            ? `Page ${props.pageIndex + 1} of ${props.getPageCount()}`
-                            : "No pages available"}
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Button
-                            variant="outline"
-                            className="hidden h-8 w-8 p-0 lg:flex"
-                            onClick={() => {
-                                props.setPageIndex(0);
-                            }}
-                            disabled={!props.getCanPreviousPage()}
-                        >
-                            <span className="sr-only">Go to first page</span>
-                            <LuChevronsLeft className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="h-8 w-8 p-0"
-                            onClick={() => {
-                                props.previousPage();
-                            }}
-                            disabled={!props.getCanPreviousPage()}
-                        >
-                            <span className="sr-only">Go to previous page</span>
-                            <LuChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="h-8 w-8 p-0"
-                            onClick={() => {
-                                props.nextPage();
-                            }}
-                            disabled={!props.getCanNextPage()}
-                        >
-                            <span className="sr-only">Go to next page</span>
-                            <LuChevronRight className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="hidden h-8 w-8 p-0 lg:flex"
-                            onClick={() => {
-                                props.setPageIndex(props.getPageCount() - 1);
-                            }}
-                            disabled={!props.getCanNextPage()}
-                        >
-                            <span className="sr-only">Go to last page</span>
-                            <LuChevronsRight className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
+function PaginationNext({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to next page"
+      size="default"
+      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      {...props}
+    >
+      <span className="hidden sm:block">Next</span>
+      <LuChevronRight />
+    </PaginationLink>
+  )
+}
+
+function PaginationEllipsis({
+  className,
+  ...props
+}: React.ComponentProps<"span">) {
+  return (
+    <span
+      aria-hidden
+      data-slot="pagination-ellipsis"
+      className={cn("flex size-9 items-center justify-center", className)}
+      {...props}
+    >
+      <LuMoreHorizontal className="size-4" />
+      <span className="sr-only">More pages</span>
+    </span>
+  )
+}
+
+export {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+}

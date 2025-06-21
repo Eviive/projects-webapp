@@ -1,13 +1,7 @@
 "use client";
 
 import type { ColumnDef, SortingState, TableOptions } from "@tanstack/react-table";
-import {
-    flexRender,
-    getCoreRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable
-} from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { DataTableViewOptions } from "components/ui/data-table-view-options";
 import { Pagination } from "components/ui/pagination";
 import { Skeleton } from "components/ui/skeleton";
