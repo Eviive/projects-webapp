@@ -1,23 +1,21 @@
 import { SortDialogDragContent } from "components/common/sort-dialog/sort-dialog-drag-content";
 import { Button } from "components/ui/button";
 import { Defer } from "components/ui/defer";
-import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode, RefAttributes } from "react";
-import { forwardRef, useEffect, useState } from "react";
+import type { ReactNode, Ref } from "react";
+import { useEffect, useState } from "react";
 import type { DndItem } from "types/dnd";
 import type { PropsWithStatus } from "types/utils/props";
 
 export type SortDialogContentRef = () => DndItem[] | null;
 
 interface Props<E extends DndItem> {
+    ref: Ref<SortDialogContentRef>;
     initialItems?: E[];
     render: (item: E) => ReactNode;
     closeDialog: (resetSort: boolean) => void;
 }
 
-const SortDialogContent = <E extends DndItem>(
-    props: PropsWithStatus<Props<E>>,
-    ref: ForwardedRef<SortDialogContentRef>
-) => {
+export const SortDialogContent = <E extends DndItem>(props: PropsWithStatus<Props<E>>) => {
     const [items, setItems] = useState<E[]>();
 
     useEffect(() => {
@@ -37,7 +35,7 @@ const SortDialogContent = <E extends DndItem>(
             <div className="grid h-[500px] place-items-center">
                 {shouldDisplayContent && (
                     <SortDialogDragContent
-                        ref={ref}
+                        ref={props.ref}
                         items={items}
                         setItems={items => {
                             setItems(prevItems => {
@@ -77,10 +75,3 @@ const SortDialogContent = <E extends DndItem>(
         </>
     );
 };
-
-const SortDialogContentWithForwardedRef = forwardRef(SortDialogContent) as <E extends DndItem>(
-    props: ComponentPropsWithoutRef<typeof SortDialogContent<E>> &
-        RefAttributes<SortDialogContentRef>
-) => ReactNode;
-
-export { SortDialogContentWithForwardedRef as SortDialogContent };

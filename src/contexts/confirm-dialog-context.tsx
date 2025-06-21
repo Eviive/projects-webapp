@@ -35,7 +35,7 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
         open: false
     });
 
-    const resolveRef = useRef<(resolve: boolean) => void>();
+    const resolveRef = useRef<(resolve: boolean) => void>(undefined);
 
     const dialog = useCallback(async (params?: ConfirmDialogParams) => {
         setDialogState({
