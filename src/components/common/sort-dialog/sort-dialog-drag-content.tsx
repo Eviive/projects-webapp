@@ -13,17 +13,20 @@ import { SortDialogItem } from "components/common/sort-dialog/sort-dialog-item";
 import { SortDialogOverlay } from "components/common/sort-dialog/sort-dialog-overlay";
 import { ScrollArea } from "components/ui/scroll-area";
 import { Separator } from "components/ui/separator";
-import type { Dispatch, ReactNode, Ref, SetStateAction } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { Fragment, useImperativeHandle, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import type { DndItem } from "types/dnd";
+import type { PropsWithForwardedRef } from "types/utils/props";
 
-interface Props<E extends DndItem> {
-    ref: Ref<SortDialogContentRef>;
-    items: E[];
-    setItems: Dispatch<SetStateAction<E[]>>;
-    render: (item: E) => ReactNode;
-}
+type Props<E extends DndItem> = PropsWithForwardedRef<
+    {
+        items: E[];
+        setItems: Dispatch<SetStateAction<E[]>>;
+        render: (item: E) => ReactNode;
+    },
+    SortDialogContentRef
+>;
 
 export const SortDialogDragContent = <E extends DndItem>(props: Props<E>) => {
     const [initialSort] = useState(props.items.map(item => item.sort));

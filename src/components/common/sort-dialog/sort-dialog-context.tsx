@@ -1,9 +1,9 @@
 import type { SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
-import type { RefObject } from "react";
+import type { Ref } from "react";
 import { createContext, use } from "react";
 
 interface ISortDialogContext {
-    contentRef: RefObject<SortDialogContentRef | null>;
+    contentRef: Ref<SortDialogContentRef | null>;
     handleClose: (open: boolean, resetSort?: boolean) => void;
 }
 

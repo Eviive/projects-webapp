@@ -1,3 +1,4 @@
+import type { Ref } from "react";
 import type { RenderableReactNode } from "types/utils/react";
 
 type FalseOrNode = false | RenderableReactNode;
@@ -14,4 +15,6 @@ export interface ErrorProps {
     error: FalseOrNode;
 }
 
-export type PropsWithStatus<P = unknown> = P & EmptyProps & LoadingProps & ErrorProps;
+export type PropsWithStatus<Props = unknown> = Props & EmptyProps & LoadingProps & ErrorProps;
+
+export type PropsWithForwardedRef<Props, RefContent> = Props & { ref: Ref<RefContent> };

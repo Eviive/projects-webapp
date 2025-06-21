@@ -1,11 +1,11 @@
 import type { FC, PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
 
-interface Props {
+type Props = PropsWithChildren<{
     delay?: number;
-}
+}>;
 
-export const Defer: FC<PropsWithChildren<Props>> = props => {
+export const Defer: FC<Props> = props => {
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {

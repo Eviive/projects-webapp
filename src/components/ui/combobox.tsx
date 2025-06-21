@@ -10,7 +10,7 @@ import type { PropsWithStatus } from "types/utils/props";
 
 const listFormatter = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" });
 
-type Props<V> = CommonProps<V> & (SingleProps<V> | MultipleProps<V>);
+type Props<V> = PropsWithStatus<CommonProps<V> & (SingleProps<V> | MultipleProps<V>)>;
 
 interface CommonProps<V> {
     options: V[];
@@ -33,7 +33,7 @@ interface MultipleProps<V> {
 }
 
 // TODO: update
-export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
+export const Combobox = <V,>(props: Props<V>) => {
     const getButtonLabel = () => {
         if (props.selection === "multiple" && props.value.length > 0) {
             return listFormatter.format(props.value.map(item => props.getValue(item)));

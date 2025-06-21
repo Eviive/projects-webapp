@@ -6,12 +6,12 @@ import { cn } from "libs/utils/style";
 import type { CSSProperties, FC, PropsWithChildren } from "react";
 import { useMemo } from "react";
 
-interface Props {
+type Props = PropsWithChildren<{
     id: UniqueIdentifier;
     isOverlay?: boolean;
-}
+}>;
 
-export const SortDialogItem: FC<PropsWithChildren<Props>> = props => {
+export const SortDialogItem: FC<Props> = props => {
     const {
         attributes,
         isDragging,
