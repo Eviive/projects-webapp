@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const SearchBar: FC<Props> = props => {
-    const ref = useRef<Props["handleDebounce"]>();
+    const ref = useRef<Props["handleDebounce"]>(null);
 
     useEffect(() => {
         ref.current = debounce(props.handleDebounce, props.debounce ?? 300);

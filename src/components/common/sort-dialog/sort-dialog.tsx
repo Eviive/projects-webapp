@@ -1,6 +1,6 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 import type { SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
-import { SortDialogContextProvider } from "components/common/sort-dialog/sort-dialog-context";
+import { SortDialogContext } from "components/common/sort-dialog/sort-dialog-context";
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
 import type { FC, ReactNode } from "react";
 import { useRef, useState } from "react";
@@ -37,14 +37,14 @@ export const SortDialog: FC<Props> = props => {
                 title: `Sorting ${props.itemsName}`
             }}
             content={
-                <SortDialogContextProvider
+                <SortDialogContext
                     value={{
                         contentRef,
                         handleClose
                     }}
                 >
                     {props.content}
-                </SortDialogContextProvider>
+                </SortDialogContext>
             }
             open={open}
             onOpenChange={handleClose}

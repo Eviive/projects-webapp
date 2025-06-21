@@ -20,7 +20,7 @@ export const ThemeContextProvider: FC<PropsWithChildren> = ({ children }) => {
         [theme, systemTheme, setLightTheme, setDarkTheme, setSystemTheme]
     );
 
-    return <ThemeContext.Provider value={themeContextValue}>{children}</ThemeContext.Provider>;
+    return <ThemeContext value={themeContextValue}>{children}</ThemeContext>;
 };
 
 export const useThemeContext = (): IThemeContext => {

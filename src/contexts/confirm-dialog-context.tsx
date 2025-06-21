@@ -35,7 +35,7 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
         open: false
     });
 
-    const resolveRef = useRef<(resolve: boolean) => void>(undefined);
+    const resolveRef = useRef<(resolve: boolean) => void>(null);
 
     const dialog = useCallback(async (params?: ConfirmDialogParams) => {
         setDialogState({
@@ -53,7 +53,7 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
     }, []);
 
     return (
-        <ConfirmDialogContext.Provider value={dialog}>
+        <ConfirmDialogContext value={dialog}>
             {children}
             <ConfirmDialog
                 state={dialogState}
@@ -62,7 +62,7 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
                     setDialogState({ open: false });
                 }}
             />
-        </ConfirmDialogContext.Provider>
+        </ConfirmDialogContext>
     );
 };
 

@@ -3,13 +3,11 @@ import type { RefObject } from "react";
 import { createContext, useContext } from "react";
 
 interface ISortDialogContext {
-    contentRef: RefObject<SortDialogContentRef>;
+    contentRef: RefObject<SortDialogContentRef | null>;
     handleClose: (open: boolean, resetSort?: boolean) => void;
 }
 
-const SortDialogContext = createContext<ISortDialogContext | null>(null);
-
-export const SortDialogContextProvider = SortDialogContext.Provider;
+export const SortDialogContext = createContext<ISortDialogContext | null>(null);
 
 export const useSortDialogContext = (): ISortDialogContext => {
     const sortDialogContext = useContext(SortDialogContext);

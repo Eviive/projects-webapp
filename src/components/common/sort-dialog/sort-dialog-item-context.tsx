@@ -6,9 +6,7 @@ type ISortDialogItemContext = Pick<
     "attributes" | "listeners" | "setActivatorNodeRef"
 >;
 
-const SortDialogItemContext = createContext<ISortDialogItemContext | null>(null);
-
-export const SortDialogItemContextProvider = SortDialogItemContext.Provider;
+export const SortDialogItemContext = createContext<ISortDialogItemContext | null>(null);
 
 export const useSortDialogItemContext = (): ISortDialogItemContext => {
     const sortDialogItemContext = useContext(SortDialogItemContext);
