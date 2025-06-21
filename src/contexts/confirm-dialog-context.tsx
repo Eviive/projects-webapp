@@ -4,7 +4,7 @@ import {
     type FC,
     type PropsWithChildren,
     useCallback,
-    useContext,
+    use,
     useRef,
     useState
 } from "react";
@@ -67,7 +67,7 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
 };
 
 export const useConfirmDialogContext = () => {
-    const confirm = useContext(ConfirmDialogContext);
+    const confirm = use(ConfirmDialogContext);
     if (confirm === null) {
         throw new Error("useConfirm called without ConfirmDialogContext");
     }

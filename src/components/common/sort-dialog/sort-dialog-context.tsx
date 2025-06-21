@@ -1,6 +1,6 @@
 import type { SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
 import type { RefObject } from "react";
-import { createContext, useContext } from "react";
+import { createContext, use } from "react";
 
 interface ISortDialogContext {
     contentRef: RefObject<SortDialogContentRef | null>;
@@ -10,7 +10,7 @@ interface ISortDialogContext {
 export const SortDialogContext = createContext<ISortDialogContext | null>(null);
 
 export const useSortDialogContext = (): ISortDialogContext => {
-    const sortDialogContext = useContext(SortDialogContext);
+    const sortDialogContext = use(SortDialogContext);
     if (sortDialogContext === null) {
         throw new Error("useSortDialogContext called without SortDialogContextProvider");
     }
