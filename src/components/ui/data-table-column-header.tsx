@@ -31,11 +31,11 @@ export const DataTableColumnHeader = <TData, TValue>({
                     >
                         <span>{title}</span>
                         {column.getIsSorted() === "desc" && (
-                            <LuArrowDown className="ml-2 h-4 w-4" />
+                            <LuArrowDown className="ml-2 size-4" />
                         )}
-                        {column.getIsSorted() === "asc" && <LuArrowUp className="ml-2 h-4 w-4" />}
+                        {column.getIsSorted() === "asc" && <LuArrowUp className="ml-2 size-4" />}
                         {column.getIsSorted() === false && (
-                            <LuChevronsUpDown className="ml-2 h-4 w-4" />
+                            <LuChevronsUpDown className="ml-2 size-4" />
                         )}
                     </Button>
                 </DropdownMenuTrigger>

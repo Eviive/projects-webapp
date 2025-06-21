@@ -15,7 +15,7 @@ import { clearAuthContext, hasEveryAuthority } from "libs/auth";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import type { FC } from "react";
-import { LuUser2 } from "react-icons/lu";
+import { LuUserRound } from "react-icons/lu";
 import { NavLink, useLocation, useMatches, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { authoritiesHandleSchema, type Authority } from "types/auth";
@@ -99,7 +99,7 @@ export const HeaderUserAccount: FC<Props> = props => {
                     />
                 ) : (
                     <div className="bg-input grid aspect-square h-full place-items-center rounded-full">
-                        <LuUser2 className={iconClasses} />
+                        <LuUserRound className={iconClasses} />
                     </div>
                 )}
                 {props.type === "header" && (

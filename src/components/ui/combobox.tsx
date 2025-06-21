@@ -60,7 +60,7 @@ export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
                         )}
                     >
                         <span className="truncate">{getButtonLabel()}</span>
-                        <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <LuChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                     </Button>
                 </FormControl>
             </PopoverTrigger>
@@ -94,7 +94,7 @@ export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
                                     {props.selection === "single" && (
                                         <LuCheck
                                             className={cn(
-                                                "h-4 w-4",
+                                                "size-4",
                                                 isSelected ? "opacity-100" : "opacity-0"
                                             )}
                                         />
@@ -102,13 +102,13 @@ export const Combobox = <V,>(props: PropsWithStatus<Props<V>>) => {
                                     {props.selection === "multiple" && (
                                         <div
                                             className={cn(
-                                                "border-primary flex h-4 w-4 items-center justify-center rounded-sm border",
+                                                "border-primary flex size-4 items-center justify-center rounded-sm border",
                                                 isSelected
                                                     ? "bg-primary text-primary-foreground"
                                                     : "opacity-50 [&_svg]:invisible"
                                             )}
                                         >
-                                            <LuCheck className="h-4 w-4" />
+                                            <LuCheck className="size-4" />
                                         </div>
                                     )}
                                     {props.renderItem(item)}

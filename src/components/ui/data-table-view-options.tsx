@@ -14,7 +14,7 @@ export const DataTableViewOptions = <TData,>({ table }: DataTableViewOptionsProp
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
-                    <RxMixerHorizontal className="mr-2 h-4 w-4" />
+                    <RxMixerHorizontal className="mr-2 size-4" />
                     View
                 </Button>
             </DropdownMenuTrigger>

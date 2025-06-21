@@ -139,3 +139,7 @@ html {
         -moz-osx-font-smoothing: grayscale;
     }
 }
+
+:is(button, [role="button"]):not([disabled]) {
+    cursor: pointer;
+}

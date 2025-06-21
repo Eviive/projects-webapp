@@ -21,7 +21,7 @@ export const DatePicker = () => {
                         !date && "text-muted-foreground"
                     )}
                 >
-                    <LuCalendar className="mr-2 h-4 w-4" />
+                    <LuCalendar className="mr-2 size-4" />
                     {date ? format(date, "PPP") : <span>Pick a date</span>}
                 </Button>
             </PopoverTrigger>

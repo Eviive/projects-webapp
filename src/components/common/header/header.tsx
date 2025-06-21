@@ -9,7 +9,14 @@ import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
 import { type FC, useEffect, useState } from "react";
-import { LuActivity, LuFolder, LuHome, LuPanelLeft, LuRefreshCw, LuUserCog2 } from "react-icons/lu";
+import {
+    LuActivity,
+    LuFolder,
+    LuHouse,
+    LuPanelLeft,
+    LuRefreshCw,
+    LuUserRoundCog
+} from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -77,7 +84,7 @@ export const Header: FC = () => {
                         type="sidebar"
                         title="Dashboard"
                         to="/"
-                        icon={<LuHome className={iconClasses} />}
+                        icon={<LuHouse className={iconClasses} />}
                         className={getSidebarItemClasses}
                     />
 
@@ -96,7 +103,7 @@ export const Header: FC = () => {
                             type="sidebar"
                             title="Skills"
                             to="/skills"
-                            icon={<LuUserCog2 className={iconClasses} />}
+                            icon={<LuUserRoundCog className={iconClasses} />}
                             className={getSidebarItemClasses}
                         />
                     </RequireAuthority>
@@ -151,7 +158,7 @@ export const Header: FC = () => {
                                 type="header"
                                 title="Dashboard"
                                 to="/"
-                                icon={<LuHome className={iconClasses} />}
+                                icon={<LuHouse className={iconClasses} />}
                                 className={getHeaderItemClasses}
                             />
 
@@ -170,7 +177,7 @@ export const Header: FC = () => {
                                     type="header"
                                     title="Skills"
                                     to="/skills"
-                                    icon={<LuUserCog2 className={iconClasses} />}
+                                    icon={<LuUserRoundCog className={iconClasses} />}
                                     className={getHeaderItemClasses}
                                 />
                             </RequireAuthority>
