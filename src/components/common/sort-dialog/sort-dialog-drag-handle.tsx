@@ -11,7 +11,7 @@ export const SortDialogDragHandle: FC = () => {
             {...attributes}
             {...listeners}
             ref={setActivatorNodeRef}
-            className="text-foreground-500 h-8 w-8"
+            className="text-foreground-500 size-8"
             variant="ghost"
             size="icon"
         >

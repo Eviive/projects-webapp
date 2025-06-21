@@ -52,7 +52,7 @@ export const columns = [
                             trigger={
                                 <TooltipTrigger asChild>
                                     <Button
-                                        className="text-foreground-500 ms-auto h-8 w-8"
+                                        className="text-foreground-500 ms-auto size-8"
                                         variant="outline"
                                         size="icon"
                                     >

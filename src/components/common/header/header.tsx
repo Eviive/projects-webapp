@@ -44,7 +44,7 @@ export const Header: FC = () => {
     const getHeaderItemClasses = ({ isActive }: { isActive: boolean }): string =>
         cn(headerItemClasses, isActive && "text-foreground");
 
-    const iconClasses = "h-6 w-6 shrink-0";
+    const iconClasses = "size-6 shrink-0";
 
     const handleRevalidate = async () => {
         try {

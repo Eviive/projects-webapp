@@ -60,7 +60,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                                     trigger={
                                         <TooltipTrigger asChild>
                                             <Button
-                                                className="text-foreground-500 h-7 w-7"
+                                                className="text-foreground-500 size-7"
                                                 variant="outline"
                                                 size="icon"
                                                 disabled={isOptimistic}

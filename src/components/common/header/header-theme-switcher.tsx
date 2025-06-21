@@ -48,7 +48,7 @@ export const HeaderThemeSwitcher: FC<Props> = props => {
         );
     }
 
-    const themeIconClasses = "mr-2 h-4 w-4";
+    const themeIconClasses = "mr-2 size-4";
 
     return (
         <div className="flex grow basis-0 items-center">
