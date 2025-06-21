@@ -65,7 +65,7 @@ const update = (skill: Skill, file?: File | null) => {
 };
 
 const sort = (sorts: DndItem[]) => {
-    return request<void, DndItem[]>(`/${URL}/sort`, {
+    return request<undefined, DndItem[]>(`/${URL}/sort`, {
         method: "PATCH",
         data: sorts,
         requiredAuthorities: ["update:skill"]

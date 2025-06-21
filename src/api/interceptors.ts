@@ -32,7 +32,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
         } catch (e) {
             console.error("Error while refreshing token:", getDetail(e));
             await clearAuthContext();
-            return Promise.reject(e);
+            throw e;
         } finally {
             await queryClient.invalidateQueries();
         }
@@ -47,7 +47,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
                 await clearAuthContext();
                 await queryClient.invalidateQueries();
             }
-            return Promise.reject(err);
+            throw err;
         }
     );
 };

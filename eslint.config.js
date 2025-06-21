@@ -57,6 +57,14 @@ export default defineConfig([
                     fixMixedExportsWithInlineTypeSpecifier: false
                 }
             ],
+            "@typescript-eslint/no-misused-promises": [
+                "error",
+                {
+                    checksVoidReturn: {
+                        attributes: false
+                    }
+                }
+            ],
             "react/self-closing-comp": [
                 "error",
                 {

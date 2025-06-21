@@ -15,7 +15,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
     const parseObject = (obj: object): ReactNode => {
         return Object.entries(obj).map(([key, val]) => {
             if (typeof val === "object" && !Array.isArray(val)) {
-                return parseObject(val);
+                return parseObject(val as object);
             }
             return (
                 <span key={key}>
