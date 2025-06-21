@@ -1,7 +1,6 @@
+import styles from "layouts/grid.module.css";
 import { cn } from "libs/utils/style";
 import type { CSSProperties, FC, PropsWithChildren } from "react";
-
-import styles from "./grid.module.scss";
 
 interface Props {
     className?: string;

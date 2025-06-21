@@ -1,8 +1,8 @@
 import { Defer } from "components/ui/defer";
+
+import styles from "components/ui/loader.module.css";
 import { cn } from "libs/utils/style";
 import type { CSSProperties, FC } from "react";
-
-import styles from "./loader.module.scss";
 
 interface Props {
     size?: number;

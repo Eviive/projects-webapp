@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import eslint from "vite-plugin-eslint";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 
-/** @type {import('vite').UserConfig} */
+/** @type {import("vite").UserConfig} */
 export default {
     plugins: [react(), viteTsconfigPaths(), tailwindcss(), eslint()],
     server: {
