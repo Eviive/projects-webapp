@@ -7,7 +7,7 @@ interface Props {
     trigger: ReactNode;
     header: {
         title: ReactNode;
-        description?: ReactNode;
+        description: ReactNode;
     };
     content: ReactNode;
     open?: boolean;
@@ -29,9 +29,7 @@ export const ResponsiveDrawerDialog: FC<Props> = props => {
                 <DialogContent className={props.classNames?.dialog?.content}>
                     <DialogHeader>
                         <DialogTitle>{props.header.title}</DialogTitle>
-                        {props.header.description && (
-                            <DialogDescription>{props.header.description}</DialogDescription>
-                        )}
+                        <DialogDescription>{props.header.description}</DialogDescription>
                     </DialogHeader>
                     {props.content}
                 </DialogContent>
@@ -45,9 +43,7 @@ export const ResponsiveDrawerDialog: FC<Props> = props => {
             <DrawerContent>
                 <DrawerHeader>
                     <DrawerTitle>{props.header.title}</DrawerTitle>
-                    {props.header.description && (
-                        <DrawerDescription>{props.header.description}</DrawerDescription>
-                    )}
+                    <DrawerDescription>{props.header.description}</DrawerDescription>
                 </DrawerHeader>
                 {props.content}
             </DrawerContent>

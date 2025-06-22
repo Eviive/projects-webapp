@@ -1,5 +1,6 @@
 import { UserService } from "api/services/user";
-import { getAuthContext, type IAuthContext, setAuthContext } from "contexts/auth-context";
+import { getAuthContext, setAuthContext } from "contexts/auth-context";
+import type { IAuthContext } from "contexts/auth-context";
 import { getDetail } from "libs/utils/error";
 import { router } from "router";
 import type { Authority } from "types/auth";

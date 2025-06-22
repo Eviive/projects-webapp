@@ -8,7 +8,8 @@ import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
-import { type FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { FC } from "react";
 import {
     LuActivity,
     LuFolder,

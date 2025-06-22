@@ -30,7 +30,8 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
         <ResponsiveDrawerDialog
             trigger={trigger}
             header={{
-                title: "HTTP Exchange Details"
+                title: "HTTP Exchange Details",
+                description: "Inspecting a request made to the API."
             }}
             content={
                 <Tabs defaultValue="request" className="flex flex-col gap-3">

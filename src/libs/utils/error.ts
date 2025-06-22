@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import z from "zod";
+import { z } from "zod";
 
 const problemDetailSchema = z.object({
     title: z

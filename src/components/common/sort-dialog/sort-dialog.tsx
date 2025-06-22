@@ -34,7 +34,8 @@ export const SortDialog: FC<Props> = props => {
         <ResponsiveDrawerDialog
             trigger={props.trigger}
             header={{
-                title: `Sorting ${props.itemsName}`
+                title: `Sorting ${props.itemsName}`,
+                description: `Use this list to sort the ${props.itemsName} by their importance.`
             }}
             content={
                 <SortDialogContext

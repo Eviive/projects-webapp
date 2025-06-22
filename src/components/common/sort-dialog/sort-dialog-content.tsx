@@ -36,7 +36,7 @@ export const SortDialogContent = <E extends DndItem>(props: Props<E>) => {
 
     return (
         <>
-            <div className="grid h-[500px] place-items-center">
+            <div className="grid h-[500px] place-items-center overflow-x-hidden">
                 {shouldDisplayContent && (
                     <SortDialogDragContent
                         ref={props.ref}

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* shadcn/ui */
+
 :root {
     --radius: 0.625rem;
     --background: oklch(1 0 0);
@@ -108,11 +110,17 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@source inline("{text,bg}-{gray-600,green-600,blue-600,yellow-500,yellow-600,orange-600,danger}{,/10}");
+/* Custom */
 
 :root {
     --danger: hsl(339.2 90.36% 51.18%);
 }
+
+@theme inline {
+    --color-danger: var(--danger);
+}
+
+@source inline("{text,bg}-{gray-600,green-600,blue-600,yellow-500,yellow-600,orange-600,danger}{,/10}");
 
 * {
     @apply border-border;

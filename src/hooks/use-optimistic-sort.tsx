@@ -1,10 +1,10 @@
-import {
-    type InfiniteData,
-    type MutationKey,
-    type UseInfiniteQueryResult,
-    useMutationState,
-    type UseQueryResult
+import type {
+    InfiniteData,
+    MutationKey,
+    UseInfiniteQueryResult,
+    UseQueryResult
 } from "@tanstack/react-query";
+import { useMutationState } from "@tanstack/react-query";
 import { useMemo } from "react";
 import type { DndItem } from "types/dnd";
 import type { Page, Slice } from "types/pagination";

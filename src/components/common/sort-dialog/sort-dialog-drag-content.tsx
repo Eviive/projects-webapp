@@ -11,7 +11,6 @@ import type { SortDialogContentRef } from "components/common/sort-dialog/sort-di
 import { SortDialogDragHandle } from "components/common/sort-dialog/sort-dialog-drag-handle";
 import { SortDialogItem } from "components/common/sort-dialog/sort-dialog-item";
 import { SortDialogOverlay } from "components/common/sort-dialog/sort-dialog-overlay";
-import { ScrollArea } from "components/ui/scroll-area";
 import { Separator } from "components/ui/separator";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { Fragment, useImperativeHandle, useMemo, useState } from "react";
@@ -100,22 +99,19 @@ export const SortDialogDragContent = <E extends DndItem>(props: Props<E>) => {
             onDragEnd={handleDragEnd}
         >
             <SortableContext items={props.items} strategy={verticalListSortingStrategy}>
-                <ScrollArea className="h-full w-full">
-                    <ul className="mr-[calc(var(--scrollbar-size)*1.5)]">
-                        {" "}
-                        {/* TODO: scrollbar size ? */}
-                        {props.items.map((item, i) => (
-                            <Fragment key={item.id}>
-                                <Separator />
-                                <SortDialogItem id={item.id}>
-                                    {props.render(item)}
-                                    <SortDialogDragHandle />
-                                </SortDialogItem>
-                                {i === props.items.length - 1 && <Separator />}
-                            </Fragment>
-                        ))}
-                    </ul>
-                </ScrollArea>
+                <ul className="size-full">
+                    {" "}
+                    {props.items.map((item, i) => (
+                        <Fragment key={item.id}>
+                            <Separator />
+                            <SortDialogItem id={item.id}>
+                                {props.render(item)}
+                                <SortDialogDragHandle />
+                            </SortDialogItem>
+                            {i === props.items.length - 1 && <Separator />}
+                        </Fragment>
+                    ))}
+                </ul>
             </SortableContext>
             {createPortal(
                 <SortDialogOverlay>

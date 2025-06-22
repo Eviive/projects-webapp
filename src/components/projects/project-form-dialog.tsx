@@ -35,7 +35,12 @@ export const ProjectFormDialog: FC<Props> = props => {
                 <ResponsiveDrawerDialog
                     trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
                     header={{
-                        title: props.project ? `Editing ${props.project.title}` : "Creating project"
+                        title: props.project
+                            ? `Editing ${props.project.title}`
+                            : "Creating project",
+                        description: props.project
+                            ? "The project's information can be edited using this form."
+                            : "Create a new project by filling out this form."
                     }}
                     content={
                         <ProjectForm

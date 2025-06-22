@@ -18,7 +18,8 @@ import type { FC } from "react";
 import { LuUserRound } from "react-icons/lu";
 import { NavLink, useLocation, useMatches, useNavigate } from "react-router";
 import { toast } from "sonner";
-import { authoritiesHandleSchema, type Authority } from "types/auth";
+import { authoritiesHandleSchema } from "types/auth";
+import type { Authority } from "types/auth";
 import type { HeaderTypeProps } from "types/header";
 
 type Props = HeaderTypeProps & {

@@ -49,7 +49,7 @@ export const LoginForm: FC = () => {
 
             const redirectPath = searchParams.get("redirect") ?? "/";
 
-            navigate(redirectPath, { replace: true });
+            await navigate(redirectPath, { replace: true });
         } catch (e) {
             console.error("Login failed:", getDetail(e));
         } finally {

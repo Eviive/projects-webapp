@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
+import jsImport from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -19,6 +20,9 @@ export default defineConfig([
     ]),
 
     js.configs.recommended,
+    jsImport.flatConfigs.recommended,
+    jsImport.flatConfigs.typescript,
+    jsImport.flatConfigs.react,
     ts.configs.strictTypeChecked,
     ts.configs.stylisticTypeChecked,
     react.configs.flat.recommended,
@@ -40,6 +44,9 @@ export default defineConfig([
         settings: {
             react: {
                 version: "detect"
+            },
+            "import/resolver": {
+                typescript: {}
             }
         },
 
@@ -51,6 +58,7 @@ export default defineConfig([
                     fixStyle: "separate-type-imports"
                 }
             ],
+            "@typescript-eslint/no-import-type-side-effects": ["error"],
             "@typescript-eslint/consistent-type-exports": [
                 "error",
                 {
@@ -65,6 +73,7 @@ export default defineConfig([
                     }
                 }
             ],
+            "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
             "react/self-closing-comp": [
                 "error",
                 {

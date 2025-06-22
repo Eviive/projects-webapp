@@ -7,5 +7,5 @@ export const isTokenExpired = (token: string) => {
         return true;
     }
 
-    return Date.now() >= (tokenPayload.exp + 1) * 1000;
+    return Date.now() >= (tokenPayload.exp - 10) * 1000;
 };
