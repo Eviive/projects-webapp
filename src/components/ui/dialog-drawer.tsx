@@ -1,7 +1,7 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "components/ui/dialog";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "components/ui/drawer";
-import { useMediaQuery } from "hooks/use-media-query";
-import type { FC, ReactNode } from "react";
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "components/ui/dialog";
+import {Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger} from "components/ui/drawer";
+import {useMediaQuery} from "hooks/use-media-query";
+import type {FC, ReactNode} from "react";
 
 interface Props {
     trigger: ReactNode;
@@ -19,7 +19,7 @@ interface Props {
     };
 }
 
-export const ResponsiveDrawerDialog: FC<Props> = props => {
+export const DialogDrawer: FC<Props> = props => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
     if (isDesktop) {

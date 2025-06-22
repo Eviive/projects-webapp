@@ -1,7 +1,7 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 import type { SortDialogContentRef } from "components/common/sort-dialog/sort-dialog-content";
 import { SortDialogContext } from "components/common/sort-dialog/sort-dialog-context";
-import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
+import { DialogDrawer } from "components/ui/dialog-drawer";
 import type { FC, ReactNode } from "react";
 import { useRef, useState } from "react";
 import type { DndItem } from "types/dnd";
@@ -31,11 +31,11 @@ export const SortDialog: FC<Props> = props => {
     };
 
     return (
-        <ResponsiveDrawerDialog
+        <DialogDrawer
             trigger={props.trigger}
             header={{
                 title: `Sorting ${props.itemsName}`,
-                description: `Use this list to sort the ${props.itemsName} by their importance.`
+                description: `Use this list to sort the ${props.itemsName}.`
             }}
             content={
                 <SortDialogContext

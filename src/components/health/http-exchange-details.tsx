@@ -1,4 +1,4 @@
-import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
+import { DialogDrawer } from "components/ui/dialog-drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
 import type { FC, ReactNode } from "react";
 import type { HttpExchange } from "types/health";
@@ -26,7 +26,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
     };
 
     return (
-        <ResponsiveDrawerDialog
+        <DialogDrawer
             trigger={trigger}
             header={{
                 title: "HTTP Exchange Details",

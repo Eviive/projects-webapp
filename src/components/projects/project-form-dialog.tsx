@@ -1,6 +1,6 @@
 import type { ProjectFormType } from "components/projects/project-form";
 import { ProjectForm } from "components/projects/project-form";
-import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
+import { DialogDrawer } from "components/ui/dialog-drawer";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import type { FC, ReactNode } from "react";
@@ -32,7 +32,7 @@ export const ProjectFormDialog: FC<Props> = props => {
     return (
         <TooltipProvider>
             <Tooltip>
-                <ResponsiveDrawerDialog
+                <DialogDrawer
                     trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
                     header={{
                         title: props.project
