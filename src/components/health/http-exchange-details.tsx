@@ -1,5 +1,4 @@
 import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
-import { ScrollArea } from "components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
 import type { FC, ReactNode } from "react";
 import type { HttpExchange } from "types/health";
@@ -39,7 +38,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
                         <TabsTrigger value="request">Request</TabsTrigger>
                         <TabsTrigger value="response">Response</TabsTrigger>
                     </TabsList>
-                    <ScrollArea className="h-[500px]">
+                    <div className="h-[500px] overflow-x-hidden">
                         <TabsContent
                             value="request"
                             className="flex flex-col gap-2 [overflow-wrap:anywhere]"
@@ -73,7 +72,7 @@ export const HttpExchangeDetails: FC<Props> = ({ httpExchange, trigger }) => {
                         >
                             {parseObject(httpExchange.response)}
                         </TabsContent>
-                    </ScrollArea>
+                    </div>
                 </Tabs>
             }
         />
