@@ -19,7 +19,7 @@ import { clamp } from "libs/utils/math";
 import { updateSearchParams } from "libs/utils/search-params";
 import { getProjectsQueryParams, projectsQueryOptionsFn } from "pages/projects/projects.loader";
 import type { FC } from "react";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { useSearchParams } from "react-router";
 
@@ -36,22 +36,19 @@ export const Projects: FC = () => {
     );
 
     const [searchBarValue, setSearchBarValue] = useState(search ?? "");
-    const setSearchQueryParam = useCallback(
-        (search: string) => {
-            updateSearchParams(
-                setSearchParams,
-                {
-                    key: "search",
-                    value: search
-                },
-                {
-                    key: "page",
-                    value: null
-                }
-            );
-        },
-        [setSearchParams]
-    );
+    const setSearchQueryParam = (search: string) => {
+        updateSearchParams(
+            setSearchParams,
+            {
+                key: "search",
+                value: search
+            },
+            {
+                key: "page",
+                value: null
+            }
+        );
+    };
 
     useLayoutEffect(() => {
         if (!projectsQuery.isSuccess) return;

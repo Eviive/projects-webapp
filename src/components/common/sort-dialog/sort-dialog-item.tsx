@@ -4,7 +4,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { SortDialogItemContext } from "components/common/sort-dialog/sort-dialog-item-context";
 import { cn } from "libs/utils/style";
 import type { CSSProperties, FC, PropsWithChildren } from "react";
-import { useMemo } from "react";
 
 type Props = PropsWithChildren<{
     id: UniqueIdentifier;
@@ -24,15 +23,6 @@ export const SortDialogItem: FC<Props> = props => {
         id: props.id
     });
 
-    const context = useMemo(
-        () => ({
-            attributes,
-            listeners,
-            setActivatorNodeRef
-        }),
-        [attributes, listeners, setActivatorNodeRef]
-    );
-
     const style: CSSProperties = {
         opacity: isDragging ? 0.4 : undefined,
         transform: CSS.Translate.toString(transform),
@@ -40,7 +30,13 @@ export const SortDialogItem: FC<Props> = props => {
     };
 
     return (
-        <SortDialogItemContext value={context}>
+        <SortDialogItemContext
+            value={{
+                attributes,
+                listeners,
+                setActivatorNodeRef
+            }}
+        >
             <li
                 ref={setNodeRef}
                 style={style}

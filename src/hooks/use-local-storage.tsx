@@ -1,6 +1,6 @@
 import { getDetail } from "libs/utils/error";
 import type { Dispatch, SetStateAction } from "react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 type UseLocalStorageOutput<T> = [T, Dispatch<SetStateAction<T>>];
 
@@ -26,26 +26,23 @@ export const useLocalStorage = <T,>(key: string, defaultValue: T): UseLocalStora
         return defaultValue;
     });
 
-    const setValue: Dispatch<SetStateAction<T>> = useCallback(
-        newValueOrFactory => {
-            try {
-                setStoredValue(prevState => {
-                    const newState =
-                        newValueOrFactory instanceof Function
-                            ? newValueOrFactory(prevState)
-                            : newValueOrFactory;
+    const setValue: Dispatch<SetStateAction<T>> = newValueOrFactory => {
+        try {
+            setStoredValue(prevState => {
+                const newState =
+                    newValueOrFactory instanceof Function
+                        ? newValueOrFactory(prevState)
+                        : newValueOrFactory;
 
-                    if (newState === prevState) return prevState;
+                if (newState === prevState) return prevState;
 
-                    localStorage.setItem(key, JSON.stringify(newState));
-                    return newState;
-                });
-            } catch (e) {
-                console.error(`Error while setting local storage key "${key}":`, getDetail(e));
-            }
-        },
-        [key]
-    );
+                localStorage.setItem(key, JSON.stringify(newState));
+                return newState;
+            });
+        } catch (e) {
+            console.error(`Error while setting local storage key "${key}":`, getDetail(e));
+        }
+    };
 
     return [storedValue, setValue];
 };

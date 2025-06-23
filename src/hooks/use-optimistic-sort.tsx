@@ -5,7 +5,6 @@ import type {
     UseQueryResult
 } from "@tanstack/react-query";
 import { useMutationState } from "@tanstack/react-query";
-import { useMemo } from "react";
 import type { DndItem } from "types/dnd";
 import type { Page, Slice } from "types/pagination";
 
@@ -23,38 +22,30 @@ export const useOptimisticSort = <I extends DndItem>(
         select: mutation => mutation.state.variables as DndItem[]
     });
 
-    const optimisticSortItems = useMemo(() => {
-        const items: Record<number, number> = {};
+    const optimisticSortItems: Record<number, number> = {};
 
-        for (const sortItem of optimisticSorts.flat()) {
-            items[sortItem.id] = sortItem.sort;
-        }
+    for (const sortItem of optimisticSorts.flat()) {
+        optimisticSortItems[sortItem.id] = sortItem.sort;
+    }
 
-        return items;
-    }, [optimisticSorts]);
-
-    const optimisticItems = useMemo((): I[] => {
-        if (!itemsQuery.isSuccess) return [];
-
-        let tempOptimisticItems: I[];
+    let optimisticItems: I[] = [];
+    if (itemsQuery.isSuccess) {
         if (Array.isArray(itemsQuery.data)) {
-            tempOptimisticItems = [...itemsQuery.data];
+            optimisticItems = [...itemsQuery.data];
         } else if ("pages" in itemsQuery.data) {
-            tempOptimisticItems = itemsQuery.data.pages.flatMap(page => page.content);
+            optimisticItems = itemsQuery.data.pages.flatMap(page => page.content);
         } else {
-            tempOptimisticItems = itemsQuery.data.content;
+            optimisticItems = itemsQuery.data.content;
         }
 
-        for (const optimisticItem of tempOptimisticItems) {
+        for (const optimisticItem of optimisticItems) {
             if (optimisticItem.id in optimisticSortItems) {
                 optimisticItem.sort = optimisticSortItems[optimisticItem.id];
             }
         }
 
-        tempOptimisticItems.sort((a, b) => a.sort - b.sort);
-
-        return tempOptimisticItems;
-    }, [itemsQuery.data, itemsQuery.isSuccess, optimisticSortItems]);
+        optimisticItems.sort((a, b) => a.sort - b.sort);
+    }
 
     return [optimisticItems, optimisticSortItems] as const;
 };

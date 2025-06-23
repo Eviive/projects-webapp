@@ -8,7 +8,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "compon
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
 import { getImageUrl } from "libs/image";
 import type { FC } from "react";
-import { useMemo } from "react";
 import { MdEdit } from "react-icons/md";
 
 import type { Project } from "types/entities/project";
@@ -24,20 +23,18 @@ interface Props {
 }
 
 export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
-    const skills = useMemo(() => {
-        project.skills.sort((a, b) => a.sort - b.sort);
+    project.skills.sort((a, b) => a.sort - b.sort);
 
-        return project.skills.map(s => (
-            <img
-                key={s.id}
-                className="drop-shadow-icon aspect-square object-cover"
-                src={getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
-                alt={s.image.altEn}
-                width={35}
-                loading="lazy"
-            />
-        ));
-    }, [project.skills]);
+    const skills = project.skills.map(s => (
+        <img
+            key={s.id}
+            className="drop-shadow-icon aspect-square object-cover"
+            src={getImageUrl(s.image, "skills") ?? SKILL_PLACEHOLDER}
+            alt={s.image.altEn}
+            width={35}
+            loading="lazy"
+        />
+    ));
 
     return (
         <li className="self-stretch justify-self-stretch">

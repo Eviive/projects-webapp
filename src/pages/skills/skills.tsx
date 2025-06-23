@@ -13,7 +13,7 @@ import { Grid } from "layouts/grid";
 import { updateSearchParams } from "libs/utils/search-params";
 import { getSkillsQueryParams, skillsQueryOptionsFn } from "pages/skills/skills.loader";
 import type { FC } from "react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { useSearchParams } from "react-router";
 
@@ -30,15 +30,12 @@ export const Skills: FC = () => {
     );
 
     const [searchBarValue, setSearchBarValue] = useState(search ?? "");
-    const setSearchQueryParam = useCallback(
-        (search: string) => {
-            updateSearchParams(setSearchParams, {
-                key: "search",
-                value: search
-            });
-        },
-        [setSearchParams]
-    );
+    const setSearchQueryParam = (search: string) => {
+        updateSearchParams(setSearchParams, {
+            key: "search",
+            value: search
+        });
+    };
 
     return (
         <Page title="Skills">

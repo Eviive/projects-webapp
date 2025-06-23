@@ -13,7 +13,7 @@ import { SortDialogItem } from "components/common/sort-dialog/sort-dialog-item";
 import { SortDialogOverlay } from "components/common/sort-dialog/sort-dialog-overlay";
 import { Separator } from "components/ui/separator";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
-import { Fragment, useImperativeHandle, useMemo, useState } from "react";
+import { Fragment, useImperativeHandle, useState } from "react";
 import { createPortal } from "react-dom";
 import type { DndItem } from "types/dnd";
 import type { PropsWithForwardedRef } from "types/utils/props";
@@ -59,10 +59,7 @@ export const SortDialogDragContent = <E extends DndItem>(props: Props<E>) => {
 
     const [active, setActive] = useState<Active | null>(null);
 
-    const activeItem = useMemo(
-        () => props.items.find(item => item.id === active?.id),
-        [props.items, active]
-    );
+    const activeItem = props.items.find(item => item.id === active?.id);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
