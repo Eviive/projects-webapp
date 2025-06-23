@@ -8,8 +8,8 @@ import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { getDetail } from "libs/utils/error";
 import { cn } from "libs/utils/style";
-import { useEffect, useState } from "react";
 import type { FC } from "react";
+import { useEffect, useState } from "react";
 import {
     LuActivity,
     LuFolder,
@@ -35,7 +35,7 @@ export const Header: FC = () => {
     const sidebarNavClasses = "flex flex-col items-center gap-4 px-2 sm:py-5";
 
     const sidebarItemClasses =
-        "flex h-10 w-10 items-center justify-center rounded-lg bg-background p-0 " +
+        "flex size-10 items-center justify-center rounded-lg bg-background p-0 " +
         "text-muted-foreground ring-offset-background transition-colors hover:bg-background hover:text-foreground " +
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
 
@@ -67,7 +67,7 @@ export const Header: FC = () => {
         <>
             <aside className="bg-background fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r sm:flex">
                 <nav className={sidebarNavClasses}>
-                    <div className="flex h-10 w-10 items-center justify-center">
+                    <div className="flex size-10 items-center justify-center">
                         <img
                             className="w-full object-cover"
                             src={logoSrc}

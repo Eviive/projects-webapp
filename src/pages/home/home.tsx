@@ -12,7 +12,7 @@ export const Home: FC = () => {
 
     return (
         <Page title="Home">
-            <div className="h-full w-full px-[5%] py-16">
+            <div className="size-full px-[5%] py-16">
                 <div className="flex flex-col gap-20">
                     <div>
                         <h1 className="text-3xl font-medium">

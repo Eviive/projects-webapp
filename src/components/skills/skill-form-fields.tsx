@@ -21,11 +21,13 @@ export const SkillFormFields: FC = () => {
                 rules={{
                     onChange: () => {
                         const [name, altEn, altFr] = getValues([
-                                "name",
-                                "image.altEn",
-                                "image.altFr"
-                            ]),
-                            isNameEmpty = !name.trim(),
+                            "name",
+                            "image.altEn",
+                            "image.altFr"
+                        ]);
+
+                        // TODO: name finishing by an s
+                        const isNameEmpty = !name.trim(),
                             isAltEnEmpty = !altEn.trim(),
                             isAltFrEmpty = !altFr.trim(),
                             isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,

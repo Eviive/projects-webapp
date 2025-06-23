@@ -22,7 +22,7 @@ export const StatusCard: FC<Props> = props => {
             <CardHeader className="space-y-0 p-3">
                 <CardTitle className="flex flex-row items-center text-lg">
                     <span
-                        className="mr-2 inline-block h-2.5 w-2.5 rounded-full"
+                        className="mr-2 inline-block size-2.5 rounded-full"
                         style={{ backgroundColor: STATUS_COLORS[props.status] }}
                     />
                     {props.title}

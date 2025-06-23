@@ -37,11 +37,13 @@ export const ProjectFormFields: FC = () => {
                 rules={{
                     onChange: () => {
                         const [title, altEn, altFr] = getValues([
-                                "title",
-                                "image.altEn",
-                                "image.altFr"
-                            ]),
-                            isTitleEmpty = !title.trim(),
+                            "title",
+                            "image.altEn",
+                            "image.altFr"
+                        ]);
+
+                        // TODO: name finishing by an s
+                        const isTitleEmpty = !title.trim(),
                             isAltEnEmpty = !altEn.trim(),
                             isAltFrEmpty = !altFr.trim(),
                             isAltEnFormatted = altEn === `${oldTitle.trim()}'s logo`,

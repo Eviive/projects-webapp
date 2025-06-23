@@ -1,7 +1,7 @@
 import { RequireAuthority } from "components/common/require-authority";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
 import { Button } from "components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { SKILL_PLACEHOLDER } from "libs/constants";
@@ -19,36 +19,36 @@ interface Props {
 export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
     return (
         <li className="self-stretch justify-self-stretch">
-            <Card className="h-full w-full">
-                <CardHeader className="flex-row items-center justify-between gap-1 space-y-0 p-3">
-                    <CardTitle className="max-w-[calc(100% - 36px)] truncate text-sm">
-                        {skill.name}
-                    </CardTitle>
+            <Card className="size-full gap-4 py-4">
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle className="truncate text-sm">{skill.name}</CardTitle>
                     <RequireAuthority authority={["update:skill", "delete:skill"]}>
-                        <TooltipProvider>
-                            <Tooltip>
-                                <SkillFormDialog
-                                    skill={skill}
-                                    trigger={
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                className="text-foreground-500 size-7"
-                                                variant="outline"
-                                                size="icon"
-                                                disabled={isOptimistic}
-                                            >
-                                                <MdEdit size={18} />
-                                            </Button>
-                                        </TooltipTrigger>
-                                    }
-                                />
-                                <TooltipContent>Edit</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
+                        <CardAction>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <SkillFormDialog
+                                        skill={skill}
+                                        trigger={
+                                            <TooltipTrigger asChild>
+                                                <Button
+                                                    className="text-foreground-500 size-7"
+                                                    variant="outline"
+                                                    size="icon"
+                                                    disabled={isOptimistic}
+                                                >
+                                                    <MdEdit size={18} />
+                                                </Button>
+                                            </TooltipTrigger>
+                                        }
+                                    />
+                                    <TooltipContent>Edit</TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </CardAction>
                     </RequireAuthority>
                 </CardHeader>
                 <Separator />
-                <CardContent className="flex items-center justify-center p-4">
+                <CardContent className="flex items-center justify-center">
                     <img
                         className="drop-shadow-icon aspect-square object-cover"
                         src={getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}

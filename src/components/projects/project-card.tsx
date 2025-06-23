@@ -38,7 +38,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
 
     return (
         <li className="self-stretch justify-self-stretch">
-            <Card className="flex h-full w-full flex-col">
+            <Card className="flex size-full flex-col">
                 <CardHeader className="flex-row items-center justify-between gap-1 space-y-0 p-3">
                     <div>
                         <CardTitle className="leading-inherit flex items-center gap-1.5 truncate">

@@ -39,7 +39,7 @@ export const Skills: FC = () => {
 
     return (
         <Page title="Skills">
-            <div className="flex h-full w-full grow flex-col gap-9 px-[5%] py-9">
+            <div className="flex size-full grow flex-col gap-9 px-[5%] py-9">
                 <div className="flex w-full max-w-md items-center gap-2 self-center">
                     <SearchBar
                         value={searchBarValue}

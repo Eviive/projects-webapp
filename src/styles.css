@@ -118,36 +118,40 @@
 
 @theme inline {
     --color-danger: var(--danger);
+
+    --drop-shadow-icon: 0 1px 1px hsl(0deg, 0%, 0%, 0.5);
 }
 
 @source inline("{text,bg}-{gray-600,green-600,blue-600,yellow-500,yellow-600,orange-600,danger}{,/10}");
 
-* {
-    @apply border-border;
-}
-
-html,
-body,
-#root {
-    @apply bg-background text-foreground;
-}
-
-a,
-button {
-    -webkit-tap-highlight-color: transparent;
-}
-
-html {
-    min-width: 350px;
-    font-family: "Inter", sans-serif;
-    scroll-behavior: smooth;
-
-    body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+@layer reset {
+    * {
+        @apply border-border;
     }
-}
 
-:is(button, [role="button"]):not([disabled]) {
-    cursor: pointer;
+    html,
+    body,
+    #root {
+        @apply bg-background text-foreground;
+    }
+
+    a,
+    button {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+        min-width: 350px;
+        font-family: "Inter", sans-serif;
+        scroll-behavior: smooth;
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    }
+
+    :is(button, [role="button"]):not([disabled]) {
+        cursor: pointer;
+    }
 }
