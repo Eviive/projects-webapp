@@ -20,7 +20,7 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
     return (
         <li className="self-stretch justify-self-stretch">
             <Card className="size-full gap-4 py-4">
-                <CardHeader className="flex flex-row items-center justify-between">
+                <CardHeader className="flex flex-row items-center justify-between px-4">
                     <CardTitle className="truncate text-sm">{skill.name}</CardTitle>
                     <RequireAuthority authority={["update:skill", "delete:skill"]}>
                         <CardAction>

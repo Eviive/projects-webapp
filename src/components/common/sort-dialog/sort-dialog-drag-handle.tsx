@@ -1,9 +1,14 @@
 import { useSortDialogItemContext } from "components/common/sort-dialog/sort-dialog-item-context";
 import { Button } from "components/ui/button";
+import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { MdDragHandle } from "react-icons/md";
 
-export const SortDialogDragHandle: FC = () => {
+interface Props {
+    isOverlay?: boolean;
+}
+
+export const SortDialogDragHandle: FC<Props> = props => {
     const { attributes, listeners, setActivatorNodeRef } = useSortDialogItemContext();
 
     return (
@@ -11,11 +16,14 @@ export const SortDialogDragHandle: FC = () => {
             {...attributes}
             {...listeners}
             ref={setActivatorNodeRef}
-            className="text-foreground-500 size-8"
+            className={cn(
+                "text-muted-foreground",
+                props.isOverlay && "bg-accent text-accent-foreground dark:bg-accent/50"
+            )}
             variant="ghost"
             size="icon"
         >
-            <MdDragHandle className="size-full" data-vaul-no-drag />
+            <MdDragHandle className="size-3/4" data-vaul-no-drag />
         </Button>
     );
 };

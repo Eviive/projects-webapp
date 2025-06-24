@@ -7,6 +7,7 @@ import { Checkbox } from "components/ui/checkbox";
 import { Combobox } from "components/ui/combobox";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
+import { Loader } from "components/ui/loader";
 import { Textarea } from "components/ui/textarea";
 import { formatISO } from "date-fns";
 import { SKILL_PLACEHOLDER } from "libs/constants";
@@ -42,7 +43,6 @@ export const ProjectFormFields: FC = () => {
                             "image.altFr"
                         ]);
 
-                        // TODO: name finishing by an s
                         const isTitleEmpty = !title.trim(),
                             isAltEnEmpty = !altEn.trim(),
                             isAltFrEmpty = !altFr.trim(),
@@ -207,7 +207,14 @@ export const ProjectFormFields: FC = () => {
                             placeholder="Select skills"
                             searchPlaceholder="Search skill..."
                             empty={skillsQuery.data?.length === 0 && "No skills found."}
-                            loading={skillsQuery.isLoading && "Loading skills..."}
+                            loading={
+                                skillsQuery.isLoading && (
+                                    <div className="flex gap-2 justify-self-center">
+                                        <Loader />
+                                        Loading skills...
+                                    </div>
+                                )
+                            }
                             error={skillsQuery.isError && "Failed to load skills."}
                         />
 

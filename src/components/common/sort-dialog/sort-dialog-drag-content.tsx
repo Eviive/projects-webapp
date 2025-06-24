@@ -117,7 +117,7 @@ export const SortDialogDragContent = <E extends DndItem>(props: Props<E>) => {
                             <Separator />
                             <SortDialogItem id={activeItem.id} isOverlay>
                                 {props.render(activeItem)}
-                                <SortDialogDragHandle />
+                                <SortDialogDragHandle isOverlay />
                             </SortDialogItem>
                             <Separator />
                         </>

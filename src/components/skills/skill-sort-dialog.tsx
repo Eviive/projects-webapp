@@ -43,7 +43,7 @@ export const SkillSortDialog: FC = () => {
             empty={skillsQuery.isSuccess && optimisticSkills.length === 0 && "No skills found."}
             loading={
                 skillsQuery.isLoading && (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
                         <Loader />
                         Loading skills...
                     </div>

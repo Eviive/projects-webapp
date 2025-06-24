@@ -43,7 +43,7 @@ export const ProjectSortDialog: FC = () => {
             }
             loading={
                 lightProjectsQuery.isLoading && (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
                         <Loader />
                         Loading projects...
                     </div>

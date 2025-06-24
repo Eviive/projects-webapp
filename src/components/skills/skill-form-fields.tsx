@@ -26,7 +26,6 @@ export const SkillFormFields: FC = () => {
                             "image.altFr"
                         ]);
 
-                        // TODO: name finishing by an s
                         const isNameEmpty = !name.trim(),
                             isAltEnEmpty = !altEn.trim(),
                             isAltFrEmpty = !altFr.trim(),
