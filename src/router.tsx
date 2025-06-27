@@ -1,11 +1,8 @@
 import { queryClient } from "api/query-client";
 import { App } from "App";
-import { initAuthContext } from "libs/auth";
 import { ErrorPage } from "pages/error";
 import { createBrowserRouter } from "react-router";
 import type { Authority } from "types/auth";
-
-await initAuthContext();
 
 export const router = createBrowserRouter(
     [

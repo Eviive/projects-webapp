@@ -39,9 +39,9 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
     return (
         <li className="self-stretch justify-self-stretch">
             <Card className="flex size-full flex-col">
-                <CardHeader className="flex-row items-center justify-between gap-1 space-y-0 p-3">
+                <CardHeader className="flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle className="leading-inherit flex items-center gap-1.5 truncate">
+                        <CardTitle className="flex items-center gap-1.5 truncate">
                             {project.title}
                             {project.featured && <ProjectFeaturedBadge />}
                         </CardTitle>
@@ -57,12 +57,12 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                                     trigger={
                                         <TooltipTrigger asChild>
                                             <Button
-                                                className="text-foreground-500 size-7"
+                                                className="size-7"
                                                 variant="outline"
                                                 size="icon"
                                                 disabled={isOptimistic}
                                             >
-                                                <MdEdit size={18} />
+                                                <MdEdit />
                                             </Button>
                                         </TooltipTrigger>
                                     }
@@ -73,7 +73,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                     </RequireAuthority>
                 </CardHeader>
                 <Separator />
-                <CardContent className="flex grow flex-col justify-between gap-3 p-4">
+                <CardContent className="flex grow flex-col justify-between gap-3">
                     <p className="line-clamp-4">{project.descriptionEn}</p>
                     <div>
                         <img

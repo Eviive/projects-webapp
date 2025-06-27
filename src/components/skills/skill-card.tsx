@@ -31,12 +31,12 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
                                         trigger={
                                             <TooltipTrigger asChild>
                                                 <Button
-                                                    className="text-foreground-500 size-7"
+                                                    className="size-7"
                                                     variant="outline"
                                                     size="icon"
                                                     disabled={isOptimistic}
                                                 >
-                                                    <MdEdit size={18} />
+                                                    <MdEdit />
                                                 </Button>
                                             </TooltipTrigger>
                                         }
@@ -48,7 +48,7 @@ export const SkillCard: FC<Props> = ({ skill, isOptimistic }) => {
                     </RequireAuthority>
                 </CardHeader>
                 <Separator />
-                <CardContent className="flex items-center justify-center">
+                <CardContent className="flex items-center justify-center px-4">
                     <img
                         className="drop-shadow-icon aspect-square object-cover"
                         src={getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}

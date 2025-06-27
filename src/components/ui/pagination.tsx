@@ -45,7 +45,7 @@ export const Pagination: FC<Props> = props => {
                     {props.selectedRows} of {props.totalRows} {itemName}(s) selected.
                 </div>
             )}
-            <div className="ms-auto flex flex-wrap items-center justify-end space-x-6 gap-y-2 lg:space-x-8">
+            <div className="ml-auto flex flex-wrap items-center justify-end space-x-6 gap-y-2 lg:space-x-8">
                 <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium first-letter:capitalize">
                         {itemName}s per page

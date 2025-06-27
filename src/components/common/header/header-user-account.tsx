@@ -18,8 +18,8 @@ import type { FC } from "react";
 import { LuUserRound } from "react-icons/lu";
 import { NavLink, useLocation, useMatches, useNavigate } from "react-router";
 import { toast } from "sonner";
-import { authoritiesHandleSchema } from "types/auth";
 import type { Authority } from "types/auth";
+import { authoritiesHandleSchema } from "types/auth";
 import type { HeaderTypeProps } from "types/header";
 
 type Props = HeaderTypeProps & {
@@ -84,7 +84,7 @@ export const HeaderUserAccount: FC<Props> = props => {
     const buttonClasses = cn(
         props.classNames?.item,
         "border-0",
-        props.type === "header" && "w-auto ms-auto gap-2 p-0"
+        props.type === "header" && "w-auto ml-auto gap-2 p-0"
     );
 
     const iconClasses = cn(props.classNames?.icon, "overflow-hidden rounded-full");

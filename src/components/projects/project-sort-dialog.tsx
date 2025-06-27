@@ -28,7 +28,7 @@ export const ProjectSortDialog: FC = () => {
             ref={contentRef}
             initialItems={optimisticLightProjects}
             render={lightProject => (
-                <div className="flex grow items-center gap-3">
+                <div className="flex items-center gap-1.5">
                     {lightProject.title}
                     {lightProject.featured && <ProjectFeaturedBadge />}
                 </div>

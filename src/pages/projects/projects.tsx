@@ -19,7 +19,7 @@ import { clamp } from "libs/utils/math";
 import { updateSearchParams } from "libs/utils/search-params";
 import { getProjectsQueryParams, projectsQueryOptionsFn } from "pages/projects/projects.loader";
 import type { FC } from "react";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { useSearchParams } from "react-router";
 
@@ -63,10 +63,6 @@ export const Projects: FC = () => {
             });
         }
     }, [page, projectsQuery.data?.page.totalPages, projectsQuery.isSuccess, setSearchParams]);
-
-    useEffect(() => {
-        document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
-    }, [page]);
 
     return (
         <Page title="Projects">
@@ -120,8 +116,8 @@ export const Projects: FC = () => {
                                 });
                             }}
                             getPageCount={() => projectsQuery.data.page.totalPages}
-                            getCanPreviousPage={() => !projectsQuery.data.page.previous}
-                            getCanNextPage={() => !projectsQuery.data.page.next}
+                            getCanPreviousPage={() => projectsQuery.data.page.previous}
+                            getCanNextPage={() => projectsQuery.data.page.next}
                             previousPage={() => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",
