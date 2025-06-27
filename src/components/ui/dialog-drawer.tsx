@@ -1,7 +1,7 @@
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "components/ui/dialog";
-import {Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger} from "components/ui/drawer";
-import {useMediaQuery} from "hooks/use-media-query";
-import type {FC, ReactNode} from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "components/ui/dialog";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "components/ui/drawer";
+import { useIsMobile } from "hooks/use-mobile";
+import type { FC, ReactNode } from "react";
 
 interface Props {
     trigger: ReactNode;
@@ -20,33 +20,33 @@ interface Props {
 }
 
 export const DialogDrawer: FC<Props> = props => {
-    const isDesktop = useMediaQuery("(min-width: 768px)");
+    const isMobile = useIsMobile();
 
-    if (isDesktop) {
+    if (isMobile) {
         return (
-            <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-                <DialogTrigger asChild>{props.trigger}</DialogTrigger>
-                <DialogContent className={props.classNames?.dialog?.content}>
-                    <DialogHeader>
-                        <DialogTitle>{props.header.title}</DialogTitle>
-                        <DialogDescription>{props.header.description}</DialogDescription>
-                    </DialogHeader>
+            <Drawer open={props.open} onOpenChange={props.onOpenChange} shouldScaleBackground>
+                <DrawerTrigger asChild>{props.trigger}</DrawerTrigger>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>{props.header.title}</DrawerTitle>
+                        <DrawerDescription>{props.header.description}</DrawerDescription>
+                    </DrawerHeader>
                     {props.content}
-                </DialogContent>
-            </Dialog>
+                </DrawerContent>
+            </Drawer>
         );
     }
 
     return (
-        <Drawer open={props.open} onOpenChange={props.onOpenChange} shouldScaleBackground>
-            <DrawerTrigger asChild>{props.trigger}</DrawerTrigger>
-            <DrawerContent>
-                <DrawerHeader>
-                    <DrawerTitle>{props.header.title}</DrawerTitle>
-                    <DrawerDescription>{props.header.description}</DrawerDescription>
-                </DrawerHeader>
+        <Dialog open={props.open} onOpenChange={props.onOpenChange}>
+            <DialogTrigger asChild>{props.trigger}</DialogTrigger>
+            <DialogContent className={props.classNames?.dialog?.content}>
+                <DialogHeader>
+                    <DialogTitle>{props.header.title}</DialogTitle>
+                    <DialogDescription>{props.header.description}</DialogDescription>
+                </DialogHeader>
                 {props.content}
-            </DrawerContent>
-        </Drawer>
+            </DialogContent>
+        </Dialog>
     );
 };

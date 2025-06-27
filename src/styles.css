@@ -1,7 +1,9 @@
+/* shadcn/ui */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* shadcn/ui */
+@custom-variant dark (&:is(.dark *));
 
 :root {
     --radius: 0.625rem;
@@ -110,6 +112,15 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
 /* Custom */
 
 :root {
@@ -125,16 +136,6 @@
 @source inline("{text,bg}-{gray-600,green-600,blue-600,yellow-500,yellow-600,orange-600,danger}{,/10}");
 
 @layer reset {
-    * {
-        @apply border-border;
-    }
-
-    html,
-    body,
-    #root {
-        @apply bg-background text-foreground;
-    }
-
     a,
     button {
         -webkit-tap-highlight-color: transparent;
