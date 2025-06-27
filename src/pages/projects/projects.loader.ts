@@ -5,7 +5,7 @@ import { queryLoader } from "libs/loader/query-loader";
 import { getNumberSearchParam } from "libs/utils/search-params";
 import type { Project } from "types/entities/project";
 import type { QueryLoaderFunction } from "types/loader";
-import type { Page } from "types/pagination";
+import type { Page } from "types/pagination/page";
 
 export const getProjectsQueryParams = (searchParams: URLSearchParams) => {
     const page = getNumberSearchParam(searchParams, "page") ?? 0;

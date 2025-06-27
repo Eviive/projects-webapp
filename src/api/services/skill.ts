@@ -2,7 +2,8 @@ import { request } from "api/client";
 import { buildFormData } from "libs/utils/form-data";
 import type { DndItem } from "types/dnd";
 import type { Skill, SkillCreation } from "types/entities/skill";
-import type { Slice } from "types/pagination";
+
+import type { Slice } from "types/pagination/slice";
 
 const URL = "skill";
 

@@ -54,15 +54,15 @@ export const Projects: FC = () => {
         if (!projectsQuery.isSuccess) return;
 
         if (
-            projectsQuery.data.totalPages !== 0 &&
-            (page < 0 || page >= projectsQuery.data.totalPages)
+            projectsQuery.data.page.totalPages !== 0 &&
+            (page < 0 || page >= projectsQuery.data.page.totalPages)
         ) {
             updateSearchParams(setSearchParams, {
                 key: "page",
-                value: clamp(page, 0, projectsQuery.data.totalPages - 1)
+                value: clamp(page, 0, projectsQuery.data.page.totalPages - 1)
             });
         }
-    }, [page, projectsQuery.data?.totalPages, projectsQuery.isSuccess, setSearchParams]);
+    }, [page, projectsQuery.data?.page.totalPages, projectsQuery.isSuccess, setSearchParams]);
 
     useEffect(() => {
         document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
@@ -84,12 +84,8 @@ export const Projects: FC = () => {
                         <ProjectSortButton />
                         <ProjectFormDialog
                             trigger={
-                                <Button
-                                    className="text-foreground-500"
-                                    variant="outline"
-                                    size="icon"
-                                >
-                                    <FaPlus size={20} />
+                                <Button variant="outline" size="icon">
+                                    <FaPlus />
                                 </Button>
                             }
                         />
@@ -123,9 +119,9 @@ export const Projects: FC = () => {
                                     value: pageIndex
                                 });
                             }}
-                            getPageCount={() => projectsQuery.data.totalPages}
-                            getCanPreviousPage={() => !projectsQuery.data.first}
-                            getCanNextPage={() => !projectsQuery.data.last}
+                            getPageCount={() => projectsQuery.data.page.totalPages}
+                            getCanPreviousPage={() => !projectsQuery.data.page.previous}
+                            getCanNextPage={() => !projectsQuery.data.page.next}
                             previousPage={() => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",

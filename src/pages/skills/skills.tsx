@@ -51,12 +51,8 @@ export const Skills: FC = () => {
                         <SkillSortButton />
                         <SkillFormDialog
                             trigger={
-                                <Button
-                                    className="text-foreground-500"
-                                    variant="outline"
-                                    size="icon"
-                                >
-                                    <FaPlus size={20} />
+                                <Button variant="outline" size="icon">
+                                    <FaPlus />
                                 </Button>
                             }
                         />

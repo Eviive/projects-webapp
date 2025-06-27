@@ -6,7 +6,8 @@ import type {
 } from "@tanstack/react-query";
 import { useMutationState } from "@tanstack/react-query";
 import type { DndItem } from "types/dnd";
-import type { Page, Slice } from "types/pagination";
+import type { Page } from "types/pagination/page";
+import type { Slice } from "types/pagination/slice";
 
 export const useOptimisticSort = <I extends DndItem>(
     sortMutationKey: MutationKey,

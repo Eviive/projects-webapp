@@ -3,7 +3,7 @@ import { buildFormData } from "libs/utils/form-data";
 import type { DndItem } from "types/dnd";
 import type { Project, ProjectCreation } from "types/entities/project";
 import type { ProjectLight } from "types/entities/project-light";
-import type { Page } from "types/pagination";
+import type { Page } from "types/pagination/page";
 
 const URL = "project";
 
