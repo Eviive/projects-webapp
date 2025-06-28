@@ -133,8 +133,6 @@
     --drop-shadow-icon: 0 1px 1px hsl(0deg, 0%, 0%, 0.5);
 }
 
-@source inline("{text,bg}-{gray-600,green-600,blue-600,yellow-500,yellow-600,orange-600,danger}{,/10}");
-
 @layer reset {
     a,
     button {

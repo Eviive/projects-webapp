@@ -16,7 +16,7 @@ import { Skeleton } from "components/ui/skeleton";
 import { infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
 import type { IconType } from "react-icons";
-import { LuActivity, LuFolder, LuHouse, LuRefreshCw, LuUserRoundCog } from "react-icons/lu";
+import { LuFolder, LuHouse, LuRefreshCw, LuUserRoundCog } from "react-icons/lu";
 import { NavLink } from "react-router";
 
 interface LinkItem {
@@ -52,12 +52,6 @@ const items: Item[] = [
         title: "Skills",
         icon: LuUserRoundCog,
         url: "/skills"
-    },
-    {
-        type: "link",
-        title: "Health",
-        icon: LuActivity,
-        url: "/health"
     },
     {
         type: "button",

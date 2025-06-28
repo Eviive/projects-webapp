@@ -42,8 +42,7 @@ const scopeSchema = z.enum([
     "create:skill",
     "update:skill",
     "delete:skill",
-    "revalidate:portfolio",
-    "read:actuator"
+    "revalidate:portfolio"
 ]);
 
 export const authoritySchema = z.union([roleSchema, scopeSchema]);

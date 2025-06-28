@@ -59,22 +59,6 @@ export const router = createBrowserRouter(
                                 };
                             },
                             HydrateFallback: () => null
-                        },
-                        {
-                            path: "/health",
-                            lazy: async () => {
-                                const authorities: Authority[] = ["read:actuator"];
-                                return {
-                                    Component: (await import("pages/health/health")).Health,
-                                    loader: (
-                                        await import("pages/health/health.loader")
-                                    ).healthLoader(queryClient, authorities),
-                                    handle: {
-                                        authorities
-                                    }
-                                };
-                            },
-                            HydrateFallback: () => null
                         }
                     ]
                 },

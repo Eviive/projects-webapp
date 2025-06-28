@@ -27,6 +27,7 @@ export default {
         open: true
     },
     build: {
+        target: "ESNext",
         sourcemap: true
     },
     css: {
