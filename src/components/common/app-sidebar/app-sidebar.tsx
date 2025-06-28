@@ -18,6 +18,7 @@ import type { FC } from "react";
 import type { IconType } from "react-icons";
 import { LuFolder, LuHouse, LuRefreshCw, LuUserRoundCog } from "react-icons/lu";
 import { NavLink } from "react-router";
+import { capitalize } from "types/utils/string";
 
 interface LinkItem {
     type: "link";
@@ -80,7 +81,8 @@ export const AppSidebar: FC = () => {
                     <span className="truncate text-sm font-semibold">Personal-API</span>
                     <span className="text-muted-foreground truncate text-xs">
                         {infoQuery.isLoading && <Skeleton className="h-[1lh] w-[4ch]" />}
-                        {infoQuery.isSuccess && infoQuery.data.app.version}
+                        {infoQuery.isSuccess &&
+                            `${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}
                     </span>
                 </div>
             </SidebarHeader>
