@@ -15,7 +15,6 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "components/ui/sidebar";
 import { useAuthContext } from "contexts/auth-context";
 import { clearAuthContext, hasEveryAuthority } from "libs/auth";
-import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import { LuChevronsUpDown, LuLogIn, LuLogOut, LuUserRound } from "react-icons/lu";
 import { NavLink, useLocation, useMatches, useNavigate } from "react-router";
@@ -39,7 +38,7 @@ export const NavUser: FC = () => {
         try {
             await UserService.logout();
         } catch (e) {
-            console.error("Logout failed:", getDetail(e));
+            console.error("Logout failed:", e);
         } finally {
             toast.success("You have been logged out.");
             const { currentUser: newCurrentUser } = await clearAuthContext(false);

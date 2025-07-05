@@ -19,10 +19,6 @@ const problemDetailSchema = z.object({
 type TitleAndDetail = z.infer<typeof problemDetailSchema>;
 
 export const getTitleAndDetail = (e: unknown): TitleAndDetail => {
-    if (!import.meta.env.PROD) {
-        console.error(e);
-    }
-
     if (e instanceof AxiosError && e.response !== undefined) {
         const dataParseResult = problemDetailSchema.safeParse(e.response.data);
 

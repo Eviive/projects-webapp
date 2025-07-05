@@ -5,6 +5,8 @@ import { isRouteErrorResponse, useRouteError } from "react-router";
 export const ErrorPage: FC = () => {
     const error = useRouteError();
 
+    console.error(error);
+
     return (
         <div>
             <h1>Oops!</h1>

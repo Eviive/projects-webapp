@@ -12,16 +12,11 @@ export const Home: FC = () => {
         <Page title="Home">
             <div className="size-full px-[5%] py-16">
                 <h1 className="text-3xl font-medium">
-                    {infoQuery.isLoading && <Skeleton className="mt-1.5 h-[1lh] w-[32ch]" />}
-                    {infoQuery.isSuccess && (
-                        <>
-                            Welcome to the{" "}
-                            <strong className="bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-nowrap text-transparent">
-                                {infoQuery.data.app.name}
-                            </strong>{" "}
-                            dashboard&nbsp;!
-                        </>
-                    )}
+                    Welcome to the{" "}
+                    <strong className="bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-nowrap text-transparent">
+                        Personal-API
+                    </strong>{" "}
+                    dashboard&nbsp;!
                 </h1>
                 <h2 className="text-lg">
                     {infoQuery.isLoading && <Skeleton className="mt-1.5 h-[1lh] w-48" />}

@@ -10,6 +10,8 @@ interface Props {
 export const ErrorAlert: FC<Props> = ({ error }) => {
     const { title, detail } = getTitleAndDetail(error);
 
+    console.error(error);
+
     return (
         <Alert variant="destructive">
             <LuCircleAlert className="size-4" />

@@ -1,12 +1,11 @@
 import { UserService } from "api/services/user";
 import type { IAuthContext } from "contexts/auth-context";
 import { getAuthContext, setAuthContext } from "contexts/auth-context";
-import { getDetail } from "libs/utils/error";
 import { router } from "router";
 import type { Authority } from "types/auth";
 
 export const clearAuthContext = async (redirect = true): Promise<IAuthContext> => {
-    const newAuthContext = {
+    const newAuthContext: IAuthContext = {
         currentUser: await UserService.current(false),
         accessToken: null
     };
@@ -22,11 +21,10 @@ export const clearAuthContext = async (redirect = true): Promise<IAuthContext> =
 
 export const initAuthContext = async () => {
     try {
-        const refreshRes = await UserService.refresh(false);
+        const refreshRes = await UserService.refresh();
 
         setAuthContext(refreshRes);
-    } catch (e) {
-        console.error("Persistent login failed:", getDetail(e));
+    } catch {
         await clearAuthContext(false);
     }
 };

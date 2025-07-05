@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
+import { PortfolioService } from "api/services/portfolio";
 import { NavUser } from "components/common/app-sidebar/nav-user";
+import { RequireAuthority } from "components/common/require-authority";
 import {
     Sidebar,
     SidebarContent,
@@ -13,11 +15,14 @@ import {
     SidebarRail
 } from "components/ui/sidebar";
 import { Skeleton } from "components/ui/skeleton";
+import { getDetail } from "libs/utils/error";
 import { infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
 import type { IconType } from "react-icons";
 import { LuFolder, LuHouse, LuRefreshCw, LuUserRoundCog } from "react-icons/lu";
 import { NavLink } from "react-router";
+import { toast } from "sonner";
+import type { Authority } from "types/auth";
 import { capitalize } from "types/utils/string";
 
 interface LinkItem {
@@ -27,12 +32,13 @@ interface LinkItem {
 
 interface ButtonItem {
     type: "button";
-    action: () => void;
+    action: () => void | Promise<void>;
 }
 
 type Item = (LinkItem | ButtonItem) & {
     title: string;
     icon: IconType;
+    requiredAuthorities?: Authority | Authority[];
 };
 
 const items: Item[] = [
@@ -58,8 +64,16 @@ const items: Item[] = [
         type: "button",
         title: "Revalidate portfolio",
         icon: LuRefreshCw,
-        action: () => {
-            console.log("Revalidate portfolio");
+        requiredAuthorities: "revalidate:portfolio",
+        action: async () => {
+            try {
+                await PortfolioService.revalidate();
+                toast.success("Portfolio successfully revalidated.");
+            } catch (e) {
+                const message = "Portfolio revalidation failed:";
+                toast.error(message + " " + getDetail(e));
+                console.error(message, e);
+            }
         }
     }
 ];
@@ -97,7 +111,7 @@ export const AppSidebar: FC = () => {
                                         <span>{i.title}</span>
                                     </>
                                 );
-                                return (
+                                const item = (
                                     <SidebarMenuItem key={i.title}>
                                         {i.type === "link" ? (
                                             <SidebarMenuButton asChild>
@@ -109,6 +123,17 @@ export const AppSidebar: FC = () => {
                                             </SidebarMenuButton>
                                         )}
                                     </SidebarMenuItem>
+                                );
+                                if (!i.requiredAuthorities) {
+                                    return item;
+                                }
+                                return (
+                                    <RequireAuthority
+                                        key={i.title}
+                                        authority={i.requiredAuthorities}
+                                    >
+                                        {item}
+                                    </RequireAuthority>
                                 );
                             })}
                         </SidebarMenu>

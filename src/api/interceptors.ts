@@ -5,7 +5,6 @@ import { AxiosError } from "axios";
 import { setAuthContext } from "contexts/auth-context";
 import { clearAuthContext } from "libs/auth";
 import { isTokenExpired } from "libs/token";
-import { getDetail } from "libs/utils/error";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
     httpClient.interceptors.request.use(async req => {
@@ -30,7 +29,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
 
             setAuthContext(refreshRes);
         } catch (e) {
-            console.error("Error while refreshing token:", getDetail(e));
+            console.error("Error while refreshing token:", e);
             await clearAuthContext();
             throw e;
         } finally {

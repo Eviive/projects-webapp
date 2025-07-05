@@ -23,6 +23,7 @@ export const SortDialog: FC<Props> = props => {
             const sorts = contentRef.current?.();
 
             if (sorts) {
+                // TODO: error handling
                 props.mutation.mutate(sorts);
             }
         }

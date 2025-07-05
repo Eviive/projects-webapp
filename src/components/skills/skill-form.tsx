@@ -9,6 +9,7 @@ import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import type { FormState, SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type {
     Skill,
     SkillCreation,
@@ -103,10 +104,9 @@ export const SkillForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error(
-                editing ? "Skill update failed:" : "Skill creation failed:",
-                getDetail(e)
-            );
+            const message = editing ? "Skill update failed:" : "Skill creation failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }
@@ -140,7 +140,9 @@ export const SkillForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error("Skill deletion failed:", getDetail(e));
+            const message = "Skill deletion failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }

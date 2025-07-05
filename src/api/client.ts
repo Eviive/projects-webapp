@@ -3,7 +3,6 @@ import type { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from "
 import axios, { AxiosHeaders } from "axios";
 import { getAuthContext } from "contexts/auth-context";
 import { hasEveryAuthority } from "libs/auth";
-import { getDetail } from "libs/utils/error";
 import { toast } from "sonner";
 import type { Authority } from "types/auth";
 
@@ -20,7 +19,6 @@ initInterceptors(httpClient);
 type RequestConfig<D> = AxiosRequestConfig<D> & {
     requiredAuthorities?: Authority[];
     needsAccessToken?: boolean;
-    showErrorToast?: boolean;
 };
 
 export const request = async <T = undefined, D = undefined>(
@@ -31,7 +29,6 @@ export const request = async <T = undefined, D = undefined>(
         headers,
         requiredAuthorities,
         needsAccessToken = true,
-        showErrorToast = true,
         ...requestConfig
     } = config ?? {};
 
@@ -58,19 +55,11 @@ export const request = async <T = undefined, D = undefined>(
         axiosHeaders.Authorization = `Bearer ${accessToken}`;
     }
 
-    let res: AxiosResponse<T, D>;
-    try {
-        res = await httpClient.request<T, AxiosResponse<T, D>, D>({
-            url,
-            headers: axiosHeaders,
-            ...requestConfig
-        });
-    } catch (e) {
-        if (showErrorToast) {
-            toast.error(getDetail(e));
-        }
-        throw e;
-    }
+    const res = await httpClient.request<T, AxiosResponse<T, D>, D>({
+        url,
+        headers: axiosHeaders,
+        ...requestConfig
+    });
 
     return res.data;
 };

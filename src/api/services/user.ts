@@ -17,10 +17,9 @@ const logout = () =>
         method: "POST"
     });
 
-const refresh = (showErrorToast = true) =>
+const refresh = () =>
     request<AuthResponse>(`/${URL}/refresh`, {
         method: "POST",
-        showErrorToast,
         needsAccessToken: false
     });
 

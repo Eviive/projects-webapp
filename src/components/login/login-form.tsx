@@ -19,6 +19,7 @@ import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "sonner";
 import type { AuthRequest } from "types/auth";
 import { authRequestSchema } from "types/auth";
 
@@ -51,7 +52,9 @@ export const LoginForm: FC = () => {
 
             await navigate(redirectPath, { replace: true });
         } catch (e) {
-            console.error("Login failed:", getDetail(e));
+            const message = "Login failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             setIsSubmitting(false);
         }

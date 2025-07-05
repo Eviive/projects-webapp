@@ -9,6 +9,7 @@ import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import type { FormState, SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type {
     Project,
     ProjectCreation,
@@ -113,10 +114,9 @@ export const ProjectForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error(
-                editing ? "Project update failed:" : "Project creation failed:",
-                getDetail(e)
-            );
+            const message = editing ? "Project update failed:" : "Project creation failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }
@@ -150,7 +150,9 @@ export const ProjectForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error("Project deletion failed:", getDetail(e));
+            const message = "Project deletion failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }
