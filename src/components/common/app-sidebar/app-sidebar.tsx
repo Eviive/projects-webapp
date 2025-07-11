@@ -14,7 +14,6 @@ import {
     SidebarMenuItem,
     SidebarRail
 } from "components/ui/sidebar";
-import { Skeleton } from "components/ui/skeleton";
 import { getDetail } from "libs/utils/error";
 import { infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
@@ -93,11 +92,11 @@ export const AppSidebar: FC = () => {
                 />
                 <div className="flex flex-col">
                     <span className="truncate text-sm font-semibold">Personal-API</span>
-                    <span className="text-muted-foreground truncate text-xs">
-                        {infoQuery.isLoading && <Skeleton className="h-[1lh] w-[4ch]" />}
-                        {infoQuery.isSuccess &&
-                            `${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}
-                    </span>
+                    {infoQuery.isSuccess && (
+                        <span className="text-muted-foreground truncate text-xs">
+                            {`${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}
+                        </span>
+                    )}
                 </div>
             </SidebarHeader>
             <SidebarContent>

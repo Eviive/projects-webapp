@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
-import { Skeleton } from "components/ui/skeleton";
 import { infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
 import { capitalize } from "types/utils/string";
@@ -18,11 +17,11 @@ export const Home: FC = () => {
                     </strong>{" "}
                     dashboard&nbsp;!
                 </h1>
-                <h2 className="text-lg">
-                    {infoQuery.isLoading && <Skeleton className="mt-1.5 h-[1lh] w-48" />}
-                    {infoQuery.isSuccess &&
-                        `${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}
-                </h2>
+                {infoQuery.isSuccess && (
+                    <h2 className="text-lg">
+                        {`${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}
+                    </h2>
+                )}
                 <p className="mt-4">
                     I use this API to store data about all my projects and skills. Its dashboard
                     allows me to manage all this data.
