@@ -4,7 +4,7 @@ import type { AuthRequest, AuthResponse, CurrentUser } from "types/auth";
 const URL = "user";
 
 const current = (needsAccessToken = true) =>
-    request<CurrentUser>(`/${URL}/current`, { needsAccessToken });
+    request<CurrentUser & { username: string | null }>(`/${URL}/current`, { needsAccessToken });
 
 const login = (authRequest: AuthRequest) =>
     request<AuthResponse, AuthRequest>(`/${URL}/login`, {

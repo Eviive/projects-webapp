@@ -5,8 +5,14 @@ import { router } from "router";
 import type { Authority } from "types/auth";
 
 export const clearAuthContext = async (redirect = true): Promise<IAuthContext> => {
+    const currentUser = await UserService.current(false);
+
+    if (currentUser.id === null) {
+        currentUser.username = "Guest";
+    }
+
     const newAuthContext: IAuthContext = {
-        currentUser: await UserService.current(false),
+        currentUser,
         accessToken: null
     };
 
