@@ -2,6 +2,7 @@ import { ImageFormFields } from "components/image/image-form-fields";
 import type { SkillFormType } from "components/skills/skill-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
+import { formatAlt } from "libs/skills/alt";
 import type { FC } from "react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -26,19 +27,14 @@ export const SkillFormFields: FC = () => {
                             "image.altFr"
                         ]);
 
-                        const isNameEmpty = !name.trim(),
-                            isAltEnEmpty = !altEn.trim(),
-                            isAltFrEmpty = !altFr.trim(),
-                            isAltEnFormatted = altEn === `${oldName.trim()}'s logo`,
-                            isAltFrFormatted = altFr === `Logo de ${oldName.trim()}`;
+                        const { newAltEn, newAltFr } = formatAlt(oldName, name, altEn, altFr);
 
-                        if (isAltEnEmpty || isAltEnFormatted) {
-                            setValue("image.altEn", isNameEmpty ? "" : `${name.trim()}'s logo`);
-                        }
-                        if (isAltFrEmpty || isAltFrFormatted) {
-                            setValue("image.altFr", isNameEmpty ? "" : `Logo de ${name.trim()}`);
-                        }
-
+                        setValue("image.altEn", newAltEn, {
+                            shouldValidate: form.formState.isSubmitted
+                        });
+                        setValue("image.altFr", newAltFr, {
+                            shouldValidate: form.formState.isSubmitted
+                        });
                         setOldName(name);
                     }
                 }}

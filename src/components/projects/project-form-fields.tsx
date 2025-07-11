@@ -12,6 +12,7 @@ import { Textarea } from "components/ui/textarea";
 import { formatISO } from "date-fns";
 import { SKILL_PLACEHOLDER } from "libs/constants";
 import { getImageUrl } from "libs/image";
+import { formatAlt } from "libs/projects/alt";
 import { isNotNullOrUndefined } from "libs/utils/assertion";
 import type { FC } from "react";
 import { useState } from "react";
@@ -43,23 +44,14 @@ export const ProjectFormFields: FC = () => {
                             "image.altFr"
                         ]);
 
-                        const isTitleEmpty = !title.trim(),
-                            isAltEnEmpty = !altEn.trim(),
-                            isAltFrEmpty = !altFr.trim(),
-                            isAltEnFormatted = altEn === `${oldTitle.trim()}'s logo`,
-                            isAltFrFormatted = altFr === `Logo de ${oldTitle.trim()}`;
+                        const { newAltEn, newAltFr } = formatAlt(oldTitle, title, altEn, altFr);
 
-                        if (isAltEnEmpty || isAltEnFormatted) {
-                            setValue("image.altEn", isTitleEmpty ? "" : `${title.trim()}'s logo`, {
-                                shouldValidate: form.formState.isSubmitted
-                            });
-                        }
-                        if (isAltFrEmpty || isAltFrFormatted) {
-                            setValue("image.altFr", isTitleEmpty ? "" : `Logo de ${title.trim()}`, {
-                                shouldValidate: form.formState.isSubmitted
-                            });
-                        }
-
+                        setValue("image.altEn", newAltEn, {
+                            shouldValidate: form.formState.isSubmitted
+                        });
+                        setValue("image.altFr", newAltFr, {
+                            shouldValidate: form.formState.isSubmitted
+                        });
                         setOldTitle(title);
                     }
                 }}
