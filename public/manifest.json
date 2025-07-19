@@ -1,6 +1,6 @@
 {
-    "name": "Personal API - Dashboard",
-    "short_name": "Personal API - Dashboard",
+    "name": "Projects - Dashboard",
+    "short_name": "Projects - Dashboard",
     "start_url": "/dashboard/",
     "icons": [
         {

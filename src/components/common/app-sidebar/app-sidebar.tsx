@@ -91,7 +91,7 @@ export const AppSidebar: FC = () => {
                     className="aspect-32/25 max-h-9 max-w-full object-cover"
                 />
                 <div className="flex flex-col">
-                    <span className="truncate text-sm font-semibold">Personal-API</span>
+                    <span className="truncate text-sm font-semibold">Projects</span>
                     {infoQuery.isSuccess && (
                         <span className="text-muted-foreground truncate text-xs">
                             {`${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}

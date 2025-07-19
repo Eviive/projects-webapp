@@ -13,7 +13,7 @@ export const Home: FC = () => {
                 <h1 className="text-3xl font-medium">
                     Welcome to the{" "}
                     <strong className="bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-nowrap text-transparent">
-                        Personal-API
+                        Projects
                     </strong>{" "}
                     dashboard&nbsp;!
                 </h1>
