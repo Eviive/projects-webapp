@@ -5,11 +5,11 @@ import { useState } from "react";
 type UseLocalStorageOutput<T> = [T, Dispatch<SetStateAction<T>>];
 
 /*
-	There is a comma after the type parameter ("T,") because there is a clash between the JSX and TypeScript syntax.
-	The comma is required to disambiguate the two. Another way to do this would be to use the "extends" keyword ("T extends {}").
-	See: https://stackoverflow.com/a/45576880
+    There is a comma after the type parameter ("T,") because there is a clash between the JSX and TypeScript syntax.
+    The comma is required to disambiguate the two. Another way to do this would be to use the "extends" keyword ("T extends {}").
+    See: https://stackoverflow.com/a/45576880
 */
-export const useLocalStorage = <T,>(key: string, defaultValue: T): UseLocalStorageOutput<T> => {
+export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorageOutput<T> => {
     const [storedValue, setStoredValue] = useState<T>(() => {
         try {
             const item = localStorage.getItem(key);

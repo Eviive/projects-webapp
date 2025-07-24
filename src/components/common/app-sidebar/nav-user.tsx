@@ -1,7 +1,6 @@
 "use client";
 
-import { queryClient } from "api/query-client";
-import { UserService } from "api/services/user";
+import { LogoutService } from "api/services/logout";
 import { NavThemeSwitcher } from "components/common/app-sidebar/nav-theme-switcher";
 import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
 import {
@@ -14,67 +13,48 @@ import {
 } from "components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "components/ui/sidebar";
 import { useAuthContext } from "contexts/auth-context";
-import { clearAuthContext, hasEveryAuthority } from "libs/auth";
+import { clearAuthContext } from "libs/auth";
 import type { FC } from "react";
 import { LuChevronsUpDown, LuLogIn, LuLogOut, LuUserRound } from "react-icons/lu";
-import { NavLink, useLocation, useMatches, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import { toast } from "sonner";
-import type { Authority } from "types/auth";
-import { authoritiesHandleSchema } from "types/auth";
 
 const AVATAR = "https://avatars.githubusercontent.com/u/80990528";
 
 export const NavUser: FC = () => {
     const { currentUser } = useAuthContext();
 
-    const isLoggedIn = currentUser.id !== null;
+    // TODO: include NON_NULL
+    const isLoggedIn = "email" in currentUser;
 
     const { isMobile } = useSidebar();
     const location = useLocation();
-    const matches = useMatches();
-    const navigate = useNavigate();
 
     const handleLogout = async () => {
+        let redirectUri: string | null = null;
         try {
-            await UserService.logout();
+            redirectUri = await LogoutService.logout();
         } catch (e) {
             console.error("Logout failed:", e);
-        } finally {
+            await clearAuthContext(false);
+            return;
+        }
+
+        if (redirectUri !== null) {
+            window.location.replace(redirectUri);
+        } else {
             toast.success("You have been logged out.");
-            const { currentUser: newCurrentUser } = await clearAuthContext(false);
-
-            const requiredAuthoritiesToStay = new Set<Authority>();
-
-            for (const match of matches) {
-                const dataParseResult = authoritiesHandleSchema.safeParse(match.handle);
-
-                if (dataParseResult.success) {
-                    for (const authority of dataParseResult.data.authorities) {
-                        requiredAuthoritiesToStay.add(authority);
-                    }
-                }
-            }
-
-            const canStayOnCurrentMatch = hasEveryAuthority(
-                Array.from(requiredAuthoritiesToStay),
-                newCurrentUser.authorities
-            );
-
-            if (!canStayOnCurrentMatch) {
-                await navigate("/");
-            }
-
-            await queryClient.invalidateQueries({
-                refetchType: canStayOnCurrentMatch ? "active" : "none"
-            });
+            await clearAuthContext(false);
         }
     };
 
     const currentUrl = location.pathname + location.search;
 
-    let loginHref = "/login";
+    let loginHref = "/oauth2/authorization/authentik"; // TODO: login options
     if (currentUrl !== `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/`) {
-        loginHref += `?redirect=${encodeURIComponent(currentUrl)}`;
+        loginHref += `?post_login_success_uri=${encodeURIComponent("http://localhost:3001/" + currentUrl)}`; // TODO: env
+    } else {
+        loginHref += "?post_login_success_uri=http://localhost:3001";
     }
 
     const userCard = (
@@ -82,9 +62,9 @@ export const NavUser: FC = () => {
             <Avatar className="h-8 w-8 rounded-lg">
                 {isLoggedIn ? (
                     <>
-                        <AvatarImage src={AVATAR} alt={currentUser.username} />
+                        <AvatarImage src={AVATAR} alt={currentUser.name} />
                         <AvatarFallback className="rounded-lg">
-                            {currentUser.username.substring(0, 2).toUpperCase()}
+                            {currentUser.name.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </>
                 ) : (
@@ -92,11 +72,10 @@ export const NavUser: FC = () => {
                 )}
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{currentUser.username}</span>
-                {currentUser.firstName && currentUser.lastName && (
-                    <span className="truncate text-xs">
-                        {currentUser.firstName} {currentUser.lastName}
-                    </span>
+                <span className="truncate font-medium">{currentUser.name}</span>
+                {/* // TODO: include NON_NULL */}
+                {"email" in currentUser && (
+                    <span className="truncate text-xs">{currentUser.email}</span>
                 )}
             </div>
         </>
@@ -136,10 +115,10 @@ export const NavUser: FC = () => {
                             </DropdownMenuItem>
                         ) : (
                             <DropdownMenuItem asChild>
-                                <NavLink to={loginHref}>
+                                <a href={loginHref}>
                                     <LuLogIn />
                                     Login
-                                </NavLink>
+                                </a>
                             </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>

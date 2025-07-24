@@ -1,11 +1,11 @@
 import { queryOptions } from "@tanstack/react-query";
-import { HealthService } from "api/services/health";
+import { InfoService } from "api/services/health";
 import { queryLoader } from "libs/loader/query-loader";
 import type { Info } from "types/health";
 import type { QueryLoaderFunction } from "types/loader";
 
 export const infoQueryOptions = queryOptions({
-    queryFn: HealthService.info,
+    queryFn: InfoService.info,
     queryKey: ["info"]
 });
 

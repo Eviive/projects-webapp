@@ -19,7 +19,7 @@ export const Home: FC = () => {
                 </h1>
                 {infoQuery.isSuccess && (
                     <h2 className="text-lg">
-                        {`${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}
+                        {`${capitalize(infoQuery.data.stage)} ${infoQuery.data.version}`}
                     </h2>
                 )}
                 <p className="mt-4">

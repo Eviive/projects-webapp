@@ -1,10 +1,10 @@
-import { request } from "api/client";
+import { requestData } from "api/client";
 import type { Info } from "types/health";
 
-const URL = "actuator";
+const URL = "/api/info";
 
-const info = () => request<Info>(`/${URL}/info`);
+const info = () => requestData<Info>(URL);
 
-export const HealthService = {
+export const InfoService = {
     info
 };

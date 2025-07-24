@@ -1,19 +1,14 @@
-import { UserService } from "api/services/user";
+import { MeService } from "api/services/me";
 import type { IAuthContext } from "contexts/auth-context";
 import { getAuthContext, setAuthContext } from "contexts/auth-context";
 import { router } from "router";
 import type { Authority } from "types/auth";
 
 export const clearAuthContext = async (redirect = true): Promise<IAuthContext> => {
-    const currentUser = await UserService.current(false);
-
-    if (currentUser.id === null) {
-        currentUser.username = "Guest";
-    }
+    const currentUser = await MeService.me();
 
     const newAuthContext: IAuthContext = {
-        currentUser,
-        accessToken: null
+        currentUser
     };
 
     setAuthContext(newAuthContext);
@@ -26,13 +21,13 @@ export const clearAuthContext = async (redirect = true): Promise<IAuthContext> =
 };
 
 export const initAuthContext = async () => {
-    try {
-        const refreshRes = await UserService.refresh();
+    const currentUser = await MeService.me();
 
-        setAuthContext(refreshRes);
-    } catch {
-        await clearAuthContext(false);
-    }
+    const newAuthContext: IAuthContext = {
+        currentUser
+    };
+
+    setAuthContext(newAuthContext);
 };
 
 const getAuthorities = (): Authority[] => {

@@ -3,10 +3,11 @@ import type { CurrentUser } from "types/auth";
 
 export interface IAuthContext {
     currentUser: CurrentUser;
-    accessToken: string | null;
 }
 
 let authContext: IAuthContext | null = null;
+
+export const getOptionalAuthContext = (): IAuthContext | null => authContext;
 
 export const getAuthContext = (): IAuthContext => {
     if (authContext === null) {

@@ -1,33 +1,39 @@
 import { queryClient } from "api/query-client";
-import { UserService } from "api/services/user";
+import { MeService } from "api/services/me";
 import type { AxiosInstance } from "axios";
 import { AxiosError } from "axios";
-import { setAuthContext } from "contexts/auth-context";
+import type { IAuthContext } from "contexts/auth-context";
+import { getOptionalAuthContext, setAuthContext } from "contexts/auth-context";
 import { clearAuthContext } from "libs/auth";
 import { isTokenExpired } from "libs/token";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
     httpClient.interceptors.request.use(async req => {
-        if (!req.headers.hasAuthorization()) {
+        const authContext = getOptionalAuthContext();
+
+        if (authContext === null) {
             return req;
         }
 
-        const authHeaderMatch = req.headers.getAuthorization(/^Bearer (.+)$/);
-        if (authHeaderMatch === null) {
+        const currentUser = authContext.currentUser;
+
+        // TODO: include NON_NULL
+        if (!("email" in currentUser)) {
             return req;
         }
 
-        const accessToken = authHeaderMatch[1];
-        if (!isTokenExpired(accessToken)) {
+        if (!isTokenExpired(currentUser.exp)) {
             return req;
         }
 
         try {
-            const refreshRes = await UserService.refresh();
+            const currentUser = await MeService.me();
 
-            req.headers.setAuthorization(`Bearer ${refreshRes.accessToken}`);
+            const newAuthContext: IAuthContext = {
+                currentUser
+            };
 
-            setAuthContext(refreshRes);
+            setAuthContext(newAuthContext);
         } catch (e) {
             console.error("Error while refreshing token:", e);
             await clearAuthContext();

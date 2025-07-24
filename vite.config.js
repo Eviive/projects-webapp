@@ -20,7 +20,11 @@ export default {
     ],
     server: {
         port: 3001,
-        open: true
+        open: true,
+        proxy: {
+            "^/(api|login|oauth2|logout|v2/api-docs|v3/api-docs|swagger-resources|configuration/ui|configuration/security|swagger-ui|webjars)(.*)?$":
+                "http://localhost:8081"
+        }
     },
     preview: {
         port: 3000,

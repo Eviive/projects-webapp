@@ -94,7 +94,7 @@ export const AppSidebar: FC = () => {
                     <span className="truncate text-sm font-semibold">Projects</span>
                     {infoQuery.isSuccess && (
                         <span className="text-muted-foreground truncate text-xs">
-                            {`${capitalize(infoQuery.data.app.stage)} ${infoQuery.data.app.version}`}
+                            {`${capitalize(infoQuery.data.stage)} ${infoQuery.data.version}`}
                         </span>
                     )}
                 </div>
