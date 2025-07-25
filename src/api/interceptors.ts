@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import type { IAuthContext } from "contexts/auth-context";
 import { getOptionalAuthContext, setAuthContext } from "contexts/auth-context";
 import { clearAuthContext, isLoggedIn } from "libs/auth";
-import { isTokenExpired } from "libs/token";
+import { isTokenExpired } from "libs/utils/token";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
     httpClient.interceptors.request.use(async req => {

@@ -1,5 +1,3 @@
-"use client";
-
 import { LogoutService } from "api/services/logout";
 import { NavThemeSwitcher } from "components/common/app-sidebar/nav-theme-switcher";
 import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
@@ -18,8 +16,6 @@ import type { FC } from "react";
 import { LuChevronsUpDown, LuLogIn, LuLogOut, LuUserRound } from "react-icons/lu";
 import { useLocation } from "react-router";
 import { toast } from "sonner";
-
-const AVATAR = "https://avatars.githubusercontent.com/u/80990528";
 
 export const NavUser: FC = () => {
     const { currentUser } = useAuthContext();
@@ -47,18 +43,24 @@ export const NavUser: FC = () => {
         }
     };
 
-    let loginHref = "/oauth2/authorization/authentik"; // TODO: login options
-    const encodedCurrentUrl = encodeURIComponent(
-        import.meta.env.VITE_BASE_URL + location.pathname + location.search + location.hash
-    );
-    loginHref += `?post_login_success_uri=${encodedCurrentUrl}`;
+    let loginHref = "/login";
+    if (location.pathname !== "/" || location.search !== "" || location.hash !== "") {
+        const encodedCurrentUrl = encodeURIComponent(
+            location.pathname + location.search + location.hash
+        );
+        loginHref += `?redirect=${encodedCurrentUrl}`;
+    }
 
     const userCard = (
         <>
             <Avatar className="h-8 w-8 rounded-lg">
                 {isUserLoggedIn ? (
                     <>
-                        <AvatarImage src={AVATAR} alt={currentUser.name} />
+                        <AvatarImage
+                            src={currentUser.avatar}
+                            alt={currentUser.name}
+                            fetchPriority="high"
+                        />
                         <AvatarFallback className="rounded-lg">
                             {currentUser.name.substring(0, 2).toUpperCase()}
                         </AvatarFallback>

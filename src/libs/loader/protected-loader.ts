@@ -22,14 +22,12 @@ export const protectedLoader = <D>(
 
         const url = new URL(args.request.url);
 
-        const redirectPath = url.pathname;
-
-        if (redirectPath.trim() === "") {
+        if (url.pathname !== "/" || url.search !== "" || url.hash !== "") {
             return redirect("/login");
         }
 
         const searchParams = new URLSearchParams({
-            redirect: redirectPath + url.search
+            redirect: url.pathname + url.search + url.hash
         });
 
         return redirect(`/login?${searchParams.toString()}`);

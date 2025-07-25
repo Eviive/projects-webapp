@@ -6,6 +6,17 @@ import viteTsconfigPaths from "vite-tsconfig-paths";
 /** @type {Partial<import("babel-plugin-react-compiler").PluginOptions>} */
 const ReactCompilerConfig = {};
 
+/** @type {import("vite").CommonServerOptions} */
+const commonServerOptions = {
+    port: 3001,
+    open: true,
+    proxy: {
+        "^/(api|oauth2|logout|v2/api-docs|v3/api-docs|swagger-resources|configuration/ui|configuration/security|webjars|swagger-ui)(.*)?$":
+            "http://localhost:8081",
+        "^/login/.+$": "http://localhost:8081"
+    }
+};
+
 /** @type {import("vite").UserConfig} */
 export default {
     plugins: [
@@ -18,22 +29,8 @@ export default {
         tailwindcss(),
         eslint()
     ],
-    server: {
-        port: 3001,
-        open: true,
-        proxy: {
-            "^/(api|oauth2|logout|v2/api-docs|v3/api-docs|swagger-resources|configuration/ui|configuration/security|swagger-ui|webjars)(.*)?$":
-                "http://localhost:8081"
-        }
-    },
-    preview: {
-        port: 3001,
-        open: true,
-        proxy: {
-            "^/(api|oauth2|logout|v2/api-docs|v3/api-docs|swagger-resources|configuration/ui|configuration/security|swagger-ui|webjars)(.*)?$":
-                "http://localhost:8081"
-        }
-    },
+    server: commonServerOptions,
+    preview: commonServerOptions,
     build: {
         target: "ESNext",
         sourcemap: true

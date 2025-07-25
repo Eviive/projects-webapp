@@ -4,6 +4,7 @@ export interface CurrentLoggedInUser {
     username: string;
     email: string;
     name: string;
+    avatar: string;
     authorities: Authority[];
     exp: number;
 }
