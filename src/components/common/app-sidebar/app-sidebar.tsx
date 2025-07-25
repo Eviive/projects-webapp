@@ -80,13 +80,11 @@ const items: Item[] = [
 export const AppSidebar: FC = () => {
     const infoQuery = useQuery(infoQueryOptions);
 
-    const logoSrc = `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/logo.svg`;
-
     return (
         <Sidebar variant="floating" collapsible="icon">
             <SidebarHeader className="flex flex-row items-center gap-2 overflow-hidden p-4 transition-[padding] [[data-state=collapsed]_&]:p-2">
                 <img
-                    src={logoSrc}
+                    src="/logo.svg"
                     alt="Logo"
                     className="aspect-32/25 max-h-9 max-w-full object-cover"
                 />

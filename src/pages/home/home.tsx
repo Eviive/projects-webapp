@@ -12,7 +12,7 @@ export const Home: FC = () => {
             <div className="size-full px-[5%] py-16">
                 <h1 className="text-3xl font-medium">
                     Welcome to the{" "}
-                    <strong className="bg-gradient-to-b from-[hsl(347deg_84%_50%)] to-pink-600 bg-clip-text font-bold text-nowrap text-transparent">
+                    <strong className="bg-[hsl(347deg_84%_50%)] bg-clip-text font-bold text-nowrap text-transparent">
                         Projects
                     </strong>{" "}
                     dashboard&nbsp;!

@@ -7,7 +7,7 @@ const logout = async (): Promise<string | null> => {
     const res = await request(URL, {
         method: "POST",
         params: {
-            post_logout_success_uri: "http://localhost:3001" // TODO: env
+            post_logout_success_uri: import.meta.env.VITE_BASE_URL
         }
     });
 

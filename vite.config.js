@@ -22,13 +22,17 @@ export default {
         port: 3001,
         open: true,
         proxy: {
-            "^/(api|login|oauth2|logout|v2/api-docs|v3/api-docs|swagger-resources|configuration/ui|configuration/security|swagger-ui|webjars)(.*)?$":
+            "^/(api|oauth2|logout|v2/api-docs|v3/api-docs|swagger-resources|configuration/ui|configuration/security|swagger-ui|webjars)(.*)?$":
                 "http://localhost:8081"
         }
     },
     preview: {
-        port: 3000,
-        open: true
+        port: 3001,
+        open: true,
+        proxy: {
+            "^/(api|oauth2|logout|v2/api-docs|v3/api-docs|swagger-resources|configuration/ui|configuration/security|swagger-ui|webjars)(.*)?$":
+                "http://localhost:8081"
+        }
     },
     build: {
         target: "ESNext",

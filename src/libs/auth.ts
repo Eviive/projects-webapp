@@ -1,8 +1,8 @@
 import { MeService } from "api/services/me";
 import type { IAuthContext } from "contexts/auth-context";
-import { getAuthContext, setAuthContext } from "contexts/auth-context";
+import { setAuthContext } from "contexts/auth-context";
 import { router } from "router";
-import type { Authority } from "types/auth";
+import type { Authority, CurrentUser } from "types/auth";
 
 export const clearAuthContext = async (redirect = true): Promise<IAuthContext> => {
     const currentUser = await MeService.me();
@@ -30,22 +30,19 @@ export const initAuthContext = async () => {
     setAuthContext(newAuthContext);
 };
 
-const getAuthorities = (): Authority[] => {
-    return getAuthContext().currentUser.authorities;
+export const isLoggedIn = (currentUser: CurrentUser) => {
+    return "email" in currentUser;
 };
 
 export const hasEveryAuthority = (
     requiredAuthorities: Authority[],
-    authorities: Authority[] = getAuthorities()
+    currentUser: CurrentUser
 ): boolean => {
     return requiredAuthorities.every(requiredAuthority =>
-        hasAuthority(requiredAuthority, authorities)
+        hasAuthority(requiredAuthority, currentUser)
     );
 };
 
-export const hasAuthority = (
-    authority: Authority,
-    authorities: Authority[] = getAuthorities()
-): boolean => {
-    return authorities.includes(authority);
+export const hasAuthority = (authority: Authority, currentUser: CurrentUser): boolean => {
+    return currentUser.authorities.includes(authority);
 };

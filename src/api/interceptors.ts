@@ -4,7 +4,7 @@ import type { AxiosInstance } from "axios";
 import { AxiosError } from "axios";
 import type { IAuthContext } from "contexts/auth-context";
 import { getOptionalAuthContext, setAuthContext } from "contexts/auth-context";
-import { clearAuthContext } from "libs/auth";
+import { clearAuthContext, isLoggedIn } from "libs/auth";
 import { isTokenExpired } from "libs/token";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
@@ -17,8 +17,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
 
         const currentUser = authContext.currentUser;
 
-        // TODO: include NON_NULL
-        if (!("email" in currentUser)) {
+        if (!isLoggedIn(currentUser)) {
             return req;
         }
 

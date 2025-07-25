@@ -13,7 +13,7 @@ import {
 } from "components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "components/ui/sidebar";
 import { useAuthContext } from "contexts/auth-context";
-import { clearAuthContext } from "libs/auth";
+import { clearAuthContext, isLoggedIn } from "libs/auth";
 import type { FC } from "react";
 import { LuChevronsUpDown, LuLogIn, LuLogOut, LuUserRound } from "react-icons/lu";
 import { useLocation } from "react-router";
@@ -24,8 +24,7 @@ const AVATAR = "https://avatars.githubusercontent.com/u/80990528";
 export const NavUser: FC = () => {
     const { currentUser } = useAuthContext();
 
-    // TODO: include NON_NULL
-    const isLoggedIn = "email" in currentUser;
+    const isUserLoggedIn = isLoggedIn(currentUser);
 
     const { isMobile } = useSidebar();
     const location = useLocation();
@@ -48,19 +47,16 @@ export const NavUser: FC = () => {
         }
     };
 
-    const currentUrl = location.pathname + location.search;
-
     let loginHref = "/oauth2/authorization/authentik"; // TODO: login options
-    if (currentUrl !== `${import.meta.env.VITE_ROUTER_BASE_URL ?? ""}/`) {
-        loginHref += `?post_login_success_uri=${encodeURIComponent("http://localhost:3001/" + currentUrl)}`; // TODO: env
-    } else {
-        loginHref += "?post_login_success_uri=http://localhost:3001";
-    }
+    const encodedCurrentUrl = encodeURIComponent(
+        import.meta.env.VITE_BASE_URL + location.pathname + location.search + location.hash
+    );
+    loginHref += `?post_login_success_uri=${encodedCurrentUrl}`;
 
     const userCard = (
         <>
             <Avatar className="h-8 w-8 rounded-lg">
-                {isLoggedIn ? (
+                {isUserLoggedIn ? (
                     <>
                         <AvatarImage src={AVATAR} alt={currentUser.name} />
                         <AvatarFallback className="rounded-lg">
@@ -73,10 +69,7 @@ export const NavUser: FC = () => {
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{currentUser.name}</span>
-                {/* // TODO: include NON_NULL */}
-                {"email" in currentUser && (
-                    <span className="truncate text-xs">{currentUser.email}</span>
-                )}
+                {isUserLoggedIn && <span className="truncate text-xs">{currentUser.email}</span>}
             </div>
         </>
     );
@@ -108,7 +101,7 @@ export const NavUser: FC = () => {
                         <DropdownMenuSeparator />
                         <NavThemeSwitcher />
                         <DropdownMenuSeparator />
-                        {isLoggedIn ? (
+                        {isUserLoggedIn ? (
                             <DropdownMenuItem onSelect={handleLogout}>
                                 <LuLogOut />
                                 Logout

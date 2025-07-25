@@ -8,14 +8,13 @@ export interface CurrentLoggedInUser {
     exp: number;
 }
 
-// TODO: include NON_NULL ??
 export interface CurrentAnonymousUser {
     name: string;
     authorities: Authority[];
 }
 
 type Role = `ROLE_${"ANONYMOUS" | "ADMIN"}`;
-type Scope =
+type Permission =
     | "read:project"
     | "create:project"
     | "update:project"
@@ -26,4 +25,4 @@ type Scope =
     | "delete:skill"
     | "revalidate:portfolio";
 
-export type Authority = Role | Scope;
+export type Authority = Role | Permission;

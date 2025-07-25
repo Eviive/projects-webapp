@@ -1,6 +1,7 @@
 import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from "axios";
 import axios, { AxiosHeaders } from "axios";
+import { getAuthContext } from "contexts/auth-context";
 import { hasEveryAuthority } from "libs/auth";
 import { toast } from "sonner";
 import type { Authority } from "types/auth";
@@ -24,10 +25,13 @@ export const request = <T = undefined, D = undefined>(
 ): Promise<AxiosResponse<T, D>> => {
     const { headers, requiredAuthorities, ...requestConfig } = config ?? {};
 
-    if (requiredAuthorities !== undefined && !hasEveryAuthority(requiredAuthorities)) {
-        const message = "You do not have the required authorities to perform this action.";
-        toast.error(message);
-        throw new Error(message);
+    if (requiredAuthorities !== undefined) {
+        const currentUser = getAuthContext().currentUser;
+        if (!hasEveryAuthority(requiredAuthorities, currentUser)) {
+            const message = "You do not have the required authorities to perform this action.";
+            toast.error(message);
+            throw new Error(message);
+        }
     }
 
     let axiosHeaders: RawAxiosRequestHeaders;

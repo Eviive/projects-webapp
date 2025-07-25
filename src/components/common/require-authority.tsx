@@ -10,17 +10,11 @@ type Props = PropsWithChildren<{
 export const RequireAuthority: FC<Props> = props => {
     const { currentUser } = useAuthContext();
 
-    if (
-        !Array.isArray(props.authority) &&
-        !hasAuthority(props.authority, currentUser.authorities)
-    ) {
+    if (!Array.isArray(props.authority) && !hasAuthority(props.authority, currentUser)) {
         return null;
     }
 
-    if (
-        Array.isArray(props.authority) &&
-        !hasEveryAuthority(props.authority, currentUser.authorities)
-    ) {
+    if (Array.isArray(props.authority) && !hasEveryAuthority(props.authority, currentUser)) {
         return null;
     }
 

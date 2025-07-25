@@ -1,9 +1,12 @@
 import { getAuthContext } from "contexts/auth-context";
+import { isLoggedIn } from "libs/auth";
 import { redirect } from "react-router";
 import type { LoaderFunction } from "types/loader";
 
 export const loginLoader: LoaderFunction<Response | null> = ({ request }) => {
-    if (getAuthContext().currentUser.email === null) {
+    const currentUser = getAuthContext().currentUser;
+
+    if (!isLoggedIn(currentUser)) {
         return null;
     }
 

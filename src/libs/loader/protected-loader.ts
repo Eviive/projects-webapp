@@ -1,3 +1,4 @@
+import { getAuthContext } from "contexts/auth-context";
 import { hasEveryAuthority } from "libs/auth";
 import { redirect } from "react-router";
 import type { Authority } from "types/auth";
@@ -13,24 +14,23 @@ export const protectedLoader = <D>(
     loader: LoaderFunction<D>
 ): ProtectedLoaderFunction<D> => {
     return async args => {
-        if (hasEveryAuthority(authorities)) {
+        const currentUser = getAuthContext().currentUser;
+
+        if (hasEveryAuthority(authorities, currentUser)) {
             return loader(args);
         }
 
-        const routerBaseUrl = import.meta.env.VITE_ROUTER_BASE_URL;
-        let redirectPath = new URL(args.request.url).pathname;
+        const url = new URL(args.request.url);
 
-        if (routerBaseUrl && redirectPath.startsWith(routerBaseUrl)) {
-            redirectPath = redirectPath.substring(routerBaseUrl.length);
-        }
+        const redirectPath = url.pathname;
 
         if (redirectPath.trim() === "") {
             return redirect("/login");
         }
 
-        const searchParams = new URLSearchParams();
-
-        searchParams.set("redirect", redirectPath);
+        const searchParams = new URLSearchParams({
+            redirect: redirectPath + url.search
+        });
 
         return redirect(`/login?${searchParams.toString()}`);
     };
