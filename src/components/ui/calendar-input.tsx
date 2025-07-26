@@ -18,7 +18,7 @@ export const CalendarInput: FC<Props> = props => {
                     variant="outline"
                     className={cn(
                         "flex w-full pl-3 text-left font-normal",
-                        props.selected !== undefined && "text-muted-foreground"
+                        props.selected === undefined && "text-muted-foreground"
                     )}
                 >
                     {props.selected !== undefined ? format(props.selected, "PPP") : "Pick a date"}

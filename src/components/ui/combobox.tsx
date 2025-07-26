@@ -1,7 +1,6 @@
 import { Button } from "components/ui/button";
 import { ComboboxEmpty } from "components/ui/combobox-empty";
 import { Command, CommandInput, CommandItem, CommandList } from "components/ui/command";
-import { FormControl } from "components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
 import { conjunctionListFormatter } from "libs/intl-formatter";
 import { cn } from "libs/utils/style";
@@ -31,7 +30,6 @@ interface MultipleProps<V> {
     value: V[];
 }
 
-// TODO: update
 export const Combobox = <V,>(props: Props<V>) => {
     const getButtonLabel = () => {
         if (props.selection === "multiple" && props.value.length > 0) {
@@ -46,27 +44,25 @@ export const Combobox = <V,>(props: Props<V>) => {
     };
 
     return (
-        <Popover>
+        <Popover modal>
             <PopoverTrigger asChild>
-                <FormControl>
-                    <Button
-                        variant="outline"
-                        className={cn(
-                            "flex w-full justify-between font-normal",
-                            (props.selection === "multiple"
-                                ? props.value.length <= 0
-                                : props.value === undefined) && "text-muted-foreground"
-                        )}
-                    >
-                        <span className="truncate">{getButtonLabel()}</span>
-                        <LuChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                    </Button>
-                </FormControl>
+                <Button
+                    variant="outline"
+                    className={cn(
+                        "flex w-full justify-between font-normal",
+                        (props.selection === "multiple"
+                            ? props.value.length <= 0
+                            : props.value === undefined) && "text-muted-foreground"
+                    )}
+                >
+                    <span className="truncate">{getButtonLabel()}</span>
+                    <LuChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-[200px] p-0">
                 <Command loop>
-                    <CommandInput placeholder={props.searchPlaceholder} />
-                    <CommandList className="max-h-[204px]">
+                    <CommandInput placeholder={props.searchPlaceholder} className="h-9" />
+                    <CommandList>
                         <ComboboxEmpty
                             empty={props.empty}
                             loading={props.loading}
@@ -81,6 +77,11 @@ export const Combobox = <V,>(props: Props<V>) => {
                                     : props.value !== undefined &&
                                       props.getKey(props.value) === props.getKey(item);
 
+                            let checkClassName: string | null = null;
+                            if (props.selection === "multiple") {
+                                checkClassName = isSelected ? "opacity-100" : "opacity-0";
+                            }
+
                             return (
                                 <CommandItem
                                     key={props.getKey(item)}
@@ -90,26 +91,7 @@ export const Combobox = <V,>(props: Props<V>) => {
                                     }}
                                     className="gap-3"
                                 >
-                                    {props.selection === "single" && (
-                                        <LuCheck
-                                            className={cn(
-                                                "size-4",
-                                                isSelected ? "opacity-100" : "opacity-0"
-                                            )}
-                                        />
-                                    )}
-                                    {props.selection === "multiple" && (
-                                        <div
-                                            className={cn(
-                                                "border-primary flex size-4 items-center justify-center rounded-sm border",
-                                                isSelected
-                                                    ? "bg-primary text-primary-foreground"
-                                                    : "opacity-50 [&_svg]:invisible"
-                                            )}
-                                        >
-                                            <LuCheck className="size-4" />
-                                        </div>
-                                    )}
+                                    <LuCheck className={cn("size-4", checkClassName)} />
                                     {props.renderItem(item)}
                                 </CommandItem>
                             );

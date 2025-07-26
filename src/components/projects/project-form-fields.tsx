@@ -154,62 +154,64 @@ export const ProjectFormFields: FC = () => {
                 render={({ field }) => (
                     <FormItem className="col-span-2">
                         <FormLabel>Skills</FormLabel>
-                        <Combobox
-                            selection="multiple"
-                            options={skillsQuery.data ?? []}
-                            value={field.value}
-                            onChange={(skill, isSelected) => {
-                                let newSkills: Skill[];
+                        <FormControl>
+                            <Combobox
+                                selection="multiple"
+                                options={skillsQuery.data ?? []}
+                                value={field.value}
+                                onChange={(skill, isSelected) => {
+                                    let newSkills: Skill[];
 
-                                if (isSelected) {
-                                    const nextIndex = field.value.findIndex(
-                                        s => s.sort > skill.sort
-                                    );
+                                    if (isSelected) {
+                                        const nextIndex = field.value.findIndex(
+                                            s => s.sort > skill.sort
+                                        );
 
-                                    newSkills =
-                                        nextIndex === -1
-                                            ? [...field.value, skill]
-                                            : [
-                                                  ...field.value.slice(0, nextIndex),
-                                                  skill,
-                                                  ...field.value.slice(nextIndex)
-                                              ];
-                                } else {
-                                    newSkills = field.value.filter(s => s.id !== skill.id);
-                                }
+                                        newSkills =
+                                            nextIndex === -1
+                                                ? [...field.value, skill]
+                                                : [
+                                                      ...field.value.slice(0, nextIndex),
+                                                      skill,
+                                                      ...field.value.slice(nextIndex)
+                                                  ];
+                                    } else {
+                                        newSkills = field.value.filter(s => s.id !== skill.id);
+                                    }
 
-                                field.onChange(newSkills);
-                            }}
-                            renderItem={skill => (
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        className="drop-shadow-icon aspect-square object-cover"
-                                        src={
-                                            getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER
-                                        }
-                                        alt={skill.image.altEn}
-                                        width={22}
-                                        loading="lazy"
-                                    />
-                                    {skill.name}
-                                </div>
-                            )}
-                            getKey={skill => skill.id}
-                            getValue={skill => skill.name}
-                            placeholder="Select skills"
-                            searchPlaceholder="Search skill..."
-                            empty={skillsQuery.data?.length === 0 && "No skills found."}
-                            loading={
-                                skillsQuery.isLoading && (
-                                    <div className="flex gap-2 justify-self-center">
-                                        <Loader />
-                                        Loading skills...
+                                    field.onChange(newSkills);
+                                }}
+                                renderItem={skill => (
+                                    <div className="flex items-center gap-2">
+                                        <img
+                                            className="drop-shadow-icon aspect-square object-cover"
+                                            src={
+                                                getImageUrl(skill.image, "skills") ??
+                                                SKILL_PLACEHOLDER
+                                            }
+                                            alt={skill.image.altEn}
+                                            width={22}
+                                            loading="lazy"
+                                        />
+                                        {skill.name}
                                     </div>
-                                )
-                            }
-                            error={skillsQuery.isError && "Failed to load skills."}
-                        />
-
+                                )}
+                                getKey={skill => skill.id}
+                                getValue={skill => skill.name}
+                                placeholder="Select skills"
+                                searchPlaceholder="Search skill..."
+                                empty={skillsQuery.data?.length === 0 && "No skills found."}
+                                loading={
+                                    skillsQuery.isLoading && (
+                                        <div className="flex gap-2 justify-self-center">
+                                            <Loader />
+                                            Loading skills...
+                                        </div>
+                                    )
+                                }
+                                error={skillsQuery.isError && "Failed to load skills."}
+                            />
+                        </FormControl>
                         <FormMessage />
                     </FormItem>
                 )}
