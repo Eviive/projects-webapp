@@ -33,8 +33,8 @@ export const ProjectSortDialog: FC = () => {
                     {lightProject.featured && <ProjectFeaturedBadge />}
                 </div>
             )}
-            closeDialog={resetSort => {
-                handleClose(false, resetSort);
+            closeDialog={async resetSort => {
+                await handleClose(false, resetSort);
             }}
             empty={
                 lightProjectsQuery.isSuccess &&

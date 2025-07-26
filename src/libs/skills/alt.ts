@@ -25,11 +25,11 @@ export const formatAlt = (
         }
     }
 
-    if (altFr.trim() === "" || altFr === `Logo de ${oldName.trim()}`) {
+    if (altFr.trim() === "" || altFr === "Logo de " + oldName.trim()) {
         if (isNameEmpty) {
             newAltFr = "";
         } else {
-            newAltFr = `Logo de ${name.trim()}`;
+            newAltFr = "Logo de " + name.trim();
         }
     }
 

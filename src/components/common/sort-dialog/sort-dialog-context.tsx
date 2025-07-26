@@ -4,7 +4,7 @@ import { createContext, use } from "react";
 
 interface ISortDialogContext {
     contentRef: Ref<SortDialogContentRef | null>;
-    handleClose: (open: boolean, resetSort?: boolean) => void;
+    handleClose: (open: boolean, resetSort?: boolean) => Promise<void>;
 }
 
 export const SortDialogContext = createContext<ISortDialogContext | null>(null);

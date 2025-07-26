@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Page } from "components/common/page";
+import { capitalize } from "libs/utils/string";
 import { infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
-import { capitalize } from "types/utils/string";
 
 export const Home: FC = () => {
     const infoQuery = useQuery(infoQueryOptions);

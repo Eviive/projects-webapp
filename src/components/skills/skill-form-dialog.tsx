@@ -36,7 +36,7 @@ export const SkillFormDialog: FC<Props> = props => {
                 <DialogDrawer
                     trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
                     header={{
-                        title: props.skill ? `Editing ${props.skill.name}` : "Creating skill",
+                        title: props.skill ? "Editing " + props.skill.name : "Creating skill",
                         description: props.skill
                             ? "The skill's information can be edited using this form."
                             : "Create a new skill by filling out this form."

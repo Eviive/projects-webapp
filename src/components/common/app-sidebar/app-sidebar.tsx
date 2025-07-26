@@ -15,6 +15,7 @@ import {
     SidebarRail
 } from "components/ui/sidebar";
 import { getDetail } from "libs/utils/error";
+import { capitalize } from "libs/utils/string";
 import { infoQueryOptions } from "pages/home/home.loader";
 import type { FC } from "react";
 import type { IconType } from "react-icons";
@@ -22,7 +23,6 @@ import { LuFolder, LuHouse, LuRefreshCw, LuUserRoundCog } from "react-icons/lu";
 import { NavLink } from "react-router";
 import { toast } from "sonner";
 import type { Authority } from "types/auth/authorities";
-import { capitalize } from "types/utils/string";
 
 interface LinkItem {
     type: "link";

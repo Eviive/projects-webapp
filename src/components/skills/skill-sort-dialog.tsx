@@ -37,8 +37,8 @@ export const SkillSortDialog: FC = () => {
                     {skill.name}
                 </div>
             )}
-            closeDialog={resetSort => {
-                handleClose(false, resetSort);
+            closeDialog={async resetSort => {
+                await handleClose(false, resetSort);
             }}
             empty={skillsQuery.isSuccess && optimisticSkills.length === 0 && "No skills found."}
             loading={

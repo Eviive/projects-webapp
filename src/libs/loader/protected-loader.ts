@@ -30,7 +30,7 @@ export const protectedLoader = <D>(
             redirect: url.pathname + url.search + url.hash
         });
 
-        return redirect(`/login?${searchParams.toString()}`);
+        return redirect("/login?" + searchParams.toString());
     };
 };
 

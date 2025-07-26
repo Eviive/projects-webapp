@@ -13,7 +13,7 @@ type Props<E extends DndItem> = PropsWithStatus<
         {
             initialItems?: E[];
             render: (item: E) => ReactNode;
-            closeDialog: (resetSort: boolean) => void;
+            closeDialog: (resetSort: boolean) => Promise<void>;
         },
         SortDialogContentRef
     >
@@ -62,15 +62,15 @@ export const SortDialogContent = <E extends DndItem>(props: Props<E>) => {
             <div className="flex justify-between">
                 <Button
                     variant="outline"
-                    onClick={() => {
-                        props.closeDialog(true);
+                    onClick={async () => {
+                        await props.closeDialog(true);
                     }}
                 >
                     Cancel
                 </Button>
                 <Button
-                    onClick={() => {
-                        props.closeDialog(false);
+                    onClick={async () => {
+                        await props.closeDialog(false);
                     }}
                 >
                     Save

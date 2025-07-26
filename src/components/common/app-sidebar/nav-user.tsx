@@ -49,7 +49,7 @@ export const NavUser: FC = () => {
         const encodedCurrentUrl = encodeURIComponent(
             location.pathname + location.search + location.hash
         );
-        loginHref += `?redirect=${encodedCurrentUrl}`;
+        loginHref += "?redirect=" + encodedCurrentUrl;
     }
 
     const userCard = (

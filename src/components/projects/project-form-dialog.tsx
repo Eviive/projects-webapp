@@ -36,7 +36,7 @@ export const ProjectFormDialog: FC<Props> = props => {
                     trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
                     header={{
                         title: props.project
-                            ? `Editing ${props.project.title}`
+                            ? "Editing " + props.project.title
                             : "Creating project",
                         description: props.project
                             ? "The project's information can be edited using this form."
