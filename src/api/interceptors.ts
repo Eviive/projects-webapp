@@ -4,7 +4,8 @@ import type { AxiosInstance } from "axios";
 import { AxiosError } from "axios";
 import type { IAuthContext } from "contexts/auth-context";
 import { getOptionalAuthContext, setAuthContext } from "contexts/auth-context";
-import { clearAuthContext, isLoggedIn } from "libs/auth";
+import { isLoggedIn } from "libs/auth/authorities";
+import { clearAuthContext } from "libs/auth/context";
 import { isTokenExpired } from "libs/utils/token";
 
 export const initInterceptors = (httpClient: AxiosInstance) => {
@@ -26,7 +27,7 @@ export const initInterceptors = (httpClient: AxiosInstance) => {
         }
 
         try {
-            const currentUser = await MeService.me();
+            const currentUser = await MeService.findMe();
 
             const newAuthContext: IAuthContext = {
                 currentUser

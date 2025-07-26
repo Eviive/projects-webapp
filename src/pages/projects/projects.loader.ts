@@ -26,9 +26,9 @@ export const projectsQueryOptionsFn = (page?: number, size?: number, search?: st
         placeholderData: keepPreviousData
     });
 
-export const projectsQueryLoader: QueryLoaderFunction<Page<Project> | null> =
+const projectsQueryLoader: QueryLoaderFunction<Page<Project> | null> =
     qC =>
-    async ({ request }) => {
+    ({ request }) => {
         const searchParams = new URL(request.url).searchParams;
 
         const { page, size, search } = getProjectsQueryParams(searchParams);

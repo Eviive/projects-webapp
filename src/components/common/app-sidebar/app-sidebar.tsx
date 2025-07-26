@@ -21,7 +21,7 @@ import type { IconType } from "react-icons";
 import { LuFolder, LuHouse, LuRefreshCw, LuUserRoundCog } from "react-icons/lu";
 import { NavLink } from "react-router";
 import { toast } from "sonner";
-import type { Authority } from "types/auth";
+import type { Authority } from "types/auth/authorities";
 import { capitalize } from "types/utils/string";
 
 interface LinkItem {

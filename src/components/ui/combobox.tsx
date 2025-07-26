@@ -3,12 +3,11 @@ import { ComboboxEmpty } from "components/ui/combobox-empty";
 import { Command, CommandInput, CommandItem, CommandList } from "components/ui/command";
 import { FormControl } from "components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
+import { conjunctionListFormatter } from "libs/intl-formatter";
 import { cn } from "libs/utils/style";
 import type { Key, ReactNode } from "react";
 import { LuCheck, LuChevronsUpDown } from "react-icons/lu";
 import type { PropsWithStatus } from "types/utils/props";
-
-const listFormatter = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" });
 
 type Props<V> = PropsWithStatus<CommonProps<V> & (SingleProps<V> | MultipleProps<V>)>;
 
@@ -36,7 +35,7 @@ interface MultipleProps<V> {
 export const Combobox = <V,>(props: Props<V>) => {
     const getButtonLabel = () => {
         if (props.selection === "multiple" && props.value.length > 0) {
-            return listFormatter.format(props.value.map(item => props.getValue(item)));
+            return conjunctionListFormatter.format(props.value.map(item => props.getValue(item)));
         }
 
         if (props.selection === "single" && props.value !== undefined) {

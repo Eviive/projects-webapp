@@ -1,7 +1,7 @@
 import { useAuthContext } from "contexts/auth-context";
-import { hasAuthority, hasEveryAuthority } from "libs/auth";
+import { hasAuthority, hasEveryAuthority } from "libs/auth/authorities";
 import type { FC, PropsWithChildren } from "react";
-import type { Authority } from "types/auth";
+import type { Authority } from "types/auth/authorities";
 
 type Props = PropsWithChildren<{
     authority: Authority | Authority[];

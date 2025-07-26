@@ -4,8 +4,8 @@ import { Button } from "components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
+import { getImageUrl } from "libs/assets/image";
 import { SKILL_PLACEHOLDER } from "libs/constants";
-import { getImageUrl } from "libs/image";
 import type { FC } from "react";
 import { MdEdit } from "react-icons/md";
 

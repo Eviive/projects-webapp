@@ -23,7 +23,7 @@ export const skillsQueryOptionsFn = (search?: string) =>
         select: data => data
     });
 
-export const skillsQueryLoader: QueryLoaderFunction<InfiniteData<Slice<Skill>, number> | null> =
+const skillsQueryLoader: QueryLoaderFunction<InfiniteData<Slice<Skill>, number> | null> =
     qC =>
     async ({ request }) => {
         const searchParams = new URL(request.url).searchParams;

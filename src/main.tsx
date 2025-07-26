@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "api/query-client";
 import { ConfirmDialogProvider } from "contexts/confirm-dialog-context";
 import { ThemeContextProvider } from "contexts/theme-context";
-import { initAuthContext } from "libs/auth";
+import { initAuthContext } from "libs/auth/context";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";

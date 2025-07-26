@@ -2,7 +2,7 @@ import { queryClient } from "api/query-client";
 import { App } from "App";
 import { ErrorPage } from "pages/error";
 import { createBrowserRouter } from "react-router";
-import type { Authority } from "types/auth";
+import type { Authority } from "types/auth/authorities";
 
 export const router = createBrowserRouter([
     {

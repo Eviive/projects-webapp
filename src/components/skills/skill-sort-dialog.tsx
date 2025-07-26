@@ -5,8 +5,8 @@ import { useSortDialogContext } from "components/common/sort-dialog/sort-dialog-
 import { sortSkillsMutationKey } from "components/skills/skill-sort-button";
 import { Loader } from "components/ui/loader";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
+import { getImageUrl } from "libs/assets/image";
 import { SKILL_PLACEHOLDER } from "libs/constants";
-import { getImageUrl } from "libs/image";
 import type { FC } from "react";
 
 export const SkillSortDialog: FC = () => {

@@ -11,10 +11,11 @@ import {
 } from "components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "components/ui/sidebar";
 import { useAuthContext } from "contexts/auth-context";
-import { clearAuthContext, isLoggedIn } from "libs/auth";
+import { isLoggedIn } from "libs/auth/authorities";
+import { clearAuthContext } from "libs/auth/context";
 import type { FC } from "react";
 import { LuChevronsUpDown, LuLogIn, LuLogOut, LuUserRound } from "react-icons/lu";
-import { useLocation } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import { toast } from "sonner";
 
 export const NavUser: FC = () => {
@@ -110,10 +111,10 @@ export const NavUser: FC = () => {
                             </DropdownMenuItem>
                         ) : (
                             <DropdownMenuItem asChild>
-                                <a href={loginHref}>
+                                <NavLink to={loginHref}>
                                     <LuLogIn />
                                     Login
-                                </a>
+                                </NavLink>
                             </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>

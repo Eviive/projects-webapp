@@ -9,7 +9,7 @@ interface Props {
 export const Loader: FC<Props> = props => {
     const loader = (
         <div className="grid grow place-items-center">
-            <LuLoaderCircle className="animate-spin" />
+            <LuLoaderCircle className="animate-spin min-w-7 min-h-7" />
         </div>
     );
 

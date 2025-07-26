@@ -5,7 +5,7 @@ import type { Info } from "types/health";
 import type { QueryLoaderFunction } from "types/loader";
 
 export const infoQueryOptions = queryOptions({
-    queryFn: InfoService.info,
+    queryFn: InfoService.findApiInfo,
     queryKey: ["info"]
 });
 

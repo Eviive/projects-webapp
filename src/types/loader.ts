@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
 import type { LoaderFunctionArgs } from "react-router";
-import type { Authority } from "types/auth";
+import type { Authority } from "types/auth/authorities";
 
 export type LoaderFunction<D> = (args: LoaderFunctionArgs) => D | Promise<D>;
 

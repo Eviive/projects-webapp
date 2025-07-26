@@ -1,10 +1,10 @@
 import { requestData } from "api/client";
-import type { CurrentUser } from "types/auth";
+import type { CurrentUser } from "types/auth/user";
 
 const URL = "/api/me";
 
-const me = () => requestData<CurrentUser>(URL);
+const findMe = () => requestData<CurrentUser>(URL);
 
 export const MeService = {
-    me
+    findMe
 };

@@ -5,17 +5,13 @@ import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
+import { getImageUrl } from "libs/assets/image";
 import { PROJECT_PLACEHOLDER, SKILL_PLACEHOLDER } from "libs/constants";
-import { getImageUrl } from "libs/image";
+import { monthYearFormatter } from "libs/intl-formatter";
 import type { FC } from "react";
 import { MdEdit } from "react-icons/md";
 
 import type { Project } from "types/entities/project";
-
-const dateFormatter = Intl.DateTimeFormat("en-GB", {
-    month: "long",
-    year: "numeric"
-});
 
 interface Props {
     project: Project;
@@ -46,7 +42,7 @@ export const ProjectCard: FC<Props> = ({ project, isOptimistic }) => {
                             {project.featured && <ProjectFeaturedBadge />}
                         </CardTitle>
                         <CardDescription>
-                            {dateFormatter.format(new Date(project.creationDate))}
+                            {monthYearFormatter.format(new Date(project.creationDate))}
                         </CardDescription>
                     </div>
                     <RequireAuthority authority={["update:project", "delete:project"]}>

@@ -11,7 +11,7 @@ export const Defer: FC<Props> = props => {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setIsReady(true);
-        }, props.delay ?? 150);
+        }, props.delay ?? 200);
 
         return () => {
             clearTimeout(timeout);

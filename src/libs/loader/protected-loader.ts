@@ -1,7 +1,7 @@
 import { getAuthContext } from "contexts/auth-context";
-import { hasEveryAuthority } from "libs/auth";
+import { hasEveryAuthority } from "libs/auth/authorities";
 import { redirect } from "react-router";
-import type { Authority } from "types/auth";
+import type { Authority } from "types/auth/authorities";
 import type {
     LoaderFunction,
     ProtectedLoaderFunction,

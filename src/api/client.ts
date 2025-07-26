@@ -2,9 +2,9 @@ import { initInterceptors } from "api/interceptors";
 import type { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from "axios";
 import axios, { AxiosHeaders } from "axios";
 import { getAuthContext } from "contexts/auth-context";
-import { hasEveryAuthority } from "libs/auth";
+import { hasEveryAuthority } from "libs/auth/authorities";
 import { toast } from "sonner";
-import type { Authority } from "types/auth";
+import type { Authority } from "types/auth/authorities";
 
 export const httpClient = axios.create({
     headers: {
