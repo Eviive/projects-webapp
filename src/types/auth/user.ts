@@ -8,7 +8,6 @@ export interface CurrentLoggedInUser {
     name: string;
     avatar: string;
     authorities: Authority[];
-    exp: number;
 }
 
 interface CurrentAnonymousUser {

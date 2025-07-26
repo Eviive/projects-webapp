@@ -69,7 +69,7 @@ export const Login: FC = () => {
                                         </Button>
                                     );
                                 })}
-                            {loginQuery.isLoading && <Loader defer />}
+                            {loginQuery.isLoading && <Loader className="size-7" defer />}
                             {loginQuery.isError && "Failed to load login options."}
                         </div>
                     </CardContent>

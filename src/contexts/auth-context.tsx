@@ -7,8 +7,6 @@ export interface IAuthContext {
 
 let authContext: IAuthContext | null = null;
 
-export const getOptionalAuthContext = (): IAuthContext | null => authContext;
-
 export const getAuthContext = (): IAuthContext => {
     if (authContext === null) {
         throw new Error("The authContext has not been initialized");

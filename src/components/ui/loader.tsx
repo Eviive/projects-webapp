@@ -1,15 +1,17 @@
 import { Defer } from "components/ui/defer";
+import { cn } from "libs/utils/style";
 import type { FC } from "react";
 import { LuLoaderCircle } from "react-icons/lu";
 
 interface Props {
+    className?: string;
     defer?: boolean | number;
 }
 
 export const Loader: FC<Props> = props => {
     const loader = (
         <div className="grid grow place-items-center">
-            <LuLoaderCircle className="animate-spin min-w-7 min-h-7" />
+            <LuLoaderCircle className={cn("animate-spin", props.className)} />
         </div>
     );
 
