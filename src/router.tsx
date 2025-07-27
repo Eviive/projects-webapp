@@ -9,21 +9,20 @@ export const router = createBrowserRouter([
         path: "/",
         element: <App />,
         errorElement: <ErrorPage />,
+        HydrateFallback: () => null,
         children: [
             {
                 path: "/",
                 lazy: async () => ({
                     Component: (await import("layouts/main")).Main
                 }),
-                HydrateFallback: () => null,
                 children: [
                     {
                         index: true,
                         lazy: async () => ({
                             Component: (await import("pages/home/home")).Home,
                             loader: (await import("pages/home/home.loader")).homeLoader(queryClient)
-                        }),
-                        HydrateFallback: () => null
+                        })
                     },
                     {
                         path: "/projects",
@@ -38,8 +37,7 @@ export const router = createBrowserRouter([
                                     authorities
                                 }
                             };
-                        },
-                        HydrateFallback: () => null
+                        }
                     },
                     {
                         path: "/skills",
@@ -55,8 +53,7 @@ export const router = createBrowserRouter([
                                     authorities
                                 }
                             };
-                        },
-                        HydrateFallback: () => null
+                        }
                     }
                 ]
             },
@@ -64,9 +61,8 @@ export const router = createBrowserRouter([
                 path: "/login",
                 lazy: async () => ({
                     Component: (await import("pages/login/login")).Login,
-                    loader: (await import("pages/login/login.loader")).loginLoader
-                }),
-                HydrateFallback: () => null
+                    loader: (await import("pages/login/login.loader")).loginLoader(queryClient)
+                })
             }
         ]
     }

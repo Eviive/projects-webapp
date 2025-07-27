@@ -5,6 +5,7 @@ import { SkillCard } from "components/skills/skill-card";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
 import { SkillSortButton, sortSkillsMutationKey } from "components/skills/skill-sort-button";
 import { Button } from "components/ui/button";
+import { Defer } from "components/ui/defer";
 import { ErrorAlert } from "components/ui/error-alert";
 import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
@@ -71,15 +72,15 @@ export const Skills: FC = () => {
                         </Grid>
                         {skillsQuery.hasNextPage && (
                             <Button
-                                className="self-center"
+                                className="self-center disabled:opacity-100"
                                 onClick={() => skillsQuery.fetchNextPage()}
                                 disabled={skillsQuery.isFetchingNextPage}
                             >
                                 {skillsQuery.isFetchingNextPage ? (
-                                    <>
+                                    <Defer fallback="Load more">
                                         <Loader />
                                         Loading more...
-                                    </>
+                                    </Defer>
                                 ) : (
                                     "Load more"
                                 )}

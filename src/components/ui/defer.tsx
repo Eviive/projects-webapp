@@ -1,8 +1,9 @@
-import type { FC, PropsWithChildren } from "react";
+import type { FC, PropsWithChildren, ReactNode } from "react";
 import { useEffect, useState } from "react";
 
 type Props = PropsWithChildren<{
     delay?: number;
+    fallback?: ReactNode;
 }>;
 
 export const Defer: FC<Props> = props => {
@@ -18,5 +19,5 @@ export const Defer: FC<Props> = props => {
         };
     }, [props.delay]);
 
-    return isReady ? props.children : null;
+    return isReady ? props.children : props.fallback;
 };
