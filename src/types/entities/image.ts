@@ -46,7 +46,7 @@ export const imageSchema = imageCreationWithFileSchema
     })
     .extend({
         id: z.number(),
-        uuid: z.nullable(z.string())
+        uuid: z.optional(z.string())
     });
 
 export type Image = z.infer<typeof imageSchema>;

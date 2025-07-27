@@ -156,7 +156,7 @@ export const SkillForm: FC<Props> = props => {
                 <div className="flex w-full justify-center gap-3">
                     {!!props.skill && (
                         <Button
-                            className="w-full max-w-[50%]"
+                            className="grow"
                             variant="destructive"
                             disabled={isSubmitting}
                             onClick={handleDelete}
@@ -164,7 +164,7 @@ export const SkillForm: FC<Props> = props => {
                             Delete
                         </Button>
                     )}
-                    <Button className="w-full max-w-[50%]" type="submit" disabled={isSubmitting}>
+                    <Button className="grow" type="submit" disabled={isSubmitting}>
                         Submit
                     </Button>
                 </div>

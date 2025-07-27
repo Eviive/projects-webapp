@@ -41,7 +41,7 @@ export const request = <T = undefined, D = undefined>(
         axiosHeaders = headers ?? {};
     }
 
-    if (config?.data !== undefined && axiosHeaders["Content-Type"] !== undefined) {
+    if (config?.data !== undefined && axiosHeaders["Content-Type"] === undefined) {
         axiosHeaders["Content-Type"] = "application/json";
     }
 

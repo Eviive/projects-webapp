@@ -169,7 +169,7 @@ export const ProjectForm: FC<Props> = props => {
                 <div className="col-span-2 mt-3 flex w-full justify-center gap-4">
                     {!!props.project && (
                         <Button
-                            className="w-full max-w-[50%]"
+                            className="grow"
                             variant="destructive"
                             disabled={isSubmitting}
                             onClick={handleDelete}
@@ -177,7 +177,7 @@ export const ProjectForm: FC<Props> = props => {
                             Delete
                         </Button>
                     )}
-                    <Button className="w-full max-w-[50%]" type="submit" disabled={isSubmitting}>
+                    <Button className="grow" type="submit" disabled={isSubmitting}>
                         Submit
                     </Button>
                 </div>
