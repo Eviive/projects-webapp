@@ -1,6 +1,6 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import eslint from "vite-plugin-eslint";
+import eslint from "vite-plugin-eslint2";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 
 /** @type {Partial<import("babel-plugin-react-compiler").PluginOptions>} */
