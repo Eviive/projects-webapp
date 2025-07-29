@@ -1,22 +1,6 @@
 import { AxiosError } from "axios";
-import { z } from "zod";
-
-const problemDetailSchema = z.object({
-    title: z
-        .string({
-            required_error: "Title is required",
-            invalid_type_error: "Title must be a string"
-        })
-        .min(1, "Title is required"),
-    detail: z
-        .string({
-            required_error: "Detail is required",
-            invalid_type_error: "Detail must be a string"
-        })
-        .min(1, "Detail is required")
-});
-
-type TitleAndDetail = z.infer<typeof problemDetailSchema>;
+import type { TitleAndDetail } from "types/error";
+import { problemDetailSchema } from "types/error";
 
 export const getTitleAndDetail = (e: unknown): TitleAndDetail => {
     if (e instanceof AxiosError && e.response !== undefined) {
