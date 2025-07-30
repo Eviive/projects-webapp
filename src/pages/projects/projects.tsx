@@ -89,7 +89,13 @@ export const Projects: FC = () => {
                 </div>
                 {projectsQuery.isSuccess && (
                     <>
-                        <Grid minWidth="350px" gap="2.5em" columnCount={3} centerHorizontally>
+                        <Grid
+                            className="grow"
+                            minWidth="350px"
+                            gap="2.5em"
+                            columnCount={3}
+                            centerHorizontally
+                        >
                             {optimisticProjects.map(project => (
                                 <ProjectCard
                                     key={project.id}

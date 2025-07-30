@@ -9,4 +9,6 @@ RUN npm ci && \
 
 FROM nginx:stable-alpine
 
+COPY /app/.docker/nginx/webapp.conf /etc/nginx/conf.d/default.conf
+
 COPY --from=build /app/dist /usr/share/nginx/html
