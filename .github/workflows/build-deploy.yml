@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: 'true'
 
       - id: docker-metadata
         name: Docker metadata
@@ -34,6 +36,7 @@ jobs:
       - name: Build and Push to Docker Hub
         uses: docker/build-push-action@v6
         with:
+          context: .
           tags: ${{ steps.docker-metadata.outputs.tags }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           push: true
