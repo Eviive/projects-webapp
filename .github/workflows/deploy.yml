@@ -54,7 +54,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION: ${{ needs.build.outputs.version }}
-      IMAGE: ${{ vars.DOCKER_HUB_USERNAME }}/${{ vars.DOCKER_HUB_REPOSITORY }}:${{ env.VERSION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,7 +65,7 @@ jobs:
 
       - name: Update image
         working-directory: ${{ env.APP }}/overlays/production
-        run: kustomize edit set image ${{ env.APP }}=${{ env.IMAGE }}
+        run: kustomize edit set image ${{ env.APP }}=${{ vars.DOCKER_HUB_USERNAME }}/${{ vars.DOCKER_HUB_REPOSITORY }}:${{ needs.build.outputs.version }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
