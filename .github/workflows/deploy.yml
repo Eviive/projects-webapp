@@ -14,7 +14,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.docker-metadata.outputs.tags[0] }}
+      version: ${{ steps.docker-metadata.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,6 +52,9 @@ jobs:
     needs: build
     #if: success() && startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
+      IMAGE: ${{ vars.DOCKER_HUB_USERNAME }}/${{ vars.DOCKER_HUB_REPOSITORY }}:${{ env.VERSION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,13 +66,13 @@ jobs:
 
       - name: Update image
         working-directory: ${{ env.APP }}/overlays/production
-        run: kustomize edit set image ${{ env.APP }}=${{ vars.DOCKER_HUB_USERNAME }}/${{ vars.DOCKER_HUB_REPOSITORY }}:${{ needs.build.outputs.version }}
+        run: kustomize edit set image ${{ env.APP }}=${{ env.IMAGE }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: 'ops(${{ env.APP }}): ${{ needs.build.outputs.version }}'
-          branch: release/${{ env.APP }}/${{ needs.build.outputs.version }}
-          title: 'Release ${{ env.APP }}: ${{ needs.build.outputs.version }}'
+          commit-message: 'ops(${{ env.APP }}): ${{ env.VERSION }}'
+          branch: release/${{ env.APP }}/${{ env.VERSION }}
+          title: 'Release ${{ env.APP }}: ${{ env.VERSION }}'
           body: ''
           assignees: ${{ github.actor }}
