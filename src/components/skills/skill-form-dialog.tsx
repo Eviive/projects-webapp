@@ -1,6 +1,6 @@
 import type { ProjectFormType } from "components/projects/project-form";
 import { SkillForm } from "components/skills/skill-form";
-import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
+import { DialogDrawer } from "components/ui/dialog-drawer";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import type { FC, ReactNode } from "react";
@@ -9,13 +9,13 @@ import type { FormState } from "react-hook-form";
 
 import type { Skill } from "types/entities/skill";
 
-type EditionProps = {
+interface EditionProps {
     skill: Skill;
-};
+}
 
-type CreationProps = {
+interface CreationProps {
     skill?: never;
-};
+}
 
 type Props = {
     trigger: ReactNode;
@@ -33,16 +33,21 @@ export const SkillFormDialog: FC<Props> = props => {
     return (
         <TooltipProvider>
             <Tooltip>
-                <ResponsiveDrawerDialog
+                <DialogDrawer
                     trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
                     header={{
-                        title: props.skill ? `Editing ${props.skill.name}` : "Creating skill"
+                        title: props.skill ? "Editing " + props.skill.name : "Creating skill",
+                        description: props.skill
+                            ? "The skill's information can be edited using this form."
+                            : "Create a new skill by filling out this form."
                     }}
                     content={
                         <SkillForm
                             skill={props.skill ?? null}
                             state={formState}
-                            closeDialog={() => setOpen(false)}
+                            closeDialog={() => {
+                                setOpen(false);
+                            }}
                         />
                     }
                     open={open}

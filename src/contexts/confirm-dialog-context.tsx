@@ -1,26 +1,19 @@
 import { ConfirmDialog } from "components/ui/confirm-dialog";
-import {
-    createContext,
-    type FC,
-    type PropsWithChildren,
-    useCallback,
-    useContext,
-    useRef,
-    useState
-} from "react";
+import type { FC, PropsWithChildren } from "react";
+import { createContext, use, useRef, useState } from "react";
 
-type ConfirmDialogOpenState = {
+interface ConfirmDialogOpenState {
     open: true;
     title: string;
     body: string | null;
     confirmButton: string;
     confirmDanger?: boolean;
     cancelButton: string;
-};
+}
 
-type ConfirmDialogCloseState = {
+interface ConfirmDialogCloseState {
     open: false;
-};
+}
 
 export type ConfirmDialogState = ConfirmDialogOpenState | ConfirmDialogCloseState;
 
@@ -35,9 +28,9 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
         open: false
     });
 
-    const resolveRef = useRef<(resolve: boolean) => void>();
+    const resolveRef = useRef<(resolve: boolean) => void>(null);
 
-    const dialog = useCallback(async (params?: ConfirmDialogParams) => {
+    const dialog = async (params?: ConfirmDialogParams) => {
         setDialogState({
             open: true,
             title: params?.title ?? "Are you sure?",
@@ -50,10 +43,10 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
         return new Promise<boolean>(resolve => {
             resolveRef.current = resolve;
         });
-    }, []);
+    };
 
     return (
-        <ConfirmDialogContext.Provider value={dialog}>
+        <ConfirmDialogContext value={dialog}>
             {children}
             <ConfirmDialog
                 state={dialogState}
@@ -62,12 +55,12 @@ export const ConfirmDialogProvider: FC<PropsWithChildren> = ({ children }) => {
                     setDialogState({ open: false });
                 }}
             />
-        </ConfirmDialogContext.Provider>
+        </ConfirmDialogContext>
     );
 };
 
 export const useConfirmDialogContext = () => {
-    const confirm = useContext(ConfirmDialogContext);
+    const confirm = use(ConfirmDialogContext);
     if (confirm === null) {
         throw new Error("useConfirm called without ConfirmDialogContext");
     }

@@ -1,17 +1,17 @@
-import { request } from "api/client";
+import { requestData } from "api/client";
 import { buildFormData } from "libs/utils/form-data";
 import type { DndItem } from "types/dnd";
 import type { Project, ProjectCreation } from "types/entities/project";
 import type { ProjectLight } from "types/entities/project-light";
-import type { Page } from "types/pagination";
+import type { Page } from "types/pagination/page";
 
-const URL = "project";
+const URL = "/api/project";
 
 export const PROJECTS_PAGE_SIZE_OPTIONS = [6, 12, 18, 24, 30] as const;
 export const PROJECTS_DEFAULT_PAGE_SIZE = PROJECTS_PAGE_SIZE_OPTIONS[0];
 
 const findPage = (page?: number, size: number = PROJECTS_DEFAULT_PAGE_SIZE, search?: string) =>
-    request<Page<Project>>(`/${URL}/page`, {
+    requestData<Page<Project>>(`${URL}/page`, {
         params: {
             page,
             size,
@@ -21,7 +21,7 @@ const findPage = (page?: number, size: number = PROJECTS_DEFAULT_PAGE_SIZE, sear
     });
 
 const findAllLight = async () => {
-    const lightProjects = await request<ProjectLight[]>(`/${URL}/light`, {
+    const lightProjects = await requestData<ProjectLight[]>(`${URL}/light`, {
         requiredAuthorities: ["read:project"]
     });
     lightProjects.sort((a, b) => a.sort - b.sort);
@@ -30,14 +30,14 @@ const findAllLight = async () => {
 
 const create = (project: ProjectCreation, file?: File | null) => {
     if (!file) {
-        return request<Project, ProjectCreation>(`/${URL}`, {
+        return requestData<Project, ProjectCreation>(URL, {
             method: "POST",
             data: project,
             requiredAuthorities: ["create:project"]
         });
     }
 
-    return request<Project, FormData>(`/${URL}/with-image`, {
+    return requestData<Project, FormData>(`${URL}/with-image`, {
         method: "POST",
         data: buildProjectFormData(project, file),
         headers: {
@@ -49,14 +49,14 @@ const create = (project: ProjectCreation, file?: File | null) => {
 
 const update = (project: Project, file?: File | null) => {
     if (!file) {
-        return request<Project, Project>(`/${URL}/${project.id}`, {
+        return requestData<Project, Project>(`${URL}/${project.id.toString()}`, {
             method: "PUT",
             data: project,
             requiredAuthorities: ["update:project"]
         });
     }
 
-    return request<Project, FormData>(`/${URL}/${project.id}/with-image`, {
+    return requestData<Project, FormData>(`${URL}/${project.id.toString()}/with-image`, {
         method: "PUT",
         data: buildProjectFormData(project, file),
         headers: {
@@ -67,7 +67,7 @@ const update = (project: Project, file?: File | null) => {
 };
 
 const sort = (sorts: DndItem[]) => {
-    return request<void, DndItem[]>(`/${URL}/sort`, {
+    return requestData<undefined, DndItem[]>(`${URL}/sort`, {
         method: "PATCH",
         data: sorts,
         requiredAuthorities: ["update:project"]
@@ -75,7 +75,7 @@ const sort = (sorts: DndItem[]) => {
 };
 
 const deleteProject = (id: number) =>
-    request<void>(`/${URL}/${id}`, {
+    requestData(`${URL}/${id.toString()}`, {
         method: "DELETE",
         requiredAuthorities: ["delete:project"]
     });

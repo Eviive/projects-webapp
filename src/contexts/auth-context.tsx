@@ -1,10 +1,9 @@
 import { useSyncExternalStore } from "react";
-import type { CurrentUser } from "types/auth";
+import type { CurrentUser } from "types/auth/user";
 
-export type IAuthContext = {
+export interface IAuthContext {
     currentUser: CurrentUser;
-    accessToken: string | null;
-};
+}
 
 let authContext: IAuthContext | null = null;
 
@@ -16,7 +15,7 @@ export const getAuthContext = (): IAuthContext => {
     return authContext;
 };
 
-export const setAuthContext = async (newAuthContext: IAuthContext) => {
+export const setAuthContext = (newAuthContext: IAuthContext) => {
     authContext = newAuthContext;
     notify();
 };

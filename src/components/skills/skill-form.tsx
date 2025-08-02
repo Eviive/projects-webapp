@@ -9,6 +9,7 @@ import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import type { FormState, SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type {
     Skill,
     SkillCreation,
@@ -19,11 +20,11 @@ import { skillCreationWithFileSchema, skillEditionWithFileSchema } from "types/e
 
 export type SkillFormType = SkillCreationWithFile | SkillEditionWithFile;
 
-type Props = {
+interface Props {
     skill: Skill | null;
     state: Pick<FormState<SkillFormType>, "isDirty">;
     closeDialog: () => void;
-};
+}
 
 export const SkillForm: FC<Props> = props => {
     const confirm = useConfirmDialogContext();
@@ -63,7 +64,10 @@ export const SkillForm: FC<Props> = props => {
     const submitHandler: SubmitHandler<SkillFormType> = async data => {
         if (isSubmitting) return;
 
-        if (!isDirty) return props.closeDialog();
+        if (!isDirty) {
+            props.closeDialog();
+            return;
+        }
 
         startSubmitting();
 
@@ -100,10 +104,9 @@ export const SkillForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error(
-                editing ? "Skill update failed:" : "Skill creation failed:",
-                getDetail(e)
-            );
+            const message = editing ? "Skill update failed:" : "Skill creation failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }
@@ -123,7 +126,10 @@ export const SkillForm: FC<Props> = props => {
             confirmDanger: true
         });
 
-        if (!confirmed) return endSubmitting();
+        if (!confirmed) {
+            endSubmitting();
+            return;
+        }
 
         try {
             await SkillService.delete(props.skill.id);
@@ -134,7 +140,9 @@ export const SkillForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error("Skill deletion failed:", getDetail(e));
+            const message = "Skill deletion failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }
@@ -148,7 +156,7 @@ export const SkillForm: FC<Props> = props => {
                 <div className="flex w-full justify-center gap-3">
                     {!!props.skill && (
                         <Button
-                            className="w-full max-w-[50%]"
+                            className="grow"
                             variant="destructive"
                             disabled={isSubmitting}
                             onClick={handleDelete}
@@ -156,7 +164,7 @@ export const SkillForm: FC<Props> = props => {
                             Delete
                         </Button>
                     )}
-                    <Button className="w-full max-w-[50%]" type="submit" disabled={isSubmitting}>
+                    <Button className="grow" type="submit" disabled={isSubmitting}>
                         Submit
                     </Button>
                 </div>

@@ -1,18 +1,17 @@
+import styles from "layouts/grid.module.css";
 import { cn } from "libs/utils/style";
 import type { CSSProperties, FC, PropsWithChildren } from "react";
 
-import styles from "./grid.module.scss";
-
-type Props = {
+type Props = PropsWithChildren<{
     className?: string;
     minWidth?: string;
     gap?: string;
     columnCount?: number;
     centerVertically?: boolean;
     centerHorizontally?: boolean;
-};
+}>;
 
-export const Grid: FC<PropsWithChildren<Props>> = props => {
+export const Grid: FC<Props> = props => {
     return (
         <ul
             className={cn(styles.layout, props.className)}

@@ -26,8 +26,8 @@ export const ProjectSortButton: FC = () => {
                     itemsName="projects"
                     trigger={
                         <TooltipTrigger asChild>
-                            <Button className="text-foreground-500" variant="outline" size="icon">
-                                <MdDragHandle size={24} />
+                            <Button variant="outline" size="icon">
+                                <MdDragHandle className="size-3/4" />
                             </Button>
                         </TooltipTrigger>
                     }

@@ -1,26 +1,27 @@
 import { AxiosError } from "axios";
-
-type TitleAndDetail = { title: string; detail: string };
+import type { TitleAndDetail } from "types/error";
+import { problemDetailSchema } from "types/error";
 
 export const getTitleAndDetail = (e: unknown): TitleAndDetail => {
-    import.meta.env.PROD || console.error(e);
+    if (e instanceof AxiosError && e.response !== undefined) {
+        const dataParseResult = problemDetailSchema.safeParse(e.response.data);
 
-    if (e instanceof AxiosError) {
-        return {
-            title: e.response?.data?.title ?? e.name,
-            detail: e.response?.data?.detail ?? e.message
-        };
-    } else if (e instanceof Error) {
+        if (dataParseResult.success) {
+            return dataParseResult.data;
+        }
+    }
+
+    if (e instanceof Error) {
         return {
             title: e.name,
             detail: e.message
         };
-    } else {
-        return {
-            title: "Unknown error",
-            detail: "Please contact an administrator if this error persists."
-        };
     }
+
+    return {
+        title: "Unknown error",
+        detail: "Please contact an administrator if this error persists."
+    };
 };
 
 export const getDetail = (e: unknown): TitleAndDetail["detail"] => {

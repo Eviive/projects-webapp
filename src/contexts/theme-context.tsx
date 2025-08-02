@@ -1,6 +1,6 @@
 import { useTheme } from "hooks/use-theme";
 import type { FC, PropsWithChildren } from "react";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, use, useMemo } from "react";
 
 type IThemeContext = ReturnType<typeof useTheme>;
 
@@ -20,11 +20,11 @@ export const ThemeContextProvider: FC<PropsWithChildren> = ({ children }) => {
         [theme, systemTheme, setLightTheme, setDarkTheme, setSystemTheme]
     );
 
-    return <ThemeContext.Provider value={themeContextValue}>{children}</ThemeContext.Provider>;
+    return <ThemeContext value={themeContextValue}>{children}</ThemeContext>;
 };
 
 export const useThemeContext = (): IThemeContext => {
-    const themeContext = useContext(ThemeContext);
+    const themeContext = use(ThemeContext);
     if (themeContext === null) {
         throw new Error("useThemeContext called without ThemeContextProvider");
     }

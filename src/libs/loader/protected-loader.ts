@@ -1,6 +1,7 @@
-import { hasEveryAuthority } from "libs/auth";
-import { redirect } from "react-router-dom";
-import type { Authority } from "types/auth";
+import { getAuthContext } from "contexts/auth-context";
+import { hasEveryAuthority } from "libs/auth/authorities";
+import { redirect } from "react-router";
+import type { Authority } from "types/auth/authorities";
 import type {
     LoaderFunction,
     ProtectedLoaderFunction,
@@ -13,26 +14,23 @@ export const protectedLoader = <D>(
     loader: LoaderFunction<D>
 ): ProtectedLoaderFunction<D> => {
     return async args => {
-        if (hasEveryAuthority(authorities)) {
+        const currentUser = getAuthContext().currentUser;
+
+        if (hasEveryAuthority(authorities, currentUser)) {
             return loader(args);
         }
 
-        let redirectPath = new URL(args.request.url).pathname;
+        const url = new URL(args.request.url);
 
-        const routerBaseUrl = import.meta.env.VITE_ROUTER_BASE_URL;
-        if (routerBaseUrl && redirectPath?.startsWith(routerBaseUrl)) {
-            redirectPath = redirectPath.substring(routerBaseUrl.length);
-        }
-
-        if (redirectPath.trim() === "") {
+        if (url.pathname !== "/" || url.search !== "" || url.hash !== "") {
             return redirect("/login");
         }
 
-        const searchParams = new URLSearchParams();
+        const searchParams = new URLSearchParams({
+            redirect: url.pathname + url.search + url.hash
+        });
 
-        searchParams.set("redirect", redirectPath);
-
-        return redirect(`/login?${searchParams.toString()}`);
+        return redirect("/login?" + searchParams.toString());
     };
 };
 

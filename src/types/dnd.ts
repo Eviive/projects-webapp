@@ -1,4 +1,4 @@
-export type DndItem = {
+export interface DndItem {
     id: number;
     sort: number;
-};
+}

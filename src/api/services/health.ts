@@ -1,25 +1,10 @@
-import { request } from "api/client";
-import type { Health, HttpExchange, Info } from "types/health";
+import { requestData } from "api/client";
+import type { Info } from "types/health";
 
-const URL = "actuator";
+const URL = "/api/info";
 
-const info = () => request<Info>(`/${URL}/info`);
+const findApiInfo = () => requestData<Info>(URL);
 
-const health = () => request<Health>(`/${URL}/health`);
-
-const httpExchanges = async (): Promise<HttpExchange[]> => {
-    const data = await request<{ exchanges: HttpExchange[] }>(`/${URL}/httpexchanges`, {
-        requiredAuthorities: ["read:actuator"]
-    });
-
-    return data.exchanges.map(exchange => ({
-        ...exchange,
-        uuid: crypto.randomUUID()
-    }));
-};
-
-export const HealthService = {
-    info,
-    health,
-    httpExchanges
+export const InfoService = {
+    findApiInfo
 };

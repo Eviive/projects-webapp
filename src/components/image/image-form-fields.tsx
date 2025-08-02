@@ -4,13 +4,13 @@ import type { FC } from "react";
 import { useFormContext } from "react-hook-form";
 import type { ImageCreationWithFile } from "types/entities/image";
 
-type Props = {
+interface Props {
     classNames?: {
         imageFile?: string;
         imageAltEn?: string;
         imageAltFr?: string;
     };
-};
+}
 
 export const ImageFormFields: FC<Props> = ({ classNames }) => {
     const form = useFormContext<{ image: ImageCreationWithFile }>();
@@ -28,8 +28,10 @@ export const ImageFormFields: FC<Props> = ({ classNames }) => {
                                 {...field}
                                 type="file"
                                 value={undefined}
-                                onChange={e => field.onChange(e.target.files)}
-                                className="cursor-pointer file:cursor-pointer file:text-foreground"
+                                onChange={e => {
+                                    field.onChange(e.target.files);
+                                }}
+                                className="file:text-foreground cursor-pointer file:cursor-pointer"
                             />
                         </FormControl>
                         <FormMessage />

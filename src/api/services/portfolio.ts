@@ -1,9 +1,9 @@
-import { request } from "api/client";
+import { requestData } from "api/client";
 
-const URL = "portfolio";
+const URL = "/api/portfolio";
 
 const revalidate = () =>
-    request(`/${URL}/revalidate`, {
+    requestData(`${URL}/revalidate`, {
         method: "POST",
         requiredAuthorities: ["revalidate:portfolio"]
     });

@@ -10,47 +10,52 @@ import { z } from "zod";
 export const projectCreationSchema = z.object({
     title: z
         .string({
-            required_error: "Title is required",
-            invalid_type_error: "Title must be a string"
+            error: ({ input }) =>
+                input === undefined ? "Title is required" : "Title must be a string"
         })
         .min(1, "Title is required")
         .max(50, "Title must be at most 50 characters"),
     descriptionEn: z
         .string({
-            required_error: "Description (English) is required",
-            invalid_type_error: "Description (English) must be a string"
+            error: ({ input }) =>
+                input === undefined
+                    ? "Description (English) is required"
+                    : "Description (English) must be a string"
         })
         .min(1, "Description (English) is required")
         .max(510, "Description (English) must be at most 500 characters"),
     descriptionFr: z
         .string({
-            required_error: "Description (French) is required",
-            invalid_type_error: "Description (French) must be a string"
+            error: ({ input }) =>
+                input === undefined
+                    ? "Description (French) is required"
+                    : "Description (French) must be a string"
         })
         .min(1, "Description (French) is required")
         .max(510, "Description (French) must be at most 500 characters"),
-    creationDate: z
-        .string({
-            required_error: "Creation date is required"
-        })
-        .date("Creation date must be a valid date"),
+    creationDate: z.date({
+        error: ({ input }) =>
+            input === undefined ? "Creation date is required" : "Creation date must be a valid date"
+    }),
     repoUrl: z
-        .string({
-            required_error: "Repository URL is required",
-            invalid_type_error: "Repository URL must be a string"
+        .url({
+            error: ({ input }) =>
+                input === undefined
+                    ? "Repository URL is required"
+                    : "Repository URL must be a valid URL"
         })
-        .url("Repository URL must be a valid URL")
         .max(255, "Repository URL must be at most 255 characters"),
     demoUrl: z
-        .string({
-            required_error: "Demonstration URL is required",
-            invalid_type_error: "Demonstration URL must be a string"
+        .url({
+            error: ({ input }) =>
+                input === undefined
+                    ? "Demonstration URL is required"
+                    : "Demonstration URL must be a valid URL"
         })
-        .url("Demonstration URL must be a valid URL")
         .max(255, "Demonstration URL must be at most 255 characters"),
     featured: z.boolean({
-        required_error: "Featured is required",
-        invalid_type_error: "Featured must be a boolean"
+        error: ({ input }) =>
+            input === undefined ? "Featured is required" : "Featured must be a string"
     }),
     skills: z.array(skillSchema).min(1, "At least one skill is required"),
     image: imageCreationSchema
@@ -59,18 +64,19 @@ export const projectCreationSchema = z.object({
 export type ProjectCreation = z.infer<typeof projectCreationSchema>;
 
 // Project creation with file
-export const projectCreationWithFileSchema = projectCreationSchema.extend({
+export const projectCreationWithFileSchema = z.object({
+    ...projectCreationSchema.shape,
     image: imageCreationWithFileSchema
 });
 
 export type ProjectCreationWithFile = z.infer<typeof projectCreationWithFileSchema>;
 
 // Project
-export const projectSchema = projectCreationSchema.extend({
+export const projectSchema = z.object({
+    ...projectCreationSchema.shape,
     id: z.number(),
     sort: z.number({
-        required_error: "Sort is required",
-        invalid_type_error: "Sort must be a number"
+        error: ({ input }) => (input === undefined ? "Sort is required" : "Sort must be a string")
     }),
     image: imageSchema
 });

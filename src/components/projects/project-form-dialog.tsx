@@ -1,6 +1,6 @@
 import type { ProjectFormType } from "components/projects/project-form";
 import { ProjectForm } from "components/projects/project-form";
-import { ResponsiveDrawerDialog } from "components/ui/responsive-drawer-dialog";
+import { DialogDrawer } from "components/ui/dialog-drawer";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip";
 import { useConfirmDialogContext } from "contexts/confirm-dialog-context";
 import type { FC, ReactNode } from "react";
@@ -8,13 +8,13 @@ import { useState } from "react";
 import type { FormState } from "react-hook-form";
 import type { Project } from "types/entities/project";
 
-type EditionProps = {
+interface EditionProps {
     project: Project;
-};
+}
 
-type CreationProps = {
+interface CreationProps {
     project?: never;
-};
+}
 
 type Props = {
     trigger: ReactNode;
@@ -32,16 +32,23 @@ export const ProjectFormDialog: FC<Props> = props => {
     return (
         <TooltipProvider>
             <Tooltip>
-                <ResponsiveDrawerDialog
+                <DialogDrawer
                     trigger={<TooltipTrigger asChild>{props.trigger}</TooltipTrigger>}
                     header={{
-                        title: props.project ? `Editing ${props.project.title}` : "Creating project"
+                        title: props.project
+                            ? "Editing " + props.project.title
+                            : "Creating project",
+                        description: props.project
+                            ? "The project's information can be edited using this form."
+                            : "Create a new project by filling out this form."
                     }}
                     content={
                         <ProjectForm
                             project={props.project ?? null}
                             state={formState}
-                            closeDialog={() => setOpen(false)}
+                            closeDialog={() => {
+                                setOpen(false);
+                            }}
                         />
                     }
                     open={open}
