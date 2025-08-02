@@ -1,8 +1,8 @@
 import { Toaster } from "components/ui/sonner";
 import type { FC } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 
-import "./styles/reset.scss";
+import "styles.css";
 
 export const App: FC = () => {
     return (

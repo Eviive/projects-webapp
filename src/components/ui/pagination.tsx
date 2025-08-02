@@ -1,25 +1,19 @@
 import { Button } from "components/ui/button";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "components/ui/select";
 import type { FC } from "react";
 import { LuChevronLeft, LuChevronRight, LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50] as const;
 
-type SelectionProps = {
+interface SelectionProps {
     isSelectable: true;
     selectedRows: number;
     totalRows: number;
-};
+}
 
-type NoSelectionProps = {
+interface NoSelectionProps {
     isSelectable?: false;
-};
+}
 
 type Props = {
     itemName?: string;
@@ -47,11 +41,11 @@ export const Pagination: FC<Props> = props => {
     return (
         <div className="flex items-center justify-between px-2">
             {props.isSelectable && (
-                <div className="hidden flex-1 text-sm text-muted-foreground md:block">
+                <div className="text-muted-foreground hidden flex-1 text-sm md:block">
                     {props.selectedRows} of {props.totalRows} {itemName}(s) selected.
                 </div>
             )}
-            <div className="ms-auto flex flex-wrap items-center justify-end gap-y-2 space-x-6 lg:space-x-8">
+            <div className="ml-auto flex flex-wrap items-center justify-end space-x-6 gap-y-2 lg:space-x-8">
                 <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium first-letter:capitalize">
                         {itemName}s per page
@@ -85,39 +79,47 @@ export const Pagination: FC<Props> = props => {
                     <div className="flex items-center space-x-2">
                         <Button
                             variant="outline"
-                            className="hidden h-8 w-8 p-0 lg:flex"
-                            onClick={() => props.setPageIndex(0)}
+                            className="hidden size-8 p-0 lg:flex"
+                            onClick={() => {
+                                props.setPageIndex(0);
+                            }}
                             disabled={!props.getCanPreviousPage()}
                         >
                             <span className="sr-only">Go to first page</span>
-                            <LuChevronsLeft className="h-4 w-4" />
+                            <LuChevronsLeft className="size-4" />
                         </Button>
                         <Button
                             variant="outline"
-                            className="h-8 w-8 p-0"
-                            onClick={() => props.previousPage()}
+                            className="size-8 p-0"
+                            onClick={() => {
+                                props.previousPage();
+                            }}
                             disabled={!props.getCanPreviousPage()}
                         >
                             <span className="sr-only">Go to previous page</span>
-                            <LuChevronLeft className="h-4 w-4" />
+                            <LuChevronLeft className="size-4" />
                         </Button>
                         <Button
                             variant="outline"
-                            className="h-8 w-8 p-0"
-                            onClick={() => props.nextPage()}
+                            className="size-8 p-0"
+                            onClick={() => {
+                                props.nextPage();
+                            }}
                             disabled={!props.getCanNextPage()}
                         >
                             <span className="sr-only">Go to next page</span>
-                            <LuChevronRight className="h-4 w-4" />
+                            <LuChevronRight className="size-4" />
                         </Button>
                         <Button
                             variant="outline"
-                            className="hidden h-8 w-8 p-0 lg:flex"
-                            onClick={() => props.setPageIndex(props.getPageCount() - 1)}
+                            className="hidden size-8 p-0 lg:flex"
+                            onClick={() => {
+                                props.setPageIndex(props.getPageCount() - 1);
+                            }}
                             disabled={!props.getCanNextPage()}
                         >
                             <span className="sr-only">Go to last page</span>
-                            <LuChevronsRight className="h-4 w-4" />
+                            <LuChevronsRight className="size-4" />
                         </Button>
                     </div>
                 </div>

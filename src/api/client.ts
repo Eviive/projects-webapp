@@ -1,14 +1,12 @@
 import { initInterceptors } from "api/interceptors";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
-import axios from "axios";
+import type { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from "axios";
+import axios, { AxiosHeaders } from "axios";
 import { getAuthContext } from "contexts/auth-context";
-import { hasEveryAuthority } from "libs/auth";
-import { getDetail } from "libs/utils/error";
+import { hasEveryAuthority } from "libs/auth/authorities";
 import { toast } from "sonner";
-import type { Authority } from "types/auth";
+import type { Authority } from "types/auth/authorities";
 
 export const httpClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
         Accept: "application/json"
     },
@@ -19,48 +17,45 @@ initInterceptors(httpClient);
 
 type RequestConfig<D> = AxiosRequestConfig<D> & {
     requiredAuthorities?: Authority[];
-    needsAccessToken?: boolean;
-    showErrorToast?: boolean;
 };
 
-export const request = async <T = void, D = undefined>(url: string, config?: RequestConfig<D>) => {
-    const {
-        method = "GET",
-        data,
-        headers,
-        requiredAuthorities,
-        needsAccessToken = true,
-        showErrorToast = true,
-        ...restConfig
-    } = config ?? {};
+export const request = <T = undefined, D = undefined>(
+    url: string,
+    config?: RequestConfig<D>
+): Promise<AxiosResponse<T, D>> => {
+    const { headers, requiredAuthorities, ...requestConfig } = config ?? {};
 
-    if (requiredAuthorities !== undefined && !hasEveryAuthority(requiredAuthorities)) {
-        const message = "You do not have the required authorities to perform this action.";
-        toast.error(message);
-        throw new Error(message);
+    if (requiredAuthorities !== undefined) {
+        const currentUser = getAuthContext().currentUser;
+        if (!hasEveryAuthority(requiredAuthorities, currentUser)) {
+            const message = "You do not have the required authorities to perform this action.";
+            toast.error(message);
+            throw new Error(message);
+        }
     }
 
-    const accessToken = needsAccessToken ? getAuthContext().accessToken : null;
-
-    let res: AxiosResponse<T, D>;
-    try {
-        res = await httpClient.request<T, AxiosResponse<T, D>, D>({
-            url,
-            method,
-            data,
-            headers: {
-                ...(data && { "Content-Type": "application/json" }),
-                ...headers,
-                ...(accessToken !== null && {
-                    Authorization: `Bearer ${accessToken}`
-                })
-            },
-            ...restConfig
-        });
-    } catch (e) {
-        showErrorToast && toast.error(getDetail(e));
-        throw e;
+    let axiosHeaders: RawAxiosRequestHeaders;
+    if (headers instanceof AxiosHeaders) {
+        axiosHeaders = headers.toJSON();
+    } else {
+        axiosHeaders = headers ?? {};
     }
 
+    if (config?.data !== undefined && axiosHeaders["Content-Type"] === undefined) {
+        axiosHeaders["Content-Type"] = "application/json";
+    }
+
+    return httpClient.request<T, AxiosResponse<T, D>, D>({
+        url,
+        headers: axiosHeaders,
+        ...requestConfig
+    });
+};
+
+export const requestData = async <T = undefined, D = undefined>(
+    url: string,
+    config?: RequestConfig<D>
+): Promise<T> => {
+    const res = await request<T, D>(url, config);
     return res.data;
 };

@@ -19,9 +19,9 @@ import { clamp } from "libs/utils/math";
 import { updateSearchParams } from "libs/utils/search-params";
 import { getProjectsQueryParams, projectsQueryOptionsFn } from "pages/projects/projects.loader";
 import type { FC } from "react";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 export const Projects: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -36,43 +36,37 @@ export const Projects: FC = () => {
     );
 
     const [searchBarValue, setSearchBarValue] = useState(search ?? "");
-    const setSearchQueryParam = useCallback(
-        (search: string) =>
-            updateSearchParams(
-                setSearchParams,
-                {
-                    key: "search",
-                    value: search
-                },
-                {
-                    key: "page",
-                    value: null
-                }
-            ),
-        [setSearchParams]
-    );
+    const setSearchQueryParam = (search: string) => {
+        updateSearchParams(
+            setSearchParams,
+            {
+                key: "search",
+                value: search
+            },
+            {
+                key: "page",
+                value: null
+            }
+        );
+    };
 
     useLayoutEffect(() => {
         if (!projectsQuery.isSuccess) return;
 
         if (
-            projectsQuery.data.totalPages !== 0 &&
-            (page < 0 || page >= projectsQuery.data.totalPages)
+            projectsQuery.data.page.totalPages !== 0 &&
+            (page < 0 || page >= projectsQuery.data.page.totalPages)
         ) {
             updateSearchParams(setSearchParams, {
                 key: "page",
-                value: clamp(page, 0, projectsQuery.data.totalPages - 1)
+                value: clamp(page, 0, projectsQuery.data.page.totalPages - 1)
             });
         }
-    }, [page, projectsQuery.data?.totalPages, projectsQuery.isSuccess, setSearchParams]);
-
-    useEffect(() => {
-        document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
-    }, [page]);
+    }, [page, projectsQuery.data?.page.totalPages, projectsQuery.isSuccess, setSearchParams]);
 
     return (
         <Page title="Projects">
-            <div className="flex h-full w-full grow flex-col gap-9 px-[5%] py-9">
+            <div className="flex size-full grow flex-col gap-9 px-[5%] py-9">
                 <div className="flex w-full max-w-md items-center gap-2 self-center">
                     <SearchBar
                         value={searchBarValue}
@@ -86,12 +80,8 @@ export const Projects: FC = () => {
                         <ProjectSortButton />
                         <ProjectFormDialog
                             trigger={
-                                <Button
-                                    className="text-foreground-500"
-                                    variant="outline"
-                                    size="icon"
-                                >
-                                    <FaPlus size={20} />
+                                <Button variant="outline" size="icon">
+                                    <FaPlus />
                                 </Button>
                             }
                         />
@@ -99,12 +89,18 @@ export const Projects: FC = () => {
                 </div>
                 {projectsQuery.isSuccess && (
                     <>
-                        <Grid minWidth="350px" gap="2.5em" columnCount={3} centerHorizontally>
+                        <Grid
+                            className="grow"
+                            minWidth="350px"
+                            gap="2.5em"
+                            columnCount={3}
+                            centerHorizontally
+                        >
                             {optimisticProjects.map(project => (
                                 <ProjectCard
                                     key={project.id}
                                     project={project}
-                                    isOptimistic={optimisticProjectSorts[project.id] !== undefined}
+                                    isOptimistic={project.id in optimisticProjectSorts}
                                 />
                             ))}
                         </Grid>
@@ -112,34 +108,34 @@ export const Projects: FC = () => {
                             itemName="project"
                             pageSize={size}
                             pageSizeOptions={PROJECTS_PAGE_SIZE_OPTIONS}
-                            setPageSize={pageSize =>
+                            setPageSize={pageSize => {
                                 updateSearchParams(setSearchParams, {
                                     key: "size",
                                     value: pageSize
-                                })
-                            }
+                                });
+                            }}
                             pageIndex={page}
-                            setPageIndex={pageIndex =>
+                            setPageIndex={pageIndex => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",
                                     value: pageIndex
-                                })
-                            }
-                            getPageCount={() => projectsQuery.data.totalPages}
-                            getCanPreviousPage={() => !projectsQuery.data.first}
-                            getCanNextPage={() => !projectsQuery.data.last}
-                            previousPage={() =>
+                                });
+                            }}
+                            getPageCount={() => projectsQuery.data.page.totalPages}
+                            getCanPreviousPage={() => projectsQuery.data.page.previous}
+                            getCanNextPage={() => projectsQuery.data.page.next}
+                            previousPage={() => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",
                                     value: page - 1
-                                })
-                            }
-                            nextPage={() =>
+                                });
+                            }}
+                            nextPage={() => {
                                 updateSearchParams(setSearchParams, {
                                     key: "page",
                                     value: page + 1
-                                })
-                            }
+                                });
+                            }}
                         />
                     </>
                 )}

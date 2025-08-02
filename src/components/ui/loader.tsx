@@ -1,38 +1,27 @@
 import { Defer } from "components/ui/defer";
 import { cn } from "libs/utils/style";
-import type { CSSProperties, FC } from "react";
+import type { FC } from "react";
+import { LuLoaderCircle } from "react-icons/lu";
 
-import styles from "./loader.module.scss";
-
-type Props = {
-    size?: number;
-    color?: string;
-    absolute?: boolean;
+interface Props {
+    className?: string;
     defer?: boolean | number;
-};
+}
 
-export const Loader: FC<Props> = ({ size, color, absolute, defer }) => {
-    const loaderStyle = {
-        ...(size && { "--loader-size": `${size}px` }),
-        ...(color && { "--loader-color": color })
-    } as CSSProperties;
-
+export const Loader: FC<Props> = props => {
     const loader = (
         <div className="grid grow place-items-center">
-            <span
-                className={cn(
-                    styles.loader,
-                    "loader animate-spin rounded-full",
-                    absolute && "absolute"
-                )}
-                style={loaderStyle}
-            />
+            <LuLoaderCircle className={cn("animate-spin", props.className)} />
         </div>
     );
 
-    return defer ? (
-        <Defer delay={typeof defer === "number" ? defer : undefined}>{loader}</Defer>
-    ) : (
-        loader
+    if (!props.defer) {
+        return loader;
+    }
+
+    return (
+        <Defer delay={typeof props.defer === "number" ? props.defer : undefined}>
+            {loader}
+        </Defer>
     );
 };

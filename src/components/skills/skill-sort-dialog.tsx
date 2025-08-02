@@ -5,8 +5,8 @@ import { useSortDialogContext } from "components/common/sort-dialog/sort-dialog-
 import { sortSkillsMutationKey } from "components/skills/skill-sort-button";
 import { Loader } from "components/ui/loader";
 import { useOptimisticSort } from "hooks/use-optimistic-sort";
+import { getImageUrl } from "libs/assets/image";
 import { SKILL_PLACEHOLDER } from "libs/constants";
-import { getImageUrl } from "libs/image";
 import type { FC } from "react";
 
 export const SkillSortDialog: FC = () => {
@@ -28,7 +28,7 @@ export const SkillSortDialog: FC = () => {
             render={skill => (
                 <div className="flex grow items-center gap-3">
                     <img
-                        className="aspect-square object-cover drop-shadow-icon"
+                        className="drop-shadow-icon aspect-square object-cover"
                         src={getImageUrl(skill.image, "skills") ?? SKILL_PLACEHOLDER}
                         alt={skill.image.altEn}
                         width={36}
@@ -37,11 +37,13 @@ export const SkillSortDialog: FC = () => {
                     {skill.name}
                 </div>
             )}
-            closeDialog={resetSort => handleClose(false, resetSort)}
+            closeDialog={async resetSort => {
+                await handleClose(false, resetSort);
+            }}
             empty={skillsQuery.isSuccess && optimisticSkills.length === 0 && "No skills found."}
             loading={
                 skillsQuery.isLoading && (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
                         <Loader />
                         Loading skills...
                     </div>

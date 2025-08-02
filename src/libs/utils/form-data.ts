@@ -2,15 +2,15 @@ type FormDataPart = {
     name: string;
 } & (FormDataPartJson | FormDataPartBlob);
 
-type FormDataPartJson = {
+interface FormDataPartJson {
     type: "json";
     value: unknown;
-};
+}
 
-type FormDataPartBlob = {
+interface FormDataPartBlob {
     type: "blob";
     value: Blob;
-};
+}
 
 export const buildFormData = (...parts: FormDataPart[]): FormData => {
     const formData = new FormData();

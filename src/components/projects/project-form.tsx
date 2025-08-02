@@ -9,6 +9,7 @@ import { getDetail } from "libs/utils/error";
 import type { FC } from "react";
 import type { FormState, SubmitHandler } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type {
     Project,
     ProjectCreation,
@@ -22,11 +23,11 @@ import {
 
 export type ProjectFormType = ProjectCreationWithFile | ProjectEditionWithFile;
 
-type Props = {
+interface Props {
     project: Project | null;
     state: Pick<FormState<ProjectFormType>, "isDirty">;
     closeDialog: () => void;
-};
+}
 
 export const ProjectForm: FC<Props> = props => {
     const confirm = useConfirmDialogContext();
@@ -73,7 +74,10 @@ export const ProjectForm: FC<Props> = props => {
     const submitHandler: SubmitHandler<ProjectFormType> = async data => {
         if (isSubmitting) return;
 
-        if (!isDirty) return props.closeDialog();
+        if (!isDirty) {
+            props.closeDialog();
+            return;
+        }
 
         startSubmitting();
 
@@ -110,10 +114,9 @@ export const ProjectForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error(
-                editing ? "Project update failed:" : "Project creation failed:",
-                getDetail(e)
-            );
+            const message = editing ? "Project update failed:" : "Project creation failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }
@@ -133,7 +136,10 @@ export const ProjectForm: FC<Props> = props => {
             confirmDanger: true
         });
 
-        if (!confirmed) return endSubmitting();
+        if (!confirmed) {
+            endSubmitting();
+            return;
+        }
 
         try {
             await ProjectService.delete(props.project.id);
@@ -144,7 +150,9 @@ export const ProjectForm: FC<Props> = props => {
 
             props.closeDialog();
         } catch (e) {
-            console.error("Project deletion failed:", getDetail(e));
+            const message = "Project deletion failed:";
+            toast.error(message + " " + getDetail(e));
+            console.error(message, e);
         } finally {
             endSubmitting();
         }
@@ -161,7 +169,7 @@ export const ProjectForm: FC<Props> = props => {
                 <div className="col-span-2 mt-3 flex w-full justify-center gap-4">
                     {!!props.project && (
                         <Button
-                            className="w-full max-w-[50%]"
+                            className="grow"
                             variant="destructive"
                             disabled={isSubmitting}
                             onClick={handleDelete}
@@ -169,7 +177,7 @@ export const ProjectForm: FC<Props> = props => {
                             Delete
                         </Button>
                     )}
-                    <Button className="w-full max-w-[50%]" type="submit" disabled={isSubmitting}>
+                    <Button className="grow" type="submit" disabled={isSubmitting}>
                         Submit
                     </Button>
                 </div>

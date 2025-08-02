@@ -28,12 +28,14 @@ export const ProjectSortDialog: FC = () => {
             ref={contentRef}
             initialItems={optimisticLightProjects}
             render={lightProject => (
-                <div className="flex grow items-center gap-3">
+                <div className="flex items-center gap-1.5">
                     {lightProject.title}
                     {lightProject.featured && <ProjectFeaturedBadge />}
                 </div>
             )}
-            closeDialog={resetSort => handleClose(false, resetSort)}
+            closeDialog={async resetSort => {
+                await handleClose(false, resetSort);
+            }}
             empty={
                 lightProjectsQuery.isSuccess &&
                 optimisticLightProjects.length === 0 &&
@@ -41,7 +43,7 @@ export const ProjectSortDialog: FC = () => {
             }
             loading={
                 lightProjectsQuery.isLoading && (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
                         <Loader />
                         Loading projects...
                     </div>

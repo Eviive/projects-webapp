@@ -5,6 +5,7 @@ import { SkillCard } from "components/skills/skill-card";
 import { SkillFormDialog } from "components/skills/skill-form-dialog";
 import { SkillSortButton, sortSkillsMutationKey } from "components/skills/skill-sort-button";
 import { Button } from "components/ui/button";
+import { Defer } from "components/ui/defer";
 import { ErrorAlert } from "components/ui/error-alert";
 import { Loader } from "components/ui/loader";
 import { SearchBar } from "components/ui/search-bar";
@@ -13,9 +14,9 @@ import { Grid } from "layouts/grid";
 import { updateSearchParams } from "libs/utils/search-params";
 import { getSkillsQueryParams, skillsQueryOptionsFn } from "pages/skills/skills.loader";
 import type { FC } from "react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 export const Skills: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -30,18 +31,16 @@ export const Skills: FC = () => {
     );
 
     const [searchBarValue, setSearchBarValue] = useState(search ?? "");
-    const setSearchQueryParam = useCallback(
-        (search: string) =>
-            updateSearchParams(setSearchParams, {
-                key: "search",
-                value: search
-            }),
-        [setSearchParams]
-    );
+    const setSearchQueryParam = (search: string) => {
+        updateSearchParams(setSearchParams, {
+            key: "search",
+            value: search
+        });
+    };
 
     return (
         <Page title="Skills">
-            <div className="flex h-full w-full grow flex-col gap-9 px-[5%] py-9">
+            <div className="flex size-full grow flex-col gap-9 px-[5%] py-9">
                 <div className="flex w-full max-w-md items-center gap-2 self-center">
                     <SearchBar
                         value={searchBarValue}
@@ -53,12 +52,8 @@ export const Skills: FC = () => {
                         <SkillSortButton />
                         <SkillFormDialog
                             trigger={
-                                <Button
-                                    className="text-foreground-500"
-                                    variant="outline"
-                                    size="icon"
-                                >
-                                    <FaPlus size={20} />
+                                <Button variant="outline" size="icon">
+                                    <FaPlus />
                                 </Button>
                             }
                         />
@@ -71,17 +66,24 @@ export const Skills: FC = () => {
                                 <SkillCard
                                     key={skill.id}
                                     skill={skill}
-                                    isOptimistic={optimisticSkillSorts[skill.id] !== undefined}
+                                    isOptimistic={skill.id in optimisticSkillSorts}
                                 />
                             ))}
                         </Grid>
                         {skillsQuery.hasNextPage && (
                             <Button
-                                className="self-center"
+                                className="self-center disabled:opacity-100"
                                 onClick={() => skillsQuery.fetchNextPage()}
                                 disabled={skillsQuery.isFetchingNextPage}
                             >
-                                {skillsQuery.isFetchingNextPage ? "Loading more..." : "Load more"}
+                                {skillsQuery.isFetchingNextPage ? (
+                                    <Defer fallback="Load more">
+                                        <Loader />
+                                        Loading more...
+                                    </Defer>
+                                ) : (
+                                    "Load more"
+                                )}
                             </Button>
                         )}
                     </>

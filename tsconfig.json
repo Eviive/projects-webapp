@@ -17,10 +17,5 @@
         "jsx": "react-jsx",
         "baseUrl": "src"
     },
-    "include": ["src", "tailwind.config.js", "postcss.config.js"],
-    "references": [
-        {
-            "path": "./tsconfig.node.json"
-        }
-    ]
+    "include": ["src"]
 }

@@ -3,7 +3,9 @@ import { CommandEmpty } from "components/ui/command";
 import type { FC } from "react";
 import type { PropsWithStatus } from "types/utils/props";
 
-export const ComboboxEmpty: FC<PropsWithStatus> = props => {
+type Props = PropsWithStatus;
+
+export const ComboboxEmpty: FC<Props> = props => {
     const search = useCommandState(state => state.search);
 
     return (

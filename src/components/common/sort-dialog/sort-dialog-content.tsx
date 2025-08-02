@@ -1,23 +1,25 @@
 import { SortDialogDragContent } from "components/common/sort-dialog/sort-dialog-drag-content";
 import { Button } from "components/ui/button";
 import { Defer } from "components/ui/defer";
-import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode, RefAttributes } from "react";
-import { forwardRef, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import type { DndItem } from "types/dnd";
-import type { PropsWithStatus } from "types/utils/props";
+import type { PropsWithForwardedRef, PropsWithStatus } from "types/utils/props";
 
 export type SortDialogContentRef = () => DndItem[] | null;
 
-type Props<E extends DndItem> = {
-    initialItems?: E[];
-    render: (item: E) => ReactNode;
-    closeDialog: (resetSort: boolean) => void;
-};
+type Props<E extends DndItem> = PropsWithStatus<
+    PropsWithForwardedRef<
+        {
+            initialItems?: E[];
+            render: (item: E) => ReactNode;
+            closeDialog: (resetSort: boolean) => Promise<void>;
+        },
+        SortDialogContentRef
+    >
+>;
 
-const SortDialogContent = <E extends DndItem>(
-    props: PropsWithStatus<Props<E>>,
-    ref: ForwardedRef<SortDialogContentRef>
-) => {
+export const SortDialogContent = <E extends DndItem>(props: Props<E>) => {
     const [items, setItems] = useState<E[]>();
 
     useEffect(() => {
@@ -34,10 +36,10 @@ const SortDialogContent = <E extends DndItem>(
 
     return (
         <>
-            <div className="grid h-[500px] place-items-center">
+            <div className="grid h-[500px] place-items-center overflow-x-hidden">
                 {shouldDisplayContent && (
                     <SortDialogDragContent
-                        ref={ref}
+                        ref={props.ref}
                         items={items}
                         setItems={items => {
                             setItems(prevItems => {
@@ -58,18 +60,22 @@ const SortDialogContent = <E extends DndItem>(
                 {props.error}
             </div>
             <div className="flex justify-between">
-                <Button variant="outline" onClick={() => props.closeDialog(true)}>
+                <Button
+                    variant="outline"
+                    onClick={async () => {
+                        await props.closeDialog(true);
+                    }}
+                >
                     Cancel
                 </Button>
-                <Button onClick={() => props.closeDialog(false)}>Save</Button>
+                <Button
+                    onClick={async () => {
+                        await props.closeDialog(false);
+                    }}
+                >
+                    Save
+                </Button>
             </div>
         </>
     );
 };
-
-const SortDialogContentWithForwardedRef = forwardRef(SortDialogContent) as <E extends DndItem>(
-    props: ComponentPropsWithoutRef<typeof SortDialogContent<E>> &
-        RefAttributes<SortDialogContentRef>
-) => ReactNode;
-
-export { SortDialogContentWithForwardedRef as SortDialogContent };

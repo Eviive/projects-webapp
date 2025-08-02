@@ -1,13 +1,14 @@
-import { request } from "api/client";
+import { requestData } from "api/client";
 import { buildFormData } from "libs/utils/form-data";
 import type { DndItem } from "types/dnd";
 import type { Skill, SkillCreation } from "types/entities/skill";
-import type { Slice } from "types/pagination";
 
-const URL = "skill";
+import type { Slice } from "types/pagination/slice";
+
+const URL = "/api/skill";
 
 const findAll = async () => {
-    const skills = await request<Skill[]>(`/${URL}`, {
+    const skills = await requestData<Skill[]>(URL, {
         requiredAuthorities: ["read:skill"]
     });
     skills.sort((a, b) => a.sort - b.sort);
@@ -17,7 +18,7 @@ const findAll = async () => {
 export const SKILLS_DEFAULT_PAGE_SIZE = 24;
 
 const findSlice = async (page?: number, size = SKILLS_DEFAULT_PAGE_SIZE, search?: string) =>
-    request<Slice<Skill>>(`/${URL}/slice`, {
+    requestData<Slice<Skill>>(`${URL}/slice`, {
         params: {
             page,
             size,
@@ -28,14 +29,14 @@ const findSlice = async (page?: number, size = SKILLS_DEFAULT_PAGE_SIZE, search?
 
 const create = (skill: SkillCreation, file?: File | null) => {
     if (!file) {
-        return request<Skill, SkillCreation>(`/${URL}`, {
+        return requestData<Skill, SkillCreation>(URL, {
             method: "POST",
             data: skill,
             requiredAuthorities: ["create:skill"]
         });
     }
 
-    return request<Skill, FormData>(`/${URL}/with-image`, {
+    return requestData<Skill, FormData>(`${URL}/with-image`, {
         method: "POST",
         data: buildSkillFormData(skill, file),
         headers: {
@@ -47,14 +48,14 @@ const create = (skill: SkillCreation, file?: File | null) => {
 
 const update = (skill: Skill, file?: File | null) => {
     if (!file) {
-        return request<Skill, Skill>(`/${URL}/${skill.id}`, {
+        return requestData<Skill, Skill>(`${URL}/${skill.id.toString()}`, {
             method: "PUT",
             data: skill,
             requiredAuthorities: ["update:skill"]
         });
     }
 
-    return request<Skill, FormData>(`/${URL}/${skill.id}/with-image`, {
+    return requestData<Skill, FormData>(`${URL}/${skill.id.toString()}/with-image`, {
         method: "PUT",
         data: buildSkillFormData(skill, file),
         headers: {
@@ -65,7 +66,7 @@ const update = (skill: Skill, file?: File | null) => {
 };
 
 const sort = (sorts: DndItem[]) => {
-    return request<void, DndItem[]>(`/${URL}/sort`, {
+    return requestData<undefined, DndItem[]>(`${URL}/sort`, {
         method: "PATCH",
         data: sorts,
         requiredAuthorities: ["update:skill"]
@@ -73,7 +74,7 @@ const sort = (sorts: DndItem[]) => {
 };
 
 const deleteSkill = (id: number) =>
-    request<void>(`/${URL}/${id}`, {
+    requestData(`${URL}/${id.toString()}`, {
         method: "DELETE",
         requiredAuthorities: ["delete:skill"]
     });

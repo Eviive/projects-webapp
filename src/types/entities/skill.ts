@@ -9,8 +9,8 @@ import { z } from "zod";
 export const skillCreationSchema = z.object({
     name: z
         .string({
-            required_error: "Name is required",
-            invalid_type_error: "Name must be a string"
+            error: ({ input }) =>
+                input === undefined ? "Name is required" : "Name must be a string"
         })
         .min(1, "Name is required")
         .max(50, "Name must be at most 50 characters"),
@@ -30,8 +30,7 @@ export type SkillCreationWithFile = z.infer<typeof skillCreationWithFileSchema>;
 export const skillSchema = skillCreationSchema.extend({
     id: z.number(),
     sort: z.number({
-        required_error: "Sort is required",
-        invalid_type_error: "Sort must be a number"
+        error: ({ input }) => (input === undefined ? "Sort is required" : "Sort must be a string")
     }),
     image: imageSchema
 });
