@@ -7,26 +7,17 @@ on:
       - "[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  build-docker:
-    name: Build Docker
-    uses: eviive/actions/.github/workflows/build-docker.yaml@chore/reusable-workflows
+  deploy:
+    name: Deploy
+    uses: eviive/actions/.github/workflows/deploy-kustomize-gitops.yaml@chore/reusable-workflows
     with:
       docker-hub-repository: ${{ vars.DOCKER_HUB_REPOSITORY }}
       docker-hub-username: ${{ vars.DOCKER_HUB_USERNAME }}
       docker-tag-prefix: ${{ vars.DOCKER_TAG_PREFIX }}
       lfs: true
-    secrets:
-      docker-hub-token: ${{ secrets.DOCKER_HUB_TOKEN }}
-
-  gitops-kustomize-pr:
-    name: GitOps Kustomize PR
-    needs: build-docker
-    uses: eviive/actions/.github/workflows/gitops-kustomize-pr.yaml@chore/reusable-workflows
-    with:
-      repository: ${{ vars.GITOPS_REPOSITORY }}
+      gitops-repository: ${{ vars.GITOPS_REPOSITORY }}
       kustomize-working-directory: webapp/overlays/production
       kustomize-image: webapp
-      docker-image: ${{ vars.DOCKER_HUB_USERNAME }}/${{ vars.DOCKER_HUB_REPOSITORY }}
-      docker-tag: ${{ needs.build-docker.outputs.version }}
     secrets:
-      token: ${{ secrets.GITOPS_TOKEN }}
+      docker-hub-token: ${{ secrets.DOCKER_HUB_TOKEN }}
+      gitops-token: ${{ secrets.GITOPS_TOKEN }}
