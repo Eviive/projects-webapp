@@ -5,15 +5,7 @@ on:
 
 jobs:
   prettier:
-    name: Prettier
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prettier
-        uses: eviive/actions/validate/format/prettier@main
+    uses: eviive/actions/reusable-workflows/validate/format/prettier.yaml@chore/reusable-workflows
 
   eslint:
-    name: ESLint
-    runs-on: ubuntu-latest
-    steps:
-      - name: ESLint
-        uses: eviive/actions/validate/lint/eslint@main
+    uses: eviive/actions/reusable-workflows/validate/lint/eslint.yaml@chore/reusable-workflows
