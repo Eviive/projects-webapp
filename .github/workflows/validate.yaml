@@ -6,4 +6,4 @@ on:
 jobs:
   validate:
     name: Validate
-    uses: eviive/actions/.github/workflows/validate-js.yaml@chore/reusable-workflows
+    uses: eviive/actions/.github/workflows/validate-js.yaml@main
