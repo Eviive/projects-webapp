@@ -6,8 +6,8 @@ on:
 jobs:
   prettier:
     name: Prettier
-    uses: eviive/actions/.github/workflows/test/validate-format-prettier.yaml@chore/reusable-workflows
+    uses: eviive/actions/.github/workflows/validate-format-prettier.yaml@chore/reusable-workflows
 
   eslint:
     name: ESLint
-    uses: eviive/actions/.github/workflows/test/validate-lint-eslint.yaml@chore/reusable-workflows
+    uses: eviive/actions/.github/workflows/validate-lint-eslint.yaml@chore/reusable-workflows
