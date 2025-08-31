@@ -1,0 +1,9 @@
+name: Validate
+
+on:
+  pull_request:
+
+jobs:
+  validate:
+    name: Validate
+    uses: eviive/actions/.github/workflows/validate-js.yaml@main
