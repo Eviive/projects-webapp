@@ -6,9 +6,6 @@ on:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+"
 
-env:
-  APP: webapp
-
 jobs:
   build-docker:
     name: Build Docker
@@ -27,8 +24,8 @@ jobs:
     uses: eviive/actions/.github/workflows/gitops-kustomize-pr.yaml@chore/reusable-workflows
     with:
       repository: ${{ vars.GITOPS_REPOSITORY }}
-      kustomize-working-directory: ${{ env.APP }}/overlays/production
-      kustomize-image: ${{ env.APP }}
+      kustomize-working-directory: webapp/overlays/production
+      kustomize-image: webapp
       docker-image: ${{ vars.DOCKER_HUB_USERNAME }}/${{ vars.DOCKER_HUB_REPOSITORY }}
       docker-tag: ${{ needs.build-docker.outputs.version }}
     secrets:
