@@ -23,7 +23,7 @@ export const Login: FC = () => {
     const [searchParams] = useSearchParams();
 
     const loginSearchParams = new URLSearchParams({
-        post_login_success_uri: import.meta.env.VITE_BASE_URL + (searchParams.get("redirect") ?? "")
+        post_login_success_uri: window.location.origin + (searchParams.get("redirect") ?? "")
     });
     const loginUriSearchParams = "?" + loginSearchParams.toString();
 
